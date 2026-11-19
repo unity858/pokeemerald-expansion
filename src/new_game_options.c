@@ -38,6 +38,7 @@ enum
 {
     MENUITEM_DIFFICULTY,
     MENUITEM_DATAMODE,
+    MENUITEM_OK,
     MENUITEM_COUNT,
 };
 
@@ -59,7 +60,7 @@ enum
 #define tDifficulty     data[1]
 #define tDataMode       data[2]
 
-#define OPTIONS_WIN_HEIGHT 6
+#define OPTIONS_WIN_HEIGHT 8
 
 #define YPOS_DIFFICULTY (MENUITEM_DIFFICULTY * 16)
 #define YPOS_DATAMODE   (MENUITEM_DATAMODE * 16)
@@ -101,6 +102,7 @@ static const u8 *const sNewGameOptionsItemNames[MENUITEM_COUNT] =
 {
     [MENUITEM_DIFFICULTY] = COMPOUND_STRING("DIFFICULTY"),
     [MENUITEM_DATAMODE]   = COMPOUND_STRING("DATA"),
+    [MENUITEM_OK]         = COMPOUND_STRING("OK"),
 };
 
 static const u8 sChoiceToDifficulty[CHOICE_DIFFICULTY_COUNT] =
@@ -326,7 +328,13 @@ static void Task_NewGameOptionsProcessInput(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
 
-    if (JOY_NEW(A_BUTTON))
+    if (JOY_NEW(A_BUTTON) && tMenuSelection != MENUITEM_OK)
+    {
+        // A on an option row advances to the next row, ending on OK
+        tMenuSelection++;
+        HighlightNewGameOptionsItem(tMenuSelection);
+    }
+    else if (JOY_NEW(A_BUTTON))
     {
         PlaySE(SE_SELECT);
         sPendingOptions.difficulty = sChoiceToDifficulty[tDifficulty];
@@ -342,10 +350,20 @@ static void Task_NewGameOptionsProcessInput(u8 taskId)
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
         gTasks[taskId].func = Task_NewGameOptionsFadeOutToMainMenu;
     }
-    else if (JOY_NEW(DPAD_UP | DPAD_DOWN))
+    else if (JOY_NEW(DPAD_UP))
     {
-        // Only two rows, so up and down both toggle
-        tMenuSelection = (tMenuSelection == MENUITEM_DIFFICULTY) ? MENUITEM_DATAMODE : MENUITEM_DIFFICULTY;
+        if (tMenuSelection > 0)
+            tMenuSelection--;
+        else
+            tMenuSelection = MENUITEM_COUNT - 1;
+        HighlightNewGameOptionsItem(tMenuSelection);
+    }
+    else if (JOY_NEW(DPAD_DOWN))
+    {
+        if (tMenuSelection < MENUITEM_COUNT - 1)
+            tMenuSelection++;
+        else
+            tMenuSelection = 0;
         HighlightNewGameOptionsItem(tMenuSelection);
     }
     else if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
@@ -363,6 +381,9 @@ static void Task_NewGameOptionsProcessInput(u8 taskId)
             tDataMode ^= 1;
             DataMode_DrawChoices(tDataMode);
             break;
+        default:
+            // Nothing to change on the OK row
+            return;
         }
         CopyWindowToVram(WIN_OPTIONS, COPYWIN_GFX);
     }
