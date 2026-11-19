@@ -47,6 +47,7 @@
 #include "mirage_tower.h"
 #include "money.h"
 #include "new_game.h"
+#include "new_game_options.h"
 #include "oras_dowse.h"
 #include "palette.h"
 #include "play_time.h"
@@ -1934,6 +1935,8 @@ void CB2_NewGame(void)
     StopMapMusic();
     ResetSafariZoneFlag_();
     NewGameInitData();
+    // Must come after NewGameInitData, which clears all flags and vars.
+    NewGameOptions_ApplyToSave();
     ResetInitialPlayerAvatarState();
     PlayTimeCounter_Start();
     ScriptContext_Init();

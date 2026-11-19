@@ -18,6 +18,7 @@
 #include "list_menu.h"
 #include "mystery_event_menu.h"
 #include "naming_screen.h"
+#include "new_game_options.h"
 #include "oak_speech.h"
 #include "option_menu.h"
 #include "overworld.h"
@@ -1091,7 +1092,10 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
 
             gPlttBufferUnfaded[0] = RGB_BLACK;
             gPlttBufferFaded[0] = RGB_BLACK;
-            gTasks[taskId].func = Task_NewGameBirchSpeech_Init;
+            // Show the Game options screen first; it continues into the
+            // Birch speech via CB2_NewGameBirchSpeech_FromNewGameOptions.
+            SetMainCallback2(CB2_InitNewGameOptions);
+            DestroyTask(taskId);
             break;
         case ACTION_CONTINUE:
             gPlttBufferUnfaded[0] = RGB_BLACK;
@@ -1817,6 +1821,44 @@ static void Task_NewGameBirchSpeech_Cleanup(u8 taskId)
         SetMainCallback2(CB2_NewGame);
         DestroyTask(taskId);
     }
+}
+
+// Entered from the new-game Game options screen (src/new_game_options.c).
+// Recreates the main menu's BG/VBlank state that Task_NewGameBirchSpeech_Init
+// expects, then starts the Birch speech from a black screen.
+void CB2_NewGameBirchSpeech_FromNewGameOptions(void)
+{
+    SetVBlankCallback(NULL);
+    SetGpuReg(REG_OFFSET_DISPCNT, 0);
+    SetGpuReg(REG_OFFSET_BG2CNT, 0);
+    SetGpuReg(REG_OFFSET_BG1CNT, 0);
+    SetGpuReg(REG_OFFSET_BG0CNT, 0);
+    SetGpuReg(REG_OFFSET_BG2HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG0HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG0VOFS, 0);
+    DmaFill16(3, 0, (void *)VRAM, VRAM_SIZE);
+    DmaFill32(3, 0, (void *)OAM, OAM_SIZE);
+    DmaFill16(3, 0, (void *)PLTT, PLTT_SIZE);
+    ResetPaletteFade();
+    ScanlineEffect_Stop();
+    ResetTasks();
+    ResetSpriteData();
+    FreeAllSpritePalettes();
+    ResetBgsAndClearDma3BusyFlags(0);
+    InitBgsFromTemplates(0, sMainMenuBgTemplates, ARRAY_COUNT(sMainMenuBgTemplates));
+    ChangeBgX(0, 0, BG_COORD_SET);
+    ChangeBgY(0, 0, BG_COORD_SET);
+    ChangeBgX(1, 0, BG_COORD_SET);
+    ChangeBgY(1, 0, BG_COORD_SET);
+    gPlttBufferUnfaded[0] = RGB_BLACK;
+    gPlttBufferFaded[0] = RGB_BLACK;
+    EnableInterrupts(INTR_FLAG_VBLANK);
+    SetVBlankCallback(VBlankCB_MainMenu);
+    SetMainCallback2(CB2_MainMenu);
+    CreateTask(Task_NewGameBirchSpeech_Init, 0);
 }
 
 static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
