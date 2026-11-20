@@ -4,6 +4,8 @@
 #include "global.h"
 #include "constants/field_move.h"
 
+struct Pokemon;
+
 struct FieldMoveUnlock
 {
    bool32 (*isUnlockedFunc)(enum FieldMove);
@@ -31,6 +33,10 @@ struct FieldMoveInfo
 
 extern const struct FieldMoveInfo gFieldMoveInfo[];
 extern const struct FieldMoveUnlock gFieldMoveUnlocks[];
+
+bool32 IsHMFieldMove(enum FieldMove fieldMove);
+u32 GetMonFieldMoveQualifiedMask(struct Pokemon *mon);
+bool32 MonQualifiesForFieldMove(struct Pokemon *mon, enum FieldMove fieldMove);
 
 static inline bool32 SetUpFieldMove(enum FieldMove fieldMove)
 {

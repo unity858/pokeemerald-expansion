@@ -9,6 +9,7 @@
 #include "field_effect_helpers.h"
 #include "field_screen_effect.h"
 #include "field_player_avatar.h"
+#include "field_move.h"
 #include "fieldmap.h"
 #include "follower_npc.h"
 #include "menu.h"
@@ -1624,7 +1625,7 @@ bool8 PartyHasMonWithSurf(void)
         {
             if (GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES) == SPECIES_NONE)
                 break;
-            if (MonKnowsMove(&gParties[B_TRAINER_PLAYER][i], MOVE_SURF))
+            if (MonQualifiesForFieldMove(&gParties[B_TRAINER_PLAYER][i], FIELD_MOVE_SURF))
                 return TRUE;
         }
     }

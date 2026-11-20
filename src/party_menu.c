@@ -2947,27 +2947,62 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
     }
 }
 
+// Order in which qualifying HM field moves are listed (most useful first),
+// in case there isn't room for all of them in the action menu.
+static const u8 sHMFieldMoveListOrder[] =
+{
+    FIELD_MOVE_FLY,
+    FIELD_MOVE_SURF,
+    FIELD_MOVE_DIVE,
+    FIELD_MOVE_WATERFALL,
+    FIELD_MOVE_STRENGTH,
+    FIELD_MOVE_ROCK_SMASH,
+    FIELD_MOVE_CUT,
+    FIELD_MOVE_FLASH,
+};
+
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
     u8 i, j;
+    u32 maxFieldMoves, numOtherActions, fieldMoveMask;
+
+    // Summary and Cancel, plus Switch and Item/Mail outside the Battle Pike.
+    numOtherActions = 2;
+    if (!InBattlePike())
+        numOtherActions += (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE) + 1;
+    maxFieldMoves = ARRAY_COUNT(sPartyMenuInternal->actions) - numOtherActions;
 
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
 
-    // Add field moves to action list
+    // Non-HM field moves: listed if known, in move slot order (vanilla).
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
         for (j = 0; j != FIELD_MOVES_COUNT; j++)
         {
-            if (!FieldMove_IsVisible(j))
+            if (IsHMFieldMove(j) || !FieldMove_IsVisible(j))
                 continue;
 
             if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == FieldMove_GetMoveId(j))
             {
-                AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
+                if (sPartyMenuInternal->numActions - 1 < maxFieldMoves) // -1 for Summary
+                    AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
                 break;
             }
         }
+    }
+
+    // HM field moves: listed if the badge is obtained and the species (or a
+    // pre-evolution) can learn the move, whether or not it's known.
+    fieldMoveMask = GetMonFieldMoveQualifiedMask(&mons[slotId]);
+    for (i = 0; i < ARRAY_COUNT(sHMFieldMoveListOrder); i++)
+    {
+        j = sHMFieldMoveListOrder[i];
+        if (!(fieldMoveMask & (1u << j)) || !IsFieldMoveUnlocked(j) || !FieldMove_IsVisible(j))
+            continue;
+        if (sPartyMenuInternal->numActions - 1 >= maxFieldMoves)
+            break;
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
     }
 
     if (!InBattlePike())
