@@ -769,7 +769,16 @@ struct SpeciesInfoOverride
     u8 baseSpDefense;
     u16 abilities[NUM_ABILITY_SLOTS]; // enum Ability
     u8 types[2]; // enum Type; a mono-type is stored as two equal types, as in gSpeciesInfo
+    // Wild held items (enum Item). ITEM_NONE (0) = keep vanilla; CUSTOM_HELD_ITEM_NONE
+    // = override the vanilla item to "no item". itemCommon == itemRare means the
+    // species always holds that item, as in gSpeciesInfo.
+    u16 itemCommon;
+    u16 itemRare;
 };
+
+// Explicit "override to ITEM_NONE" value for SpeciesInfoOverride.itemCommon/itemRare,
+// since ITEM_NONE (0) itself means "no override". Never a real item id.
+#define CUSTOM_HELD_ITEM_NONE 0xFFFF
 
 extern const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1];
 extern const u32 gExperienceTables[][MAX_LEVEL + 1];
@@ -878,6 +887,8 @@ u32 GetSpeciesBaseDefense(enum Species species);
 u32 GetSpeciesBaseSpAttack(enum Species species);
 u32 GetSpeciesBaseSpDefense(enum Species species);
 u32 GetSpeciesBaseSpeed(enum Species species);
+enum Item GetSpeciesItemCommon(enum Species species);
+enum Item GetSpeciesItemRare(enum Species species);
 u32 GetSpeciesBaseStat(enum Species species, u32 statIndex);
 u32 GetSpeciesBaseStatTotal(enum Species species);
 const struct LevelUpMove *GetSpeciesLevelUpLearnset(enum Species species);

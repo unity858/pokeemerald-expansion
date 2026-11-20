@@ -3266,6 +3266,27 @@ u32 GetSpeciesBaseSpeed(enum Species species)
     return GET_SPECIES_BASE_STAT_WITH_CUSTOM(species, baseSpeed);
 }
 
+// Wild held item accessors with the Custom data mode override (custom_species_info.h).
+#define GET_SPECIES_HELD_ITEM_WITH_CUSTOM(species, field)                                  \
+({                                                                                         \
+    enum Species _species = SanitizeSpeciesId(species);                                    \
+    enum Item _item = gSpeciesInfo[_species].field;                                        \
+    if (gCustomSpeciesInfo[_species].field != ITEM_NONE && IsCustomDataMode())             \
+        _item = (gCustomSpeciesInfo[_species].field == CUSTOM_HELD_ITEM_NONE)              \
+              ? ITEM_NONE : gCustomSpeciesInfo[_species].field;                            \
+    _item;                                                                                 \
+})
+
+enum Item GetSpeciesItemCommon(enum Species species)
+{
+    return GET_SPECIES_HELD_ITEM_WITH_CUSTOM(species, itemCommon);
+}
+
+enum Item GetSpeciesItemRare(enum Species species)
+{
+    return GET_SPECIES_HELD_ITEM_WITH_CUSTOM(species, itemRare);
+}
+
 u32 GetSpeciesBaseStat(enum Species species, u32 statIndex)
 {
     switch (statIndex)
@@ -5418,6 +5439,7 @@ void SetWildMonHeldItem(void)
 {
     u16 rnd;
     enum Species species;
+    enum Item itemCommon, itemRare;
     u16 count = (WILD_DOUBLE_BATTLE) ? 2 : 1;
     u16 i;
     bool32 itemHeldBoost = CanFirstMonBoostHeldItemRarity();
@@ -5431,6 +5453,8 @@ void SetWildMonHeldItem(void)
 
         rnd = Random() % 100;
         species = GetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_SPECIES, 0);
+        itemCommon = GetSpeciesItemCommon(species);
+        itemRare = GetSpeciesItemRare(species);
         if (gMapHeader.mapLayoutId == LAYOUT_ALTERING_CAVE)
         {
             s32 alteringCaveId = GetWildMonTableIdInAlteringCave(species);
@@ -5447,26 +5471,26 @@ void SetWildMonHeldItem(void)
                 if (rnd < chanceNoItem)
                     continue;
                 if (rnd < chanceNotRare)
-                    SetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_HELD_ITEM, &gSpeciesInfo[species].itemCommon);
+                    SetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_HELD_ITEM, &itemCommon);
                 else
-                    SetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_HELD_ITEM, &gSpeciesInfo[species].itemRare);
+                    SetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_HELD_ITEM, &itemRare);
             }
         }
         else
         {
-            if (gSpeciesInfo[species].itemCommon == gSpeciesInfo[species].itemRare && gSpeciesInfo[species].itemCommon != ITEM_NONE)
+            if (itemCommon == itemRare && itemCommon != ITEM_NONE)
             {
                 // Both held items are the same, 100% chance to hold item
-                SetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_HELD_ITEM, &gSpeciesInfo[species].itemCommon);
+                SetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_HELD_ITEM, &itemCommon);
             }
             else
             {
                 if (rnd < chanceNoItem)
                     continue;
                 if (rnd < chanceNotRare)
-                    SetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_HELD_ITEM, &gSpeciesInfo[species].itemCommon);
+                    SetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_HELD_ITEM, &itemCommon);
                 else
-                    SetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_HELD_ITEM, &gSpeciesInfo[species].itemRare);
+                    SetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_HELD_ITEM, &itemRare);
             }
         }
     }
