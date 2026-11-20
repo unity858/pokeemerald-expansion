@@ -52,7 +52,7 @@
 #else
 
 #define FLAG_CUSTOM_DATA_MODE 0x20 // Set if Custom data mode was chosen on the new-game options screen
-#define FLAG_UNUSED_0x021    0x21 // Unused Flag
+#define FLAG_EXP_SHARE_PARTY  0x21 // Set while the key-item Exp. Share is switched on (R.O.W.E. party-wide Exp. Share)
 #define FLAG_UNUSED_0x022    0x22 // Unused Flag
 #define FLAG_UNUSED_0x023    0x23 // Unused Flag
 #define FLAG_UNUSED_0x024    0x24 // Unused Flag

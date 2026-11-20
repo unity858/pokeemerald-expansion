@@ -4,6 +4,7 @@
 
 #define FLAG_0x020               0x020
 #define FLAG_0x021               0x021
+#define FLAG_EXP_SHARE_PARTY     FLAG_0x021 // Exp. Share party toggle (see I_EXP_SHARE_FLAG)
 #define FLAG_0x022               0x022
 #define FLAG_0x023               0x023
 #define FLAG_0x024               0x024
