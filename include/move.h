@@ -274,6 +274,39 @@ struct MoveEffectOverride
 
 extern const struct MoveEffectOverride gCustomMoveEffects[MOVES_COUNT];
 
+// Custom data mode move flag overrides (src/data/custom_move_flags.h).
+// Boolean properties are tri-state: 0 = vanilla, CUSTOM_FLAG_SET = TRUE,
+// CUSTOM_FLAG_CLEAR = FALSE. criticalHitStage: 0 = vanilla, otherwise
+// CUSTOM_CRIT_STAGE(n). blademasterBoost / strikerBoost are R.O.W.E.-only
+// properties with no vanilla equivalent (always FALSE outside Custom mode);
+// no ability uses them yet (later task).
+#define CUSTOM_FLAG_SET   1
+#define CUSTOM_FLAG_CLEAR 2
+#define CUSTOM_CRIT_STAGE(n) ((n) + 1) // n = 0..2
+
+struct MoveFlagOverride
+{
+    u32 criticalHitStage:2;
+    u32 punchingMove:2;
+    u32 pulseMove:2;
+    u32 soundMove:2;
+    u32 powderMove:2;
+    u32 windMove:2;
+    u32 damagesAirborne:2;
+    u32 blademasterBoost:1;
+    u32 strikerBoost:1;
+    u32 padding:16;
+};
+
+extern const struct MoveFlagOverride gCustomMoveFlags[MOVES_COUNT];
+
+// Shared helper for the tri-state flag overrides above. 'field' is a
+// MoveFlagOverride field name with the same name as the MoveInfo field.
+#define GET_MOVE_FLAG_WITH_CUSTOM(moveId, field)                                                    \
+    ((moveId) < MOVES_COUNT && gCustomMoveFlags[moveId].field != 0 && IsCustomDataMode()            \
+        ? (gCustomMoveFlags[moveId].field == CUSTOM_FLAG_SET)                                        \
+        : gMovesInfo[moveId].field)
+
 
 // The argument field in MovesInfo is limited to 4 bytes on purpose to not waste space unnecessarily.
 // Downstream projects are free to remove this limitation.
@@ -397,7 +430,10 @@ static inline u32 IsExplosionMove(enum Move move)
 
 static inline u32 GetMoveCriticalHitStage(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].criticalHitStage;
+    moveId = SanitizeMoveId(moveId);
+    if (moveId < MOVES_COUNT && gCustomMoveFlags[moveId].criticalHitStage != 0 && IsCustomDataMode())
+        return gCustomMoveFlags[moveId].criticalHitStage - 1;
+    return gMovesInfo[moveId].criticalHitStage;
 }
 
 static inline bool32 MoveAlwaysCrits(enum Move moveId)
@@ -440,7 +476,8 @@ static inline bool32 MoveIgnoresKingsRock(enum Move moveId)
 
 static inline bool32 IsPunchingMove(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].punchingMove;
+    moveId = SanitizeMoveId(moveId);
+    return GET_MOVE_FLAG_WITH_CUSTOM(moveId, punchingMove);
 }
 
 static inline bool32 IsBitingMove(enum Move moveId)
@@ -450,12 +487,14 @@ static inline bool32 IsBitingMove(enum Move moveId)
 
 static inline bool32 IsPulseMove(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].pulseMove;
+    moveId = SanitizeMoveId(moveId);
+    return GET_MOVE_FLAG_WITH_CUSTOM(moveId, pulseMove);
 }
 
 static inline bool32 IsSoundMove(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].soundMove;
+    moveId = SanitizeMoveId(moveId);
+    return GET_MOVE_FLAG_WITH_CUSTOM(moveId, soundMove);
 }
 
 static inline bool32 IsBallisticMove(enum Move moveId)
@@ -465,7 +504,8 @@ static inline bool32 IsBallisticMove(enum Move moveId)
 
 static inline bool32 IsPowderMove(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].powderMove;
+    moveId = SanitizeMoveId(moveId);
+    return GET_MOVE_FLAG_WITH_CUSTOM(moveId, powderMove);
 }
 
 static inline bool32 IsDanceMove(enum Move moveId)
@@ -475,12 +515,29 @@ static inline bool32 IsDanceMove(enum Move moveId)
 
 static inline bool32 IsWindMove(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].windMove;
+    moveId = SanitizeMoveId(moveId);
+    return GET_MOVE_FLAG_WITH_CUSTOM(moveId, windMove);
 }
 
 static inline bool32 IsSlicingMove(enum Move moveId)
 {
     return gMovesInfo[SanitizeMoveId(moveId)].slicingMove;
+}
+
+// R.O.W.E.-only move properties (Custom data mode only, see
+// src/data/custom_move_flags.h). Always FALSE in Vanilla mode.
+// NOTE: no ability reads these yet; the Blademaster / Striker abilities are a
+// later task.
+static inline bool32 IsBlademasterBoostedMove(enum Move moveId)
+{
+    moveId = SanitizeMoveId(moveId);
+    return moveId < MOVES_COUNT && gCustomMoveFlags[moveId].blademasterBoost && IsCustomDataMode();
+}
+
+static inline bool32 IsStrikerBoostedMove(enum Move moveId)
+{
+    moveId = SanitizeMoveId(moveId);
+    return moveId < MOVES_COUNT && gCustomMoveFlags[moveId].strikerBoost && IsCustomDataMode();
 }
 
 static inline bool32 IsHealingMove(enum Move moveId)
@@ -515,7 +572,8 @@ static inline bool32 MoveDamagesUnderWater(enum Move moveId)
 
 static inline bool32 MoveDamagesAirborne(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].damagesAirborne;
+    moveId = SanitizeMoveId(moveId);
+    return GET_MOVE_FLAG_WITH_CUSTOM(moveId, damagesAirborne);
 }
 
 static inline bool32 MoveDamagesAirborneDoubleDamage(enum Move moveId)
