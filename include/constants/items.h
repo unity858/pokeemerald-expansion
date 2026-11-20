@@ -813,6 +813,7 @@ enum __attribute__((packed)) Item
     ITEM_TM99 = 680,
     ITEM_TM100 = 681,
 
+    // HM01-HM08: HMs removed; IDs kept as unused placeholders so later IDs stay put.
     ITEM_HM01 = 682,
     ITEM_HM02 = 683,
     ITEM_HM03 = 684,
@@ -1063,19 +1064,14 @@ enum __attribute__((packed)) Item
     ITEM_FIELD_ARROW = ITEMS_COUNT,
 
     // After ITEMS_COUNT so these aliases don't affect it; they come after
-    // every ITEM_TMxx/ITEM_HMxx they refer to (including TM101+ above).
+    // every ITEM_TMxx they refer to (including TM101+ above).
     /* Expands to:
      *   ITEM_TM_FOCUS_PUNCH = ITEM_TM01,
-     *   ...
-     *   ITEM_HM_CUT = ITM_HM01,
      *   ... */
     #define ENUM_TM(n, id) CAT(ITEM_TM_, id) = CAT(ITEM_TM, n),
-    #define ENUM_HM(n, id) CAT(ITEM_HM_, id) = CAT(ITEM_HM, n),
     #define TO_TMHM_NUMS(a, ...) (__VA_ARGS__)
     RECURSIVELY(R_ZIP(ENUM_TM, TO_TMHM_NUMS NUMBERS_256, (FOREACH_TM(APPEND_COMMA))))
-    RECURSIVELY(R_ZIP(ENUM_HM, TO_TMHM_NUMS NUMBERS_256, (FOREACH_HM(APPEND_COMMA))))
     #undef ENUM_TM
-    #undef ENUM_HM
     #undef TO_TMHM_NUMS
 };
 

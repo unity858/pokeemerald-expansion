@@ -984,17 +984,7 @@ static u32 GetRelearnerTMMoves(struct BoxPokemon *mon, u16 *moves)
         if (!CanLearnTeachableMove(species, move))
             continue;
 
-        if (BoxMonKnowsMove(mon, move))
-            continue;
-
-        // A TM can teach the same move as an HM; list it only once.
-        u32 j;
-        for (j = 0; j < numMoves; j++)
-        {
-            if (moves[j] == move)
-                break;
-        }
-        if (j == numMoves)
+        if (!BoxMonKnowsMove(mon, move))
             moves[numMoves++] = move;
     }
 

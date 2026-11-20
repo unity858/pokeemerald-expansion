@@ -14,6 +14,9 @@ A move is "teachable" if it is:
        FOREACH_TM macro.
     3. A universal move, as defined by universalMoves in
        src/data/pokemon/special_movesets.json
+    4. One of the former HM moves (HM_FIELD_MOVES below). HM items are
+       removed, but field-move use is checked against learnsets, so these
+       stay teachable like tutor moves (without being added to gTutorMoves).
 
 For a given species, a move is considered teachable to that species if:
     1. The species can learn the move via *any* method within any Expansion-
@@ -35,8 +38,20 @@ CONFIG_ENABLED_PAT = re.compile(r"^#define P_LEARNSET_HELPER_TEACHABLE\s+(?P<cfg
 ALPHABETICAL_ORDER_ENABLED_PAT = re.compile(r"^#define HGSS_SORT_TMS_BY_NUM\s+(?P<cfg_val>[^ ]*)", flags=re.MULTILINE)
 TM_LITERACY_PAT = re.compile(r"^#define P_TM_LITERACY\s+GEN_(?P<cfg_val>[^ ]*)", flags=re.MULTILINE)
 TMHM_MACRO_PAT = re.compile(r"F\((\w+)\)")
-TMHM_ALIAS_PAT = re.compile(r"^#define\s+MOVE_(\w+)\s+MOVE_(\w+)", flags=re.MULTILINE)
 SNAKIFY_PAT = re.compile(r"(?!^)([A-Z]+)")
+
+# Former HM moves. Kept in teachable learnsets of species that can learn them
+# so field moves (checked against learnsets) keep working without HM items.
+HM_FIELD_MOVES = [
+    "MOVE_CUT",
+    "MOVE_FLY",
+    "MOVE_SURF",
+    "MOVE_STRENGTH",
+    "MOVE_FLASH",
+    "MOVE_ROCK_SMASH",
+    "MOVE_WATERFALL",
+    "MOVE_DIVE",
+]
 
 def enabled() -> bool:
     """
@@ -53,19 +68,12 @@ def extract_repo_tms() -> typing.Generator[str, None, None]:
     """
     with open("./include/constants/tms_hms.h", "r") as tmshms_fp:
         tmshms = tmshms_fp.read()
-        aliases = dict(TMHM_ALIAS_PAT.findall(tmshms))
         match_it = TMHM_MACRO_PAT.finditer(tmshms)
         if not match_it:
             return
 
-        seen = set()
         for match in match_it:
-            # A TM that teaches the same move as an HM uses an alias token;
-            # resolve it to the real move and only yield each move once.
-            move = f"MOVE_{aliases.get(match.group(1), match.group(1))}"
-            if move not in seen:
-                seen.add(move)
-                yield move
+            yield f"MOVE_{match.group(1)}"
 
 def extract_tm_litteracy_config() -> bool:
     config = False
@@ -128,11 +136,12 @@ def prepare_output(all_learnables: dict[str, set[str]], tms: list[str], tutors: 
 
     return new
 
-def prepare_header(h_align: int, tmshms: list[str], tutors: list[str], universals: list[str]) -> str:
+def prepare_header(h_align: int, tmshms: list[str], tutors: list[str], universals: list[str], field_moves: list[str]) -> str:
     universals_title = "Near-universal moves found in data/special_movesets.json:"
     tmhm_title = "TM/HM moves found in \"include/constants/tms_hms.h\":"
     tutor_title = "Tutor moves found from map scripts:"
-    h_align = max(h_align, len(universals_title), len(tmhm_title), len(tutor_title))
+    field_title = "Former HM field moves (HM_FIELD_MOVES):"
+    h_align = max(h_align, len(universals_title), len(tmhm_title), len(tutor_title), len(field_title))
 
     lines = [
          "//",
@@ -148,6 +157,11 @@ def prepare_header(h_align: int, tmshms: list[str], tutors: list[str], universal
         f"// {tutor_title: <{h_align}} //",
     ])
     lines.extend([f"// - {move: <{h_align - 2}} //" for move in sorted(tutors)])
+    lines.extend([
+        f"// {'*' * h_align} //",
+        f"// {field_title: <{h_align}} //",
+    ])
+    lines.extend([f"// - {move: <{h_align - 2}} //" for move in field_moves])
     lines.extend([
         f"// {'*' * h_align} //",
         f"// {universals_title: <{h_align}} //",
@@ -232,8 +246,8 @@ def main():
         if cfg_defined is None or cfg_defined.group("cfg_val") in ("FALSE", "0"):
             repo_tms = sorted(repo_tms)
 
-    h_align = max(map(lambda move: len(move), chain(special_movesets["universalMoves"], repo_tms, repo_tutors))) + 2
-    header = prepare_header(h_align, repo_tms, repo_tutors, special_movesets["universalMoves"])
+    h_align = max(map(lambda move: len(move), chain(special_movesets["universalMoves"], repo_tms, repo_tutors, HM_FIELD_MOVES))) + 2
+    header = prepare_header(h_align, repo_tms, repo_tutors, special_movesets["universalMoves"], HM_FIELD_MOVES)
 
     with open(SOURCE_LEARNSETS_JSON, "r") as source_fp:
         all_learnables = json.load(source_fp)
@@ -241,7 +255,9 @@ def main():
     with open(SOURCE_TEACHING_TYPES_JSON, "r") as source_fp:
         repo_teaching_types = json.load(source_fp)
 
-    content = prepare_output(all_learnables, repo_tms, repo_tutors, special_movesets, repo_teaching_types, header)
+    # Former HM moves are teachable like tutor moves (duplicates are dropped).
+    teach_tutors = repo_tutors + [m for m in HM_FIELD_MOVES if m not in repo_tutors]
+    content = prepare_output(all_learnables, repo_tms, teach_tutors, special_movesets, repo_teaching_types, header)
     with open("./src/data/pokemon/teachable_learnsets.h", "w") as teachables_fp:
         teachables_fp.write(content)
 

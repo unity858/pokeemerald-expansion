@@ -1,13 +1,6 @@
 #ifndef GUARD_CONSTANTS_TMS_HMS_H
 #define GUARD_CONSTANTS_TMS_HMS_H
 
-// TMs that teach a move an HM also teaches use an alias token, since each
-// FOREACH_TM/FOREACH_HM token must be unique (it names ITEM_TM_*/ITEM_HM_* and
-// the TM/HM index). MOVE_<token> must resolve to the real move.
-#define MOVE_FLY_TM         MOVE_FLY
-#define MOVE_SURF_TM        MOVE_SURF
-#define MOVE_WATERFALL_TM   MOVE_WATERFALL
-
 #define FOREACH_TM(F) \
     F(FOCUS_PUNCH) \
     F(DRAGON_CLAW) \
@@ -84,7 +77,7 @@
     F(THUNDER_WAVE) \
     F(GYRO_BALL) \
     F(SWORDS_DANCE) \
-    F(FLY_TM) \
+    F(FLY) \
     F(PSYCH_UP) \
     F(BULLDOZE) \
     F(FROST_BREATH) \
@@ -102,11 +95,11 @@
     F(FLASH_CANNON) \
     F(TRICK_ROOM) \
     F(WILD_CHARGE) \
-    F(SURF_TM) \
+    F(SURF) \
     F(SNARL) \
     F(NATURE_POWER) \
     F(DARK_PULSE) \
-    F(WATERFALL_TM) \
+    F(WATERFALL) \
     F(DAZZLING_GLEAM) \
     F(CONFIDE) \
     F(SLUDGE_WAVE) \
@@ -130,15 +123,8 @@
     F(DRAIN_PUNCH) \
     F(MYSTICAL_FIRE)
 
-#define FOREACH_HM(F) \
-    F(CUT) \
-    F(FLY) \
-    F(SURF) \
-    F(STRENGTH) \
-    F(FLASH) \
-    F(ROCK_SMASH) \
-    F(WATERFALL) \
-    F(DIVE)
+// HMs are removed; field moves are usable based on learnsets (see field_move.c).
+#define FOREACH_HM(F)
 
 #define FOREACH_TMHM(F) \
     FOREACH_TM(F) \
