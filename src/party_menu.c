@@ -5293,7 +5293,7 @@ void ItemUseCB_TypeGem(u8 taskId, TaskFunc task)
     }
 }
 
-// R.O.W.E.: each Feather raises one IV by 1. Like R.O.W.E., an IV already at 31 wraps down to 30.
+// R.O.W.E.: each Feather raises one IV by 1. An IV already at 31 is refused and the Feather is kept.
 void ItemUseCB_Feather(u8 taskId, TaskFunc task)
 {
     static const u8 sText_FeatherDone[] = _("{STR_VAR_1} became stronger!{PAUSE_UNTIL_PRESS}");
@@ -5313,7 +5313,8 @@ void ItemUseCB_Feather(u8 taskId, TaskFunc task)
     default:                  ivField = 0;                 break;
     }
 
-    if (ivField == 0 || GetMonData(mon, MON_DATA_IS_EGG))
+    if (ivField == 0 || GetMonData(mon, MON_DATA_IS_EGG)
+     || GetMonData(mon, ivField) >= MAX_PER_STAT_IVS)
     {
         gPartyMenuUseExitCallback = FALSE;
         PlaySE(SE_SELECT);
@@ -5323,11 +5324,7 @@ void ItemUseCB_Feather(u8 taskId, TaskFunc task)
         return;
     }
 
-    iv = GetMonData(mon, ivField);
-    if (iv < MAX_PER_STAT_IVS)
-        iv++;
-    else
-        iv = MAX_PER_STAT_IVS - 1;
+    iv = GetMonData(mon, ivField) + 1;
     SetMonData(mon, ivField, &iv);
     CalculateMonStats(mon);
 
