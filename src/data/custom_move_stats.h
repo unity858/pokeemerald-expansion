@@ -7,9 +7,12 @@
 // Use CUSTOM_ACCURACY_NEVER_MISSES for a move that can't miss (accuracy 0 in gMovesInfo).
 // Comments show vanilla (current gMovesInfo) -> custom; "--" means never misses.
 //
-// Only power, type, accuracy and PP are overridden here. Effects and
+// Power, type, accuracy, PP, target and category are overridden here
+// (target -> GetMoveTarget, category -> GetMoveCategory). Effects and
 // additional effects are overridden in custom_move_effects.h, move flags in
-// custom_move_flags.h. Target, priority and category are unchanged from vanilla.
+// custom_move_flags.h. Priority is unchanged from vanilla.
+// Target/category: write the TARGET_* / DAMAGE_CATEGORY_* constant directly;
+// 0 (TARGET_NONE / DAMAGE_CATEGORY_NONE) means "no override".
 //
 // Present: R.O.W.E. gave it power 90 together with a different effect
 // (EFFECT_HIT_ENEMY_HEAL_ALLY, "damage foes, heal allies" like Pollen Puff).
@@ -107,7 +110,7 @@ const struct MoveStatOverride gCustomMoveStats[MOVES_COUNT] =
     [MOVE_GLACIATE] = { .power = 80 }, // Power 65->80
     [MOVE_ICICLE_CRASH] = { .accuracy = 95 }, // Acc 90->95
     [MOVE_PHANTOM_FORCE] = { .power = 110 }, // Power 90->110
-    [MOVE_PETAL_BLIZZARD] = { .power = 80 }, // Power 90->80
+    [MOVE_PETAL_BLIZZARD] = { .power = 80, .category = DAMAGE_CATEGORY_SPECIAL, .target = TARGET_BOTH }, // Power 90->80, Physical->Special, foes and ally->both foes
     [MOVE_FREEZE_DRY] = { .power = 80 }, // Power 70->80
     [MOVE_FAIRY_WIND] = { .power = 60 }, // Power 40->60
     [MOVE_HYPERSPACE_HOLE] = { .power = 90, .pp = 10 }, // Power 80->90, PP 5->10
@@ -124,6 +127,7 @@ const struct MoveStatOverride gCustomMoveStats[MOVES_COUNT] =
     [MOVE_SNAP_TRAP] = { .power = 50 }, // Power 35->50
     [MOVE_PYRO_BALL] = { .power = 100 }, // Power 120->100
     [MOVE_OBSTRUCT] = { .accuracy = CUSTOM_ACCURACY_NEVER_MISSES }, // Acc 100->--
+    [MOVE_EXPANDING_FORCE] = { .target = TARGET_BOTH }, // Selected (both foes only in Psychic Terrain)->always both foes
     [MOVE_MISTY_EXPLOSION] = { .power = 160 }, // Power 100->160
     [MOVE_GRASSY_GLIDE] = { .power = 60 }, // Power 55->60
     [MOVE_LASH_OUT] = { .power = 90 }, // Power 75->90

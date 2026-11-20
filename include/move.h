@@ -235,17 +235,24 @@ extern const u8 gNotDoneYetDescription[];
 extern const struct BattleMoveEffect gBattleMoveEffects[];
 
 // Custom data mode move stat overrides (src/data/custom_move_stats.h).
-// A zero field means "no override".
+// A zero field means "no override". For target and category, 0 is
+// TARGET_NONE / DAMAGE_CATEGORY_NONE, which no real move uses, so the
+// constants can be written directly (asserted below).
 #define CUSTOM_ACCURACY_NEVER_MISSES 0xFF
 
 struct MoveStatOverride
 {
     u16 power:9;
     enum Type type:5;
-    u16 padding:2;
+    enum DamageCategory category:2;
     u8 accuracy;
     u8 pp;
+    enum MoveTarget target:4;
+    u8 padding:4;
 };
+
+_Static_assert(TARGET_NONE == 0 && DAMAGE_CATEGORY_NONE == 0, "custom move target/category overrides use 0 as 'no override'");
+_Static_assert(TARGET_ALL_BATTLERS < 16, "MoveStatOverride.target is 4 bits");
 
 extern const struct MoveStatOverride gCustomMoveStats[MOVES_COUNT];
 
@@ -295,7 +302,10 @@ struct MoveFlagOverride
     u32 damagesAirborne:2;
     u32 blademasterBoost:1;
     u32 strikerBoost:1;
-    u32 padding:16;
+    u32 sleepTalkBanned:2;
+    u32 instructBanned:2;
+    u32 assistBanned:2;
+    u32 padding:10;
 };
 
 extern const struct MoveFlagOverride gCustomMoveFlags[MOVES_COUNT];
@@ -359,7 +369,10 @@ static inline enum Type GetMoveType(enum Move moveId)
 
 static inline enum DamageCategory GetMoveCategory(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].category;
+    moveId = SanitizeMoveId(moveId);
+    if (moveId < MOVES_COUNT && gCustomMoveStats[moveId].category != DAMAGE_CATEGORY_NONE && IsCustomDataMode())
+        return gCustomMoveStats[moveId].category;
+    return gMovesInfo[moveId].category;
 }
 
 static inline u32 GetMovePower(enum Move moveId)
@@ -382,6 +395,8 @@ static inline enum MoveTarget GetMoveTarget(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
     enum MoveTarget target = gMovesInfo[moveId].target;
+    if (moveId < MOVES_COUNT && gCustomMoveStats[moveId].target != TARGET_NONE && IsCustomDataMode())
+        target = gCustomMoveStats[moveId].target;
     assertf(target != TARGET_SMART || gMovesInfo[moveId].strikeCount > 1, "Smart target requires strikeCount > 1: %S", gMovesInfo[moveId].name);
     return target;
 }
@@ -676,17 +691,20 @@ static inline bool32 IsMoveCopycatBanned(enum Move moveId)
 
 static inline bool32 IsMoveAssistBanned(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].assistBanned;
+    moveId = SanitizeMoveId(moveId);
+    return GET_MOVE_FLAG_WITH_CUSTOM(moveId, assistBanned);
 }
 
 static inline bool32 IsMoveSleepTalkBanned(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].sleepTalkBanned;
+    moveId = SanitizeMoveId(moveId);
+    return GET_MOVE_FLAG_WITH_CUSTOM(moveId, sleepTalkBanned);
 }
 
 static inline bool32 IsMoveInstructBanned(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].instructBanned;
+    moveId = SanitizeMoveId(moveId);
+    return GET_MOVE_FLAG_WITH_CUSTOM(moveId, instructBanned);
 }
 
 static inline bool32 IsMoveEncoreBanned(enum Move moveId)

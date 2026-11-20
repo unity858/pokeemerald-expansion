@@ -11,6 +11,9 @@
 //   .damagesAirborne  -> MoveDamagesAirborne       (R.O.W.E. FLAG_HIT_IN_AIR)
 //   .blademasterBoost -> IsBlademasterBoostedMove  (R.O.W.E. FLAG_BLADEMASTER_BOOST)
 //   .strikerBoost     -> IsStrikerBoostedMove      (R.O.W.E. FLAG_STRIKER_BOOST)
+//   .sleepTalkBanned  -> IsMoveSleepTalkBanned
+//   .instructBanned   -> IsMoveInstructBanned
+//   .assistBanned     -> IsMoveAssistBanned
 // Boolean properties: CUSTOM_FLAG_SET forces TRUE, CUSTOM_FLAG_CLEAR forces
 // FALSE, leaving the field out keeps vanilla.
 //
@@ -55,6 +58,10 @@ const struct MoveFlagOverride gCustomMoveFlags[MOVES_COUNT] =
     [MOVE_FALSE_SWIPE] = { .blademasterBoost = TRUE }, // Blademaster
     [MOVE_FURY_CUTTER] = { .blademasterBoost = TRUE }, // Blademaster
     [MOVE_SUPERPOWER] = { .punchingMove = CUSTOM_FLAG_SET }, // Punching (Iron Fist)
+    // Dive is a one-turn hit in Custom mode (custom_move_effects.h), so drop the
+    // bans it had only for being a two-turn semi-invulnerable move. Its Sky
+    // Battle ban is kept: that list bans water/ground moves (e.g. Surf, Muddy Water).
+    [MOVE_DIVE] = { .sleepTalkBanned = CUSTOM_FLAG_CLEAR, .instructBanned = CUSTOM_FLAG_CLEAR, .assistBanned = CUSTOM_FLAG_CLEAR }, // Callable by Sleep Talk, Instruct, Assist
     [MOVE_BLAZE_KICK] = { .strikerBoost = TRUE }, // Striker
     [MOVE_DRAGON_CLAW] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1) }, // High crit
     [MOVE_LEAF_BLADE] = { .blademasterBoost = TRUE }, // Blademaster
