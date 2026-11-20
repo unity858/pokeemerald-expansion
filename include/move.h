@@ -284,9 +284,8 @@ extern const struct MoveEffectOverride gCustomMoveEffects[MOVES_COUNT];
 // Custom data mode move flag overrides (src/data/custom_move_flags.h).
 // Boolean properties are tri-state: 0 = vanilla, CUSTOM_FLAG_SET = TRUE,
 // CUSTOM_FLAG_CLEAR = FALSE. criticalHitStage: 0 = vanilla, otherwise
-// CUSTOM_CRIT_STAGE(n). blademasterBoost / strikerBoost are R.O.W.E.-only
-// properties with no vanilla equivalent (always FALSE outside Custom mode);
-// no ability uses them yet (later task).
+// CUSTOM_CRIT_STAGE(n). strikerBoost is an R.O.W.E.-only property with no
+// vanilla equivalent (always FALSE outside Custom mode), read by ABILITY_STRIKER.
 #define CUSTOM_FLAG_SET   1
 #define CUSTOM_FLAG_CLEAR 2
 #define CUSTOM_CRIT_STAGE(n) ((n) + 1) // n = 0..2
@@ -300,12 +299,12 @@ struct MoveFlagOverride
     u32 powderMove:2;
     u32 windMove:2;
     u32 damagesAirborne:2;
-    u32 blademasterBoost:1;
+    u32 slicingMove:2;
     u32 strikerBoost:1;
     u32 sleepTalkBanned:2;
     u32 instructBanned:2;
     u32 assistBanned:2;
-    u32 padding:10;
+    u32 padding:9;
 };
 
 extern const struct MoveFlagOverride gCustomMoveFlags[MOVES_COUNT];
@@ -536,17 +535,13 @@ static inline bool32 IsWindMove(enum Move moveId)
 
 static inline bool32 IsSlicingMove(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].slicingMove;
+    moveId = SanitizeMoveId(moveId);
+    return GET_MOVE_FLAG_WITH_CUSTOM(moveId, slicingMove);
 }
 
-// R.O.W.E.-only move properties (Custom data mode only, see
+// R.O.W.E.-only move property (Custom data mode only, see
 // src/data/custom_move_flags.h). Always FALSE in Vanilla mode.
-// Read by ABILITY_BLADEMASTER / ABILITY_STRIKER (src/battle_util.c).
-static inline bool32 IsBlademasterBoostedMove(enum Move moveId)
-{
-    moveId = SanitizeMoveId(moveId);
-    return moveId < MOVES_COUNT && gCustomMoveFlags[moveId].blademasterBoost && IsCustomDataMode();
-}
+// Read by ABILITY_STRIKER (src/battle_util.c).
 
 static inline bool32 IsStrikerBoostedMove(enum Move moveId)
 {

@@ -344,8 +344,7 @@ enum __attribute__((packed)) Ability
     ABILITIES_COUNT_GEN9,
 
     // R.O.W.E. abilities (boosted moves are set in Custom data mode only)
-    ABILITY_BLADEMASTER = ABILITIES_COUNT_GEN9,
-    ABILITY_STRIKER,
+    ABILITY_STRIKER = ABILITIES_COUNT_GEN9,
     ABILITIES_COUNT,
 };
 

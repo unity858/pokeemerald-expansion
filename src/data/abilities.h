@@ -2557,13 +2557,6 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("Unimplemented."),
     },
 
-    [ABILITY_BLADEMASTER] =
-    {
-        .name = _("Blademaster"),
-        .description = COMPOUND_STRING("Boosts sword moves."),
-        .aiRating = 7,
-    },
-
     [ABILITY_STRIKER] =
     {
         .name = _("Striker"),

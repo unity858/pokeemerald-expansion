@@ -9,7 +9,7 @@
 //   .powderMove       -> IsPowderMove              (R.O.W.E. FLAG_POWDER)
 //   .windMove         -> IsWindMove                (R.O.W.E. FLAG_WIND_BASED)
 //   .damagesAirborne  -> MoveDamagesAirborne       (R.O.W.E. FLAG_HIT_IN_AIR)
-//   .blademasterBoost -> IsBlademasterBoostedMove  (R.O.W.E. FLAG_BLADEMASTER_BOOST)
+//   .slicingMove      -> IsSlicingMove             (R.O.W.E. FLAG_BLADEMASTER_BOOST)
 //   .strikerBoost     -> IsStrikerBoostedMove      (R.O.W.E. FLAG_STRIKER_BOOST)
 //   .sleepTalkBanned  -> IsMoveSleepTalkBanned
 //   .instructBanned   -> IsMoveInstructBanned
@@ -29,11 +29,17 @@
 // Not ported:
 //   FLAG_SHEER_FORCE_BOOST changes (Volt Tackle, Razor Shell, Floaty Fall,
 //   Secret Power): expansion derives Sheer Force from additional effects.
-//   Moves kept fully vanilla per user (Cross Poison's Blademaster flag,
-//   Secret Power's and Beak Blast's flag changes).
+//   Moves kept fully vanilla per user (Secret Power's and Beak Blast's flag
+//   changes).
 //
-// Blademaster / Striker: R.O.W.E.-only properties, read by ABILITY_BLADEMASTER
-// (1.5x power) and ABILITY_STRIKER (1.3x power) in src/battle_util.c.
+// Slicing: R.O.W.E. called Sharpness "Blademaster" and gave it its own move
+// list. In Custom mode Sharpness boosts the union of the vanilla slicing moves
+// and that list, so only the R.O.W.E. moves that aren't vanilla slicing moves
+// are set here (Cut, Slash, Fury Cutter, Leaf Blade, Night Slash, X-Scissor,
+// Psycho Cut, Cross Poison, Sacred Sword, Razor Shell, Secret Sword and Solar
+// Blade already are).
+// Striker: R.O.W.E.-only property, read by ABILITY_STRIKER (1.3x power) in
+// src/battle_util.c.
 
 const struct MoveFlagOverride gCustomMoveFlags[MOVES_COUNT] =
 {
@@ -42,7 +48,7 @@ const struct MoveFlagOverride gCustomMoveFlags[MOVES_COUNT] =
     [MOVE_MEGA_KICK] = { .strikerBoost = TRUE }, // Striker
     [MOVE_JUMP_KICK] = { .strikerBoost = TRUE }, // Striker
     [MOVE_ROLLING_KICK] = { .strikerBoost = TRUE }, // Striker
-    [MOVE_CUT] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1), .blademasterBoost = TRUE }, // High crit, Blademaster
+    [MOVE_CUT] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1) }, // High crit
     [MOVE_FLAMETHROWER] = { .pulseMove = CUSTOM_FLAG_SET }, // Pulse (Mega Launcher)
     [MOVE_HYDRO_PUMP] = { .pulseMove = CUSTOM_FLAG_SET }, // Pulse (Mega Launcher)
     [MOVE_DRILL_PECK] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1) }, // High crit
@@ -50,13 +56,11 @@ const struct MoveFlagOverride gCustomMoveFlags[MOVES_COUNT] =
     [MOVE_BONE_CLUB] = { .damagesAirborne = CUSTOM_FLAG_SET }, // Hits airborne (Fly/Bounce) targets
     [MOVE_HIGH_JUMP_KICK] = { .strikerBoost = TRUE }, // Striker
     [MOVE_BONEMERANG] = { .damagesAirborne = CUSTOM_FLAG_SET }, // Hits airborne (Fly/Bounce) targets
-    [MOVE_SLASH] = { .blademasterBoost = TRUE }, // Blademaster
     [MOVE_TRIPLE_KICK] = { .strikerBoost = TRUE }, // Striker
     [MOVE_OCTAZOOKA] = { .pulseMove = CUSTOM_FLAG_SET }, // Pulse (Mega Launcher)
     [MOVE_ZAP_CANNON] = { .pulseMove = CUSTOM_FLAG_SET }, // Pulse (Mega Launcher)
     [MOVE_BONE_RUSH] = { .damagesAirborne = CUSTOM_FLAG_SET }, // Hits airborne (Fly/Bounce) targets
-    [MOVE_FALSE_SWIPE] = { .blademasterBoost = TRUE }, // Blademaster
-    [MOVE_FURY_CUTTER] = { .blademasterBoost = TRUE }, // Blademaster
+    [MOVE_FALSE_SWIPE] = { .slicingMove = CUSTOM_FLAG_SET }, // Slicing (Sharpness)
     [MOVE_SUPERPOWER] = { .punchingMove = CUSTOM_FLAG_SET }, // Punching (Iron Fist)
     // Dive is a one-turn hit in Custom mode (custom_move_effects.h), so drop the
     // bans it had only for being a two-turn semi-invulnerable move. Its Sky
@@ -64,22 +68,17 @@ const struct MoveFlagOverride gCustomMoveFlags[MOVES_COUNT] =
     [MOVE_DIVE] = { .sleepTalkBanned = CUSTOM_FLAG_CLEAR, .instructBanned = CUSTOM_FLAG_CLEAR, .assistBanned = CUSTOM_FLAG_CLEAR }, // Callable by Sleep Talk, Instruct, Assist
     [MOVE_BLAZE_KICK] = { .strikerBoost = TRUE }, // Striker
     [MOVE_DRAGON_CLAW] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1) }, // High crit
-    [MOVE_LEAF_BLADE] = { .blademasterBoost = TRUE }, // Blademaster
     [MOVE_CLOSE_COMBAT] = { .punchingMove = CUSTOM_FLAG_SET }, // Punching (Iron Fist)
     [MOVE_SUCKER_PUNCH] = { .punchingMove = CUSTOM_FLAG_SET }, // Punching (Iron Fist)
-    [MOVE_NIGHT_SLASH] = { .blademasterBoost = TRUE }, // Blademaster
-    [MOVE_X_SCISSOR] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1), .blademasterBoost = TRUE }, // High crit, Blademaster
+    [MOVE_X_SCISSOR] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1) }, // High crit
     [MOVE_FOCUS_BLAST] = { .pulseMove = CUSTOM_FLAG_SET }, // Pulse (Mega Launcher)
-    [MOVE_SHADOW_CLAW] = { .blademasterBoost = TRUE }, // Blademaster
-    [MOVE_PSYCHO_CUT] = { .blademasterBoost = TRUE }, // Blademaster
+    [MOVE_SHADOW_CLAW] = { .slicingMove = CUSTOM_FLAG_SET }, // Slicing (Sharpness)
     [MOVE_FLASH_CANNON] = { .pulseMove = CUSTOM_FLAG_SET }, // Pulse (Mega Launcher)
-    // [MOVE_CROSS_POISON] = { .blademasterBoost = TRUE }, // Blademaster. Kept vanilla per user
-    [MOVE_DUAL_CHOP] = { .blademasterBoost = TRUE }, // Blademaster
-    [MOVE_SACRED_SWORD] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1), .blademasterBoost = TRUE }, // High crit, Blademaster
-    [MOVE_RAZOR_SHELL] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1), .blademasterBoost = TRUE }, // High crit, Blademaster (stats/effect stay vanilla)
-    [MOVE_SECRET_SWORD] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1), .blademasterBoost = TRUE }, // High crit, Blademaster
+    [MOVE_DUAL_CHOP] = { .slicingMove = CUSTOM_FLAG_SET }, // Slicing (Sharpness)
+    [MOVE_SACRED_SWORD] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1) }, // High crit
+    [MOVE_RAZOR_SHELL] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1) }, // High crit (stats/effect stay vanilla)
+    [MOVE_SECRET_SWORD] = { .criticalHitStage = CUSTOM_CRIT_STAGE(1) }, // High crit
     [MOVE_HIGH_HORSEPOWER] = { .strikerBoost = TRUE }, // Striker
-    [MOVE_SOLAR_BLADE] = { .blademasterBoost = TRUE }, // Blademaster
     [MOVE_TROP_KICK] = { .strikerBoost = TRUE }, // Striker
     [MOVE_DYNAMAX_CANNON] = { .pulseMove = CUSTOM_FLAG_SET }, // Pulse (Mega Launcher)
     [MOVE_SNIPE_SHOT] = { .pulseMove = CUSTOM_FLAG_SET }, // Pulse (Mega Launcher); high crit already vanilla
