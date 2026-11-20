@@ -1,6 +1,13 @@
 #ifndef GUARD_CONSTANTS_TMS_HMS_H
 #define GUARD_CONSTANTS_TMS_HMS_H
 
+// TMs that teach a move an HM also teaches use an alias token, since each
+// FOREACH_TM/FOREACH_HM token must be unique (it names ITEM_TM_*/ITEM_HM_* and
+// the TM/HM index). MOVE_<token> must resolve to the real move.
+#define MOVE_FLY_TM         MOVE_FLY
+#define MOVE_SURF_TM        MOVE_SURF
+#define MOVE_WATERFALL_TM   MOVE_WATERFALL
+
 #define FOREACH_TM(F) \
     F(FOCUS_PUNCH) \
     F(DRAGON_CLAW) \
@@ -51,7 +58,57 @@
     F(STEEL_WING) \
     F(SKILL_SWAP) \
     F(SNATCH) \
-    F(OVERHEAT)
+    F(OVERHEAT) \
+    F(LOW_SWEEP) \
+    F(FOCUS_BLAST) \
+    F(ENERGY_BALL) \
+    F(FALSE_SWIPE) \
+    F(SCALD) \
+    F(DARKEST_LARIAT) \
+    F(CHARGE_BEAM) \
+    F(ROOST) \
+    F(BRUTAL_SWING) \
+    F(QUASH) \
+    F(WILL_O_WISP) \
+    F(ACROBATICS) \
+    F(EMBARGO) \
+    F(EXPLOSION) \
+    F(SHADOW_CLAW) \
+    F(PAYBACK) \
+    F(SMART_STRIKE) \
+    F(GIGA_IMPACT) \
+    F(ROCK_POLISH) \
+    F(AURORA_VEIL) \
+    F(STONE_EDGE) \
+    F(VOLT_SWITCH) \
+    F(THUNDER_WAVE) \
+    F(GYRO_BALL) \
+    F(SWORDS_DANCE) \
+    F(FLY_TM) \
+    F(PSYCH_UP) \
+    F(BULLDOZE) \
+    F(FROST_BREATH) \
+    F(ROCK_SLIDE) \
+    F(X_SCISSOR) \
+    F(DRAGON_TAIL) \
+    F(INFESTATION) \
+    F(POISON_JAB) \
+    F(DREAM_EATER) \
+    F(GRASS_KNOT) \
+    F(SWAGGER) \
+    F(SLEEP_TALK) \
+    F(U_TURN) \
+    F(SUBSTITUTE) \
+    F(FLASH_CANNON) \
+    F(TRICK_ROOM) \
+    F(WILD_CHARGE) \
+    F(SURF_TM) \
+    F(SNARL) \
+    F(NATURE_POWER) \
+    F(DARK_PULSE) \
+    F(WATERFALL_TM) \
+    F(DAZZLING_GLEAM) \
+    F(CONFIDE)
 
 #define FOREACH_HM(F) \
     F(CUT) \

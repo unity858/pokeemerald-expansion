@@ -35,6 +35,7 @@ CONFIG_ENABLED_PAT = re.compile(r"^#define P_LEARNSET_HELPER_TEACHABLE\s+(?P<cfg
 ALPHABETICAL_ORDER_ENABLED_PAT = re.compile(r"^#define HGSS_SORT_TMS_BY_NUM\s+(?P<cfg_val>[^ ]*)", flags=re.MULTILINE)
 TM_LITERACY_PAT = re.compile(r"^#define P_TM_LITERACY\s+GEN_(?P<cfg_val>[^ ]*)", flags=re.MULTILINE)
 TMHM_MACRO_PAT = re.compile(r"F\((\w+)\)")
+TMHM_ALIAS_PAT = re.compile(r"^#define\s+MOVE_(\w+)\s+MOVE_(\w+)", flags=re.MULTILINE)
 SNAKIFY_PAT = re.compile(r"(?!^)([A-Z]+)")
 
 def enabled() -> bool:
@@ -52,12 +53,19 @@ def extract_repo_tms() -> typing.Generator[str, None, None]:
     """
     with open("./include/constants/tms_hms.h", "r") as tmshms_fp:
         tmshms = tmshms_fp.read()
+        aliases = dict(TMHM_ALIAS_PAT.findall(tmshms))
         match_it = TMHM_MACRO_PAT.finditer(tmshms)
         if not match_it:
             return
 
+        seen = set()
         for match in match_it:
-            yield f"MOVE_{match.group(1)}"
+            # A TM that teaches the same move as an HM uses an alias token;
+            # resolve it to the real move and only yield each move once.
+            move = f"MOVE_{aliases.get(match.group(1), match.group(1))}"
+            if move not in seen:
+                seen.add(move)
+                yield move
 
 def extract_tm_litteracy_config() -> bool:
     config = False
