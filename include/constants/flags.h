@@ -53,9 +53,9 @@
 
 #define FLAG_CUSTOM_DATA_MODE 0x20 // Set if Custom data mode was chosen on the new-game options screen
 #define FLAG_EXP_SHARE_PARTY  0x21 // Set while the key-item Exp. Share is switched on (R.O.W.E. party-wide Exp. Share)
-#define FLAG_UNUSED_0x022    0x22 // Unused Flag
-#define FLAG_UNUSED_0x023    0x23 // Unused Flag
-#define FLAG_UNUSED_0x024    0x24 // Unused Flag
+#define FLAG_DEXNAV_SEARCHING  0x22 // DexNav: set while a DexNav search is active (DN_FLAG_SEARCHING)
+#define FLAG_SYS_DEXNAV_GET    0x23 // DexNav: shows DexNav in the start menu (DN_FLAG_DEXNAV_GET)
+#define FLAG_SYS_DETECTOR_MODE 0x24 // DexNav: lets the player stumble on hidden Pokémon (DN_FLAG_DETECTOR_MODE)
 #define FLAG_UNUSED_0x025    0x25 // Unused Flag
 #define FLAG_UNUSED_0x026    0x26 // Unused Flag
 #define FLAG_UNUSED_0x027    0x27 // Unused Flag

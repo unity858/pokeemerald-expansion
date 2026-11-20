@@ -61,6 +61,7 @@ static void WarpToTruck(void);
 static void ResetMiniGamesRecords(void);
 static void ResetItemFlags(void);
 static void ResetDexNav(void);
+static void EnableStartingFeatures(void);
 
 EWRAM_DATA bool8 gDifferentSaveFile = FALSE;
 EWRAM_DATA bool8 gEnableContestDebugging = FALSE;
@@ -234,6 +235,7 @@ void NewGameInitData(void)
     ResetItemFlags();
     ResetDexNav();
     ClearFollowerNPCData();
+    EnableStartingFeatures();
 }
 
 static void ResetMiniGamesRecords(void)
@@ -248,6 +250,16 @@ static void ResetItemFlags(void)
 {
 #if OW_SHOW_ITEM_DESCRIPTIONS == OW_ITEM_DESCRIPTIONS_FIRST_TIME
     memset(&gSaveBlock3Ptr->itemFlags, 0, sizeof(gSaveBlock3Ptr->itemFlags));
+#endif
+}
+
+// Built-in features that are available from the very start (both data modes),
+// as in R.O.W.E., which handed the player the DexNav in the moving truck.
+static void EnableStartingFeatures(void)
+{
+#if DEXNAV_ENABLED
+    FlagSet(DN_FLAG_DEXNAV_GET);
+    FlagSet(DN_FLAG_DETECTOR_MODE);
 #endif
 }
 
