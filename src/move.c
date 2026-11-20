@@ -5,3 +5,4 @@
 
 #include "data/moves_info.h"
 #include "data/custom_move_stats.h"
+#include "data/custom_move_effects.h"

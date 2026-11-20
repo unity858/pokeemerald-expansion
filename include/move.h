@@ -249,6 +249,32 @@ struct MoveStatOverride
 
 extern const struct MoveStatOverride gCustomMoveStats[MOVES_COUNT];
 
+// Custom data mode move effect overrides (src/data/custom_move_effects.h).
+// Consulted by GetMoveEffect, GetMoveAdditionalEffectCount,
+// GetMoveAdditionalEffectById and GetMoveDescription only when
+// IsCustomDataMode() is TRUE.
+//   effect:      EFFECT_PLACEHOLDER (0) = keep the vanilla effect.
+//   additionalEffects: only used when overrideAdditionalEffects is TRUE; set
+//                all three fields with CUSTOM_ADDITIONAL_EFFECTS(...). The list
+//                fully replaces the vanilla one (CUSTOM_NO_ADDITIONAL_EFFECTS
+//                removes it).
+//   description: NULL = keep the vanilla description.
+#define CUSTOM_ADDITIONAL_EFFECTS(...) .additionalEffects = EFFECTS_ARR( __VA_ARGS__ ), .numAdditionalEffects = ARRAY_COUNT(EFFECTS_ARR( __VA_ARGS__ )), .overrideAdditionalEffects = TRUE
+#define CUSTOM_NO_ADDITIONAL_EFFECTS .additionalEffects = NULL, .numAdditionalEffects = 0, .overrideAdditionalEffects = TRUE
+
+struct MoveEffectOverride
+{
+    const struct AdditionalEffect *additionalEffects;
+    const u8 *description;
+    u16 effect; // enum BattleMoveEffects
+    u8 numAdditionalEffects:3;
+    u8 overrideAdditionalEffects:1;
+    u8 padding:4;
+};
+
+extern const struct MoveEffectOverride gCustomMoveEffects[MOVES_COUNT];
+
+
 // The argument field in MovesInfo is limited to 4 bytes on purpose to not waste space unnecessarily.
 // Downstream projects are free to remove this limitation.
 _Static_assert(sizeof(gMovesInfo[0].argument) == 4, "MovesInfo argument does not fit into 4 bytes");
@@ -274,7 +300,10 @@ static inline const u8 *GetMoveName(enum Move moveId)
 
 static inline enum BattleMoveEffects GetMoveEffect(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].effect;
+    moveId = SanitizeMoveId(moveId);
+    if (moveId < MOVES_COUNT && gCustomMoveEffects[moveId].effect != EFFECT_PLACEHOLDER && IsCustomDataMode())
+        return gCustomMoveEffects[moveId].effect;
+    return gMovesInfo[moveId].effect;
 }
 
 static inline const u8 *GetMoveDescription(enum Move moveId)
@@ -282,6 +311,8 @@ static inline const u8 *GetMoveDescription(enum Move moveId)
     moveId = SanitizeMoveId(moveId);
     if (GetMoveEffect(moveId) == EFFECT_PLACEHOLDER)
         return gNotDoneYetDescription;
+    if (moveId < MOVES_COUNT && gCustomMoveEffects[moveId].description != NULL && IsCustomDataMode())
+        return gCustomMoveEffects[moveId].description;
     return gMovesInfo[moveId].description;
 }
 
@@ -376,7 +407,10 @@ static inline bool32 MoveAlwaysCrits(enum Move moveId)
 
 static inline u32 GetMoveAdditionalEffectCount(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].numAdditionalEffects;
+    moveId = SanitizeMoveId(moveId);
+    if (moveId < MOVES_COUNT && gCustomMoveEffects[moveId].overrideAdditionalEffects && IsCustomDataMode())
+        return gCustomMoveEffects[moveId].numAdditionalEffects;
+    return gMovesInfo[moveId].numAdditionalEffects;
 }
 
 static inline bool32 MoveMakesContact(enum Move moveId)
@@ -630,7 +664,7 @@ static inline bool32 IsValidApprenticeMove(enum Move moveId)
 static inline u32 GetMoveTwoTurnAttackStringId(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    enum BattleMoveEffects effect = gMovesInfo[moveId].effect;
+    enum BattleMoveEffects effect = GetMoveEffect(moveId);
     assertf(gBattleMoveEffects[effect].twoTurnEffect, "not a two-turn move: %S", gMovesInfo[moveId].name);
     return gMovesInfo[moveId].argument.twoTurnAttack.stringId;
 }
@@ -638,7 +672,7 @@ static inline u32 GetMoveTwoTurnAttackStringId(enum Move moveId)
 static inline u32 GetTwoTurnMoveSemiInvulnerability(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    enum BattleMoveEffects effect = gMovesInfo[moveId].effect;
+    enum BattleMoveEffects effect = GetMoveEffect(moveId);
     assertf(effect == EFFECT_SEMI_INVULNERABLE || effect == EFFECT_SKY_DROP, "not a two-turn move with status: %S", gMovesInfo[moveId].name);
     return gMovesInfo[moveId].argument.twoTurnAttack.state;
 }
@@ -646,7 +680,7 @@ static inline u32 GetTwoTurnMoveSemiInvulnerability(enum Move moveId)
 static inline u32 GetTwoTurnMoveWeather(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    enum BattleMoveEffects effect = gMovesInfo[moveId].effect;
+    enum BattleMoveEffects effect = GetMoveEffect(moveId);
     assertf(effect == EFFECT_TWO_TURNS_ATTACK || effect == EFFECT_SOLAR_BEAM, "not a two-turn move with weather: %S", gMovesInfo[moveId].name);
     return gMovesInfo[moveId].argument.twoTurnAttack.weather;
 }
@@ -654,84 +688,84 @@ static inline u32 GetTwoTurnMoveWeather(enum Move moveId)
 static inline enum Species GetMoveSpeciesPowerOverride_Species(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_SPECIES_POWER_OVERRIDE, "not a species power override move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_SPECIES_POWER_OVERRIDE, "not a species power override move: %S", GetMoveName(moveId));
     return gMovesInfo[SanitizeMoveId(moveId)].argument.speciesPowerOverride.species;
 }
 
 static inline u32 GetMoveSpeciesPowerOverride_Power(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_SPECIES_POWER_OVERRIDE, "not a species power override move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_SPECIES_POWER_OVERRIDE, "not a species power override move: %S", GetMoveName(moveId));
     return gMovesInfo[SanitizeMoveId(moveId)].argument.speciesPowerOverride.power;
 }
 
 static inline u32 GetMoveSpeciesPowerOverride_NumOfHits(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_SPECIES_POWER_OVERRIDE, "not a species power override move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_SPECIES_POWER_OVERRIDE, "not a species power override move: %S", GetMoveName(moveId));
     return gMovesInfo[SanitizeMoveId(moveId)].argument.speciesPowerOverride.numOfHits;
 }
 
 static inline u32 GetMoveReflectDamage_DamagePercent(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_REFLECT_DAMAGE, "not a damage reflection move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_REFLECT_DAMAGE, "not a damage reflection move: %S", GetMoveName(moveId));
     return gMovesInfo[SanitizeMoveId(moveId)].argument.reflectDamage.damagePercent;
 }
 
 static inline u32 GetMoveReflectDamage_DamageCategories(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_REFLECT_DAMAGE, "not a damage reflection move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_REFLECT_DAMAGE, "not a damage reflection move: %S", GetMoveName(moveId));
     return gMovesInfo[SanitizeMoveId(moveId)].argument.reflectDamage.damageCategories;
 }
 
 static inline enum BattleTerrain GetMoveTerrainBoost_Terrain(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_TERRAIN_BOOST, "not a terrain boosted move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_TERRAIN_BOOST, "not a terrain boosted move: %S", GetMoveName(moveId));
     return gMovesInfo[moveId].argument.terrainBoost.terrain;
 }
 
 static inline u32 GetMoveTerrainBoost_Percent(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_TERRAIN_BOOST, "not a terrain boosted move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_TERRAIN_BOOST, "not a terrain boosted move: %S", GetMoveName(moveId));
     return gMovesInfo[moveId].argument.terrainBoost.percent;
 }
 
 static inline enum TerrainGroundCheck GetMoveTerrainBoost_GroundCheck(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_TERRAIN_BOOST, "not a terrain boosted move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_TERRAIN_BOOST, "not a terrain boosted move: %S", GetMoveName(moveId));
     return gMovesInfo[moveId].argument.terrainBoost.groundCheck;
 }
 
 static inline bool32 GetMoveTerrainBoost_HitsBothFoes(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_TERRAIN_BOOST, "not a terrain boosted move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_TERRAIN_BOOST, "not a terrain boosted move: %S", GetMoveName(moveId));
     return gMovesInfo[moveId].argument.terrainBoost.hitsBothFoes;
 }
 
 static inline enum Move GetPledgeComboMove(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_PLEDGE, "not a pledge move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_PLEDGE, "not a pledge move: %S", GetMoveName(moveId));
     return gMovesInfo[moveId].argument.pledge.comboMove;
 }
 
 static inline enum Move GetPledgeResultMove(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_PLEDGE, "not a pledge move: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_PLEDGE, "not a pledge move: %S", GetMoveName(moveId));
     return gMovesInfo[moveId].argument.pledge.resultMove;
 }
 
 static inline enum ProtectMethod GetMoveProtectMethod(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    enum BattleMoveEffects effect = gMovesInfo[moveId].effect;
+    enum BattleMoveEffects effect = GetMoveEffect(moveId);
     assertf(effect == EFFECT_PROTECT || effect == EFFECT_ENDURE || effect == EFFECT_MAT_BLOCK, "not a protect move: %S", GetMoveName(moveId));
     return gMovesInfo[moveId].argument.protectMethod;
 }
@@ -743,7 +777,7 @@ static inline u32 GetMoveEffectArg_Status(enum Move moveId)
     extern bool32 MoveHasAdditionalEffect(enum Move move, enum MoveEffect moveEffect);
 
     moveId = SanitizeMoveId(moveId);
-    enum BattleMoveEffects effect = gMovesInfo[moveId].effect;
+    enum BattleMoveEffects effect = GetMoveEffect(moveId);
     assertf(effect == EFFECT_FOCUS_ENERGY || effect == EFFECT_DOUBLE_POWER_ON_ARG_STATUS || MoveHasAdditionalEffect(moveId, MOVE_EFFECT_REMOVE_STATUS), "not a move with status: %S", gMovesInfo[moveId].name);
     return gMovesInfo[moveId].argument.status;
 }
@@ -751,14 +785,14 @@ static inline u32 GetMoveEffectArg_Status(enum Move moveId)
 static inline u32 GetMoveStatusOnStatChange(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_STAT_CHANGE_ON_STATUS, "not a stat change on status move: %S", gMovesInfo[moveId].name);
+    assertf(GetMoveEffect(moveId) == EFFECT_STAT_CHANGE_ON_STATUS, "not a stat change on status move: %S", gMovesInfo[moveId].name);
     return gMovesInfo[moveId].argument.status;
 }
 
 static inline u32 GetMoveEffectArg_MoveProperty(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    enum BattleMoveEffects effect = gMovesInfo[moveId].effect;
+    enum BattleMoveEffects effect = GetMoveEffect(moveId);
     assertf(effect == EFFECT_FIRST_TURN_ONLY || effect == EFFECT_HEAL_PULSE, "not a move with moveProperty: %S", gMovesInfo[moveId].name);
     return gMovesInfo[SanitizeMoveId(moveId)].argument.moveProperty;
 }
@@ -766,7 +800,7 @@ static inline u32 GetMoveEffectArg_MoveProperty(enum Move moveId)
 static inline enum HoldEffect GetMoveEffectArg_HoldEffect(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    enum BattleMoveEffects effect = gMovesInfo[moveId].effect;
+    enum BattleMoveEffects effect = GetMoveEffect(moveId);
     assertf(effect == EFFECT_CHANGE_TYPE_ON_ITEM, "not a move with a hold effect: %S", gMovesInfo[moveId].name);
     return gMovesInfo[moveId].argument.holdEffect;
 }
@@ -774,7 +808,7 @@ static inline enum HoldEffect GetMoveEffectArg_HoldEffect(enum Move moveId)
 static inline enum Type GetMoveArgType(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    enum BattleMoveEffects effect = gMovesInfo[moveId].effect;
+    enum BattleMoveEffects effect = GetMoveEffect(moveId);
     assertf(effect == EFFECT_SOAK
          || effect == EFFECT_TWO_TYPED_MOVE
          || effect == EFFECT_THIRD_TYPE
@@ -788,21 +822,21 @@ static inline enum Type GetMoveArgType(enum Move moveId)
 static inline u32 GetMoveFixedHPDamage(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_FIXED_HP_DAMAGE, "not a fixed-damage move: %S", gMovesInfo[moveId].name);
+    assertf(GetMoveEffect(moveId) == EFFECT_FIXED_HP_DAMAGE, "not a fixed-damage move: %S", gMovesInfo[moveId].name);
     return gMovesInfo[moveId].argument.fixedDamage;
 }
 
 static inline u32 GetMoveRecoil(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_RECOIL, "not a recoil move: %S", gMovesInfo[moveId].name);
+    assertf(GetMoveEffect(moveId) == EFFECT_RECOIL, "not a recoil move: %S", gMovesInfo[moveId].name);
     return gMovesInfo[moveId].argument.recoilPercentage;
 }
 
 static inline u32 GetMoveSecondaryEffectChance(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
-    assertf(gMovesInfo[moveId].effect == EFFECT_SECRET_POWER, "not a move with a secondary effect chance argument: %S", GetMoveName(moveId));
+    assertf(GetMoveEffect(moveId) == EFFECT_SECRET_POWER, "not a move with a secondary effect chance argument: %S", GetMoveName(moveId));
     return gMovesInfo[moveId].argument.secondaryEffectChance;
 }
 
@@ -823,32 +857,35 @@ static inline enum MoveEffect GetMoveNonVolatileStatus(enum Move move)
 static inline u32 GetMoveDamagePercentage(enum Move move)
 {
     move = SanitizeMoveId(move);
-    assertf(gMovesInfo[move].effect == EFFECT_FIXED_PERCENT_DAMAGE, "not a percentage-damage move: %S", gMovesInfo[move].name);
+    assertf(GetMoveEffect(move) == EFFECT_FIXED_PERCENT_DAMAGE, "not a percentage-damage move: %S", gMovesInfo[move].name);
     return gMovesInfo[move].argument.damagePercentage;
 }
 
 static inline enum Ability GetMoveOverwriteAbility(enum Move move)
 {
     move = SanitizeMoveId(move);
-    assertf(gMovesInfo[move].effect == EFFECT_OVERWRITE_ABILITY, "not a move that overwrites abilities: %S", gMovesInfo[move].name);
+    assertf(GetMoveEffect(move) == EFFECT_OVERWRITE_ABILITY, "not a move that overwrites abilities: %S", gMovesInfo[move].name);
     return gMovesInfo[move].argument.overwriteAbility;
 }
 
 static inline enum BattleWeather GetMoveWeatherType(enum Move move)
 {
-    assertf(gMovesInfo[move].effect == EFFECT_WEATHER || gMovesInfo[move].effect == EFFECT_WEATHER_AND_SWITCH, "not a move that sets weather: %S", gMovesInfo[move].name);
+    assertf(GetMoveEffect(move) == EFFECT_WEATHER || GetMoveEffect(move) == EFFECT_WEATHER_AND_SWITCH, "not a move that sets weather: %S", gMovesInfo[move].name);
     return gMovesInfo[SanitizeMoveId(move)].argument.weatherType;
 }
 
 static inline enum BattleTerrain GetMoveTerrainType(enum Move move)
 {
-    assertf(gMovesInfo[move].effect == EFFECT_TERRAIN, "not a move that sets terrain: %S", gMovesInfo[move].name);
+    assertf(GetMoveEffect(move) == EFFECT_TERRAIN, "not a move that sets terrain: %S", gMovesInfo[move].name);
     return gMovesInfo[SanitizeMoveId(move)].argument.terrainType;
 }
 
 static inline const struct AdditionalEffect *GetMoveAdditionalEffectById(enum Move moveId, u32 effect)
 {
-    return &gMovesInfo[SanitizeMoveId(moveId)].additionalEffects[effect];
+    moveId = SanitizeMoveId(moveId);
+    if (moveId < MOVES_COUNT && gCustomMoveEffects[moveId].overrideAdditionalEffects && IsCustomDataMode())
+        return &gCustomMoveEffects[moveId].additionalEffects[effect];
+    return &gMovesInfo[moveId].additionalEffects[effect];
 }
 
 static inline u32 GetMoveContestEffect(enum Move moveId)
