@@ -6132,10 +6132,10 @@ static s32 AI_Risky(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum M
     {
     case EFFECT_REFLECT_DAMAGE:
         if (GetMoveReflectDamage_DamageCategories(move) & (1u << DAMAGE_CATEGORY_PHYSICAL) // Can reflect physical damage
-         && GetSpeciesBaseAttack(gBattleMons[battlerDef].species) >= GetSpeciesBaseSpAttack(gBattleMons[battlerDef].species) + 10)
+         && GetSpeciesBaseAttack(GetBattlerBaseStatSpecies(battlerDef)) >= GetSpeciesBaseSpAttack(GetBattlerBaseStatSpecies(battlerDef)) + 10)
             ADJUST_SCORE(STRONG_RISKY_EFFECT);
         else if (GetMoveReflectDamage_DamageCategories(move) & (1u << DAMAGE_CATEGORY_SPECIAL) // Can reflect special damage
-              && GetSpeciesBaseSpAttack(gBattleMons[battlerDef].species) >= GetSpeciesBaseAttack(gBattleMons[battlerDef].species) + 10)
+              && GetSpeciesBaseSpAttack(GetBattlerBaseStatSpecies(battlerDef)) >= GetSpeciesBaseAttack(GetBattlerBaseStatSpecies(battlerDef)) + 10)
             ADJUST_SCORE(STRONG_RISKY_EFFECT);
         break;
 
@@ -6145,7 +6145,7 @@ static s32 AI_Risky(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum M
             ADJUST_SCORE(AVERAGE_RISKY_EFFECT);
         break;
     case EFFECT_REVENGE:
-        if (GetSpeciesBaseSpeed(gBattleMons[battlerDef].species) >= GetSpeciesBaseSpeed(gBattleMons[battlerAtk].species) + 10)
+        if (GetSpeciesBaseSpeed(GetBattlerBaseStatSpecies(battlerDef)) >= GetSpeciesBaseSpeed(GetBattlerBaseStatSpecies(battlerAtk)) + 10)
             ADJUST_SCORE(AVERAGE_RISKY_EFFECT);
         break;
     case EFFECT_STAT_CHANGE_HALF_HP:

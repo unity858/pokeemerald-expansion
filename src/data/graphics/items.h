@@ -2122,3 +2122,6 @@ const u16 gItemIconPalette_IronPill[] = INCGFX_U16("graphics/items/icon_palettes
 
 const u32 gItemIcon_SafariPass[] = INCGFX_U32("graphics/items/icons/safari_pass.png", ".4bpp.smol");
 const u16 gItemIconPalette_SafariPass[] = INCGFX_U16("graphics/items/icon_palettes/safari_pass.pal", ".gbapal");
+
+// Exiolite: the Eviolite graphic with R.O.W.E.'s Exiolite palette
+const u16 gItemIconPalette_Exiolite[] = INCGFX_U16("graphics/items/icon_palettes/exiolite.pal", ".gbapal");

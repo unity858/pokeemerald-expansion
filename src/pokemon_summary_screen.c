@@ -83,7 +83,8 @@
 #define PSS_LABEL_WINDOW_PORTRAIT_DEX_NUMBER 17
 #define PSS_LABEL_WINDOW_PORTRAIT_NICKNAME 18 // The upper name
 #define PSS_LABEL_WINDOW_PORTRAIT_SPECIES 19 // The lower name
-#define PSS_LABEL_WINDOW_END 20
+#define PSS_LABEL_WINDOW_PORTRAIT_EXIOLITE 20 // R.O.W.E. Exiolite marker, right of the Dex number
+#define PSS_LABEL_WINDOW_END 21
 
 // Dynamic fields for the Pokémon Info page
 #define PSS_DATA_WINDOW_INFO_ORIGINAL_TRAINER 0
@@ -610,6 +611,15 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .paletteNum = 6,
         .baseBlock = 431,
     },
+    [PSS_LABEL_WINDOW_PORTRAIT_EXIOLITE] = {
+        .bg = 0,
+        .tilemapLeft = 6,
+        .tilemapTop = 2,
+        .width = 1,
+        .height = 2,
+        .paletteNum = 6, // has the icon's blues at 11/12, like R.O.W.E.'s palette
+        .baseBlock = 823,
+    },
     [PSS_LABEL_WINDOW_END] = DUMMY_WIN_TEMPLATE
 };
 static const struct WindowTemplate sPageInfoTemplate[] =
@@ -745,6 +755,9 @@ static const u8 sTextColors[][3] =
     {0, 5, 6},
     {0, 7, 8}
 };
+
+// R.O.W.E.: 8x8 orb shown for Exiolited Pokemon (graphics/ui_menu/summary_screen/summary_exiolite_icon.png)
+static const u8 sExioliteIcon_Gfx[] = INCGFX_U8("graphics/summary_screen/exiolite_icon.png", ".4bpp");
 
 static const u8 sButtons_Gfx[][4 * TILE_SIZE_4BPP] = {
     INCGFX_U8("graphics/summary_screen/a_button.png", ".4bpp"),
@@ -3176,6 +3189,7 @@ static void PrintMonInfo(void)
     FillWindowPixelBuffer(PSS_LABEL_WINDOW_PORTRAIT_DEX_NUMBER, PIXEL_FILL(0));
     FillWindowPixelBuffer(PSS_LABEL_WINDOW_PORTRAIT_NICKNAME, PIXEL_FILL(0));
     FillWindowPixelBuffer(PSS_LABEL_WINDOW_PORTRAIT_SPECIES, PIXEL_FILL(0));
+    FillWindowPixelBuffer(PSS_LABEL_WINDOW_PORTRAIT_EXIOLITE, PIXEL_FILL(0));
     if (!sMonSummaryScreen->summary.isEgg)
         PrintNotEggInfo();
     else
@@ -3215,6 +3229,17 @@ static void PrintNotEggInfo(void)
         else
             SetMonPicBackgroundPalette(TRUE);
     }
+    // R.O.W.E. Exiolite marker, next to the Dex number (which turns red for shiny Pokemon)
+    if (GetMonData(mon, MON_DATA_EXIOLITE))
+    {
+        BlitBitmapToWindow(PSS_LABEL_WINDOW_PORTRAIT_EXIOLITE, sExioliteIcon_Gfx, 0, 4, 8, 8);
+        PutWindowTilemap(PSS_LABEL_WINDOW_PORTRAIT_EXIOLITE);
+        CopyWindowToVram(PSS_LABEL_WINDOW_PORTRAIT_EXIOLITE, COPYWIN_GFX);
+    }
+    else
+    {
+        ClearWindowTilemap(PSS_LABEL_WINDOW_PORTRAIT_EXIOLITE);
+    }
     StringCopy(gStringVar1, gText_LevelSymbol);
     ConvertIntToDecimalStringN(gStringVar2, summary->level, STR_CONV_MODE_LEFT_ALIGN, 3);
     StringAppend(gStringVar1, gStringVar2);
@@ -3235,6 +3260,7 @@ static void PrintEggInfo(void)
     PutWindowTilemap(PSS_LABEL_WINDOW_PORTRAIT_NICKNAME);
     ClearWindowTilemap(PSS_LABEL_WINDOW_PORTRAIT_DEX_NUMBER);
     ClearWindowTilemap(PSS_LABEL_WINDOW_PORTRAIT_SPECIES);
+    ClearWindowTilemap(PSS_LABEL_WINDOW_PORTRAIT_EXIOLITE);
 }
 
 static void PrintGenderSymbol(struct Pokemon *mon, enum Species species)

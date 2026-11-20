@@ -1389,8 +1389,14 @@ void CalculateMonStatsCont(struct Pokemon *mon, bool32 updateSpeedStat)
     s32 newMaxHP;
 
     u8 nature = GetMonData(mon, MON_DATA_HIDDEN_NATURE);
+    enum Species statSpecies = species;
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
+
+    // R.O.W.E. Exiolite: base stats of the evolution reached at this level.
+    if (GetMonData(mon, MON_DATA_EXIOLITE))
+        statSpecies = GetExioliteStatSpecies(species, GetMonData(mon, MON_DATA_PERSONALITY),
+                                             GetMonData(mon, MON_DATA_EXIOLITE_BRANCH), level);
 
     bool32 hyperTrained[NUM_STATS]; //In a battle test, hyper training flag indicates a fixed stat
     s32 iv[NUM_STATS];
@@ -1413,7 +1419,10 @@ void CalculateMonStatsCont(struct Pokemon *mon, bool32 updateSpeedStat)
         if (i == STAT_HP)
             continue;
 
-        u8 baseStat = GetSpeciesBaseStat(species, i);
+        u8 baseStat = GetSpeciesBaseStat(statSpecies, i);
+        // R.O.W.E.: an Exiolited Vigoroth keeps its own Attack and Speed (Slaking's come with Truant).
+        if (species == SPECIES_VIGOROTH && (i == STAT_ATK || i == STAT_SPEED))
+            baseStat = GetSpeciesBaseStat(species, i);
         s32 n = (((2 * baseStat + iv[i] + ev[i] / 4) * level) / 100) + 5;
         n = ModifyStatByNature(nature, n, i);
         if (B_FRIENDSHIP_BOOST == TRUE)
@@ -1426,13 +1435,13 @@ void CalculateMonStatsCont(struct Pokemon *mon, bool32 updateSpeedStat)
         return;
 #endif
 
-    if (HasShedinjaHPHandling(species))
+    if (HasShedinjaHPHandling(species) || HasShedinjaHPHandling(statSpecies))
     {
         newMaxHP = 1;
     }
     else
     {
-        s32 n = 2 * GetSpeciesBaseHP(species) + iv[STAT_HP];
+        s32 n = 2 * GetSpeciesBaseHP(statSpecies) + iv[STAT_HP];
         newMaxHP = (((n + ev[STAT_HP] / 4) * level) / 100) + level + 10;
     }
 
@@ -2418,6 +2427,12 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
                 }
             }
             break;
+        case MON_DATA_EXIOLITE:
+            retVal = GetSubstruct0(boxMon)->exiolite;
+            break;
+        case MON_DATA_EXIOLITE_BRANCH:
+            retVal = GetSubstruct0(boxMon)->exioliteBranch;
+            break;
         case MON_DATA_EVOLUTION_TRACKER:
             {
                 struct PokemonSubstruct1 *substruct1 = GetSubstruct1(boxMon);
@@ -2849,6 +2864,12 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
             break;
         case MON_DATA_TERA_TYPE:
             SET8(GetSubstruct0(boxMon)->teraType);
+            break;
+        case MON_DATA_EXIOLITE:
+            SET8(GetSubstruct0(boxMon)->exiolite);
+            break;
+        case MON_DATA_EXIOLITE_BRANCH:
+            SET8(GetSubstruct0(boxMon)->exioliteBranch);
             break;
         case MON_DATA_EVOLUTION_TRACKER:
         {
@@ -3402,6 +3423,327 @@ const struct Evolution *GetSpeciesEvolutions(enum Species species)
     if (evolutions == NULL)
         return gSpeciesInfo[SPECIES_NONE].evolutions;
     return evolutions;
+}
+
+// ---------------------------------------------------------------------------
+// R.O.W.E. Exiolite
+//
+// An Exiolited Pokemon (MON_DATA_EXIOLITE) can't evolve and uses the base stats
+// of the furthest evolution it could have reached at its current level, along
+// the path chosen when the item was used (MON_DATA_EXIOLITE_BRANCH). The target
+// is recomputed on every stat calculation, so the boost moves up as it levels.
+//
+// Level requirements per evolution step (no other requirement is checked):
+// - R.O.W.E.'s fixed Exiolite level for the step, if it has one (sExioliteLevels;
+//   for stone/trade/etc. evolvers);
+// - otherwise the evolution's level for level-up methods;
+// - otherwise Lv. 24 for friendship evolutions (as in R.O.W.E.);
+// - otherwise none.
+// Gender-locked steps the Pokemon's gender can't take are skipped. Split
+// evolutions (Shedinja) aren't paths.
+// ---------------------------------------------------------------------------
+
+#define EXIOLITE_FRIENDSHIP_LEVEL 24
+
+struct ExioliteLevel
+{
+    u16 species;
+    u16 target; // matched by National Dex number, so regional forms of the target share it
+    u8 level;
+};
+
+// R.O.W.E.'s EVO_EXIOLITE levels (src/data/pokemon/evolution.h).
+static const struct ExioliteLevel sExioliteLevels[] =
+{
+    {SPECIES_PIKACHU,           SPECIES_RAICHU,             30},
+    {SPECIES_NIDORINA,          SPECIES_NIDOQUEEN,          36},
+    {SPECIES_NIDORINO,          SPECIES_NIDOKING,           36},
+    {SPECIES_CLEFAIRY,          SPECIES_CLEFABLE,           30},
+    {SPECIES_VULPIX,            SPECIES_NINETALES,          25},
+    {SPECIES_JIGGLYPUFF,        SPECIES_WIGGLYTUFF,         30},
+    {SPECIES_GLOOM,             SPECIES_VILEPLUME,          36},
+    {SPECIES_GROWLITHE,         SPECIES_ARCANINE,           25},
+    {SPECIES_POLIWHIRL,         SPECIES_POLIWRATH,          38},
+    {SPECIES_KADABRA,           SPECIES_ALAKAZAM,           36},
+    {SPECIES_MACHOKE,           SPECIES_MACHAMP,            42},
+    {SPECIES_WEEPINBELL,        SPECIES_VICTREEBEL,         36},
+    {SPECIES_GRAVELER,          SPECIES_GOLEM,              42},
+    {SPECIES_MAGNETON,          SPECIES_MAGNEZONE,          42},
+    {SPECIES_SHELLDER,          SPECIES_CLOYSTER,           26},
+    {SPECIES_HAUNTER,           SPECIES_GENGAR,             42},
+    {SPECIES_ONIX,              SPECIES_STEELIX,            32},
+    {SPECIES_EXEGGCUTE,         SPECIES_EXEGGUTOR,          30},
+    {SPECIES_LICKITUNG,         SPECIES_LICKILICKY,         33},
+    {SPECIES_RHYDON,            SPECIES_RHYPERIOR,          45},
+    {SPECIES_TANGELA,           SPECIES_TANGROWTH,          38},
+    {SPECIES_SEADRA,            SPECIES_KINGDRA,            42},
+    {SPECIES_STARYU,            SPECIES_STARMIE,            26},
+    {SPECIES_SCYTHER,           SPECIES_SCIZOR,             35},
+    {SPECIES_ELECTABUZZ,        SPECIES_ELECTIVIRE,         38},
+    {SPECIES_MAGMAR,            SPECIES_MAGMORTAR,          38},
+    {SPECIES_PORYGON,           SPECIES_PORYGON2,           22},
+    {SPECIES_TOGETIC,           SPECIES_TOGEKISS,           36},
+    {SPECIES_AIPOM,             SPECIES_AMBIPOM,            32},
+    {SPECIES_SUNKERN,           SPECIES_SUNFLORA,           22},
+    {SPECIES_YANMA,             SPECIES_YANMEGA,            33},
+    {SPECIES_MURKROW,           SPECIES_HONCHKROW,          30},
+    {SPECIES_MISDREAVUS,        SPECIES_MISMAGIUS,          26},
+    {SPECIES_GLIGAR,            SPECIES_GLISCOR,            26},
+    {SPECIES_SNEASEL,           SPECIES_WEAVILE,            28},
+    {SPECIES_PILOSWINE,         SPECIES_MAMOSWINE,          45},
+    {SPECIES_PORYGON2,          SPECIES_PORYGON_Z,          40},
+    {SPECIES_LOMBRE,            SPECIES_LUDICOLO,           34},
+    {SPECIES_NUZLEAF,           SPECIES_SHIFTRY,            34},
+    {SPECIES_SKITTY,            SPECIES_DELCATTY,           28},
+    {SPECIES_NOSEPASS,          SPECIES_PROBOPASS,          33},
+    {SPECIES_FEEBAS,            SPECIES_MILOTIC,            20},
+    {SPECIES_DUSCLOPS,          SPECIES_DUSKNOIR,           40},
+    {SPECIES_CLAMPERL,          SPECIES_GOREBYSS,           26},
+    {SPECIES_BONSLY,            SPECIES_SUDOWOODO,          20},
+    {SPECIES_MIME_JR,           SPECIES_MR_MIME,            20},
+    {SPECIES_MANTYKE,           SPECIES_MANTINE,            28},
+    {SPECIES_PANSAGE,           SPECIES_SIMISAGE,           22},
+    {SPECIES_PANSEAR,           SPECIES_SIMISEAR,           22},
+    {SPECIES_PANPOUR,           SPECIES_SIMIPOUR,           22},
+    {SPECIES_MUNNA,             SPECIES_MUSHARNA,           26},
+    {SPECIES_BOLDORE,           SPECIES_GIGALITH,           40},
+    {SPECIES_WOOBAT,            SPECIES_SWOOBAT,            26},
+    {SPECIES_GURDURR,           SPECIES_CONKELDURR,         40},
+    {SPECIES_COTTONEE,          SPECIES_WHIMSICOTT,         22},
+    {SPECIES_PETILIL,           SPECIES_LILLIGANT,          22},
+    {SPECIES_MINCCINO,          SPECIES_CINCCINO,           24},
+    {SPECIES_KARRABLAST,        SPECIES_ESCAVALIER,         28},
+    {SPECIES_EELEKTRIK,         SPECIES_EELEKTROSS,         40},
+    {SPECIES_LAMPENT,           SPECIES_CHANDELURE,         42},
+    {SPECIES_SHELMET,           SPECIES_ACCELGOR,           28},
+    {SPECIES_FLOETTE,           SPECIES_FLORGES,            32},
+    {SPECIES_SPRITZEE,          SPECIES_AROMATISSE,         26},
+    {SPECIES_SWIRLIX,           SPECIES_SLURPUFF,           26},
+    {SPECIES_PHANTUMP,          SPECIES_TREVENANT,          30},
+    {SPECIES_PUMPKABOO,         SPECIES_GOURGEIST,          30},
+    {SPECIES_CHARJABUG,         SPECIES_VIKAVOLT,           42},
+    {SPECIES_CRABRAWLER,        SPECIES_CRABOMINABLE,       32},
+    {SPECIES_STEENEE,           SPECIES_TSAREENA,           28},
+    {SPECIES_CLOBBOPUS,         SPECIES_GRAPPLOCT,          35},
+    {SPECIES_SANDSHREW_ALOLA,   SPECIES_SANDSLASH_ALOLA,    22},
+    {SPECIES_VULPIX_ALOLA,      SPECIES_NINETALES_ALOLA,    25},
+    {SPECIES_DARUMAKA_GALAR,    SPECIES_DARMANITAN_GALAR,   35},
+    {SPECIES_FLOETTE_YELLOW,    SPECIES_FLORGES,            35},
+    {SPECIES_FLOETTE_ORANGE,    SPECIES_FLORGES,            35},
+    {SPECIES_FLOETTE_BLUE,      SPECIES_FLORGES,            35},
+    {SPECIES_FLOETTE_WHITE,     SPECIES_FLORGES,            35},
+    {SPECIES_PUMPKABOO_SMALL,   SPECIES_GOURGEIST,          30},
+    {SPECIES_PUMPKABOO_LARGE,   SPECIES_GOURGEIST,          30},
+    {SPECIES_PUMPKABOO_SUPER,   SPECIES_GOURGEIST,          30},
+};
+
+static bool32 EvoHasCondition(const struct EvolutionParam *params, enum EvolutionConditions condition)
+{
+    u32 i;
+
+    if (params == NULL)
+        return FALSE;
+    for (i = 0; params[i].condition != CONDITIONS_END; i++)
+    {
+        if (params[i].condition == condition)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+static u32 GetExioliteStepLevel(enum Species species, const struct Evolution *evo)
+{
+    u32 i;
+    u32 targetDexNum = gSpeciesInfo[SanitizeSpeciesId(evo->targetSpecies)].natDexNum;
+
+    for (i = 0; i < ARRAY_COUNT(sExioliteLevels); i++)
+    {
+        if (sExioliteLevels[i].species == species && gSpeciesInfo[sExioliteLevels[i].target].natDexNum == targetDexNum)
+            return sExioliteLevels[i].level;
+    }
+    if ((evo->method == EVO_LEVEL || evo->method == EVO_LEVEL_BATTLE_ONLY) && evo->param != 0)
+        return evo->param;
+    if (EvoHasCondition(evo->params, IF_MIN_FRIENDSHIP))
+        return EXIOLITE_FRIENDSHIP_LEVEL;
+    return 0;
+}
+
+static bool32 IsExioliteStep(enum Species species, u32 personality, const struct Evolution *evo)
+{
+    enum Species target = SanitizeSpeciesId(evo->targetSpecies);
+    u32 i;
+
+    if (evo->method == EVO_NONE || evo->method == EVO_SPLIT_FROM_EVO)
+        return FALSE;
+    if (target == SPECIES_NONE || target == species)
+        return FALSE;
+    if (evo->params != NULL)
+    {
+        u8 gender = GetGenderFromSpeciesAndPersonality(species, personality);
+        for (i = 0; evo->params[i].condition != CONDITIONS_END; i++)
+        {
+            if (evo->params[i].condition == IF_GENDER && evo->params[i].arg1 != gender)
+                return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+// Two final species are the same option if they look and play the same for
+// Exiolite: same name, same regional form and same (vanilla) base stats. This
+// folds e.g. Alcremie's or Florges' cosmetic forms into one option. Vanilla
+// stats keep the option list, and so the stored index, independent of data mode.
+static bool32 IsSameExioliteLeaf(enum Species a, enum Species b)
+{
+    const struct SpeciesInfo *ia = &gSpeciesInfo[a];
+    const struct SpeciesInfo *ib = &gSpeciesInfo[b];
+
+    if (a == b)
+        return TRUE;
+    return StringCompare(GetSpeciesName(a), GetSpeciesName(b)) == 0
+        && ia->isAlolanForm == ib->isAlolanForm
+        && ia->isGalarianForm == ib->isGalarianForm
+        && ia->isHisuianForm == ib->isHisuianForm
+        && ia->isPaldeanForm == ib->isPaldeanForm
+        && ia->baseHP == ib->baseHP
+        && ia->baseAttack == ib->baseAttack
+        && ia->baseDefense == ib->baseDefense
+        && ia->baseSpeed == ib->baseSpeed
+        && ia->baseSpAttack == ib->baseSpAttack
+        && ia->baseSpDefense == ib->baseSpDefense;
+}
+
+struct ExioliteSearch
+{
+    u32 personality;
+    u32 wanted; // index of the option to return in *out
+    u32 count;
+    bool32 found;
+    u16 leaves[EXIOLITE_MAX_OPTIONS];
+    struct ExioliteOption current;
+    struct ExioliteOption *out;
+};
+
+static void ExioliteSearchPaths(struct ExioliteSearch *s, enum Species species, u32 depth)
+{
+    const struct Evolution *evos = GetSpeciesEvolutions(species);
+    bool32 hasStep = FALSE;
+    u32 i, j;
+
+    if (depth < EXIOLITE_MAX_STAGES && evos != NULL)
+    {
+        for (i = 0; evos[i].method != EVOLUTIONS_END; i++)
+        {
+            enum Species target;
+            u32 level;
+            bool32 seen = FALSE;
+
+            if (!IsExioliteStep(species, s->personality, &evos[i]))
+                continue;
+            target = SanitizeSpeciesId(evos[i].targetSpecies);
+
+            // The same target can be listed for several methods (e.g. Leafeon);
+            // handle it once, with the lowest level requirement.
+            level = GetExioliteStepLevel(species, &evos[i]);
+            for (j = 0; evos[j].method != EVOLUTIONS_END; j++)
+            {
+                if (j == i || SanitizeSpeciesId(evos[j].targetSpecies) != target
+                 || !IsExioliteStep(species, s->personality, &evos[j]))
+                    continue;
+                if (j < i)
+                {
+                    seen = TRUE;
+                    break;
+                }
+                level = min(level, GetExioliteStepLevel(species, &evos[j]));
+            }
+            if (seen)
+                continue;
+
+            hasStep = TRUE;
+            s->current.species[depth] = target;
+            s->current.level[depth] = level;
+            s->current.lastEvo[depth] = &evos[i];
+            ExioliteSearchPaths(s, target, depth + 1);
+            if (s->found)
+                return;
+        }
+    }
+
+    if (!hasStep && depth > 0)
+    {
+        enum Species leaf = s->current.species[depth - 1];
+
+        for (j = 0; j < s->count; j++)
+        {
+            if (IsSameExioliteLeaf(s->leaves[j], leaf))
+                return;
+        }
+        if (s->count >= EXIOLITE_MAX_OPTIONS)
+            return;
+        s->leaves[s->count] = leaf;
+        if (s->count == s->wanted)
+        {
+            s->current.numStages = depth;
+            *s->out = s->current;
+            s->found = TRUE;
+        }
+        s->count++;
+    }
+}
+
+// Number of evolution paths Exiolite can follow from this species (0 if none).
+u32 GetExioliteOptionCount(enum Species species, u32 personality)
+{
+    struct ExioliteSearch search = {0};
+    struct ExioliteOption unused;
+
+    search.personality = personality;
+    search.wanted = EXIOLITE_MAX_OPTIONS; // never matches
+    search.out = &unused;
+    ExioliteSearchPaths(&search, SanitizeSpeciesId(species), 0);
+    return search.count;
+}
+
+bool32 GetExioliteOption(enum Species species, u32 personality, u32 index, struct ExioliteOption *option)
+{
+    struct ExioliteSearch search = {0};
+
+    search.personality = personality;
+    search.wanted = index;
+    search.out = option;
+    ExioliteSearchPaths(&search, SanitizeSpeciesId(species), 0);
+    return search.found;
+}
+
+// The species whose base stats an Exiolited Pokemon uses at this level.
+enum Species GetExioliteStatSpecies(enum Species species, u32 personality, u32 branch, u32 level)
+{
+    struct ExioliteOption option;
+    enum Species statSpecies = species;
+    u32 i;
+
+    if (!GetExioliteOption(species, personality, branch, &option)
+     && !GetExioliteOption(species, personality, 0, &option))
+        return species;
+
+    for (i = 0; i < option.numStages; i++)
+    {
+        if (option.level[i] > level)
+            break;
+        statSpecies = option.species[i];
+    }
+    return statSpecies;
+}
+
+enum Species GetMonExioliteStatSpecies(struct Pokemon *mon)
+{
+    enum Species species = GetMonData(mon, MON_DATA_SPECIES);
+
+    if (!GetMonData(mon, MON_DATA_EXIOLITE))
+        return species;
+    return GetExioliteStatSpecies(species, GetMonData(mon, MON_DATA_PERSONALITY),
+                                  GetMonData(mon, MON_DATA_EXIOLITE_BRANCH), GetMonData(mon, MON_DATA_LEVEL));
 }
 
 const u16 *GetSpeciesFormTable(enum Species species)
@@ -4505,6 +4847,10 @@ enum Species GetEvolutionTargetSpecies(struct Pokemon *mon, enum EvolutionMode m
 
     // R.O.W.E.: Eviolite also prevents evolution while held, including by evolution items
     if (holdEffect == HOLD_EFFECT_EVIOLITE)
+        return SPECIES_NONE;
+
+    // R.O.W.E.: an Exiolited Pokemon can never evolve, by any method
+    if (GetMonData(mon, MON_DATA_EXIOLITE))
         return SPECIES_NONE;
 
     switch (mode)

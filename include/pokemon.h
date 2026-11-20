@@ -125,6 +125,8 @@ enum MonData {
     MON_DATA_GIGANTAMAX_FACTOR,
     MON_DATA_TERA_TYPE,
     MON_DATA_EVOLUTION_TRACKER,
+    MON_DATA_EXIOLITE,
+    MON_DATA_EXIOLITE_BRANCH,
 };
 
 #define BLOCK_AI_DYNAMAX 15 // Used as dynamax level value by the AI to indicate this mon shouldn't dynamax
@@ -134,7 +136,9 @@ struct PokemonSubstruct0
     enum Species species:11; // 2047 species.
     enum Type teraType:5; // 30 types.
     enum Item heldItem:10; // 1023 items.
-    u16 unused_02:6;
+    u16 exioliteBranch:4; // R.O.W.E. Exiolite: chosen evolution path (index into GetExioliteOption), 16 paths.
+    u16 exiolite:1; // R.O.W.E. Exiolite: uses evolved base stats, can't evolve.
+    u16 unused_02:1;
     u32 experience:21;
     u32 nickname11:8; // 11th character of nickname.
     u32 unused_04:3;
@@ -912,6 +916,21 @@ const u16 *GetSpeciesTeachableLearnset(enum Species species);
 const u16 *GetSpeciesEggMoves(enum Species species);
 bool32 SpeciesHasEggMove(enum Species species, enum Move move);
 const struct Evolution *GetSpeciesEvolutions(enum Species species);
+
+// R.O.W.E. Exiolite (see src/pokemon.c)
+#define EXIOLITE_MAX_OPTIONS 16 // fits MON_DATA_EXIOLITE_BRANCH (4 bits)
+#define EXIOLITE_MAX_STAGES 4
+struct ExioliteOption
+{
+    u16 species[EXIOLITE_MAX_STAGES];               // each evolution step along the path
+    u8 level[EXIOLITE_MAX_STAGES];                  // level needed to get that step's base stats
+    const struct Evolution *lastEvo[EXIOLITE_MAX_STAGES]; // evolution entry used for each step
+    u8 numStages;
+};
+u32 GetExioliteOptionCount(enum Species species, u32 personality);
+bool32 GetExioliteOption(enum Species species, u32 personality, u32 index, struct ExioliteOption *option);
+enum Species GetExioliteStatSpecies(enum Species species, u32 personality, u32 branch, u32 level);
+enum Species GetMonExioliteStatSpecies(struct Pokemon *mon);
 const u16 *GetSpeciesFormTable(enum Species species);
 const struct FormChange *GetSpeciesFormChanges(enum Species species);
 u8 CalculatePPWithBonus(enum Move move, u8 ppBonuses, u8 moveIndex);

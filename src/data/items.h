@@ -16830,6 +16830,22 @@ const struct ItemInfo gItemsInfo[] =
         .iconPic = gItemIcon_BeastBall,
         .iconPalette = gItemIconPalette_BeastBall,
     },
+
+    [ITEM_EXIOLITE] =
+    {
+        .name = ITEM_NAME("Exiolite"),
+        .price = 9000,
+        .description = COMPOUND_STRING(
+            "Raises the base stats\n"
+            "of a Pokémon that is\n"
+            "able to evolve."),
+        .pocket = POCKET_POWER_UP,
+        .sortType = ITEM_TYPE_FIELD_USE,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_Exiolite,
+        .iconPic = gItemIcon_Eviolite,
+        .iconPalette = gItemIconPalette_Exiolite,
+    },
 };
 
 #undef ITEM_NAME

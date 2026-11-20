@@ -394,13 +394,13 @@ static s32 CalcBeatUpDamage(struct DamageContext *ctx)
 {
     u32 partyIndex = gBattleStruct->beatUpSpecies[gBattleStruct->beatUpSlot++];
     struct Pokemon *party = GetBattlerParty(ctx->battlerAtk);
-    enum Species species = GetMonData(&party[partyIndex], MON_DATA_SPECIES);
+    enum Species species = GetMonExioliteStatSpecies(&party[partyIndex]); // R.O.W.E. Exiolite base stats
     u32 levelFactor = GetMonData(&party[partyIndex], MON_DATA_LEVEL) * 2 / 5 + 2;
     s32 dmg = GetSpeciesBaseAttack(species);
 
     dmg *= GetMovePower(ctx->move);
     dmg *= levelFactor;
-    dmg /= GetSpeciesBaseDefense(gBattleMons[ctx->battlerDef].species);
+    dmg /= GetSpeciesBaseDefense(GetBattlerBaseStatSpecies(ctx->battlerDef));
     dmg = (dmg / 50) + 2;
 
     if (gProtectStructs[ctx->battlerAtk].helpingHand)
@@ -7133,7 +7133,10 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
         break;
     case HOLD_EFFECT_DEEP_SEA_TOOTH:
-        // R.O.W.E.: boosts Attack instead of Sp. Atk; Clamperl 2x, Huntail 1.5x
+        // R.O.W.E.: boosts Attack instead of Sp. Atk; Clamperl 2x, Huntail 1.5x.
+        // No boost for an Exiolited Clamperl (it already has evolved stats).
+        if (IsBattlerExiolited(battlerAtk))
+            break;
         if (gBattleMons[battlerAtk].species == SPECIES_CLAMPERL && IsBattleMovePhysical(move))
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
         else if (gBattleMons[battlerAtk].species == SPECIES_HUNTAIL && IsBattleMovePhysical(move))
@@ -7161,6 +7164,48 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
     modifier = ApplyOffensiveBadgeBoost(modifier, battlerAtk, move);
 
     return uq4_12_multiply_by_int_half_down(modifier, atkStat);
+}
+
+// R.O.W.E. Exiolite is stored on the party Pokemon (see GetMonExioliteStatSpecies).
+// The AI sometimes puts a different party Pokemon into gBattleMons[battler] to
+// simulate a switch-in without changing gBattlerPartyIndexes, so the party
+// Pokemon is found by personality, falling back to the battler's party slot.
+static struct Pokemon *GetBattlerExioliteMon(enum BattlerId battler)
+{
+    struct Pokemon *mon = GetBattlerMon(battler);
+
+    if (GetMonData(mon, MON_DATA_PERSONALITY) != gBattleMons[battler].personality)
+    {
+        struct Pokemon *party = GetBattlerParty(battler);
+        u32 i;
+
+        for (i = 0; i < PARTY_SIZE; i++)
+        {
+            if (GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
+             && GetMonData(&party[i], MON_DATA_PERSONALITY) == gBattleMons[battler].personality)
+                return &party[i];
+        }
+    }
+    return mon;
+}
+
+bool32 IsBattlerExiolited(enum BattlerId battler)
+{
+    return GetMonData(GetBattlerExioliteMon(battler), MON_DATA_EXIOLITE);
+}
+
+// Species whose base stats this battler effectively has: for an Exiolited Pokemon,
+// the evolution it gets stats from. A transformed battler copies its target's
+// stats, so it uses its current (copied) species.
+enum Species GetBattlerBaseStatSpecies(enum BattlerId battler)
+{
+    struct Pokemon *mon;
+
+    if (gBattleMons[battler].volatiles.transformed || !IsBattlerExiolited(battler))
+        return gBattleMons[battler].species;
+    mon = GetBattlerExioliteMon(battler);
+    return GetExioliteStatSpecies(gBattleMons[battler].species, GetMonData(mon, MON_DATA_PERSONALITY),
+                                  GetMonData(mon, MON_DATA_EXIOLITE_BRANCH), GetMonData(mon, MON_DATA_LEVEL));
 }
 
 static bool32 CanEvolve(enum Species species)
@@ -7310,6 +7355,9 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
     switch (ctx->holdEffects[ctx->battlerDef])
     {
     case HOLD_EFFECT_DEEP_SEA_SCALE:
+        // No boost for an Exiolited Clamperl (it already has evolved stats).
+        if (IsBattlerExiolited(battlerDef))
+            break;
         if (gBattleMons[battlerDef].species == SPECIES_CLAMPERL && !usesDefStat)
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
         // R.O.W.E.: Gorebyss gets 1.5x Sp. Def
@@ -7340,7 +7388,8 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
             enum Species species = gBattleMons[battlerDef].species;
             if (gBattleMons[battlerDef].volatiles.transformed && gBattleMons[battlerDef].volatiles.transformedMonSpecies != SPECIES_NONE)
                 species = gBattleMons[battlerDef].volatiles.transformedMonSpecies;
-            if (CanEvolve(species))
+            // R.O.W.E.: Eviolite does nothing for an Exiolited Pokemon
+            if (CanEvolve(species) && !IsBattlerExiolited(battlerDef))
                 modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
         }
         break;
@@ -8061,7 +8110,7 @@ s32 CalcCritChanceStageGen1(struct DamageContext *ctx)
     s32 moveCritStage = GetMoveCriticalHitStage(ctx->move);
     s32 bonusCritStage = gBattleMons[ctx->battlerAtk].volatiles.bonusCritStages; // G-Max Chi Strike
     u32 holdEffectCritStage = GetHoldEffectCritChanceIncrease(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk]);
-    u16 baseSpeed = GetSpeciesBaseSpeed(gBattleMons[ctx->battlerAtk].species);
+    u16 baseSpeed = GetSpeciesBaseSpeed(GetBattlerBaseStatSpecies(ctx->battlerAtk));
 
     critChance = baseSpeed / 2;
 

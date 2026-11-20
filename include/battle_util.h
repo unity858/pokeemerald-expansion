@@ -126,6 +126,8 @@ u32 SetRandomTarget(enum BattlerId battlerAtk);
 u32 GetBattleMoveTarget(enum Move move, enum MoveTarget moveTarget);
 enum Obedience GetAttackerObedienceForAction(void);
 enum HoldEffect GetBattlerHoldEffect(enum BattlerId battler);
+bool32 IsBattlerExiolited(enum BattlerId battler);
+enum Species GetBattlerBaseStatSpecies(enum BattlerId battler);
 enum HoldEffect GetBattlerHoldEffectIgnoreAbility(enum BattlerId battler);
 enum HoldEffect GetBattlerHoldEffectIgnoreNegation(enum BattlerId battler);
 enum HoldEffect GetBattlerHoldEffectInternal(enum BattlerId battler, enum Ability ability);

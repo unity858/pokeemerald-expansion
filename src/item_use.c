@@ -904,6 +904,13 @@ void ItemUseOutOfBattle_BallSeal(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
+// R.O.W.E.: Exiolite gives a Pokemon its evolution's base stats; it can't evolve after.
+void ItemUseOutOfBattle_Exiolite(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_Exiolite;
+    SetUpItemUseCallback(taskId);
+}
+
 // R.O.W.E.: the Soot Sack shows how much ash has been gathered.
 void ItemUseOutOfBattle_SootSack(u8 taskId)
 {

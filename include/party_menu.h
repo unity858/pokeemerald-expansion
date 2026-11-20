@@ -97,6 +97,7 @@ void ItemUseCB_Feather(u8 taskId, TaskFunc task);
 void ItemUseCB_PowerCandy(u8 taskId, TaskFunc task);
 void ItemUseCB_IronPill(u8 taskId, TaskFunc task);
 void ItemUseCB_BallSeal(u8 taskId, TaskFunc task);
+void ItemUseCB_Exiolite(u8 taskId, TaskFunc task);
 void ItemUseCB_ResetEVs(u8 taskId, TaskFunc task);
 void ItemUseCB_ReduceEV(u8 taskId, TaskFunc task);
 void ItemUseCB_PPRecovery(u8 taskId, TaskFunc task);
