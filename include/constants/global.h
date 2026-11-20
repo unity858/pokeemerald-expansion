@@ -196,10 +196,15 @@ enum Gender
 #define OPTIONS_BUTTON_MODE_LR 1
 #define OPTIONS_BUTTON_MODE_L_EQUALS_A 2
 
-#define OPTIONS_TEXT_SPEED_SLOW 0
+// Text speed choices are Mid, Fast and Instant. Slow (0) was removed; the values
+// are kept so existing saves keep their meaning, and 0 or any other out-of-range
+// stored value is read as Mid.
 #define OPTIONS_TEXT_SPEED_MID 1
 #define OPTIONS_TEXT_SPEED_FAST 2
 #define OPTIONS_TEXT_SPEED_INSTANT 3
+#define OPTIONS_TEXT_SPEED_FIRST OPTIONS_TEXT_SPEED_MID
+#define OPTIONS_TEXT_SPEED_LAST  OPTIONS_TEXT_SPEED_INSTANT
+#define OPTIONS_TEXT_SPEED_COUNT (OPTIONS_TEXT_SPEED_LAST + 1)
 
 #define OPTIONS_SOUND_MONO 0
 #define OPTIONS_SOUND_STEREO 1

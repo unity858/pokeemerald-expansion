@@ -2420,7 +2420,7 @@ static const struct BattleWindowText *const sBattleTextOnWindowsInfo[] =
     [B_WIN_TYPE_KANTO_TUTORIAL] = sTextOnWindowsInfo_KantoTutorial,
 };
 
-static const u8 sRecordedBattleTextSpeeds[] = {8, 4, 1, 0};
+static const u8 sRecordedBattleTextSpeeds[] = {8, 4, 1, 0}; // [0] = Slow, only seen in recordings from older saves
 
 void BufferStringBattle(enum StringID stringID, enum BattlerId battler)
 {
@@ -3907,7 +3907,12 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
         if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
             speed = 1;
         else if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
-            speed = sRecordedBattleTextSpeeds[GetTextSpeedInRecordedBattle()];
+        {
+            u32 recordedSpeed = GetTextSpeedInRecordedBattle();
+            if (recordedSpeed >= ARRAY_COUNT(sRecordedBattleTextSpeeds))
+                recordedSpeed = OPTIONS_TEXT_SPEED_MID;
+            speed = sRecordedBattleTextSpeeds[recordedSpeed];
+        }
         else
             speed = GetPlayerTextSpeedDelay();
 
