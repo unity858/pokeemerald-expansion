@@ -19,7 +19,7 @@ static u8 GetSaveValidStatus(const struct SaveSectorLocation *);
 static u8 CopySaveSlotData(u16, struct SaveSectorLocation *);
 static u8 TryWriteSector(u8, u8 *);
 static u8 HandleWriteSector(u16, const struct SaveSectorLocation *);
-static u8 HandleReplaceSector(u16, const struct SaveSectorLocation *);
+static u8 HandleReplaceSector(u16, const struct SaveSectorLocation *, bool32);
 static void CopyToSaveBlock3(u32, struct SaveSector *);
 static void CopyFromSaveBlock3(u32, struct SaveSector *);
 
@@ -81,6 +81,17 @@ STATIC_ASSERT(sizeof(struct SaveBlock3) <= SAVE_BLOCK_3_CHUNK_SIZE * NUM_SECTORS
 STATIC_ASSERT(sizeof(struct SaveBlock2) <= SECTOR_DATA_SIZE, SaveBlock2FreeSpace);
 STATIC_ASSERT(sizeof(struct SaveBlock1) <= SECTOR_DATA_SIZE * (SECTOR_ID_SAVEBLOCK1_END - SECTOR_ID_SAVEBLOCK1_START + 1), SaveBlock1FreeSpace);
 STATIC_ASSERT(sizeof(struct PokemonStorage) <= SECTOR_DATA_SIZE * (SECTOR_ID_PKMN_STORAGE_END - SECTOR_ID_PKMN_STORAGE_START + 1), PokemonStorageFreeSpace);
+
+// SaveBlock3 is spread over the spare SAVE_BLOCK_3_CHUNK_SIZE bytes of each sector,
+// so it extends past the SaveBlock1/2 sectors into the PC storage sectors.
+// Partial saves (SAVE_LINK, WriteSaveBlock2 + WriteSaveBlock1Sector) must rewrite every
+// sector that holds SaveBlock3 data, otherwise a reset after a partial save would load
+// SaveBlock3 data that is half new and half from the last full save. For the PC storage
+// sectors among them only the SaveBlock3 chunk is updated; their PC payload is kept as it
+// is on flash, so (as before) partial saves never save the PC.
+#define NUM_SAVEBLOCK3_SECTORS ((sizeof(struct SaveBlock3) + SAVE_BLOCK_3_CHUNK_SIZE - 1) / SAVE_BLOCK_3_CHUNK_SIZE)
+#define PARTIAL_SAVE_LAST_SECTOR ((u16)max(SECTOR_ID_SAVEBLOCK1_END, NUM_SAVEBLOCK3_SECTORS - 1))
+STATIC_ASSERT(PARTIAL_SAVE_LAST_SECTOR < NUM_SECTORS_PER_SLOT, PartialSaveSectorCount);
 
 COMMON_DATA u16 gLastWrittenSector = 0;
 COMMON_DATA u32 gLastSaveCounter = 0;
@@ -293,11 +304,11 @@ static u8 HandleWriteIncrementalSector(u16 numSectors, const struct SaveSectorLo
     return status;
 }
 
-static u8 HandleReplaceSectorAndVerify(u16 sectorId, const struct SaveSectorLocation *locations)
+static u8 HandleReplaceSectorAndVerify(u16 sectorId, const struct SaveSectorLocation *locations, bool32 keepFlashData)
 {
     u8 status = SAVE_STATUS_OK;
 
-    HandleReplaceSector(sectorId - 1, locations);
+    HandleReplaceSector(sectorId - 1, locations, keepFlashData);
 
     if (gDamagedSaveSectors)
     {
@@ -308,8 +319,12 @@ static u8 HandleReplaceSectorAndVerify(u16 sectorId, const struct SaveSectorLoca
     return status;
 }
 
-// Similar to HandleWriteSector, but fully erases the sector first, and skips writing the first signature byte
-static u8 HandleReplaceSector(u16 sectorId, const struct SaveSectorLocation *locations)
+// Similar to HandleWriteSector, but fully erases the sector first, and skips writing the first signature byte.
+// If keepFlashData is TRUE, the sector's main data (and its checksum) is kept as it currently is
+// in the current save slot on flash and only its SaveBlock3 chunk is refreshed from RAM. This is
+// used by partial saves for the PC storage sectors that also hold SaveBlock3 data. If the sector
+// on flash isn't valid, the main data is taken from RAM instead.
+static u8 HandleReplaceSector(u16 sectorId, const struct SaveSectorLocation *locations, bool32 keepFlashData)
 {
     u16 i;
     u16 sector;
@@ -326,22 +341,40 @@ static u8 HandleReplaceSector(u16 sectorId, const struct SaveSectorLocation *loc
     data = locations[sectorId].data;
     size = locations[sectorId].size;
 
-    // Clear temp save sector.
-    for (i = 0; i < SECTOR_SIZE; i++)
-        ((u8 *)gReadWriteSector)[i] = 0;
+    if (keepFlashData)
+    {
+        ReadFlashSector(sector, gReadWriteSector);
+        if (gReadWriteSector->signature != SECTOR_SIGNATURE
+         || gReadWriteSector->id != sectorId
+         || gReadWriteSector->checksum != CalculateChecksum(gReadWriteSector->data, size))
+            keepFlashData = FALSE;
+    }
 
-    // Set footer data
-    gReadWriteSector->id = sectorId;
-    gReadWriteSector->signature = SECTOR_SIGNATURE;
-    gReadWriteSector->counter = gSaveCounter;
+    if (keepFlashData)
+    {
+        // Keep the data and checksum read from flash, refresh only the footer and SaveBlock3 chunk
+        gReadWriteSector->counter = gSaveCounter;
+        memset(gReadWriteSector->saveBlock3Chunk, 0, SAVE_BLOCK_3_CHUNK_SIZE);
+    }
+    else
+    {
+        // Clear temp save sector.
+        for (i = 0; i < SECTOR_SIZE; i++)
+            ((u8 *)gReadWriteSector)[i] = 0;
 
-    // Copy current data to temp buffer for writing
-    for (i = 0; i < size; i++)
-        gReadWriteSector->data[i] = data[i];
+        // Set footer data
+        gReadWriteSector->id = sectorId;
+        gReadWriteSector->signature = SECTOR_SIGNATURE;
+        gReadWriteSector->counter = gSaveCounter;
+
+        // Copy current data to temp buffer for writing
+        for (i = 0; i < size; i++)
+            gReadWriteSector->data[i] = data[i];
+
+        gReadWriteSector->checksum = CalculateChecksum(data, size);
+    }
 
     CopyFromSaveBlock3(sectorId, gReadWriteSector);
-
-    gReadWriteSector->checksum = CalculateChecksum(data, size);
 
     // Erase old save data
     EraseFlashSector(sector);
@@ -749,11 +782,13 @@ u8 HandleSavingData(u8 saveType)
     case SAVE_LINK:
     case SAVE_EREADER: // Dummied, now duplicate of SAVE_LINK
         // Used by link / Battle Frontier
-        // Write only SaveBlocks 1 and 2 (skips the PC)
+        // Write only SaveBlocks 1 and 2 (skips the PC), plus all of SaveBlock3,
+        // which also lives in some of the PC sectors.
         CopyPartyAndObjectsToSave();
-        for (i = SECTOR_ID_SAVEBLOCK2; i <= SECTOR_ID_SAVEBLOCK1_END; i++)
-            HandleReplaceSector(i, gRamSaveSectorLocations);
-        for (i = SECTOR_ID_SAVEBLOCK2; i <= SECTOR_ID_SAVEBLOCK1_END; i++)
+        gReadWriteSector = &gSaveDataBuffer;
+        for (i = SECTOR_ID_SAVEBLOCK2; i <= PARTIAL_SAVE_LAST_SECTOR; i++)
+            HandleReplaceSector(i, gRamSaveSectorLocations, i > SECTOR_ID_SAVEBLOCK1_END);
+        for (i = SECTOR_ID_SAVEBLOCK2; i <= PARTIAL_SAVE_LAST_SECTOR; i++)
             WriteSectorSignatureByte_NoOffset(i, gRamSaveSectorLocations);
         break;
     case SAVE_OVERWRITE_DIFFERENT_FILE:
@@ -819,7 +854,7 @@ bool8 LinkFullSave_WriteSector(void)
 
 bool8 LinkFullSave_ReplaceLastSector(void)
 {
-    HandleReplaceSectorAndVerify(NUM_SECTORS_PER_SLOT, gRamSaveSectorLocations);
+    HandleReplaceSectorAndVerify(NUM_SECTORS_PER_SLOT, gRamSaveSectorLocations, FALSE);
     if (gDamagedSaveSectors)
         DoSaveFailedScreen(SAVE_NORMAL);
     return FALSE;
@@ -844,26 +879,28 @@ bool8 WriteSaveBlock2(void)
 
     // Because RestoreSaveBackupVars is called immediately prior, gIncrementalSectorId will always be 0 below,
     // so this function only saves the first sector (SECTOR_ID_SAVEBLOCK2)
-    HandleReplaceSectorAndVerify(gIncrementalSectorId + 1, gRamSaveSectorLocations);
+    HandleReplaceSectorAndVerify(gIncrementalSectorId + 1, gRamSaveSectorLocations, FALSE);
     return FALSE;
 }
 
 // Used in conjunction with WriteSaveBlock2 to write both for certain link saves.
-// This will be called repeatedly in a task, writing each sector of SaveBlock1 incrementally.
+// This will be called repeatedly in a task, writing each sector of SaveBlock1 incrementally,
+// followed by the PC storage sectors that hold the rest of SaveBlock3 (only their SaveBlock3
+// chunk is refreshed, see HandleReplaceSector). One sector is written per call.
 // It returns TRUE when finished.
 bool8 WriteSaveBlock1Sector(void)
 {
     bool32 finished = FALSE;
     u16 sectorId = ++gIncrementalSectorId; // Because WriteSaveBlock2 will have been called prior, this will be SECTOR_ID_SAVEBLOCK1_START
-    if (sectorId <= SECTOR_ID_SAVEBLOCK1_END)
+    if (sectorId <= PARTIAL_SAVE_LAST_SECTOR)
     {
-        // Write a single sector of SaveBlock1
-        HandleReplaceSectorAndVerify(gIncrementalSectorId + 1, gRamSaveSectorLocations);
+        // Write a single sector of SaveBlock1, or the SaveBlock3 chunk of a PC sector
+        HandleReplaceSectorAndVerify(gIncrementalSectorId + 1, gRamSaveSectorLocations, sectorId > SECTOR_ID_SAVEBLOCK1_END);
         WriteSectorSignatureByte(sectorId, gRamSaveSectorLocations);
     }
     else
     {
-        // Beyond SaveBlock1, don't write the sector.
+        // Beyond the last partial save sector, don't write the sector.
         // Does write 1 byte of the next sector's signature field, but as these
         // are the same for all valid sectors it doesn't matter.
         WriteSectorSignatureByte(sectorId, gRamSaveSectorLocations);
