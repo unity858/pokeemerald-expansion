@@ -47,7 +47,7 @@ const struct MoveStatOverride gCustomMoveStats[MOVES_COUNT] =
     [MOVE_SMOG] = { .power = 35, .accuracy = 90 }, // Power 30->35, Acc 70->90
     [MOVE_WATERFALL] = { .power = 85 }, // Power 80->85
     [MOVE_LOVELY_KISS] = { .accuracy = 85 }, // Acc 75->85
-    [MOVE_TRIPLE_KICK] = { .power = 25 }, // Power 10->25
+    // [MOVE_TRIPLE_KICK] = { .power = 25 }, // Power 10->25. Kept vanilla: expansion scales multi-hit power by hit number
     // [MOVE_PRESENT] = { .power = 90 }, // Power 1->90: not applied, see note at top
     [MOVE_METAL_CLAW] = { .power = 60 }, // Power 50->60
     [MOVE_EXTREME_SPEED] = { .pp = 10 }, // PP 5->10
@@ -122,7 +122,7 @@ const struct MoveStatOverride gCustomMoveStats[MOVES_COUNT] =
     [MOVE_MISTY_EXPLOSION] = { .power = 160 }, // Power 100->160
     [MOVE_GRASSY_GLIDE] = { .power = 60 }, // Power 55->60
     [MOVE_LASH_OUT] = { .power = 90 }, // Power 75->90
-    [MOVE_TRIPLE_AXEL] = { .power = 35 }, // Power 20->35
+    // [MOVE_TRIPLE_AXEL] = { .power = 35 }, // Power 20->35. Kept vanilla: expansion scales multi-hit power by hit number
     [MOVE_SCORCHING_SANDS] = { .power = 75 }, // Power 70->75
     [MOVE_THUNDEROUS_KICK] = { .type = TYPE_ELECTRIC }, // Fighting->Electric
 };
