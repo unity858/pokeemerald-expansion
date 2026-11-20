@@ -1155,14 +1155,14 @@ static void CreateStatBar(u8 *dst, u32 y, u32 width)
         WritePixel(dst, STAT_BAR_X_OFFSET + i, y + 4, COLOR_ID_BAR_WHITE);
     }
 }
-static const u8 sBaseStatOffsets[] =
+static const u8 sBaseStatOrder[] =
 {
-    offsetof(struct SpeciesInfo, baseHP),
-    offsetof(struct SpeciesInfo, baseAttack),
-    offsetof(struct SpeciesInfo, baseDefense),
-    offsetof(struct SpeciesInfo, baseSpAttack),
-    offsetof(struct SpeciesInfo, baseSpDefense),
-    offsetof(struct SpeciesInfo, baseSpeed),
+    STAT_HP,
+    STAT_ATK,
+    STAT_DEF,
+    STAT_SPATK,
+    STAT_SPDEF,
+    STAT_SPEED,
 };
 void TryDestroyStatBars(void)
 {
@@ -1204,7 +1204,7 @@ static void CreateStatBars(struct PokedexListItem *dexMon)
         memcpy(gfx, sStatBarsGfx, sizeof(sStatBarsGfx));
         for (i = 0; i < NUM_STATS; i++)
         {
-            statValue = *((u8*)(&gSpeciesInfo[species]) + sBaseStatOffsets[i]);
+            statValue = GetSpeciesBaseStat(species, sBaseStatOrder[i]);
             if (statValue <= 100)
             {
                 width = statValue / 3;

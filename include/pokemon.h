@@ -753,6 +753,22 @@ extern u8 gTriedEvolving;
 extern const u16 gFacilityClassToPicIndex[];
 extern const enum TrainerClassID gFacilityClassToTrainerClass[];
 extern const struct SpeciesInfo gSpeciesInfo[];
+
+// Custom data mode species overrides (src/data/custom_species_info.h).
+// Consulted by GetSpeciesBaseHP/.../GetSpeciesBaseSpeed and GetSpeciesAbility
+// only when IsCustomDataMode() is TRUE. 0 (or ABILITY_NONE) = keep vanilla.
+struct SpeciesInfoOverride
+{
+    u8 baseHP;
+    u8 baseAttack;
+    u8 baseDefense;
+    u8 baseSpeed;
+    u8 baseSpAttack;
+    u8 baseSpDefense;
+    u16 abilities[NUM_ABILITY_SLOTS]; // enum Ability
+};
+
+extern const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1];
 extern const u32 gExperienceTables[][MAX_LEVEL + 1];
 extern const u8 gPPUpGetMask[];
 extern const u8 gPPUpClearMask[];

@@ -83,8 +83,20 @@ bool32 SetCorrectAbilityNum(struct Pokemon *mon, enum Species species, enum Abil
     u32 maxAbilityNum = ARRAY_COUNT(speciesInfo->abilities);
     for (abilityNum = 0; abilityNum < maxAbilityNum; ++abilityNum)
     {
-        if (speciesInfo->abilities[abilityNum] == ability)
+        if (GetSpeciesAbility(species, abilityNum) == ability)
             break;
+    }
+    // Custom data mode can replace a species' abilities, so a party written
+    // against vanilla data may ask for an ability that is no longer in any
+    // slot. Fall back to the slot that holds it in vanilla data (the mon gets
+    // that slot's Custom ability) instead of asserting.
+    if (abilityNum >= maxAbilityNum && IsCustomDataMode())
+    {
+        for (abilityNum = 0; abilityNum < maxAbilityNum; ++abilityNum)
+        {
+            if (speciesInfo->abilities[abilityNum] == ability)
+                break;
+        }
     }
     assertf(abilityNum < maxAbilityNum, "illegal ability %S for %S", gAbilitiesInfo[ability].name, speciesInfo->speciesName)
     {

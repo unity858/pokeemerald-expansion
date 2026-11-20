@@ -32,6 +32,7 @@
 #include "mail.h"
 #include "move_relearner.h"
 #include "naming_screen.h"
+#include "new_game_options.h"
 #include "overworld.h"
 #include "ow_abilities.h"
 #include "party_menu.h"
@@ -490,6 +491,7 @@ const struct NatureInfo gNaturesInfo[NUM_NATURES] =
 #include "data/object_events/object_event_pic_tables_followers.h"
 
 #include "data/pokemon/species_info.h"
+#include "data/custom_species_info.h"
 
 #define PP_UP_SHIFTS(val)           val,        (val) << 2,        (val) << 4,        (val) << 6
 #define PP_UP_SHIFTS_INV(val) (u8)~(val), (u8)~((val) << 2), (u8)~((val) << 4), (u8)~((val) << 6)
@@ -3217,37 +3219,49 @@ enum Type GetSpeciesType(enum Species species, u8 slot)
 
 enum Ability GetSpeciesAbility(enum Species species, u8 slot)
 {
-    return gSpeciesInfo[SanitizeSpeciesId(species)].abilities[slot];
+    species = SanitizeSpeciesId(species);
+    if (gCustomSpeciesInfo[species].abilities[slot] != ABILITY_NONE && IsCustomDataMode())
+        return gCustomSpeciesInfo[species].abilities[slot];
+    return gSpeciesInfo[species].abilities[slot];
 }
+
+// Base stat accessor with the Custom data mode override (custom_species_info.h).
+#define GET_SPECIES_BASE_STAT_WITH_CUSTOM(species, field)                                  \
+({                                                                                         \
+    enum Species _species = SanitizeSpeciesId(species);                                    \
+    (gCustomSpeciesInfo[_species].field != 0 && IsCustomDataMode())                        \
+        ? gCustomSpeciesInfo[_species].field                                               \
+        : gSpeciesInfo[_species].field;                                                    \
+})
 
 u32 GetSpeciesBaseHP(enum Species species)
 {
-    return gSpeciesInfo[SanitizeSpeciesId(species)].baseHP;
+    return GET_SPECIES_BASE_STAT_WITH_CUSTOM(species, baseHP);
 }
 
 u32 GetSpeciesBaseAttack(enum Species species)
 {
-    return gSpeciesInfo[SanitizeSpeciesId(species)].baseAttack;
+    return GET_SPECIES_BASE_STAT_WITH_CUSTOM(species, baseAttack);
 }
 
 u32 GetSpeciesBaseDefense(enum Species species)
 {
-    return gSpeciesInfo[SanitizeSpeciesId(species)].baseDefense;
+    return GET_SPECIES_BASE_STAT_WITH_CUSTOM(species, baseDefense);
 }
 
 u32 GetSpeciesBaseSpAttack(enum Species species)
 {
-    return gSpeciesInfo[SanitizeSpeciesId(species)].baseSpAttack;
+    return GET_SPECIES_BASE_STAT_WITH_CUSTOM(species, baseSpAttack);
 }
 
 u32 GetSpeciesBaseSpDefense(enum Species species)
 {
-    return gSpeciesInfo[SanitizeSpeciesId(species)].baseSpDefense;
+    return GET_SPECIES_BASE_STAT_WITH_CUSTOM(species, baseSpDefense);
 }
 
 u32 GetSpeciesBaseSpeed(enum Species species)
 {
-    return gSpeciesInfo[SanitizeSpeciesId(species)].baseSpeed;
+    return GET_SPECIES_BASE_STAT_WITH_CUSTOM(species, baseSpeed);
 }
 
 u32 GetSpeciesBaseStat(enum Species species, u32 statIndex)
