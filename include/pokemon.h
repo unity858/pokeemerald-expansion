@@ -755,8 +755,10 @@ extern const enum TrainerClassID gFacilityClassToTrainerClass[];
 extern const struct SpeciesInfo gSpeciesInfo[];
 
 // Custom data mode species overrides (src/data/custom_species_info.h).
-// Consulted by GetSpeciesBaseHP/.../GetSpeciesBaseSpeed and GetSpeciesAbility
-// only when IsCustomDataMode() is TRUE. 0 (or ABILITY_NONE) = keep vanilla.
+// Consulted by GetSpeciesBaseHP/.../GetSpeciesBaseSpeed, GetSpeciesAbility and
+// GetSpeciesType only when IsCustomDataMode() is TRUE. 0 (ABILITY_NONE /
+// TYPE_NONE) = keep vanilla. TYPE_NONE is 0 and never a real species type
+// (TYPE_NORMAL is 1), so 0 is a safe "no override" sentinel for types.
 struct SpeciesInfoOverride
 {
     u8 baseHP;
@@ -766,6 +768,7 @@ struct SpeciesInfoOverride
     u8 baseSpAttack;
     u8 baseSpDefense;
     u16 abilities[NUM_ABILITY_SLOTS]; // enum Ability
+    u8 types[2]; // enum Type; a mono-type is stored as two equal types, as in gSpeciesInfo
 };
 
 extern const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1];
