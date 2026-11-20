@@ -261,6 +261,10 @@ static void EnableStartingFeatures(void)
     FlagSet(DN_FLAG_DEXNAV_GET);
     FlagSet(DN_FLAG_DETECTOR_MODE);
 #endif
+    if (P_FLAG_EGG_MOVES != 0)
+        FlagSet(P_FLAG_EGG_MOVES);
+    if (P_FLAG_TUTOR_MOVES != 0)
+        FlagSet(P_FLAG_TUTOR_MOVES);
 }
 
 static void ResetDexNav(void)

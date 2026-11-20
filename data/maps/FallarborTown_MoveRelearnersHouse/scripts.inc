@@ -17,12 +17,49 @@ FallarborTown_MoveRelearnersHouse_EventScript_AskTeachMove::
 	msgbox FallarborTown_MoveRelearnersHouse_Text_ThatsAHeartScaleWantMeToTeachMove, MSGBOX_YESNO
 	switch VAR_RESULT
 	case NO, FallarborTown_MoveRelearnersHouse_EventScript_ComeBackWithHeartScale
+	goto FallarborTown_MoveRelearnersHouse_EventScript_ChooseMoveType
+	end
+
+@ Level-up, Egg, TM and Tutor moves (Egg/Tutor only while their relearner flags are set)
+FallarborTown_MoveRelearnersHouse_EventScript_ChooseMoveType::
+	message FallarborTown_MoveRelearnersHouse_Text_WhichKindOfMove
+	waitmessage
+	dynmultipush MoveRelearner_Text_LevelUpMoves, 0
+	call_if_set FLAG_EGG_MOVES_RELEARNER, MoveRelearner_EventScript_PushEggMoves
+	call MoveRelearner_EventScript_PushTMMoves
+	call_if_set FLAG_TUTOR_MOVES_RELEARNER, MoveRelearner_EventScript_PushTutorMoves
+	dynmultistack 0, 0, FALSE, 5, FALSE, 0, DYN_MULTICHOICE_CB_NONE
+	closemessage
+	switch VAR_RESULT
+	case 0, FallarborTown_MoveRelearnersHouse_EventScript_LevelUpMoves
+	case 1, FallarborTown_MoveRelearnersHouse_EventScript_EggMoves
+	case 2, FallarborTown_MoveRelearnersHouse_EventScript_TMMoves
+	case 3, FallarborTown_MoveRelearnersHouse_EventScript_TutorMoves
+	goto FallarborTown_MoveRelearnersHouse_EventScript_ComeBackWithHeartScale
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_LevelUpMoves::
+	setmoverelearnerstate MOVE_RELEARNER_LEVEL_UP_MOVES
+	goto FallarborTown_MoveRelearnersHouse_EventScript_ChooseMon
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_EggMoves::
+	setmoverelearnerstate MOVE_RELEARNER_EGG_MOVES
+	goto FallarborTown_MoveRelearnersHouse_EventScript_ChooseMon
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_TMMoves::
+	setmoverelearnerstate MOVE_RELEARNER_TM_MOVES
+	goto FallarborTown_MoveRelearnersHouse_EventScript_ChooseMon
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_TutorMoves::
+	setmoverelearnerstate MOVE_RELEARNER_TUTOR_MOVES
 	goto FallarborTown_MoveRelearnersHouse_EventScript_ChooseMon
 	end
 
 FallarborTown_MoveRelearnersHouse_EventScript_ChooseMon::
 	msgbox FallarborTown_MoveRelearnersHouse_Text_TutorWhichMon, MSGBOX_DEFAULT
-	setmoverelearnerstate MOVE_RELEARNER_LEVEL_UP_MOVES @ Specifically supposed to teach level up moves
 	chooseboxmon SELECT_PC_MON_MOVE_RELEARNER
 	waitstate
 	goto_if_eq VAR_0x8004, PARTY_NOTHING_CHOSEN, FallarborTown_MoveRelearnersHouse_EventScript_ComeBackWithHeartScale
@@ -72,6 +109,9 @@ FallarborTown_MoveRelearnersHouse_Text_ThatsAHeartScaleWantMeToTeachMove:
 	.string "goodness HEART SCALE!\p"
 	.string "Let me guess, you want me to teach\n"
 	.string "a move?$"
+
+FallarborTown_MoveRelearnersHouse_Text_WhichKindOfMove:
+	.string "Which kind of move should I teach?$"
 
 FallarborTown_MoveRelearnersHouse_Text_TutorWhichMon:
 	.string "Which POKéMON needs tutoring?$"
