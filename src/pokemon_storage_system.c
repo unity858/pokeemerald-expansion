@@ -503,15 +503,7 @@ struct PokemonStorageSystemData
     struct ChooseBoxMenu chooseBoxMenu;
     struct Pokemon movingMon;
     struct Pokemon tempMon;
-    s8 canReleaseMon;
-    bool8 releaseStatusResolved;
-    s8 releaseCheckBoxId;
-    s8 releaseCheckBoxPos;
-    s8 releaseBoxId;
-    s8 releaseBoxPos;
-    u16 releaseCheckState;
-    u16 restrictedReleaseMonMoves;
-    u16 restrictedMoveList[8];
+    bool8 canReleaseMon;
     u8 summaryMaxPos;
     u8 summaryStartPos;
     u8 summaryScreenMode;
@@ -650,10 +642,8 @@ static bool8 TryStorePartyMonInBox(u8);
 static void ResetSelectionAfterDeposit(void);
 static void InitReleaseMon(void);
 static bool8 TryHideReleaseMon(void);
-static void InitCanReleaseMonVars(void);
 static void ReleaseMon(void);
 static bool32 AtLeastThreeUsableMons(void);
-static s8 RunCanReleaseMon(void);
 static void SaveMovingMon(void);
 static void LoadSavedMovingMon(void);
 static void InitSummaryScreenData(void);
@@ -2935,30 +2925,20 @@ static void Task_ReleaseMon(u8 taskId)
             break;
         case  0: // Yes
             ClearBottomWindow();
-            InitCanReleaseMonVars();
+            // With only 1 or 2 usable Pokémon, the Pokémon comes back.
+            sStorage->canReleaseMon = AtLeastThreeUsableMons();
             InitReleaseMon();
             sStorage->state++;
             break;
         }
         break;
     case 2:
-        RunCanReleaseMon();
         if (!TryHideReleaseMon())
         {
-            while (1)
-            {
-                s8 canRelease = RunCanReleaseMon();
-                if (canRelease == TRUE)
-                {
-                    sStorage->state++;
-                    break;
-                }
-                else if (!canRelease)
-                {
-                    sStorage->state = 8;
-                    break;
-                }
-            }
+            if (sStorage->canReleaseMon)
+                sStorage->state++;
+            else
+                sStorage->state = 8;
         }
         break;
     case 3:
@@ -6598,92 +6578,6 @@ static void TrySetCursorFistAnim(void)
         StartSpriteAnim(sStorage->cursorSprite, CURSOR_ANIM_FIST);
 }
 
-// If the player is on the listed map (or any map, if none is specified),
-// they may not release their last Pokémon that knows the specified move.
-// This is to stop the player from softlocking themselves by not having
-// a Pokémon that knows a required field move.
-struct
-{
-    s8 mapGroup;
-    s8 mapNum;
-    u16 move;
-} static const sRestrictedReleaseMoves[] =
-{
-    {MAP_GROUPS_COUNT, 0, MOVE_SURF},
-    {MAP_GROUPS_COUNT, 0, MOVE_DIVE},
-    {MAP_GROUP(MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F), MAP_NUM(MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F), MOVE_STRENGTH},
-    {MAP_GROUP(MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F), MAP_NUM(MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F), MOVE_ROCK_SMASH},
-    {MAP_GROUP(MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_2F), MAP_NUM(MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_2F), MOVE_STRENGTH},
-    {MAP_GROUP(MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_2F), MAP_NUM(MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_2F), MOVE_ROCK_SMASH},
-};
-
-static void GetRestrictedReleaseMoves(u16 *moves)
-{
-    s32 i;
-
-    for (i = 0; i < ARRAY_COUNT(sRestrictedReleaseMoves); i++)
-    {
-        if (sRestrictedReleaseMoves[i].mapGroup == MAP_GROUPS_COUNT
-        || (sRestrictedReleaseMoves[i].mapGroup == gSaveBlock1Ptr->location.mapGroup
-         && sRestrictedReleaseMoves[i].mapNum == gSaveBlock1Ptr->location.mapNum))
-        {
-            *moves = sRestrictedReleaseMoves[i].move;
-            moves++;
-        }
-    }
-    *moves = MOVES_COUNT;
-}
-
-static void InitCanReleaseMonVars(void)
-{
-    if (!AtLeastThreeUsableMons())
-    {
-        // The player only has 1 or 2 usable
-        // Pokémon, this one can't be released
-        sStorage->releaseStatusResolved = TRUE;
-        sStorage->canReleaseMon = FALSE;
-        return;
-    }
-
-    if (sIsMonBeingMoved)
-    {
-        sStorage->tempMon = sStorage->movingMon;
-        sStorage->releaseBoxId = -1;
-        sStorage->releaseBoxPos = -1;
-    }
-    else
-    {
-        if (sCursorArea == CURSOR_AREA_IN_PARTY)
-        {
-            sStorage->tempMon = gParties[B_TRAINER_PLAYER][sCursorPosition];
-            sStorage->releaseBoxId = TOTAL_BOXES_COUNT;
-        }
-        else
-        {
-            BoxMonAtToMon(StorageGetCurrentBox(), sCursorPosition, &sStorage->tempMon);
-            sStorage->releaseBoxId = StorageGetCurrentBox();
-        }
-        sStorage->releaseBoxPos = sCursorPosition;
-    }
-
-    GetRestrictedReleaseMoves(sStorage->restrictedMoveList);
-    sStorage->restrictedReleaseMonMoves = GetMonData(&sStorage->tempMon, MON_DATA_KNOWN_MOVES, (u8 *)sStorage->restrictedMoveList);
-    if (sStorage->restrictedReleaseMonMoves != 0)
-    {
-        // Pokémon knows at least one restricted release move
-        // Need to check if another Pokémon has this move first
-        sStorage->releaseStatusResolved = FALSE;
-    }
-    else
-    {
-        // Pokémon knows no restricted moves, can be released
-        sStorage->releaseStatusResolved = TRUE;
-        sStorage->canReleaseMon = TRUE;
-    }
-
-    sStorage->releaseCheckState = 0;
-}
-
 static bool32 AtLeastThreeUsableMons(void)
 {
     s32 i, j;
@@ -6713,83 +6607,6 @@ static bool32 AtLeastThreeUsableMons(void)
     }
 
     return FALSE;
-}
-
-static s8 RunCanReleaseMon(void)
-{
-    u16 i;
-    u16 knownMoves;
-
-    if (sStorage->releaseStatusResolved)
-        return sStorage->canReleaseMon;
-
-    switch (sStorage->releaseCheckState)
-    {
-    case 0:
-        // Check party for other Pokémon that know any restricted
-        // moves the release Pokémon knows
-        for (i = 0; i < PARTY_SIZE; i++)
-        {
-            // Make sure party Pokémon isn't the one we're releasing first
-            if (sStorage->releaseBoxId != TOTAL_BOXES_COUNT || sStorage->releaseBoxPos != i)
-            {
-                knownMoves = GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_KNOWN_MOVES, (u8 *)sStorage->restrictedMoveList);
-                sStorage->restrictedReleaseMonMoves &= ~(knownMoves);
-            }
-        }
-        if (sStorage->restrictedReleaseMonMoves == 0)
-        {
-            // No restricted moves on release Pokémon that
-            // aren't resolved by the party, it can be released.
-            sStorage->releaseStatusResolved = TRUE;
-            sStorage->canReleaseMon = TRUE;
-        }
-        else
-        {
-            // Release Pokémon has restricted moves not resolved by the party.
-            // Continue and check the PC next
-            sStorage->releaseCheckBoxId = 0;
-            sStorage->releaseCheckBoxPos = 0;
-            sStorage->releaseCheckState++;
-        }
-        break;
-    case 1:
-        // Check PC for other Pokémon that know any restricted
-        // moves the release Pokémon knows
-        for (i = 0; i < IN_BOX_COUNT; i++)
-        {
-            knownMoves = GetAndCopyBoxMonDataAt(sStorage->releaseCheckBoxId, sStorage->releaseCheckBoxPos, MON_DATA_KNOWN_MOVES, (u8 *)sStorage->restrictedMoveList);
-            if (knownMoves != 0 && !(sStorage->releaseBoxId == sStorage->releaseCheckBoxId
-                                  && sStorage->releaseBoxPos == sStorage->releaseCheckBoxPos))
-            {
-                // Found PC Pokémon with restricted move, clear move from list
-                sStorage->restrictedReleaseMonMoves &= ~(knownMoves);
-                if (sStorage->restrictedReleaseMonMoves == 0)
-                {
-                    // No restricted moves on release Pokémon that
-                    // aren't resolved, it can be released.
-                    sStorage->releaseStatusResolved = TRUE;
-                    sStorage->canReleaseMon = TRUE;
-                    break;
-                }
-            }
-            if (++sStorage->releaseCheckBoxPos >= IN_BOX_COUNT)
-            {
-                sStorage->releaseCheckBoxPos = 0;
-                if (++sStorage->releaseCheckBoxId >= TOTAL_BOXES_COUNT)
-                {
-                    // Checked every Pokémon in the PC, release Pokémon is
-                    // the sole owner of at least one restricted move.
-                    // It cannot be released.
-                    sStorage->releaseStatusResolved = TRUE;
-                    sStorage->canReleaseMon = FALSE;
-                }
-            }
-        }
-        break;
-    }
-
-    return -1;
 }
 
 static void SaveMovingMon(void)
