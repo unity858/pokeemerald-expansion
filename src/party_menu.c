@@ -37,6 +37,7 @@
 #include "caps.h"
 #include "link.h"
 #include "link_rfu.h"
+#include "list_menu.h"
 #include "mail.h"
 #include "main.h"
 #include "menu.h"
@@ -142,7 +143,14 @@ enum {
     TAG_POKEBALL = 1200,
     TAG_POKEBALL_SMALL,
     TAG_STATUS_ICONS,
+    TAG_ACTIONS_SCROLL_ARROW,
 };
+
+// The field action list can hold every field move a Pokémon qualifies for
+// (see SetPartyMonFieldSelectionActions). At most PARTY_MENU_MAX_VISIBLE_ACTIONS
+// rows are shown at once; longer lists scroll, with up/down arrows.
+#define PARTY_MENU_MAX_ACTIONS          16
+#define PARTY_MENU_MAX_VISIBLE_ACTIONS  8
 
 #define TAG_HELD_ITEM 55120
 
@@ -185,8 +193,10 @@ struct PartyMenuInternal
     u32 spriteIdCancelPokeball:7;
     u32 messageId:14;
     u8 windowId[3];
-    u8 actions[8];
+    u8 actions[PARTY_MENU_MAX_ACTIONS];
     u8 numActions;
+    u8 actionsScrollArrowsTaskId;
+    u16 actionsScrollOffset; // index of the first visible action
     // In vanilla Emerald, only the first 0xB0 hwords (0x160 bytes) are actually used.
     // However, a full 0x100 hwords (0x200 bytes) are allocated.
     // It is likely that the 0x160 value used below is a constant defined by
@@ -310,6 +320,7 @@ static void TryGiveItemOrMailToSelectedMon(u8);
 static void SwitchSelectedMons(u8);
 static void TryEnterMonForMinigame(u8, u8);
 static void Task_TryCreateSelectionWindow(u8);
+static void RemoveActionsScrollArrows(void);
 static void FinishTwoMonAction(u8);
 static void CancelParticipationPrompt(u8);
 static bool8 DisplayCancelChooseMonYesNo(u8);
@@ -536,6 +547,8 @@ static void InitPartyMenu(enum PartyMenuType menuType, enum PartyMenuLayout layo
         sPartyMenuInternal->lastSelectedSlot = 0;
         sPartyMenuInternal->spriteIdConfirmPokeball = 0x7F;
         sPartyMenuInternal->spriteIdCancelPokeball = 0x7F;
+        sPartyMenuInternal->actionsScrollArrowsTaskId = TASK_NONE;
+        sPartyMenuInternal->actionsScrollOffset = 0;
 
         if (menuType == PARTY_MENU_TYPE_CHOOSE_HALF)
             sPartyMenuInternal->chooseHalf = TRUE;
@@ -586,6 +599,7 @@ static void LoadBattlePartyCurrentOrderForLayout(void)
 static void RefreshPartyMenu(void) //Refreshes the party menu without restarting tasks
 {
     u16 i;
+    RemoveActionsScrollArrows();
     for (i = 0; i < ARRAY_COUNT(sPartyMenuInternal->data); i++)
         sPartyMenuInternal->data[i] = 0;
     for (i = 0; i < ARRAY_COUNT(sPartyMenuInternal->windowId); i++)
@@ -957,7 +971,10 @@ static void PartyPaletteBufferCopy(u8 palNum)
 static void FreePartyPointers(void)
 {
     if (sPartyMenuInternal)
+    {
+        RemoveActionsScrollArrows();
         Free(sPartyMenuInternal);
+    }
     if (sPartyBgTilemapBuffer)
         Free(sPartyBgTilemapBuffer);
     if (sPartyBgGfxTilemap)
@@ -2768,6 +2785,10 @@ static void DisplayPartyPokemonDescriptionText(u8 stringID, struct PartyMenuBox 
 
 static void PartyMenuRemoveWindow(u8 *ptr)
 {
+    // The scroll arrows belong to the selection window.
+    if (ptr == &sPartyMenuInternal->windowId[0])
+        RemoveActionsScrollArrows();
+
     if (*ptr != WINDOW_NONE)
     {
         ClearStdWindowAndFrameToTransparent(*ptr, FALSE);
@@ -2848,17 +2869,85 @@ static bool8 ShouldUseChooseMonText(void)
     return FALSE;
 }
 
+static u32 GetNumVisibleActions(void)
+{
+    return min(sPartyMenuInternal->numActions, PARTY_MENU_MAX_VISIBLE_ACTIONS);
+}
+
+// Absolute index into sPartyMenuInternal->actions of the highlighted action.
+static u32 GetSelectedActionIndex(void)
+{
+    return sPartyMenuInternal->actionsScrollOffset + Menu_GetCursorPos();
+}
+
+// Prints the visible rows of the action list, starting at actionsScrollOffset.
+static void PrintSelectionActions(u8 windowId, u32 numRows)
+{
+    u8 cursorDimension = GetMenuCursorDimensionByFont(FONT_NORMAL, 0);
+    u8 letterSpacing = GetFontAttribute(FONT_NORMAL, FONTATTR_LETTER_SPACING);
+    u32 i;
+
+    for (i = 0; i < numRows; i++)
+    {
+        u8 action = sPartyMenuInternal->actions[sPartyMenuInternal->actionsScrollOffset + i];
+        const u8 *text;
+        u8 fontColorsId = 3;
+
+        if (action >= MENU_FIELD_MOVES)
+        {
+            fontColorsId = 4;
+            text = GetMoveName(FieldMove_GetMoveId(action - MENU_FIELD_MOVES));
+        }
+        else
+        {
+            text = sCursorOptions[action].text;
+        }
+
+        AddTextPrinterParameterized4(windowId, FONT_NORMAL, cursorDimension, (i * 16) + 1, letterSpacing, 0, sFontColorTable[fontColorsId], 0, text);
+    }
+}
+
+static void RemoveActionsScrollArrows(void)
+{
+    if (sPartyMenuInternal->actionsScrollArrowsTaskId != TASK_NONE)
+    {
+        RemoveScrollIndicatorArrowPair(sPartyMenuInternal->actionsScrollArrowsTaskId);
+        sPartyMenuInternal->actionsScrollArrowsTaskId = TASK_NONE;
+    }
+}
+
+// The action window spans tiles x 19-28 and ends at tile y 19 (see
+// DisplaySelectionWindow); the arrows sit on the middle of its top and
+// bottom frame.
+#define ACTIONS_SCROLL_ARROW_X      ((19 + 10 / 2) * 8)
+#define ACTIONS_SCROLL_ARROW_TOP_Y  ((19 - PARTY_MENU_MAX_VISIBLE_ACTIONS * 2 - 1) * 8 + 4)
+#define ACTIONS_SCROLL_ARROW_BOT_Y  (19 * 8 + 4)
+
+static void AddActionsScrollArrows(void)
+{
+    if (sPartyMenuInternal->actionsScrollArrowsTaskId != TASK_NONE)
+        return;
+    sPartyMenuInternal->actionsScrollArrowsTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP,
+                                                                                            ACTIONS_SCROLL_ARROW_X,
+                                                                                            ACTIONS_SCROLL_ARROW_TOP_Y,
+                                                                                            ACTIONS_SCROLL_ARROW_BOT_Y,
+                                                                                            sPartyMenuInternal->numActions - PARTY_MENU_MAX_VISIBLE_ACTIONS,
+                                                                                            TAG_ACTIONS_SCROLL_ARROW,
+                                                                                            TAG_ACTIONS_SCROLL_ARROW,
+                                                                                            &sPartyMenuInternal->actionsScrollOffset);
+}
+
 static u8 DisplaySelectionWindow(u8 windowType)
 {
     struct WindowTemplate window;
-    u8 cursorDimension;
-    u8 letterSpacing;
-    u8 i;
+    u32 numRows = sPartyMenuInternal->numActions;
 
+    sPartyMenuInternal->actionsScrollOffset = 0;
     switch (windowType)
     {
     case SELECTWINDOW_ACTIONS:
-        SetWindowTemplateFields(&window, 2, 19, 19 - (sPartyMenuInternal->numActions * 2), 10, sPartyMenuInternal->numActions * 2, 14, 0x2E9);
+        numRows = GetNumVisibleActions();
+        SetWindowTemplateFields(&window, 2, 19, 19 - (numRows * 2), 10, numRows * 2, 14, 0x2E9);
         break;
     case SELECTWINDOW_ITEM:
         window = sItemGiveTakeWindowTemplate;
@@ -2881,29 +2970,64 @@ static u8 DisplaySelectionWindow(u8 windowType)
     DrawStdFrameWithCustomTileAndPalette(sPartyMenuInternal->windowId[0], FALSE, 0x4F, 13);
     if (windowType == SELECTWINDOW_MOVES)
         return sPartyMenuInternal->windowId[0];
-    cursorDimension = GetMenuCursorDimensionByFont(FONT_NORMAL, 0);
-    letterSpacing = GetFontAttribute(FONT_NORMAL, FONTATTR_LETTER_SPACING);
 
-    for (i = 0; i < sPartyMenuInternal->numActions; i++)
-    {
-        const u8 *text;
-        u8 fontColorsId = 3;
-
-        if (sPartyMenuInternal->actions[i] >= MENU_FIELD_MOVES)
-            fontColorsId = 4;
-
-        if (sPartyMenuInternal->actions[i] >= MENU_FIELD_MOVES)
-            text = GetMoveName(FieldMove_GetMoveId(sPartyMenuInternal->actions[i] - MENU_FIELD_MOVES));
-        else
-            text = sCursorOptions[sPartyMenuInternal->actions[i]].text;
-
-        AddTextPrinterParameterized4(sPartyMenuInternal->windowId[0], FONT_NORMAL, cursorDimension, (i * 16) + 1, letterSpacing, 0, sFontColorTable[fontColorsId], 0, text);
-    }
-
-    InitMenuInUpperLeftCorner(sPartyMenuInternal->windowId[0], sPartyMenuInternal->numActions, 0, TRUE);
+    PrintSelectionActions(sPartyMenuInternal->windowId[0], numRows);
+    InitMenuInUpperLeftCorner(sPartyMenuInternal->windowId[0], numRows, 0, TRUE);
+    if (numRows < sPartyMenuInternal->numActions)
+        AddActionsScrollArrows();
     ScheduleBgCopyTilemapToVram(2);
 
     return sPartyMenuInternal->windowId[0];
+}
+
+// Moves the highlighted action by delta (wrapping around), scrolling the
+// visible rows when the cursor leaves them.
+static void MoveScrollingActionsCursor(s32 delta)
+{
+    s32 numActions = sPartyMenuInternal->numActions;
+    s32 numVisible = GetNumVisibleActions();
+    s32 offset = sPartyMenuInternal->actionsScrollOffset;
+    s32 selected = (s32)GetSelectedActionIndex() + delta;
+
+    if (selected < 0)
+        selected = numActions - 1;
+    else if (selected >= numActions)
+        selected = 0;
+
+    if (selected < offset)
+        offset = selected;
+    else if (selected >= offset + numVisible)
+        offset = selected - numVisible + 1;
+
+    if (offset != sPartyMenuInternal->actionsScrollOffset)
+    {
+        sPartyMenuInternal->actionsScrollOffset = offset;
+        FillWindowPixelBuffer(sPartyMenuInternal->windowId[0], PIXEL_FILL(1));
+        PrintSelectionActions(sPartyMenuInternal->windowId[0], numVisible);
+        CopyWindowToVram(sPartyMenuInternal->windowId[0], COPYWIN_GFX);
+    }
+    Menu_MoveCursorNoWrapAround((selected - offset) - Menu_GetCursorPos());
+}
+
+// Like ProcessMenuInput_other, for an action list longer than the window.
+// Returns the absolute action index on A.
+static s8 ProcessScrollingActionsInput(void)
+{
+    if (JOY_NEW(A_BUTTON))
+        return GetSelectedActionIndex(); // A press is muted, like the other action lists
+    else if (JOY_NEW(B_BUTTON))
+        return MENU_B_PRESSED;
+    else if (JOY_REPEAT(DPAD_ANY) == DPAD_UP)
+    {
+        PlaySE(SE_SELECT);
+        MoveScrollingActionsCursor(-1);
+    }
+    else if (JOY_REPEAT(DPAD_ANY) == DPAD_DOWN)
+    {
+        PlaySE(SE_SELECT);
+        MoveScrollingActionsCursor(1);
+    }
+    return MENU_NOTHING_CHOSEN;
 }
 
 static void PrintMessage(const u8 *text)
@@ -2947,8 +3071,7 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
     }
 }
 
-// Order in which qualifying HM field moves are listed (most useful first),
-// in case there isn't room for all of them in the action menu.
+// Order in which qualifying HM field moves are listed.
 static const u8 sHMFieldMoveListOrder[] =
 {
     FIELD_MOVE_FLY,
@@ -2961,16 +3084,13 @@ static const u8 sHMFieldMoveListOrder[] =
     FIELD_MOVE_FLASH,
 };
 
+// Summary + known non-HM field moves + HM field moves + Switch, Item/Mail, Cancel.
+STATIC_ASSERT(PARTY_MENU_MAX_ACTIONS >= 1 + MAX_MON_MOVES + ARRAY_COUNT(sHMFieldMoveListOrder) + 3, PartyMenuActionsFitAllFieldMoves);
+
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
     u8 i, j;
-    u32 maxFieldMoves, numOtherActions, fieldMoveMask;
-
-    // Summary and Cancel, plus Switch and Item/Mail outside the Battle Pike.
-    numOtherActions = 2;
-    if (!InBattlePike())
-        numOtherActions += (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE) + 1;
-    maxFieldMoves = ARRAY_COUNT(sPartyMenuInternal->actions) - numOtherActions;
+    u32 fieldMoveMask;
 
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
@@ -2985,23 +3105,20 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 
             if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == FieldMove_GetMoveId(j))
             {
-                if (sPartyMenuInternal->numActions - 1 < maxFieldMoves) // -1 for Summary
-                    AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
+                AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
                 break;
             }
         }
     }
 
-    // HM field moves: listed if the badge is obtained and the species (or a
-    // pre-evolution) can learn the move, whether or not it's known.
+    // HM field moves: listed once each if the badge is obtained and the
+    // Pokémon qualifies (see GetMonFieldMoveQualifiedMask).
     fieldMoveMask = GetMonFieldMoveQualifiedMask(&mons[slotId]);
     for (i = 0; i < ARRAY_COUNT(sHMFieldMoveListOrder); i++)
     {
         j = sHMFieldMoveListOrder[i];
         if (!(fieldMoveMask & (1u << j)) || !IsFieldMoveUnlocked(j) || !FieldMove_IsVisible(j))
             continue;
-        if (sPartyMenuInternal->numActions - 1 >= maxFieldMoves)
-            break;
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
     }
 
@@ -3129,12 +3246,14 @@ static void Task_HandleSelectionMenuInput(u8 taskId)
         s8 input;
         s16 *data = gTasks[taskId].data;
 
-        if (sPartyMenuInternal->numActions <= 3)
+        if (sPartyMenuInternal->numActions > PARTY_MENU_MAX_VISIBLE_ACTIONS)
+            input = ProcessScrollingActionsInput();
+        else if (sPartyMenuInternal->numActions <= 3)
             input = Menu_ProcessInputNoWrapAround_other();
         else
             input = ProcessMenuInput_other();
 
-        data[0] = Menu_GetCursorPos();
+        data[0] = GetSelectedActionIndex();
         switch (input)
         {
         case MENU_NOTHING_CHOSEN:
@@ -4122,7 +4241,7 @@ static void Task_HandleSpinTradeYesNoInput(u8 taskId)
 
 static void CursorCb_FieldMove(u8 taskId)
 {
-    u8 fieldMove = sPartyMenuInternal->actions[Menu_GetCursorPos()] - MENU_FIELD_MOVES;
+    u8 fieldMove = sPartyMenuInternal->actions[GetSelectedActionIndex()] - MENU_FIELD_MOVES;
     const struct MapHeader *mapHeader;
 
     PlaySE(SE_SELECT);
