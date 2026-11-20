@@ -222,6 +222,7 @@ RAMSCRGEN    := $(TOOLS_DIR)/ramscrgen/ramscrgen$(EXE)
 FIX          := $(TOOLS_DIR)/gbafix/gbafix$(EXE)
 MAPJSON      := $(TOOLS_DIR)/mapjson/mapjson$(EXE)
 JSONPROC     := $(TOOLS_DIR)/jsonproc/jsonproc$(EXE)
+SCRIPT       := $(TOOLS_DIR)/poryscript/poryscript$(EXE)
 TRAINERPROC  := $(TOOLS_DIR)/trainerproc/trainerproc$(EXE)
 PATCHELF     := $(TOOLS_DIR)/patchelf/patchelf$(EXE)
 ifeq ($(shell uname),Darwin)
@@ -412,6 +413,7 @@ include map_data_rules.mk
 include spritesheet_rules.mk
 include json_data_rules.mk
 include audio_rules.mk
+AUTO_GEN_TARGETS += $(patsubst %.pory,%.inc,$(shell find data/ -type f -name '*.pory'))
 include trainer_rules.mk
 
 # NOTE: Tools must have been built prior (FIXME)
@@ -424,6 +426,9 @@ generated: $(AUTO_GEN_TARGETS)
 %.png: ;
 %.pal: ;
 %.wav: ;
+%.pory: ;
+
+data/%.inc: data/%.pory; $(SCRIPT) -i $< -o $@ -fc tools/poryscript/font_config.json -cc tools/poryscript/command_config.json
 
 %.1bpp:     %.png  ; $(GFX) $< $@
 %.4bpp:     %.png  ; $(GFX) $< $@
