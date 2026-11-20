@@ -155,4 +155,22 @@
 #define Z_EFFECT_RESTORE_HP_LOWER_THRESHOLD   ENABLE_RECOVERY_THRESHOLD // threshold used for moves you could conceivably use more than once
 #define Z_EFFECT_RESTORE_HP_HIGHER_THRESHOLD  90                        // these moves are one-time use or drop your HP
 
+// Difficulty-based trainer AI (see GetAiFlags in src/battle_ai_main.c).
+// Overrides the AI flags of regular NPC trainers based on GetCurrentDifficultyLevel().
+// Not applied to wild Pokémon, partner trainers, Frontier/Trainer Hill/e-Reader/secret base/recorded/Factory battles.
+#define AI_FLAGS_DIFFICULTY_EASY        0               // Same as a non-smart wild mon: random move choice. AI_FLAG_DOUBLE_BATTLE is still added in doubles so it avoids hitting its own ally.
+#define AI_FLAGS_DIFFICULTY_NORMAL      (AI_FLAG_BASIC_TRAINER | AI_FLAG_TRY_TO_2HKO | AI_FLAG_HP_AWARE)
+#define AI_FLAGS_DIFFICULTY_HARD        (AI_FLAGS_DIFFICULTY_NORMAL | AI_FLAG_SMART_SWITCHING | AI_FLAG_ABILITY_OMNISCIENCE) // SMART_SWITCHING auto-adds AI_FLAG_SMART_MON_CHOICES
+#define AI_FLAGS_TRAINER_STRUCTURAL     (AI_FLAG_ACE_POKEMON | AI_FLAG_DOUBLE_ACE_POKEMON | AI_FLAG_DYNAMIC_FUNC) // Kept from the trainer's own flags on Normal/Hard
+
+// Fairness mask: stripped from every AI battler's flags as the last step of flag assembly (all battle types).
+// Anything that lets the AI see the player's moves/items or predict the player's actions. AI_FLAG_ABILITY_OMNISCIENCE is allowed.
+#define AI_FLAGS_FORBIDDEN              (AI_FLAG_OMNISCIENT | AI_FLAG_MOVE_OMNISCIENCE | AI_FLAG_ITEM_OMNISCIENCE      \
+                                       | AI_FLAG_ASSUME_STAB | AI_FLAG_ASSUME_STATUS_MOVES                         \
+                                       | AI_FLAG_PREDICT_SWITCH | AI_FLAG_PREDICT_INCOMING_MON | AI_FLAG_PREDICT_MOVE)
+
+// AI bag items: if FALSE, AI trainers never use bag items (the "Items:" lines in trainers.party: Potions, Full Restores, X items...).
+// Held items ("@ Item") are unaffected and keep working through their normal hold effects.
+#define AI_TRAINERS_USE_BAG_ITEMS       FALSE
+
 #endif // GUARD_CONFIG_AI_H

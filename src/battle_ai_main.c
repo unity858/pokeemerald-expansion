@@ -16,6 +16,7 @@
 #include "battle_terastal.h"
 #include "data.h"
 #include "debug.h"
+#include "difficulty.h"
 #include "event_data.h"
 #include "item.h"
 #include "math_util.h"
@@ -256,9 +257,27 @@ static bool32 IsSmartBattle(void)
     return gBattleTypeFlags & BATTLE_TYPE_HAS_AI || IsWildMonSmart();
 }
 
+// Difficulty override for regular NPC trainers; flag sets are in include/config/ai.h
+static u64 GetDifficultyAiFlags(u16 trainerId)
+{
+    u64 structuralFlags = GetTrainerAIFlagsFromId(trainerId) & AI_FLAGS_TRAINER_STRUCTURAL;
+
+    switch (GetCurrentDifficultyLevel())
+    {
+    case DIFFICULTY_EASY:
+        return AI_FLAGS_DIFFICULTY_EASY;
+    case DIFFICULTY_HARD:
+        return AI_FLAGS_DIFFICULTY_HARD | structuralFlags;
+    case DIFFICULTY_NORMAL:
+    default:
+        return AI_FLAGS_DIFFICULTY_NORMAL | structuralFlags;
+    }
+}
+
 static u64 GetAiFlags(u16 trainerId, enum BattlerId battler)
 {
     u64 flags = 0;
+    bool32 difficultyOverride = FALSE;
 
     if (!IsSmartBattle())
     {
@@ -282,11 +301,17 @@ static u64 GetAiFlags(u16 trainerId, enum BattlerId battler)
             flags = GetAiScriptsInBattleFactory();
         else if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL | BATTLE_TYPE_SECRET_BASE))
             flags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT;
+        else if (trainerId != TRAINER_NONE && !IsPartnerTrainerId(trainerId))
+        {
+            flags = GetDifficultyAiFlags(trainerId);
+            difficultyOverride = TRUE;
+        }
         else
             flags = GetTrainerAIFlagsFromId(trainerId);
     }
 
-    if (IsDoubleBattle() && flags != 0)
+    // Also for Easy (no flags), so the AI doesn't target its own ally in doubles
+    if (IsDoubleBattle() && (flags != 0 || difficultyOverride))
     {
         flags |= AI_FLAG_DOUBLE_BATTLE;
     }
@@ -301,6 +326,10 @@ static u64 GetAiFlags(u16 trainerId, enum BattlerId battler)
 
     if (sDynamicAiFunc != NULL)
         flags |= AI_FLAG_DYNAMIC_FUNC;
+
+    // Fairness mask: must stay last. Skipped in tests, which set these flags explicitly to test them.
+    if (!TESTING)
+        flags &= ~AI_FLAGS_FORBIDDEN;
 
     return flags;
 }

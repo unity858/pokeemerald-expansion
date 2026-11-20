@@ -30,6 +30,10 @@ bool32 ShouldUseItem(enum BattlerId battler)
     bool32 shouldUse = FALSE;
     u32 healAmount = 0;
 
+    // Bag items disabled by config (include/config/ai.h); held items are unaffected. Kept on in tests.
+    if (!AI_TRAINERS_USE_BAG_ITEMS && !TESTING)
+        return FALSE;
+
     if (IsAiVsAiBattle())
         return FALSE;
 
