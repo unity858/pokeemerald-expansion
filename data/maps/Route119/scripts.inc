@@ -128,7 +128,6 @@ Route119_EventScript_DefeatedBrendan::
 	end
 
 Route119_EventScript_GiveFlyHM::
-	giveitem ITEM_HM_FLY
 	setflag FLAG_RECEIVED_HM_FLY
 	return
 
@@ -492,7 +491,7 @@ Route119_Text_MayDefeat:
 Route119_Text_MayPresentForYou:
 	.string "MAY: But I had absolutely nothing to\n"
 	.string "worry about! Keep it up!\p"
-	.string "And, here! I have a present for you.$"
+	.string "And, here! I have a tip for you.$"
 
 Route119_Text_MayExplainFly:
 	.string "MAY: Use FLY, and your POKéMON will\n"
@@ -522,7 +521,7 @@ Route119_Text_BrendanDefeat:
 Route119_Text_BrendanIllGiveYouThis:
 	.string "BRENDAN: I'd say you're good enough\n"
 	.string "to search for POKéMON anywhere.\p"
-	.string "Here, I'll give you this.\n"
+	.string "Here's a tip.\n"
 	.string "Try it out.$"
 
 Route119_Text_BrendanExplainFly:
