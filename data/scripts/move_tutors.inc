@@ -147,12 +147,13 @@ MoveTutor_EventScript_DoubleEdgeTaught::
 PacifidlogTown_PokemonCenter_1F_EventScript_ExplosionTutor::
 	lock
 	faceplayer
-	move_tutor MOVE_EXPLOSION, MoveTutor_Text_ExplosionTeach, MoveTutor_Text_ExplosionWhichMon, MoveTutor_EventScript_ExplosionDeclined, MoveTutor_EventScript_ExplosionTaught, FLAG_MOVE_TUTOR_TAUGHT_EXPLOSION
-	end
-
-MoveTutor_EventScript_ExplosionDeclined::
-	msgbox MoveTutor_Text_ExplosionDeclined, MSGBOX_DEFAULT
-	release
+	@ R.O.W.E.: gives TM64 Explosion once instead of tutoring the move.
+	goto_if_set FLAG_MOVE_TUTOR_TAUGHT_EXPLOSION, MoveTutor_EventScript_ExplosionTaught
+	msgbox MoveTutor_Text_ExplosionTeach, MSGBOX_DEFAULT
+	giveitem ITEM_TM_EXPLOSION
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	setflag FLAG_MOVE_TUTOR_TAUGHT_EXPLOSION
+	goto MoveTutor_EventScript_ExplosionTaught
 	end
 
 MoveTutor_EventScript_ExplosionTaught::

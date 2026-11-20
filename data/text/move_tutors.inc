@@ -219,15 +219,7 @@ MoveTutor_Text_ExplosionTeach:
 	.string "Seriously, I'm going to cause\n"
 	.string "a huge EXPLOSION of popularity!\p"
 	.string "If you overheard that, I'll happily\n"
-	.string "teach EXPLOSION to your POKéMON!$"
-
-MoveTutor_Text_ExplosionDeclined:
-	.string "Gaah! You're turning me down because\n"
-	.string "I live in the country?$"
-
-MoveTutor_Text_ExplosionWhichMon:
-	.string "Fine! An EXPLOSION it is!\n"
-	.string "Which POKéMON wants to blow up?$"
+	.string "give you this TM for your POKéMON!$"
 
 MoveTutor_Text_ExplosionTaught:
 	.string "For a long time, I've taught POKéMON\n"
