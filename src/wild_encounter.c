@@ -1202,6 +1202,8 @@ bool8 TryDoDoubleWildBattle(void)
         return TRUE;
     else if (FlagGet(WE_FLAG_FORCE_DOUBLE_WILD))
         return TRUE;
+    else if (LURE_STEP_COUNT != 0 && GetMonsStateToDoubles() == PLAYER_HAS_TWO_USABLE_MONS) // R.O.W.E.: Lures cause double wild battles
+        return TRUE;
     else if (RandomPercentage(RNG_NONE, WE_DOUBLE_WILD_CHANCE))
         return TRUE;
     return FALSE;

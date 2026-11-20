@@ -876,6 +876,26 @@ void ItemUseOutOfBattle_TypeGem(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
+// R.O.W.E.: Feathers raise an IV by 1 instead of giving EVs.
+void ItemUseOutOfBattle_Feather(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_Feather;
+    SetUpItemUseCallback(taskId);
+}
+
+// R.O.W.E.: the Soot Sack shows how much ash has been gathered.
+void ItemUseOutOfBattle_SootSack(u8 taskId)
+{
+    static const u8 sText_AshQuantity[] = _("Ash quantity:\n{STR_VAR_1}{PAUSE_UNTIL_PRESS}");
+
+    ConvertIntToDecimalStringN(gStringVar1, VarGet(VAR_ASH_GATHER_COUNT), STR_CONV_MODE_LEFT_ALIGN, 5);
+    StringExpandPlaceholders(gStringVar4, sText_AshQuantity);
+    if (!gTasks[taskId].tUsingRegisteredKeyItem)
+        DisplayItemMessage(taskId, FONT_NORMAL, gStringVar4, CloseItemMessage);
+    else
+        DisplayItemMessageOnField(taskId, gStringVar4, Task_CloseCantUseKeyItemMessage);
+}
+
 void ItemUseOutOfBattle_ResetEVs(u8 taskId)
 {
     gItemUseCB = ItemUseCB_ResetEVs;

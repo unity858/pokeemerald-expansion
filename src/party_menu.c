@@ -5293,6 +5293,54 @@ void ItemUseCB_TypeGem(u8 taskId, TaskFunc task)
     }
 }
 
+// R.O.W.E.: each Feather raises one IV by 1. Like R.O.W.E., an IV already at 31 wraps down to 30.
+void ItemUseCB_Feather(u8 taskId, TaskFunc task)
+{
+    static const u8 sText_FeatherDone[] = _("{STR_VAR_1} became stronger!{PAUSE_UNTIL_PRESS}");
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
+    enum Item item = gSpecialVar_ItemId;
+    u32 ivField;
+    u8 iv;
+
+    switch (item)
+    {
+    case ITEM_HEALTH_FEATHER: ivField = MON_DATA_HP_IV;    break;
+    case ITEM_MUSCLE_FEATHER: ivField = MON_DATA_ATK_IV;   break;
+    case ITEM_RESIST_FEATHER: ivField = MON_DATA_DEF_IV;   break;
+    case ITEM_GENIUS_FEATHER: ivField = MON_DATA_SPATK_IV; break;
+    case ITEM_CLEVER_FEATHER: ivField = MON_DATA_SPDEF_IV; break;
+    case ITEM_SWIFT_FEATHER:  ivField = MON_DATA_SPEED_IV; break;
+    default:                  ivField = 0;                 break;
+    }
+
+    if (ivField == 0 || GetMonData(mon, MON_DATA_IS_EGG))
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        PlaySE(SE_SELECT);
+        DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+        return;
+    }
+
+    iv = GetMonData(mon, ivField);
+    if (iv < MAX_PER_STAT_IVS)
+        iv++;
+    else
+        iv = MAX_PER_STAT_IVS - 1;
+    SetMonData(mon, ivField, &iv);
+    CalculateMonStats(mon);
+
+    gPartyMenuUseExitCallback = TRUE;
+    PlaySE(SE_USE_ITEM);
+    RemoveBagItem(item, 1);
+    GetMonNickname(mon, gStringVar1);
+    StringExpandPlaceholders(gStringVar4, sText_FeatherDone);
+    DisplayPartyMenuMessage(gStringVar4, TRUE);
+    ScheduleBgCopyTilemapToVram(2);
+    gTasks[taskId].func = task;
+}
+
 void ItemUseCB_ResetEVs(u8 taskId, TaskFunc task)
 {
     struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
