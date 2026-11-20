@@ -9,15 +9,17 @@ u32 GetCurrentLevelCap(void)
 {
     static const u32 sLevelCapFlagMap[][2] =
     {
-        {FLAG_BADGE01_GET, 15},
-        {FLAG_BADGE02_GET, 19},
-        {FLAG_BADGE03_GET, 24},
-        {FLAG_BADGE04_GET, 29},
-        {FLAG_BADGE05_GET, 31},
-        {FLAG_BADGE06_GET, 33},
-        {FLAG_BADGE07_GET, 42},
-        {FLAG_BADGE08_GET, 46},
-        {FLAG_IS_CHAMPION, 58},
+        // R.O.W.E. caps: the cap is the value paired with the first flag that is NOT set.
+        // 16 before badge 1, 23/29/36/43/51/57/69/77 after badges 1-8, MAX_LEVEL (100) once Champion.
+        {FLAG_BADGE01_GET, 16},
+        {FLAG_BADGE02_GET, 23},
+        {FLAG_BADGE03_GET, 29},
+        {FLAG_BADGE04_GET, 36},
+        {FLAG_BADGE05_GET, 43},
+        {FLAG_BADGE06_GET, 51},
+        {FLAG_BADGE07_GET, 57},
+        {FLAG_BADGE08_GET, 69},
+        {FLAG_IS_CHAMPION, 77},
     };
 
     u32 i;
