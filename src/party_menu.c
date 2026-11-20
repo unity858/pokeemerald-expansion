@@ -3095,7 +3095,8 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
 
-    // Non-HM field moves: listed if known, in move slot order (vanilla).
+    // Non-HM field moves: listed if known, in move slot order (vanilla). Known
+    // HM field moves are listed below with the others, so never twice.
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
         for (j = 0; j != FIELD_MOVES_COUNT; j++)

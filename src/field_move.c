@@ -194,10 +194,10 @@ const struct FieldMoveInfo gFieldMoveInfo[FIELD_MOVES_COUNT] =
 };
 
 // HM items are removed. The 8 former HM field moves are usable by a party
-// Pokémon iff the badge requirement is met (IsFieldMoveUnlocked) and the move
-// is in the learnable lists (level-up, egg, teachable) of its species or any
-// of its pre-evolutions. Knowing the move doesn't matter. Other field moves
-// still have to be known.
+// Pokémon iff the badge requirement is met (IsFieldMoveUnlocked) and it either
+// knows the move (e.g. Smeargle via Sketch) or the move is in the learnable
+// lists (level-up, egg, teachable) of its species or any of its
+// pre-evolutions. Other field moves still have to be known.
 bool32 IsHMFieldMove(enum FieldMove fieldMove)
 {
     switch (fieldMove)
@@ -269,7 +269,8 @@ static bool32 IsUsableMon(struct Pokemon *mon)
 STATIC_ASSERT(FIELD_MOVES_COUNT <= 32, FieldMoveMaskFitsInU32);
 
 // Bitmask of field moves (1 << FIELD_MOVE_*) the mon qualifies for, ignoring
-// badges: HM field moves by learnset (incl. pre-evolutions), others if known.
+// badges: HM field moves if known or learnable (incl. pre-evolutions), others
+// if known.
 u32 GetMonFieldMoveQualifiedMask(struct Pokemon *mon)
 {
     enum Species chain[MAX_PRE_EVO_CHAIN];
@@ -284,13 +285,15 @@ u32 GetMonFieldMoveQualifiedMask(struct Pokemon *mon)
     {
         enum Move move = FieldMove_GetMoveId(fieldMove);
 
-        if (IsHMFieldMove(fieldMove) ? ChainLearnablesContainMove(chain, chainCount, move) : MonKnowsMove(mon, move))
+        if (MonKnowsMove(mon, move)
+         || (IsHMFieldMove(fieldMove) && ChainLearnablesContainMove(chain, chainCount, move)))
             mask |= 1u << fieldMove;
     }
     return mask;
 }
 
-// Rule 3(b) for one field move (badge requirement checked separately).
+// Whether the mon qualifies for one field move, by the same rule as
+// GetMonFieldMoveQualifiedMask (badge requirement checked separately).
 bool32 MonQualifiesForFieldMove(struct Pokemon *mon, enum FieldMove fieldMove)
 {
     enum Species chain[MAX_PRE_EVO_CHAIN];
@@ -298,8 +301,10 @@ bool32 MonQualifiesForFieldMove(struct Pokemon *mon, enum FieldMove fieldMove)
 
     if (!IsUsableMon(mon))
         return FALSE;
+    if (MonKnowsMove(mon, FieldMove_GetMoveId(fieldMove)))
+        return TRUE;
     if (!IsHMFieldMove(fieldMove))
-        return MonKnowsMove(mon, FieldMove_GetMoveId(fieldMove));
+        return FALSE;
 
     chainCount = GetPreEvolutionChain(GetMonData(mon, MON_DATA_SPECIES), chain);
     return ChainLearnablesContainMove(chain, chainCount, FieldMove_GetMoveId(fieldMove));

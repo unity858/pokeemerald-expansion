@@ -2302,7 +2302,8 @@ bool8 ScrCmd_checkfieldmove(struct ScriptContext *ctx)
     if (doUnlockedCheck && !IsFieldMoveUnlocked(fieldMove))
         return FALSE;
 
-    // HM field moves: learnable by the species or a pre-evolution; others: known.
+    // HM field moves: known, or learnable by the species or a pre-evolution;
+    // others: known.
     for (u32 i = 0; i < PARTY_SIZE; i++)
     {
         enum Species species = GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES);
