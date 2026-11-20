@@ -1065,6 +1065,34 @@ enum __attribute__((packed)) Item
     ITEM_POWER_CANDY = 895,
     ITEM_IRON_PILL = 896,
     ITEM_SAFARI_PASS = 897,
+    // Ball Seals: keep these contiguous (see IS_BALL_SEAL)
+    ITEM_POKE_BALL_SEAL = 898,
+    ITEM_MASTER_BALL_SEAL = 899,
+    ITEM_ULTRA_BALL_SEAL = 900,
+    ITEM_GREAT_BALL_SEAL = 901,
+    ITEM_SAFARI_BALL_SEAL = 902,
+    ITEM_NET_BALL_SEAL = 903,
+    ITEM_DIVE_BALL_SEAL = 904,
+    ITEM_NEST_BALL_SEAL = 905,
+    ITEM_REPEAT_BALL_SEAL = 906,
+    ITEM_TIMER_BALL_SEAL = 907,
+    ITEM_LUXURY_BALL_SEAL = 908,
+    ITEM_PREMIER_BALL_SEAL = 909,
+    ITEM_DUSK_BALL_SEAL = 910,
+    ITEM_HEAL_BALL_SEAL = 911,
+    ITEM_QUICK_BALL_SEAL = 912,
+    ITEM_CHERISH_BALL_SEAL = 913,
+    ITEM_FAST_BALL_SEAL = 914,
+    ITEM_LEVEL_BALL_SEAL = 915,
+    ITEM_LURE_BALL_SEAL = 916,
+    ITEM_HEAVY_BALL_SEAL = 917,
+    ITEM_LOVE_BALL_SEAL = 918,
+    ITEM_FRIEND_BALL_SEAL = 919,
+    ITEM_MOON_BALL_SEAL = 920,
+    ITEM_SPORT_BALL_SEAL = 921,
+    ITEM_PARK_BALL_SEAL = 922,
+    ITEM_DREAM_BALL_SEAL = 923,
+    ITEM_BEAST_BALL_SEAL = 924,
 
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,
@@ -1089,6 +1117,9 @@ enum __attribute__((packed)) Item
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations
 // Its icon is defined at ITEMS_COUNT as the "return to field" arrow
 #define ITEM_LIST_END 0xFFFF
+
+// R.O.W.E. Ball Seals; their secondaryId is the BALL_* they set.
+#define IS_BALL_SEAL(item) ((item) >= ITEM_POKE_BALL_SEAL && (item) <= ITEM_BEAST_BALL_SEAL)
 
 #if B_CONFUSE_BERRIES_HEAL >= GEN_8
     #define CONFUSE_BERRY_HEAL_FRACTION 3

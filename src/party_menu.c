@@ -5494,7 +5494,7 @@ void ItemUseCB_Feather(u8 taskId, TaskFunc task)
 }
 
 // R.O.W.E. items used on a party Pokemon with a yes/no confirmation
-// (Power Candy, Iron Pill). The ItemUseCB_* functions refuse first, without
+// (Power Candy, Iron Pill, Ball Seals). The ItemUseCB_* functions refuse first, without
 // consuming the item; this task asks, applies the effect and consumes it.
 #define tState      data[0]
 #define tMonId      data[1]
@@ -5506,6 +5506,7 @@ static const u8 sText_RoweDonePowerUp[] = _("{STR_VAR_1} became stronger!{PAUSE_
 static void RoweItem_Apply(struct Pokemon *mon, enum Item item)
 {
     static const u8 sText_DoneIronPill[] = _("{STR_VAR_1} became slower!{PAUSE_UNTIL_PRESS}");
+    static const u8 sText_DoneBallSeal[] = _("{STR_VAR_1}'s Poké Ball\nchanged!{PAUSE_UNTIL_PRESS}");
     const u8 *doneText = sText_RoweDonePowerUp;
     u32 i;
     u8 value;
@@ -5524,6 +5525,12 @@ static void RoweItem_Apply(struct Pokemon *mon, enum Item item)
         doneText = sText_DoneIronPill;
         break;
     default:
+        if (IS_BALL_SEAL(item))
+        {
+            value = GetItemSecondaryId(item);
+            SetMonData(mon, MON_DATA_POKEBALL, &value);
+            doneText = sText_DoneBallSeal;
+        }
         break;
     }
     CalculateMonStats(mon);
@@ -5636,6 +5643,17 @@ void ItemUseCB_IronPill(u8 taskId, TaskFunc task)
     RoweItem_Start(taskId, task,
                    GetMonData(mon, MON_DATA_SPEED_IV) == 0 && GetMonData(mon, MON_DATA_SPEED_EV) == 0,
                    sText_AskIronPill);
+}
+
+// R.O.W.E. Ball Seal: the Pokemon's ball becomes the seal's ball. Refused if it already is.
+void ItemUseCB_BallSeal(u8 taskId, TaskFunc task)
+{
+    static const u8 sText_AskBallSeal[] = _("Would you like to change\n{STR_VAR_1}'s Poké Ball?");
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
+
+    RoweItem_Start(taskId, task,
+                   GetMonData(mon, MON_DATA_POKEBALL) == GetItemSecondaryId(gSpecialVar_ItemId),
+                   sText_AskBallSeal);
 }
 
 void ItemUseCB_ResetEVs(u8 taskId, TaskFunc task)

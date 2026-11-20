@@ -897,6 +897,13 @@ void ItemUseOutOfBattle_IronPill(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
+// R.O.W.E.: Ball Seals change which ball a party Pokemon is in.
+void ItemUseOutOfBattle_BallSeal(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_BallSeal;
+    SetUpItemUseCallback(taskId);
+}
+
 // R.O.W.E.: the Soot Sack shows how much ash has been gathered.
 void ItemUseOutOfBattle_SootSack(u8 taskId)
 {

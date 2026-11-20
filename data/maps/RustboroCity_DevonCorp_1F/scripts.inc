@@ -50,13 +50,61 @@ RustboroCity_DevonCorp_1F_EventScript_GotRobbed::
 	release
 	end
 
+@ R.O.W.E.: the receptionist sells Ball Seals; more after Winona's badge (TM40).
 RustboroCity_DevonCorp_1F_EventScript_Greeter::
 	lock
 	faceplayer
-	goto_if_set FLAG_RETURNED_DEVON_GOODS, RustboroCity_DevonCorp_1F_EventScript_WelcomeToDevonCorp
-	goto_if_set FLAG_RECOVERED_DEVON_GOODS, RustboroCity_DevonCorp_1F_EventScript_StaffGotRobbed
-	goto_if_set FLAG_DEVON_GOODS_STOLEN, RustboroCity_DevonCorp_1F_EventScript_StaffGotRobbed
-	msgbox RustboroCity_DevonCorp_1F_Text_WelcomeToDevonCorp, MSGBOX_DEFAULT
+	message gText_HowMayIServeYou
+	waitmessage
+	goto_if_set FLAG_RECEIVED_TM_AERIAL_ACE, RustboroCity_DevonCorp_1F_EventScript_SealMartExpanded
+	pokemart RustboroCity_DevonCorp_1F_Pokemart_Seals
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_DevonCorp_1F_EventScript_SealMartExpanded::
+	pokemart RustboroCity_DevonCorp_1F_Pokemart_SealsExpanded
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+	.align 2
+RustboroCity_DevonCorp_1F_Pokemart_Seals:
+	.2byte ITEM_POKE_BALL_SEAL
+	.2byte ITEM_GREAT_BALL_SEAL
+	.2byte ITEM_ULTRA_BALL_SEAL
+	.2byte ITEM_PREMIER_BALL_SEAL
+	.2byte ITEM_LUXURY_BALL_SEAL
+	.2byte ITEM_HEAL_BALL_SEAL
+	.2byte ITEM_TIMER_BALL_SEAL
+	.2byte ITEM_REPEAT_BALL_SEAL
+	.2byte ITEM_NET_BALL_SEAL
+	.2byte ITEM_DIVE_BALL_SEAL
+	.2byte ITEM_NONE
+	release
+	end
+
+	.align 2
+RustboroCity_DevonCorp_1F_Pokemart_SealsExpanded:
+	.2byte ITEM_POKE_BALL_SEAL
+	.2byte ITEM_GREAT_BALL_SEAL
+	.2byte ITEM_ULTRA_BALL_SEAL
+	.2byte ITEM_PREMIER_BALL_SEAL
+	.2byte ITEM_LUXURY_BALL_SEAL
+	.2byte ITEM_HEAL_BALL_SEAL
+	.2byte ITEM_TIMER_BALL_SEAL
+	.2byte ITEM_REPEAT_BALL_SEAL
+	.2byte ITEM_NET_BALL_SEAL
+	.2byte ITEM_DIVE_BALL_SEAL
+	.2byte ITEM_LURE_BALL_SEAL
+	.2byte ITEM_LEVEL_BALL_SEAL
+	.2byte ITEM_MOON_BALL_SEAL
+	.2byte ITEM_HEAVY_BALL_SEAL
+	.2byte ITEM_FAST_BALL_SEAL
+	.2byte ITEM_FRIEND_BALL_SEAL
+	.2byte ITEM_LOVE_BALL_SEAL
+	.2byte ITEM_DREAM_BALL_SEAL
+	.2byte ITEM_NONE
 	release
 	end
 
