@@ -774,7 +774,13 @@ struct SpeciesInfoOverride
     // species always holds that item, as in gSpeciesInfo.
     u16 itemCommon;
     u16 itemRare;
+    // EV yields, indexed by STAT_HP..STAT_SPDEF. 0 is a real EV yield, so values are
+    // stored as CUSTOM_EV_YIELD(n) (= n + 1); 0 = keep vanilla.
+    u8 evYield[NUM_STATS];
+    u8 catchRate; // 0 = keep vanilla (no species has catch rate 0)
 };
+
+#define CUSTOM_EV_YIELD(n) ((n) + 1)
 
 // Explicit "override to ITEM_NONE" value for SpeciesInfoOverride.itemCommon/itemRare,
 // since ITEM_NONE (0) itself means "no override". Never a real item id.
@@ -889,6 +895,8 @@ u32 GetSpeciesBaseSpDefense(enum Species species);
 u32 GetSpeciesBaseSpeed(enum Species species);
 enum Item GetSpeciesItemCommon(enum Species species);
 enum Item GetSpeciesItemRare(enum Species species);
+u32 GetSpeciesEvYield(enum Species species, u32 statIndex);
+u32 GetSpeciesCatchRate(enum Species species);
 u32 GetSpeciesBaseStat(enum Species species, u32 statIndex);
 u32 GetSpeciesBaseStatTotal(enum Species species);
 const struct LevelUpMove *GetSpeciesLevelUpLearnset(enum Species species);

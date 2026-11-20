@@ -1,4 +1,4 @@
-// Species base stat, ability, type and wild held item overrides for Custom data mode (ported from R.O.W.E.).
+// Species base stat, ability, type, wild held item, EV yield and catch rate overrides for Custom data mode (ported from R.O.W.E.).
 //
 // Applied by GetSpeciesBaseHP/.../GetSpeciesBaseSpeed (and so GetSpeciesBaseStat,
 // stat calculation, Pokédex, Battle Dome, AI, ...) and by GetSpeciesAbility
@@ -16,6 +16,10 @@
 // Eyes etc.); common == rare means always held, the same as R.O.W.E.'s
 // item1 == item2. Where R.O.W.E. made a species always hold an item, both
 // fields are set so that meaning is kept.
+// evYield[STAT_*] (GetSpeciesEvYield: EV gain, HGSS Pokédex) holds
+// CUSTOM_EV_YIELD(n) = n + 1 because 0 EVs is a real value; 0 = keep vanilla.
+// catchRate (GetSpeciesCatchRate: ball catch odds, Safari Zone, HGSS Pokédex):
+// 0 = keep vanilla.
 // Comments show vanilla (current gSpeciesInfo) -> custom.
 //
 // Only R.O.W.E.'s own edits are listed: values were diffed against the
@@ -144,7 +148,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_SUNFLORA] = { .baseHP = 95, .baseDefense = 85, .baseSpeed = 65, .baseSpAttack = 115, .abilities[2] = ABILITY_FLOWER_GIFT, .itemCommon = ITEM_GREEN_SHARD, .itemRare = ITEM_GREEN_SHARD }, // HP 75->95, Def 55->85, Spe 30->65, SpA 105->115, Hidden: Early Bird->Flower Gift, Common None→Green Shard, Rare None→Green Shard (always held)
     [SPECIES_QUAGSIRE] = { .baseHP = 100, .baseDefense = 90 }, // HP 95->100, Def 85->90
     [SPECIES_MISDREAVUS] = { .abilities[0] = ABILITY_CURSED_BODY, .abilities[1] = ABILITY_PIXILATE, .types[1] = TYPE_FAIRY, .itemRare = ITEM_SPELL_TAG }, // Slot 1: Levitate->Cursed Body, Slot 2: None->Pixilate, Type2 Ghost→Fairy, Rare None→Spell Tag
-    [SPECIES_UNOWN] = { .baseHP = 80, .baseAttack = 70, .baseDefense = 80, .baseSpeed = 95, .baseSpAttack = 95, .baseSpDefense = 80, .abilities[0] = ABILITY_PSYCHIC_SURGE }, // HP 48->80, Atk 72->70, Def 48->80, Spe 48->95, SpA 72->95, SpD 48->80, Slot 1: Levitate->Psychic Surge
+    [SPECIES_UNOWN] = { .baseHP = 80, .baseAttack = 70, .baseDefense = 80, .baseSpeed = 95, .baseSpAttack = 95, .baseSpDefense = 80, .abilities[0] = ABILITY_PSYCHIC_SURGE, .evYield[STAT_ATK] = CUSTOM_EV_YIELD(0), .evYield[STAT_SPEED] = CUSTOM_EV_YIELD(1), .catchRate = 150 }, // HP 48->80, Atk 72->70, Def 48->80, Spe 48->95, SpA 72->95, SpD 48->80, Slot 1: Levitate->Psychic Surge, EV Atk 1→0, EV Spe 0→1, Catch rate 225→150
     [SPECIES_UNOWN_B] = { .abilities[0] = ABILITY_PSYCHIC_SURGE }, // Slot 1: Levitate->Psychic Surge
     [SPECIES_UNOWN_C] = { .abilities[0] = ABILITY_PSYCHIC_SURGE }, // Slot 1: Levitate->Psychic Surge
     [SPECIES_UNOWN_D] = { .abilities[0] = ABILITY_PSYCHIC_SURGE }, // Slot 1: Levitate->Psychic Surge
@@ -228,7 +232,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_GARDEVOIR] = { .baseAttack = 60, .baseSpeed = 100 }, // Atk 65->60, Spe 80->100
     [SPECIES_GARDEVOIR_MEGA] = { .baseAttack = 60, .baseDefense = 90, .baseSpAttack = 175, .baseSpDefense = 140 }, // Atk 85->60, Def 65->90, SpA 165->175, SpD 135->140
     [SPECIES_SURSKIT] = { .abilities[1] = ABILITY_RAIN_DISH, .abilities[2] = ABILITY_WATER_VEIL }, // Slot 2: None->Rain Dish, Hidden: Rain Dish->Water Veil
-    [SPECIES_MASQUERAIN] = { .baseDefense = 70, .baseSpeed = 100, .baseSpAttack = 120, .baseSpDefense = 110, .abilities[1] = ABILITY_KEEN_EYE, .abilities[2] = ABILITY_KEEN_EYE, .types[1] = TYPE_WATER }, // Def 62->70, Spe 80->100, SpA 100->120, SpD 82->110, Slot 2: None->Keen Eye, Hidden: Unnerve->Keen Eye, Type2 Flying→Water
+    [SPECIES_MASQUERAIN] = { .baseDefense = 70, .baseSpeed = 100, .baseSpAttack = 120, .baseSpDefense = 110, .abilities[1] = ABILITY_KEEN_EYE, .abilities[2] = ABILITY_KEEN_EYE, .types[1] = TYPE_WATER, .evYield[STAT_SPATK] = CUSTOM_EV_YIELD(2), .evYield[STAT_SPDEF] = CUSTOM_EV_YIELD(0) }, // Def 62->70, Spe 80->100, SpA 100->120, SpD 82->110, Slot 2: None->Keen Eye, Hidden: Unnerve->Keen Eye, Type2 Flying→Water, EV SpA 1→2, EV SpD 1→0
     [SPECIES_SHROOMISH] = { .itemRare = ITEM_KEBIA_BERRY }, // Rare Big Mushroom→Kebia Berry
     [SPECIES_BRELOOM] = { .itemRare = ITEM_KEBIA_BERRY }, // Rare Big Mushroom→Kebia Berry
     [SPECIES_NINJASK] = { .baseAttack = 100 }, // Atk 90->100
@@ -302,7 +306,9 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_BAGON] = { .abilities[1] = ABILITY_SHEER_FORCE }, // Slot 2: None->Sheer Force
     [SPECIES_SHELGON] = { .abilities[1] = ABILITY_OVERCOAT }, // Slot 2: None->Overcoat
     [SPECIES_SALAMENCE] = { .abilities[1] = ABILITY_MOXIE }, // Slot 2: None->Moxie
-    [SPECIES_METAGROSS] = { .abilities[1] = ABILITY_IRON_FIST }, // Slot 2: None->Iron Fist
+    [SPECIES_BELDUM] = { .catchRate = 45 }, // Catch rate 3→45
+    [SPECIES_METANG] = { .catchRate = 45 }, // Catch rate 3→45
+    [SPECIES_METAGROSS] = { .abilities[1] = ABILITY_IRON_FIST, .catchRate = 45 }, // Slot 2: None->Iron Fist, Catch rate 3→45
     [SPECIES_LATIAS] = { .abilities[0] = ABILITY_TELEPATHY, .itemCommon = ITEM_LATIASITE, .itemRare = ITEM_LATIASITE }, // Slot 1: Levitate->Telepathy, Common None→Latiasite, Rare None→Latiasite (always held)
     [SPECIES_LATIAS_MEGA] = { .abilities[0] = ABILITY_TELEPATHY, .abilities[1] = ABILITY_TELEPATHY, .abilities[2] = ABILITY_TELEPATHY }, // Slot 1: Levitate->Telepathy, Slot 2: Levitate->Telepathy, Hidden: Levitate->Telepathy
     [SPECIES_LATIOS] = { .abilities[0] = ABILITY_TELEPATHY, .itemCommon = ITEM_LATIOSITE, .itemRare = ITEM_LATIOSITE }, // Slot 1: Levitate->Telepathy, Common None→Latiosite, Rare None→Latiosite (always held)

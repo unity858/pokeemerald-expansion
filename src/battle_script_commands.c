@@ -8002,7 +8002,7 @@ static u32 GetBattleMonCatchRate(struct BattlePokemon *battleMon)
         species = battleMon->species;
     else
         species = battleMon->volatiles.transformedMonSpecies;
-    return gSpeciesInfo[species].catchRate;
+    return GetSpeciesCatchRate(species);
 }
 
 static u32 ComputeCaptureOdds(u32 wildMonBattler, u32 playerBattler)

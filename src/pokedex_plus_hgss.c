@@ -1905,12 +1905,12 @@ static void SaveMonDataInStruct(void)
     enum Species species = NationalPokedexNumToSpeciesForm(sPokedexListItem->dexNum);
     u8 evs[NUM_STATS] =
     {
-        [STAT_HP]    = gSpeciesInfo[species].evYield_HP,
-        [STAT_ATK]   = gSpeciesInfo[species].evYield_Speed,
-        [STAT_DEF]   = gSpeciesInfo[species].evYield_Attack,
-        [STAT_SPEED] = gSpeciesInfo[species].evYield_SpAttack,
-        [STAT_SPATK] = gSpeciesInfo[species].evYield_Defense,
-        [STAT_SPDEF] = gSpeciesInfo[species].evYield_SpDefense
+        [STAT_HP]    = GetSpeciesEvYield(species, STAT_HP),
+        [STAT_ATK]   = GetSpeciesEvYield(species, STAT_SPEED),
+        [STAT_DEF]   = GetSpeciesEvYield(species, STAT_ATK),
+        [STAT_SPEED] = GetSpeciesEvYield(species, STAT_SPATK),
+        [STAT_SPATK] = GetSpeciesEvYield(species, STAT_DEF),
+        [STAT_SPDEF] = GetSpeciesEvYield(species, STAT_SPDEF)
     };
     u8 differentEVs = 0;
     u8 i;
@@ -1937,7 +1937,7 @@ static void SaveMonDataInStruct(void)
     sPokedexView->sPokemonStats.evYield_SpAttack    = evs[STAT_SPEED];
     sPokedexView->sPokemonStats.evYield_Defense     = evs[STAT_SPATK];
     sPokedexView->sPokemonStats.evYield_SpDefense   = evs[STAT_SPDEF];
-    sPokedexView->sPokemonStats.catchRate           = gSpeciesInfo[species].catchRate;
+    sPokedexView->sPokemonStats.catchRate           = GetSpeciesCatchRate(species);
     sPokedexView->sPokemonStats.growthRate          = gSpeciesInfo[species].growthRate;
     sPokedexView->sPokemonStats.eggGroup1           = gSpeciesInfo[species].eggGroups[0];
     sPokedexView->sPokemonStats.eggGroup2           = gSpeciesInfo[species].eggGroups[1];
