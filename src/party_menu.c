@@ -5493,6 +5493,151 @@ void ItemUseCB_Feather(u8 taskId, TaskFunc task)
     gTasks[taskId].func = task;
 }
 
+// R.O.W.E. items used on a party Pokemon with a yes/no confirmation
+// (Power Candy, Iron Pill). The ItemUseCB_* functions refuse first, without
+// consuming the item; this task asks, applies the effect and consumes it.
+#define tState      data[0]
+#define tMonId      data[1]
+#define tOldFunc    2
+
+static const u8 sText_RoweAskPowerUp[] = _("Do you want to power up\n{STR_VAR_1}?");
+static const u8 sText_RoweDonePowerUp[] = _("{STR_VAR_1} became stronger!{PAUSE_UNTIL_PRESS}");
+
+static void RoweItem_Apply(struct Pokemon *mon, enum Item item)
+{
+    static const u8 sText_DoneIronPill[] = _("{STR_VAR_1} became slower!{PAUSE_UNTIL_PRESS}");
+    const u8 *doneText = sText_RoweDonePowerUp;
+    u32 i;
+    u8 value;
+
+    switch (item)
+    {
+    case ITEM_POWER_CANDY:
+        value = MAX_PER_STAT_IVS;
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(mon, MON_DATA_HP_IV + i, &value);
+        break;
+    case ITEM_IRON_PILL:
+        value = 0;
+        SetMonData(mon, MON_DATA_SPEED_IV, &value);
+        SetMonData(mon, MON_DATA_SPEED_EV, &value);
+        doneText = sText_DoneIronPill;
+        break;
+    default:
+        break;
+    }
+    CalculateMonStats(mon);
+    GetMonNickname(mon, gStringVar1);
+    StringExpandPlaceholders(gStringVar4, doneText);
+}
+
+static void Task_RoweItemConfirm(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][tMonId];
+
+    switch (tState)
+    {
+    case 0:
+        if (!IsPartyMenuTextPrinterActive())
+        {
+            PartyMenuDisplayYesNoMenu();
+            tState++;
+        }
+        break;
+    case 1:
+        switch (Menu_ProcessInputNoWrapClearOnChoose())
+        {
+        case 0:
+            tState++;
+            break;
+        case 1:
+        case MENU_B_PRESSED:
+            gPartyMenuUseExitCallback = FALSE;
+            PlaySE(SE_SELECT);
+            ScheduleBgCopyTilemapToVram(2);
+            // Don't exit party selections screen, return to choosing a mon.
+            ClearStdWindowAndFrameToTransparent(6, 0);
+            ClearWindowTilemap(6);
+            DisplayPartyMenuStdMessage(PARTY_MSG_USE_ON_WHICH_MON);
+            gTasks[taskId].func = (void *)GetWordTaskArg(taskId, tOldFunc);
+            return;
+        }
+        break;
+    case 2:
+        PlaySE(SE_USE_ITEM);
+        RoweItem_Apply(mon, gSpecialVar_ItemId);
+        RemoveBagItem(gSpecialVar_ItemId, 1);
+        DisplayPartyMenuMessage(gStringVar4, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        tState++;
+        break;
+    case 3:
+        if (!IsPartyMenuTextPrinterActive())
+            gTasks[taskId].func = Task_ClosePartyMenu;
+        break;
+    }
+}
+
+// Refuses with "It won't have any effect." (item kept) when cannotUse is set;
+// otherwise shows askText and starts Task_RoweItemConfirm.
+static void RoweItem_Start(u8 taskId, TaskFunc task, bool32 cannotUse, const u8 *askText)
+{
+    s16 *data = gTasks[taskId].data;
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
+
+    if (cannotUse || GetMonData(mon, MON_DATA_IS_EGG))
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        PlaySE(SE_SELECT);
+        DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+        return;
+    }
+
+    gPartyMenuUseExitCallback = TRUE;
+    tState = 0;
+    tMonId = gPartyMenu.slotId;
+    SetWordTaskArg(taskId, tOldFunc, (uintptr_t)gTasks[taskId].func);
+    GetMonNickname(mon, gStringVar1);
+    StringExpandPlaceholders(gStringVar4, askText);
+    PlaySE(SE_SELECT);
+    DisplayPartyMenuMessage(gStringVar4, TRUE);
+    ScheduleBgCopyTilemapToVram(2);
+    gTasks[taskId].func = Task_RoweItemConfirm;
+}
+
+#undef tState
+#undef tMonId
+#undef tOldFunc
+
+// R.O.W.E. Power Candy: all six IVs become 31. Refused if they already are.
+void ItemUseCB_PowerCandy(u8 taskId, TaskFunc task)
+{
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
+    bool32 allMax = TRUE;
+    u32 i;
+
+    for (i = 0; i < NUM_STATS; i++)
+    {
+        if (GetMonData(mon, MON_DATA_HP_IV + i) < MAX_PER_STAT_IVS)
+            allMax = FALSE;
+    }
+    RoweItem_Start(taskId, task, allMax, sText_RoweAskPowerUp);
+}
+
+// R.O.W.E. Iron Pill: Speed IV and Speed EVs become 0. Refused if both already are.
+void ItemUseCB_IronPill(u8 taskId, TaskFunc task)
+{
+    static const u8 sText_AskIronPill[] = _("Do you want to slow down\n{STR_VAR_1}?");
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
+
+    RoweItem_Start(taskId, task,
+                   GetMonData(mon, MON_DATA_SPEED_IV) == 0 && GetMonData(mon, MON_DATA_SPEED_EV) == 0,
+                   sText_AskIronPill);
+}
+
 void ItemUseCB_ResetEVs(u8 taskId, TaskFunc task)
 {
     struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];

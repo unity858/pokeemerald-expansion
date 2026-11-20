@@ -1771,6 +1771,11 @@ extern const u32 gItemIcon_SwapSnack[];
 extern const u16 gItemIconPalette_SwapSnack[];
 extern const u32 gItemIcon_TwiceSpicedRadish[];
 extern const u16 gItemIconPalette_TwiceSpicedRadish[];
+// R.O.W.E. items
+extern const u32 gItemIcon_PowerCandy[];
+extern const u16 gItemIconPalette_PowerCandy[];
+extern const u32 gItemIcon_IronPill[];
+extern const u16 gItemIconPalette_IronPill[];
 
 extern const u32 gItemIcon_ReturnToFieldArrow[];
 extern const u16 gItemIconPalette_ReturnToFieldArrow[];

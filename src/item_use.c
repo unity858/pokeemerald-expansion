@@ -883,6 +883,20 @@ void ItemUseOutOfBattle_Feather(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
+// R.O.W.E.: the Power Candy sets all six IVs to 31.
+void ItemUseOutOfBattle_PowerCandy(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_PowerCandy;
+    SetUpItemUseCallback(taskId);
+}
+
+// R.O.W.E.: the Iron Pill sets the Speed IV and Speed EVs to 0.
+void ItemUseOutOfBattle_IronPill(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_IronPill;
+    SetUpItemUseCallback(taskId);
+}
+
 // R.O.W.E.: the Soot Sack shows how much ash has been gathered.
 void ItemUseOutOfBattle_SootSack(u8 taskId)
 {

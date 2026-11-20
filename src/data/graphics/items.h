@@ -2112,3 +2112,10 @@ const u16 gItemIconPalette_SwapSnack[] = INCGFX_U16("graphics/items/icon_palette
 
 const u32 gItemIcon_TwiceSpicedRadish[] = INCGFX_U32("graphics/items/icons/twice_spiced_radish.png", ".4bpp.smol");
 const u16 gItemIconPalette_TwiceSpicedRadish[] = INCGFX_U16("graphics/items/icon_palettes/twice_spiced_radish.pal", ".gbapal");
+
+// R.O.W.E. items
+const u32 gItemIcon_PowerCandy[] = INCGFX_U32("graphics/items/icons/power_candy.png", ".4bpp.smol");
+const u16 gItemIconPalette_PowerCandy[] = INCGFX_U16("graphics/items/icon_palettes/power_candy.pal", ".gbapal");
+
+const u32 gItemIcon_IronPill[] = INCGFX_U32("graphics/items/icons/iron_pill.png", ".4bpp.smol");
+const u16 gItemIconPalette_IronPill[] = INCGFX_U16("graphics/items/icon_palettes/iron_pill.pal", ".gbapal");

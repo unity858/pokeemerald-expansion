@@ -1061,6 +1061,10 @@ enum __attribute__((packed)) Item
     ITEM_TM120 = 893,
     ITEM_TM129 = 894, // TM121-TM128 are unused (see TM_GAP_FIRST)
 
+    // R.O.W.E. items, after the last item so existing item IDs stay put.
+    ITEM_POWER_CANDY = 895,
+    ITEM_IRON_PILL = 896,
+
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,
 

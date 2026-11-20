@@ -16393,6 +16393,41 @@ const struct ItemInfo gItemsInfo[] =
         .iconPic = gItemIcon_PokeshiDoll,
         .iconPalette = gItemIconPalette_PokeshiDoll,
     },
+
+// R.O.W.E. items (appended after the last item so existing IDs don't move)
+
+    [ITEM_POWER_CANDY] =
+    {
+        .name = ITEM_NAME("Power Candy"),
+        .pluralName = ITEM_PLURAL_NAME("Power Candies"),
+        .price = 9800,
+        .description = COMPOUND_STRING(
+            "Maximizes all of\n"
+            "a Pokémon's\n"
+            "individual values."),
+        .pocket = POCKET_POWER_UP,
+        .sortType = ITEM_TYPE_FIELD_USE,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_PowerCandy,
+        .iconPic = gItemIcon_PowerCandy,
+        .iconPalette = gItemIconPalette_PowerCandy,
+    },
+
+    [ITEM_IRON_PILL] =
+    {
+        .name = ITEM_NAME("Iron Pill"),
+        .price = 9000,
+        .description = COMPOUND_STRING(
+            "Slows down the\n"
+            "Pokémon that\n"
+            "consumes it."),
+        .pocket = POCKET_POWER_UP,
+        .sortType = ITEM_TYPE_FIELD_USE,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_IronPill,
+        .iconPic = gItemIcon_IronPill,
+        .iconPalette = gItemIconPalette_IronPill,
+    },
 };
 
 #undef ITEM_NAME
