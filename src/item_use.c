@@ -869,6 +869,13 @@ void ItemUseOutOfBattle_Mint(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
+// Using a type Gem on a party Pokemon changes its Tera Type to the Gem's type.
+void ItemUseOutOfBattle_TypeGem(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_TypeGem;
+    SetUpItemUseCallback(taskId);
+}
+
 void ItemUseOutOfBattle_ResetEVs(u8 taskId)
 {
     gItemUseCB = ItemUseCB_ResetEVs;

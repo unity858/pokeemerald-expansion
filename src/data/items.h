@@ -7325,13 +7325,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Normal-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Normal type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_NORMAL,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_NormalGem,
@@ -7344,13 +7344,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Fire-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Fire type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_FIRE,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_FireGem,
@@ -7363,13 +7363,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Water-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Water type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_WATER,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_WaterGem,
@@ -7382,13 +7382,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of an Electric-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Electric type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_ELECTRIC,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_ElectricGem,
@@ -7401,13 +7401,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Grass-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Grass type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_GRASS,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_GrassGem,
@@ -7420,13 +7420,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of an Ice-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Ice type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_ICE,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_IceGem,
@@ -7439,13 +7439,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Fighting-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Fighting type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_FIGHTING,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_FightingGem,
@@ -7458,13 +7458,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Poison-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Poison type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_POISON,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_PoisonGem,
@@ -7477,13 +7477,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Ground-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Ground type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_GROUND,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_GroundGem,
@@ -7496,13 +7496,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Flying-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Flying type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_FLYING,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_FlyingGem,
@@ -7515,13 +7515,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Psychic-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Psychic type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_PSYCHIC,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_PsychicGem,
@@ -7534,13 +7534,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Bug-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Bug type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_BUG,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_BugGem,
@@ -7553,13 +7553,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Rock-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Rock type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_ROCK,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_RockGem,
@@ -7572,13 +7572,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Ghost-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Ghost type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_GHOST,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_GhostGem,
@@ -7591,13 +7591,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Dragon-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Dragon type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_DRAGON,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_DragonGem,
@@ -7610,13 +7610,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Dark-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Dark type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_DARK,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_DarkGem,
@@ -7629,13 +7629,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Steel-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Steel type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_STEEL,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_SteelGem,
@@ -7648,13 +7648,13 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_GEMS,
         .holdEffectParam = GEM_BOOST_PARAM,
         .description = COMPOUND_STRING(
-            "Boosts the power\n"
-            "of a Fairy-\n"
-            "type move once."),
+            "Boosts one move of\n"
+            "the Fairy type.\n"
+            "Use sets Tera Type."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_GEM,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TypeGem,
         .secondaryId = TYPE_FAIRY,
         .iconPic = gItemIcon_TypeGem,
         .iconPalette = gItemIconPalette_FairyGem,

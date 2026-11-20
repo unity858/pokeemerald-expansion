@@ -5259,6 +5259,40 @@ static void Task_ClosePartyMenuAfterText(u8 taskId)
     }
 }
 
+// Type Gems used from the bag set the Pokemon's Tera Type to the Gem's type (consumed on use).
+void ItemUseCB_TypeGem(u8 taskId, TaskFunc task)
+{
+    static const u8 sText_TeraTypeBecame[] = _("{STR_VAR_1}'s Tera Type\nbecame {STR_VAR_2}!{PAUSE_UNTIL_PRESS}");
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
+    enum Item item = gSpecialVar_ItemId;
+    enum Type newType = GetItemSecondaryId(item);
+    enum Species species = GetMonData(mon, MON_DATA_SPECIES);
+
+    if (GetMonData(mon, MON_DATA_IS_EGG)
+     || gSpeciesInfo[species].forceTeraType
+     || GetMonData(mon, MON_DATA_TERA_TYPE) == newType)
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        PlaySE(SE_SELECT);
+        DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+    }
+    else
+    {
+        gPartyMenuUseExitCallback = TRUE;
+        PlaySE(SE_USE_ITEM);
+        SetMonData(mon, MON_DATA_TERA_TYPE, &newType);
+        RemoveBagItem(item, 1);
+        GetMonNickname(mon, gStringVar1);
+        StringCopy(gStringVar2, gTypesInfo[newType].name);
+        StringExpandPlaceholders(gStringVar4, sText_TeraTypeBecame);
+        DisplayPartyMenuMessage(gStringVar4, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+    }
+}
+
 void ItemUseCB_ResetEVs(u8 taskId, TaskFunc task)
 {
     struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
