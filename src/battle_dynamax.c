@@ -75,6 +75,14 @@ bool32 CanDynamax(enum BattlerId battler)
     enum Species species = GetBattlerVisualSpecies(battler);
     enum HoldEffect holdEffect = GetBattlerHoldEffectIgnoreNegation(battler);
 
+    // R.O.W.E.: Dynamax/Gigantamax is disabled entirely.
+    if (!B_DYNAMAX_ENABLED && !TESTING)
+        return FALSE;
+
+    // R.O.W.E.: each Pokemon can only use one gimmick per battle.
+    if (HasMonUsedGimmick(battler))
+        return FALSE;
+
     // Prevents Zigzagoon from dynamaxing in vanilla.
     if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE && !IsOnPlayerSide(battler))
         return FALSE;
