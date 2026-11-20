@@ -108,7 +108,27 @@
     F(DARK_PULSE) \
     F(WATERFALL_TM) \
     F(DAZZLING_GLEAM) \
-    F(CONFIDE)
+    F(CONFIDE) \
+    F(SLUDGE_WAVE) \
+    F(LIQUIDATION) \
+    F(LEECH_LIFE) \
+    F(PLAY_ROUGH) \
+    F(PSYSHOCK) \
+    F(AURA_SPHERE) \
+    F(POWER_GEM) \
+    F(EARTH_POWER) \
+    F(GUNK_SHOT) \
+    F(STEALTH_ROCK) \
+    F(HEAT_CRASH) \
+    F(POLLEN_PUFF) \
+    F(NASTY_PLOT) \
+    F(BRAVE_BIRD) \
+    F(BUG_BUZZ) \
+    F(DRAGON_DANCE) \
+    F(BLAZE_KICK) \
+    F(TRI_ATTACK) \
+    F(DRAIN_PUNCH) \
+    F(MYSTICAL_FIRE)
 
 #define FOREACH_HM(F) \
     F(CUT) \

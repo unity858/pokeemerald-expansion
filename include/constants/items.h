@@ -822,21 +822,6 @@ enum __attribute__((packed)) Item
     ITEM_HM07 = 688,
     ITEM_HM08 = 689,
 
-
-    /* Expands to:
-     *   ITEM_TM_FOCUS_PUNCH = ITEM_TM01,
-     *   ...
-     *   ITEM_HM_CUT = ITM_HM01,
-     *   ... */
-    #define ENUM_TM(n, id) CAT(ITEM_TM_, id) = CAT(ITEM_TM, n),
-    #define ENUM_HM(n, id) CAT(ITEM_HM_, id) = CAT(ITEM_HM, n),
-    #define TO_TMHM_NUMS(a, ...) (__VA_ARGS__)
-    RECURSIVELY(R_ZIP(ENUM_TM, TO_TMHM_NUMS NUMBERS_256, (FOREACH_TM(APPEND_COMMA))))
-    RECURSIVELY(R_ZIP(ENUM_HM, TO_TMHM_NUMS NUMBERS_256, (FOREACH_HM(APPEND_COMMA))))
-    #undef ENUM_TM
-    #undef ENUM_HM
-    #undef TO_TMHM_NUMS
-
     // Charms
     ITEM_OVAL_CHARM = 690,
     ITEM_SHINY_CHARM = 691,
@@ -1052,8 +1037,46 @@ enum __attribute__((packed)) Item
     ITEM_TATSUGIRINITE = 872,
     ITEM_GLIMMORANITE = 873,
 
+    // R.O.W.E. TM101-TM120, after the last item so existing item IDs stay put.
+    ITEM_TM101 = 874,
+    ITEM_TM102 = 875,
+    ITEM_TM103 = 876,
+    ITEM_TM104 = 877,
+    ITEM_TM105 = 878,
+    ITEM_TM106 = 879,
+    ITEM_TM107 = 880,
+    ITEM_TM108 = 881,
+    ITEM_TM109 = 882,
+    ITEM_TM110 = 883,
+    ITEM_TM111 = 884,
+    ITEM_TM112 = 885,
+    ITEM_TM113 = 886,
+    ITEM_TM114 = 887,
+    ITEM_TM115 = 888,
+    ITEM_TM116 = 889,
+    ITEM_TM117 = 890,
+    ITEM_TM118 = 891,
+    ITEM_TM119 = 892,
+    ITEM_TM120 = 893,
+
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,
+
+    // After ITEMS_COUNT so these aliases don't affect it; they come after
+    // every ITEM_TMxx/ITEM_HMxx they refer to (including TM101+ above).
+    /* Expands to:
+     *   ITEM_TM_FOCUS_PUNCH = ITEM_TM01,
+     *   ...
+     *   ITEM_HM_CUT = ITM_HM01,
+     *   ... */
+    #define ENUM_TM(n, id) CAT(ITEM_TM_, id) = CAT(ITEM_TM, n),
+    #define ENUM_HM(n, id) CAT(ITEM_HM_, id) = CAT(ITEM_HM, n),
+    #define TO_TMHM_NUMS(a, ...) (__VA_ARGS__)
+    RECURSIVELY(R_ZIP(ENUM_TM, TO_TMHM_NUMS NUMBERS_256, (FOREACH_TM(APPEND_COMMA))))
+    RECURSIVELY(R_ZIP(ENUM_HM, TO_TMHM_NUMS NUMBERS_256, (FOREACH_HM(APPEND_COMMA))))
+    #undef ENUM_TM
+    #undef ENUM_HM
+    #undef TO_TMHM_NUMS
 };
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations
