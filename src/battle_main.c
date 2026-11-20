@@ -4821,6 +4821,9 @@ static bool32 TryActivateGimmick(enum BattlerId battler)
         }
         gBattlerAttacker = gBattleScripting.battler = battler;
         gBattleStruct->gimmick.toActivate &= ~(1u << battler);
+        // R.O.W.E.: safety net, a Pokemon can never use a second gimmick in the same battle.
+        if (HasMonUsedGimmick(battler))
+            return FALSE;
         if (gGimmicksInfo[gBattleStruct->gimmick.usableGimmick[battler]].ActivateGimmick != NULL)
         {
             gGimmicksInfo[gBattleStruct->gimmick.usableGimmick[battler]].ActivateGimmick(battler);

@@ -129,6 +129,10 @@ bool32 CanUseZMove(enum BattlerId battler)
     if (HasTrainerUsedGimmick(battler, GIMMICK_Z_MOVE))
         return FALSE;
 
+    // R.O.W.E.: each Pokemon can only use one gimmick per battle.
+    if (HasMonUsedGimmick(battler))
+        return FALSE;
+
     // Check if battler has another gimmick active.
     if (GetActiveGimmick(battler) != GIMMICK_NONE && GetActiveGimmick(battler) != GIMMICK_ULTRA_BURST)
         return FALSE;

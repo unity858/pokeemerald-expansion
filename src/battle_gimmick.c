@@ -84,18 +84,36 @@ bool32 ShouldTrainerBattlerUseGimmick(enum BattlerId battler, enum Gimmick gimmi
     return FALSE;
 }
 
+// R.O.W.E.: Mega Evolution and Ultra Burst share a single "one per trainer" limit.
+static bool32 IsSameGimmickLimit(enum Gimmick gimmickA, enum Gimmick gimmickB)
+{
+    if (gimmickA == GIMMICK_ULTRA_BURST)
+        gimmickA = GIMMICK_MEGA;
+    if (gimmickB == GIMMICK_ULTRA_BURST)
+        gimmickB = GIMMICK_MEGA;
+    return gimmickA == gimmickB;
+}
+
+static bool32 HasBattlerActivatedGimmick(enum BattlerId battler, enum Gimmick gimmick)
+{
+    if (gimmick == GIMMICK_MEGA || gimmick == GIMMICK_ULTRA_BURST)
+        return gBattleStruct->gimmick.activated[battler][GIMMICK_MEGA]
+            || gBattleStruct->gimmick.activated[battler][GIMMICK_ULTRA_BURST];
+    return gBattleStruct->gimmick.activated[battler][gimmick];
+}
+
 // Returns whether a trainer has used a gimmick during a battle.
 bool32 HasTrainerUsedGimmick(enum BattlerId battler, enum Gimmick gimmick)
 {
     if (IsDoubleBattle() && (IsPartnerMonFromSameTrainer(battler) || (gimmick == GIMMICK_DYNAMAX)))
     {
         enum BattlerId partner = GetPartnerBattler(battler);
-        if (gBattleStruct->gimmick.activated[partner][gimmick]
-         || ((gBattleStruct->gimmick.toActivate & (1u << partner)) && gBattleStruct->gimmick.usableGimmick[partner] == gimmick))
+        if (HasBattlerActivatedGimmick(partner, gimmick)
+         || ((gBattleStruct->gimmick.toActivate & (1u << partner)) && IsSameGimmickLimit(gBattleStruct->gimmick.usableGimmick[partner], gimmick)))
             return TRUE;
     }
 
-    return gBattleStruct->gimmick.activated[battler][gimmick];
+    return HasBattlerActivatedGimmick(battler, gimmick);
 }
 
 // Sets a gimmick as used by a trainer with checks for Multi Battles.
@@ -104,6 +122,45 @@ void SetGimmickAsActivated(enum BattlerId battler, enum Gimmick gimmick)
     gBattleStruct->gimmick.activated[battler][gimmick] = TRUE;
     if (IsDoubleBattle() && (IsPartnerMonFromSameTrainer(battler) || (gimmick == GIMMICK_DYNAMAX)))
         gBattleStruct->gimmick.activated[GetPartnerBattler(battler)][gimmick] = TRUE;
+
+    // R.O.W.E.: remember that this party member has used its one gimmick for the battle.
+    gBattleStruct->gimmick.monUsedGimmick[GetBattlerTrainer(battler)] |= 1u << gBattlerPartyIndexes[battler];
+}
+
+// R.O.W.E.: returns whether the battler's party member has already used a gimmick this battle
+// (Mega Evolution, Ultra Burst, Z-Move, Terastallization or Primal Reversion).
+// Tracked per trainer party slot, so it persists through switching.
+bool32 HasMonUsedGimmick(enum BattlerId battler)
+{
+    return (gBattleStruct->gimmick.monUsedGimmick[GetBattlerTrainer(battler)] & (1u << gBattlerPartyIndexes[battler])) != 0;
+}
+
+// R.O.W.E.: Primal Reversion is limited to one Pokemon per trainer, and only for a Pokemon that hasn't used another gimmick.
+// The same Pokemon may revert again if it re-enters the battle.
+bool32 CanPrimalRevert(enum BattlerId battler)
+{
+    enum BattleTrainer trainer = GetBattlerTrainer(battler);
+    u32 slotBit = 1u << gBattlerPartyIndexes[battler];
+    u32 reverted = gBattleStruct->gimmick.primalReverted[trainer];
+
+    // Another Pokemon of this trainer has already Primal Reverted.
+    if (reverted & ~slotBit)
+        return FALSE;
+
+    // This Pokemon has already used a different gimmick.
+    if (!(reverted & slotBit) && (gBattleStruct->gimmick.monUsedGimmick[trainer] & slotBit))
+        return FALSE;
+
+    return TRUE;
+}
+
+void SetPrimalReverted(enum BattlerId battler)
+{
+    enum BattleTrainer trainer = GetBattlerTrainer(battler);
+    u32 slotBit = 1u << gBattlerPartyIndexes[battler];
+
+    gBattleStruct->gimmick.primalReverted[trainer] |= slotBit;
+    gBattleStruct->gimmick.monUsedGimmick[trainer] |= slotBit;
 }
 
 #define SINGLES_GIMMICK_TRIGGER_POS_X_OPTIMAL (30)

@@ -94,6 +94,10 @@ bool32 CanTerastallize(enum BattlerId battler)
     if (HasTrainerUsedGimmick(battler, GIMMICK_TERA))
         return FALSE;
 
+    // R.O.W.E.: each Pokemon can only use one gimmick per battle.
+    if (HasMonUsedGimmick(battler))
+        return FALSE;
+
     // Check if AI battler is intended to Terastallize.
     if (!ShouldTrainerBattlerUseGimmick(battler, GIMMICK_TERA))
         return FALSE;

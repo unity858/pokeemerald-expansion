@@ -4893,8 +4893,13 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
 
 bool32 TryPrimalReversion(enum BattlerId battler)
 {
+    // R.O.W.E.: one Primal Reversion per trainer, and not for a Pokemon that used another gimmick.
+    if (!CanPrimalRevert(battler))
+        return FALSE;
+
     if (TryBattleFormChange(battler, FORM_CHANGE_BATTLE_PRIMAL_REVERSION, GetBattlerAbility(battler)))
     {
+        SetPrimalReverted(battler);
         gBattleScripting.battler = battler;
         BattleScriptCall(BattleScript_PrimalReversion);
         return TRUE;
@@ -8629,8 +8634,12 @@ bool32 CanMegaEvolve(enum BattlerId battler)
         && !CheckBagHasItem(ITEM_MEGA_RING, 1))
         return FALSE;
 
-    // Check if Trainer has already Mega Evolved.
+    // Check if Trainer has already Mega Evolved (or Ultra Bursted, which shares the limit).
     if (HasTrainerUsedGimmick(battler, GIMMICK_MEGA))
+        return FALSE;
+
+    // R.O.W.E.: each Pokemon can only use one gimmick per battle.
+    if (HasMonUsedGimmick(battler))
         return FALSE;
 
     // R.O.W.E.: wild Pokemon can only Mega Evolve below 50% HP.
@@ -8676,8 +8685,12 @@ bool32 CanUltraBurst(enum BattlerId battler)
         && !CheckBagHasItem(ITEM_Z_POWER_RING, 1))
         return FALSE;
 
-    // Check if Trainer has already Ultra Bursted.
+    // Check if Trainer has already Ultra Bursted (or Mega Evolved, which shares the limit).
     if (HasTrainerUsedGimmick(battler, GIMMICK_ULTRA_BURST))
+        return FALSE;
+
+    // R.O.W.E.: each Pokemon can only use one gimmick per battle.
+    if (HasMonUsedGimmick(battler))
         return FALSE;
 
     // Check if battler has another gimmick active.
