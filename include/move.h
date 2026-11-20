@@ -10,6 +10,7 @@
 #include "constants/battle_z_move_effects.h"
 #include "constants/battle_set_effect.h"
 #include "constants/moves.h"
+#include "new_game_options.h"
 
 #define STAT_CHANGE_FORCE_MAX 7 // Used for belly drum as a way to show that stats are maxed
 
@@ -233,6 +234,21 @@ extern const struct MoveInfo gMovesInfo[MOVES_COUNT_ALL];
 extern const u8 gNotDoneYetDescription[];
 extern const struct BattleMoveEffect gBattleMoveEffects[];
 
+// Custom data mode move stat overrides (src/data/custom_move_stats.h).
+// A zero field means "no override".
+#define CUSTOM_ACCURACY_NEVER_MISSES 0xFF
+
+struct MoveStatOverride
+{
+    u16 power:9;
+    enum Type type:5;
+    u16 padding:2;
+    u8 accuracy;
+    u8 pp;
+};
+
+extern const struct MoveStatOverride gCustomMoveStats[MOVES_COUNT];
+
 // The argument field in MovesInfo is limited to 4 bytes on purpose to not waste space unnecessarily.
 // Downstream projects are free to remove this limitation.
 _Static_assert(sizeof(gMovesInfo[0].argument) == 4, "MovesInfo argument does not fit into 4 bytes");
@@ -271,7 +287,10 @@ static inline const u8 *GetMoveDescription(enum Move moveId)
 
 static inline enum Type GetMoveType(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].type;
+    moveId = SanitizeMoveId(moveId);
+    if (moveId < MOVES_COUNT && gCustomMoveStats[moveId].type != TYPE_NONE && IsCustomDataMode())
+        return gCustomMoveStats[moveId].type;
+    return gMovesInfo[moveId].type;
 }
 
 static inline enum DamageCategory GetMoveCategory(enum Move moveId)
@@ -281,12 +300,18 @@ static inline enum DamageCategory GetMoveCategory(enum Move moveId)
 
 static inline u32 GetMovePower(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].power;
+    moveId = SanitizeMoveId(moveId);
+    if (moveId < MOVES_COUNT && gCustomMoveStats[moveId].power != 0 && IsCustomDataMode())
+        return gCustomMoveStats[moveId].power;
+    return gMovesInfo[moveId].power;
 }
 
 static inline u32 GetMoveAccuracy(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].accuracy;
+    moveId = SanitizeMoveId(moveId);
+    if (moveId < MOVES_COUNT && gCustomMoveStats[moveId].accuracy != 0 && IsCustomDataMode())
+        return gCustomMoveStats[moveId].accuracy == CUSTOM_ACCURACY_NEVER_MISSES ? 0 : gCustomMoveStats[moveId].accuracy;
+    return gMovesInfo[moveId].accuracy;
 }
 
 static inline enum MoveTarget GetMoveTarget(enum Move moveId)
@@ -299,7 +324,10 @@ static inline enum MoveTarget GetMoveTarget(enum Move moveId)
 
 static inline u32 GetMovePP(enum Move moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].pp;
+    moveId = SanitizeMoveId(moveId);
+    if (moveId < MOVES_COUNT && gCustomMoveStats[moveId].pp != 0 && IsCustomDataMode())
+        return gCustomMoveStats[moveId].pp;
+    return gMovesInfo[moveId].pp;
 }
 
 static inline enum ZEffect GetMoveZEffect(enum Move moveId)
