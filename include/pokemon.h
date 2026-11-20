@@ -778,7 +778,13 @@ struct SpeciesInfoOverride
     // stored as CUSTOM_EV_YIELD(n) (= n + 1); 0 = keep vanilla.
     u8 evYield[NUM_STATS];
     u8 catchRate; // 0 = keep vanilla (no species has catch rate 0)
+    u16 expYield; // 0 = keep vanilla (no species has exp yield 0)
+    // MON_MALE is 0, so gender ratios are stored as CUSTOM_GENDER_RATIO(r)
+    // (= r | 0x100); 0 = keep vanilla.
+    u16 genderRatio;
 };
+
+#define CUSTOM_GENDER_RATIO(r) ((r) | 0x100)
 
 #define CUSTOM_EV_YIELD(n) ((n) + 1)
 
@@ -897,6 +903,8 @@ enum Item GetSpeciesItemCommon(enum Species species);
 enum Item GetSpeciesItemRare(enum Species species);
 u32 GetSpeciesEvYield(enum Species species, u32 statIndex);
 u32 GetSpeciesCatchRate(enum Species species);
+u32 GetSpeciesExpYield(enum Species species);
+u32 GetSpeciesGenderRatio(enum Species species);
 u32 GetSpeciesBaseStat(enum Species species, u32 statIndex);
 u32 GetSpeciesBaseStatTotal(enum Species species);
 const struct LevelUpMove *GetSpeciesLevelUpLearnset(enum Species species);

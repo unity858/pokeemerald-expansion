@@ -1,4 +1,5 @@
-// Species base stat, ability, type, wild held item, EV yield and catch rate overrides for Custom data mode (ported from R.O.W.E.).
+// Species base stat, ability, type, wild held item, EV yield, catch rate, exp yield
+// and gender ratio overrides for Custom data mode (ported from R.O.W.E.).
 //
 // Applied by GetSpeciesBaseHP/.../GetSpeciesBaseSpeed (and so GetSpeciesBaseStat,
 // stat calculation, Pokédex, Battle Dome, AI, ...) and by GetSpeciesAbility
@@ -20,6 +21,10 @@
 // CUSTOM_EV_YIELD(n) = n + 1 because 0 EVs is a real value; 0 = keep vanilla.
 // catchRate (GetSpeciesCatchRate: ball catch odds, Safari Zone, HGSS Pokédex):
 // 0 = keep vanilla.
+// expYield (GetSpeciesExpYield: battle exp, HGSS Pokédex): 0 = keep vanilla.
+// genderRatio (GetSpeciesGenderRatio: gender from personality, trainer and
+// wild mon generation, HGSS Pokédex) holds CUSTOM_GENDER_RATIO(r) because
+// MON_MALE is 0; 0 = keep vanilla.
 // Comments show vanilla (current gSpeciesInfo) -> custom.
 //
 // Only R.O.W.E.'s own edits are listed: values were diffed against the
@@ -134,6 +139,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_CROBAT] = { .baseSpAttack = 90, .abilities[1] = ABILITY_CORROSION }, // SpA 70->90, Slot 2: None->Corrosion
     [SPECIES_LANTURN] = { .baseAttack = 50, .baseDefense = 65, .baseSpeed = 70, .baseSpAttack = 90 }, // Atk 58->50, Def 58->65, Spe 67->70, SpA 76->90
     [SPECIES_PICHU] = { .abilities[1] = ABILITY_LIGHTNING_ROD, .itemCommon = ITEM_ORAN_BERRY }, // Slot 2: None->Lightning Rod, Common None→Oran Berry
+    [SPECIES_PICHU_SPIKY_EARED] = { .genderRatio = CUSTOM_GENDER_RATIO(MON_FEMALE) }, // Gender 50% female→always female
     [SPECIES_CLEFFA] = { .itemCommon = ITEM_LEPPA_BERRY }, // Common None→Leppa Berry
     [SPECIES_IGGLYBUFF] = { .itemCommon = ITEM_ORAN_BERRY }, // Common None→Oran Berry
     [SPECIES_XATU] = { .baseSpeed = 105, .baseSpAttack = 105 }, // Spe 95->105, SpA 95->105
@@ -148,7 +154,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_SUNFLORA] = { .baseHP = 95, .baseDefense = 85, .baseSpeed = 65, .baseSpAttack = 115, .abilities[2] = ABILITY_FLOWER_GIFT, .itemCommon = ITEM_GREEN_SHARD, .itemRare = ITEM_GREEN_SHARD }, // HP 75->95, Def 55->85, Spe 30->65, SpA 105->115, Hidden: Early Bird->Flower Gift, Common None→Green Shard, Rare None→Green Shard (always held)
     [SPECIES_QUAGSIRE] = { .baseHP = 100, .baseDefense = 90 }, // HP 95->100, Def 85->90
     [SPECIES_MISDREAVUS] = { .abilities[0] = ABILITY_CURSED_BODY, .abilities[1] = ABILITY_PIXILATE, .types[1] = TYPE_FAIRY, .itemRare = ITEM_SPELL_TAG }, // Slot 1: Levitate->Cursed Body, Slot 2: None->Pixilate, Type2 Ghost→Fairy, Rare None→Spell Tag
-    [SPECIES_UNOWN] = { .baseHP = 80, .baseAttack = 70, .baseDefense = 80, .baseSpeed = 95, .baseSpAttack = 95, .baseSpDefense = 80, .abilities[0] = ABILITY_PSYCHIC_SURGE, .evYield[STAT_ATK] = CUSTOM_EV_YIELD(0), .evYield[STAT_SPEED] = CUSTOM_EV_YIELD(1), .catchRate = 150 }, // HP 48->80, Atk 72->70, Def 48->80, Spe 48->95, SpA 72->95, SpD 48->80, Slot 1: Levitate->Psychic Surge, EV Atk 1→0, EV Spe 0→1, Catch rate 225→150
+    [SPECIES_UNOWN] = { .baseHP = 80, .baseAttack = 70, .baseDefense = 80, .baseSpeed = 95, .baseSpAttack = 95, .baseSpDefense = 80, .abilities[0] = ABILITY_PSYCHIC_SURGE, .evYield[STAT_ATK] = CUSTOM_EV_YIELD(0), .evYield[STAT_SPEED] = CUSTOM_EV_YIELD(1), .catchRate = 150, .expYield = 200 }, // HP 48->80, Atk 72->70, Def 48->80, Spe 48->95, SpA 72->95, SpD 48->80, Slot 1: Levitate->Psychic Surge, EV Atk 1→0, EV Spe 0→1, Catch rate 225→150, Exp yield 118→200
     [SPECIES_UNOWN_B] = { .abilities[0] = ABILITY_PSYCHIC_SURGE }, // Slot 1: Levitate->Psychic Surge
     [SPECIES_UNOWN_C] = { .abilities[0] = ABILITY_PSYCHIC_SURGE }, // Slot 1: Levitate->Psychic Surge
     [SPECIES_UNOWN_D] = { .abilities[0] = ABILITY_PSYCHIC_SURGE }, // Slot 1: Levitate->Psychic Surge
@@ -398,6 +404,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_UNFEZANT] = { .baseAttack = 65, .baseSpAttack = 115 }, // Atk 115->65, SpA 65->115
     [SPECIES_BLITZLE] = { .abilities[0] = ABILITY_STRIKER, .itemCommon = ITEM_CHERI_BERRY }, // Slot 1: Lightning Rod->Striker, Common None→Cheri Berry
     [SPECIES_ZEBSTRIKA] = { .abilities[0] = ABILITY_STRIKER, .itemCommon = ITEM_CHERI_BERRY }, // Slot 1: Lightning Rod->Striker, Common None→Cheri Berry
+    [SPECIES_AUDINO] = { .expYield = 608 }, // Exp yield 390→608
     [SPECIES_AUDINO_MEGA] = { .abilities[0] = ABILITY_REGENERATOR, .abilities[1] = ABILITY_REGENERATOR, .abilities[2] = ABILITY_REGENERATOR }, // Slot 1: Healer->Regenerator, Slot 2: Healer->Regenerator, Hidden: Healer->Regenerator
     [SPECIES_TYMPOLE] = { .itemCommon = ITEM_PERSIM_BERRY }, // Common None→Persim Berry
     [SPECIES_PALPITOAD] = { .itemCommon = ITEM_PERSIM_BERRY }, // Common None→Persim Berry
@@ -439,7 +446,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_FRAXURE] = { .abilities[0] = ABILITY_SHARPNESS }, // Slot 1: Rivalry->Sharpness
     [SPECIES_HAXORUS] = { .abilities[0] = ABILITY_SHARPNESS }, // Slot 1: Rivalry->Sharpness
     [SPECIES_CUBCHOO] = { .itemCommon = ITEM_ASPEAR_BERRY }, // Common None→Aspear Berry
-    [SPECIES_BEARTIC] = { .baseHP = 85, .baseDefense = 70, .baseSpeed = 95, .baseSpDefense = 70, .types[1] = TYPE_FIGHTING, .itemCommon = ITEM_ASPEAR_BERRY }, // HP 95->85, Def 80->70, Spe 50->95, SpD 80->70, Type2 Ice→Fighting, Common None→Aspear Berry
+    [SPECIES_BEARTIC] = { .baseHP = 85, .baseDefense = 70, .baseSpeed = 95, .baseSpDefense = 70, .types[1] = TYPE_FIGHTING, .itemCommon = ITEM_ASPEAR_BERRY, .expYield = 200 }, // HP 95->85, Def 80->70, Spe 50->95, SpD 80->70, Type2 Ice→Fighting, Common None→Aspear Berry, Exp yield 177→200
     [SPECIES_CRYOGONAL] = { .abilities[1] = ABILITY_SNOW_CLOAK, .abilities[2] = ABILITY_SLUSH_RUSH }, // Slot 2: None->Snow Cloak, Hidden: None->Slush Rush
     [SPECIES_STUNFISK] = { .itemRare = ITEM_YELLOW_SHARD }, // Rare Soft Sand→Yellow Shard
     [SPECIES_STUNFISK_GALAR] = { .abilities[0] = ABILITY_ROUGH_SKIN }, // Slot 1: Mimicry->Rough Skin

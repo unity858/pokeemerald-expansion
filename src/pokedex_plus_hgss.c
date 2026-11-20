@@ -1923,7 +1923,7 @@ static void SaveMonDataInStruct(void)
     }
 
     sPokedexView->sPokemonStats.species             = species;
-    sPokedexView->sPokemonStats.genderRatio         = gSpeciesInfo[species].genderRatio;
+    sPokedexView->sPokemonStats.genderRatio         = GetSpeciesGenderRatio(species);
     sPokedexView->sPokemonStats.baseHP              = GetSpeciesBaseHP(species);
     sPokedexView->sPokemonStats.baseSpeed           = GetSpeciesBaseSpeed(species);
     sPokedexView->sPokemonStats.baseAttack          = GetSpeciesBaseAttack(species);
@@ -1942,7 +1942,7 @@ static void SaveMonDataInStruct(void)
     sPokedexView->sPokemonStats.eggGroup1           = gSpeciesInfo[species].eggGroups[0];
     sPokedexView->sPokemonStats.eggGroup2           = gSpeciesInfo[species].eggGroups[1];
     sPokedexView->sPokemonStats.eggCycles           = gSpeciesInfo[species].eggCycles;
-    sPokedexView->sPokemonStats.expYield            = gSpeciesInfo[species].expYield;
+    sPokedexView->sPokemonStats.expYield            = GetSpeciesExpYield(species);
     sPokedexView->sPokemonStats.friendship          = gSpeciesInfo[species].friendship;
     sPokedexView->sPokemonStats.ability0            = GetAbilityBySpecies(species, 0);
     sPokedexView->sPokemonStats.ability1            = GetAbilityBySpecies(species, 1);

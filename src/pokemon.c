@@ -1039,7 +1039,7 @@ static bool32 IsValidGender(u32 gender)
 
 static void CleanIncompatibleGenderSpecies(enum Species species, u8 *gender)
 {
-    switch (gSpeciesInfo[species].genderRatio)
+    switch (GetSpeciesGenderRatio(species))
     {
     case MON_MALE:
     case MON_FEMALE:
@@ -1790,15 +1790,15 @@ u8 GetBoxMonGender(struct BoxPokemon *boxMon)
     enum Species species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
     u32 personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
 
-    switch (gSpeciesInfo[species].genderRatio)
+    switch (GetSpeciesGenderRatio(species))
     {
     case MON_MALE:
     case MON_FEMALE:
     case MON_GENDERLESS:
-        return gSpeciesInfo[species].genderRatio;
+        return GetSpeciesGenderRatio(species);
     }
 
-    if (gSpeciesInfo[species].genderRatio > (personality & 0xFF))
+    if (GetSpeciesGenderRatio(species) > (personality & 0xFF))
         return MON_FEMALE;
     else
         return MON_MALE;
@@ -1806,15 +1806,15 @@ u8 GetBoxMonGender(struct BoxPokemon *boxMon)
 
 u8 GetGenderFromSpeciesAndPersonality(enum Species species, u32 personality)
 {
-    switch (gSpeciesInfo[species].genderRatio)
+    switch (GetSpeciesGenderRatio(species))
     {
     case MON_MALE:
     case MON_FEMALE:
     case MON_GENDERLESS:
-        return gSpeciesInfo[species].genderRatio;
+        return GetSpeciesGenderRatio(species);
     }
 
-    if (gSpeciesInfo[species].genderRatio > (personality & 0xFF))
+    if (GetSpeciesGenderRatio(species) > (personality & 0xFF))
         return MON_FEMALE;
     else
         return MON_MALE;
@@ -3315,6 +3315,19 @@ u32 GetSpeciesEvYield(enum Species species, u32 statIndex)
 u32 GetSpeciesCatchRate(enum Species species)
 {
     return GET_SPECIES_BASE_STAT_WITH_CUSTOM(species, catchRate);
+}
+
+u32 GetSpeciesExpYield(enum Species species)
+{
+    return GET_SPECIES_BASE_STAT_WITH_CUSTOM(species, expYield);
+}
+
+u32 GetSpeciesGenderRatio(enum Species species)
+{
+    species = SanitizeSpeciesId(species);
+    if (gCustomSpeciesInfo[species].genderRatio != 0 && IsCustomDataMode())
+        return gCustomSpeciesInfo[species].genderRatio & 0xFF;
+    return gSpeciesInfo[species].genderRatio;
 }
 
 u32 GetSpeciesBaseStat(enum Species species, u32 statIndex)

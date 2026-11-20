@@ -43,19 +43,19 @@ static void CustomTrainerPartyAssignMoves(struct Pokemon *mon, const struct Trai
 
 u32 GeneratePersonalityForGender(u32 gender, u32 species, u32 genderRng)
 {
-    const struct SpeciesInfo *speciesInfo = &gSpeciesInfo[species];
+    u32 genderRatio = GetSpeciesGenderRatio(species);
     if (gender == MON_MALE)
     {
-        assertf(speciesInfo->genderRatio < MON_FEMALE, "species %d cannot be male", species);
-        return speciesInfo->genderRatio + (genderRng % (256 - speciesInfo->genderRatio));
+        assertf(genderRatio < MON_FEMALE, "species %d cannot be male", species);
+        return genderRatio + (genderRng % (256 - genderRatio));
     }
     if (gender == MON_FEMALE)
     {
-        assertf(speciesInfo->genderRatio != MON_MALE && speciesInfo->genderRatio != MON_GENDERLESS, "species %d cannot be female", species);
-        return genderRng % speciesInfo->genderRatio;
+        assertf(genderRatio != MON_MALE && genderRatio != MON_GENDERLESS, "species %d cannot be female", species);
+        return genderRng % genderRatio;
     }
     if (gender == MON_GENDERLESS)
-        assertf(speciesInfo->genderRatio == MON_GENDERLESS, "species %d cannot be genderless", species);
+        assertf(genderRatio == MON_GENDERLESS, "species %d cannot be genderless", species);
     else
         errorf("GeneratePersonalityForGender called with invalid gender value %d", gender);
     return 0;
