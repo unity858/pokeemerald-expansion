@@ -91,7 +91,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_DODRIO] = { .abilities[0] = ABILITY_ROCK_HEAD }, // Slot 1: Run Away->Rock Head
     [SPECIES_SEEL] = { .abilities[1] = ABILITY_ICE_BODY, .abilities[2] = ABILITY_HYDRATION, .itemCommon = ITEM_ASPEAR_BERRY }, // Slot 2: Hydration->Ice Body, Hidden: Ice Body->Hydration, Common None→Aspear Berry
     [SPECIES_DEWGONG] = { .baseAttack = 50, .baseSpAttack = 90, .abilities[1] = ABILITY_ICE_BODY, .abilities[2] = ABILITY_ICE_SCALES, .itemCommon = ITEM_ASPEAR_BERRY, .itemRare = ITEM_NEVER_MELT_ICE }, // Atk 70->50, SpA 70->90, Slot 2: Hydration->Ice Body, Hidden: Ice Body->Ice Scales, Common None→Aspear Berry, Rare None→Never-Melt Ice
-    [SPECIES_MUK] = { .abilities[0] = ABILITY_REGENERATOR, .abilities[1] = ABILITY_GOOEY, .itemRare = ITEM_TOXIC_ORB }, // Slot 1: Stench->Regenerator, Slot 2: Sticky Hold->Gooey, Rare Black Sludge→Toxic Orb
+    [SPECIES_MUK] = { .abilities[0] = ABILITY_REGENERATOR, .abilities[1] = ABILITY_GOOEY, .itemCommon = ITEM_BLACK_SLUDGE, .itemRare = ITEM_TOXIC_ORB }, // Slot 1: Stench->Regenerator, Slot 2: Sticky Hold->Gooey, Common None→Black Sludge, Rare Black Sludge→Toxic Orb
     [SPECIES_GASTLY] = { .abilities[0] = ABILITY_CURSED_BODY, .abilities[1] = ABILITY_LEVITATE }, // Slot 1: Levitate->Cursed Body, Slot 2: None->Levitate
     [SPECIES_HAUNTER] = { .abilities[0] = ABILITY_CURSED_BODY, .abilities[1] = ABILITY_LEVITATE, .itemRare = ITEM_SPELL_TAG }, // Slot 1: Levitate->Cursed Body, Slot 2: None->Levitate, Rare None→Spell Tag
     [SPECIES_GENGAR] = { .abilities[1] = ABILITY_LEVITATE, .itemRare = ITEM_SPELL_TAG }, // Slot 2: None->Levitate, Rare None→Spell Tag
@@ -102,7 +102,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_HITMONLEE] = { .abilities[2] = ABILITY_STRIKER }, // Hidden: Unburden->Striker
     [SPECIES_HITMONCHAN] = { .baseAttack = 115 }, // Atk 105->115
     [SPECIES_WEEZING_GALAR] = { .abilities[0] = ABILITY_WHITE_SMOKE }, // Slot 1: Levitate->White Smoke
-    [SPECIES_CHANSEY] = { .itemRare = ITEM_LUCKY_EGG }, // Rare None→Lucky Egg
+    [SPECIES_CHANSEY] = { .itemCommon = ITEM_OVAL_STONE, .itemRare = ITEM_LUCKY_EGG }, // Common Oval Stone→Oval Stone, Rare None→Lucky Egg
     [SPECIES_TANGELA] = { .itemRare = ITEM_BIG_ROOT }, // Rare None→Big Root
     [SPECIES_KANGASKHAN] = { .abilities[0] = ABILITY_INNER_FOCUS, .abilities[2] = ABILITY_PARENTAL_BOND }, // Slot 1: Early Bird->Inner Focus, Hidden: Inner Focus->Parental Bond
     [SPECIES_STARYU] = { .baseAttack = 40, .baseSpAttack = 75 }, // Atk 45->40, SpA 70->75
@@ -315,10 +315,10 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_BELDUM] = { .catchRate = 45 }, // Catch rate 3→45
     [SPECIES_METANG] = { .catchRate = 45 }, // Catch rate 3→45
     [SPECIES_METAGROSS] = { .abilities[1] = ABILITY_IRON_FIST, .catchRate = 45 }, // Slot 2: None->Iron Fist, Catch rate 3→45
-    [SPECIES_LATIAS] = { .abilities[0] = ABILITY_TELEPATHY, .itemCommon = ITEM_LATIASITE, .itemRare = ITEM_LATIASITE }, // Slot 1: Levitate->Telepathy, Common None→Latiasite, Rare None→Latiasite (always held)
-    [SPECIES_LATIAS_MEGA] = { .abilities[0] = ABILITY_TELEPATHY, .abilities[1] = ABILITY_TELEPATHY, .abilities[2] = ABILITY_TELEPATHY }, // Slot 1: Levitate->Telepathy, Slot 2: Levitate->Telepathy, Hidden: Levitate->Telepathy
-    [SPECIES_LATIOS] = { .abilities[0] = ABILITY_TELEPATHY, .itemCommon = ITEM_LATIOSITE, .itemRare = ITEM_LATIOSITE }, // Slot 1: Levitate->Telepathy, Common None→Latiosite, Rare None→Latiosite (always held)
-    [SPECIES_LATIOS_MEGA] = { .abilities[0] = ABILITY_TELEPATHY, .abilities[1] = ABILITY_TELEPATHY, .abilities[2] = ABILITY_TELEPATHY }, // Slot 1: Levitate->Telepathy, Slot 2: Levitate->Telepathy, Hidden: Levitate->Telepathy
+    [SPECIES_LATIAS] = { .abilities = { ABILITY_LEVITATE, ABILITY_LEVITATE, ABILITY_LEVITATE }, .itemCommon = ITEM_LATIASITE, .itemRare = ITEM_LATIASITE }, // Slot 2: None->Levitate, Hidden: None->Levitate, Common None→Latiasite, Rare None→Latiasite (always held)
+    [SPECIES_LATIAS_MEGA] = { .abilities = { ABILITY_LEVITATE, ABILITY_LEVITATE, ABILITY_LEVITATE } }, // Levitate in all slots (same as vanilla)
+    [SPECIES_LATIOS] = { .abilities = { ABILITY_LEVITATE, ABILITY_LEVITATE, ABILITY_LEVITATE }, .itemCommon = ITEM_LATIOSITE, .itemRare = ITEM_LATIOSITE }, // Slot 2: None->Levitate, Hidden: None->Levitate, Common None→Latiosite, Rare None→Latiosite (always held)
+    [SPECIES_LATIOS_MEGA] = { .abilities = { ABILITY_LEVITATE, ABILITY_LEVITATE, ABILITY_LEVITATE } }, // Levitate in all slots (same as vanilla)
     [SPECIES_TURTWIG] = { .abilities[1] = ABILITY_SHELL_ARMOR }, // Slot 2: None->Shell Armor
     [SPECIES_GROTLE] = { .abilities[1] = ABILITY_SHELL_ARMOR }, // Slot 2: None->Shell Armor
     [SPECIES_TORTERRA] = { .abilities[1] = ABILITY_SHELL_ARMOR }, // Slot 2: None->Shell Armor
@@ -353,7 +353,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_BRONZONG] = { .abilities[0] = ABILITY_HEATPROOF, .itemCommon = ITEM_STEEL_GEM, .itemRare = ITEM_STEEL_GEM }, // Slot 1: Levitate->Heatproof, Common None→Steel Gem, Rare Metal Coat→Steel Gem (always held)
     [SPECIES_BONSLY] = { .itemRare = ITEM_ROCK_GEM }, // Rare None→Rock Gem
     [SPECIES_MIME_JR] = { .itemRare = ITEM_LEPPA_BERRY }, // Rare None→Leppa Berry
-    [SPECIES_HAPPINY] = { .itemRare = ITEM_LUCKY_PUNCH }, // Rare Oval Stone→Lucky Punch
+    [SPECIES_HAPPINY] = { .itemCommon = ITEM_OVAL_STONE, .itemRare = ITEM_LUCKY_PUNCH }, // Common None→Oval Stone, Rare Oval Stone→Lucky Punch
     [SPECIES_CHATOT] = { .baseDefense = 65, .baseSpeed = 96, .baseSpAttack = 112, .baseSpDefense = 62 }, // Def 45->65, Spe 91->96, SpA 92->112, SpD 42->62
     [SPECIES_SPIRITOMB] = { .abilities[1] = ABILITY_INFILTRATOR, .itemCommon = ITEM_SMOKE_BALL, .itemRare = ITEM_ODD_KEYSTONE }, // Slot 2: None->Infiltrator, Common None→Smoke Ball, Rare None→Odd Keystone
     [SPECIES_GIBLE] = { .itemRare = ITEM_HABAN_BERRY }, // Rare None→Haban Berry
