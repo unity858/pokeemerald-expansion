@@ -92,6 +92,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_SEEL] = { .abilities[1] = ABILITY_ICE_BODY, .abilities[2] = ABILITY_HYDRATION, .itemCommon = ITEM_ASPEAR_BERRY }, // Slot 2: Hydration->Ice Body, Hidden: Ice Body->Hydration, Common None→Aspear Berry
     [SPECIES_DEWGONG] = { .baseAttack = 50, .baseSpAttack = 90, .abilities[1] = ABILITY_ICE_BODY, .abilities[2] = ABILITY_ICE_SCALES, .itemCommon = ITEM_ASPEAR_BERRY, .itemRare = ITEM_NEVER_MELT_ICE }, // Atk 70->50, SpA 70->90, Slot 2: Hydration->Ice Body, Hidden: Ice Body->Ice Scales, Common None→Aspear Berry, Rare None→Never-Melt Ice
     [SPECIES_MUK] = { .abilities[0] = ABILITY_REGENERATOR, .abilities[1] = ABILITY_GOOEY, .itemCommon = ITEM_BLACK_SLUDGE, .itemRare = ITEM_TOXIC_ORB }, // Slot 1: Stench->Regenerator, Slot 2: Sticky Hold->Gooey, Common None→Black Sludge, Rare Black Sludge→Toxic Orb
+    [SPECIES_MUK_ALOLA] = { .itemCommon = ITEM_BLACK_SLUDGE, .itemRare = ITEM_TOXIC_ORB }, // Common None→Black Sludge, Rare Black Sludge→Toxic Orb
     [SPECIES_GASTLY] = { .abilities[0] = ABILITY_CURSED_BODY, .abilities[1] = ABILITY_LEVITATE }, // Slot 1: Levitate->Cursed Body, Slot 2: None->Levitate
     [SPECIES_HAUNTER] = { .abilities[0] = ABILITY_CURSED_BODY, .abilities[1] = ABILITY_LEVITATE, .itemRare = ITEM_SPELL_TAG }, // Slot 1: Levitate->Cursed Body, Slot 2: None->Levitate, Rare None→Spell Tag
     [SPECIES_GENGAR] = { .abilities[1] = ABILITY_LEVITATE, .itemRare = ITEM_SPELL_TAG }, // Slot 2: None->Levitate, Rare None→Spell Tag
