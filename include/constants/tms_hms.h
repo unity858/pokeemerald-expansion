@@ -1,7 +1,14 @@
 #ifndef GUARD_CONSTANTS_TMS_HMS_H
 #define GUARD_CONSTANTS_TMS_HMS_H
 
-#define FOREACH_TM(F) \
+// A TM's number is its position in FOREACH_TM, except that TM121-TM128 are
+// intentionally unused: TMs in FOREACH_TM_AFTER_GAP are numbered from TM129.
+// The gap has no items or list entries, so it costs no bag slots.
+#define TM_GAP_FIRST 121 // First unused TM number
+#define TM_GAP_SIZE    8 // TM121-TM128
+
+// TM01-TM120
+#define FOREACH_TM_BEFORE_GAP(F) \
     F(FOCUS_PUNCH) \
     F(DRAGON_CLAW) \
     F(WATER_PULSE) \
@@ -122,6 +129,14 @@
     F(TRI_ATTACK) \
     F(DRAIN_PUNCH) \
     F(MYSTICAL_FIRE)
+
+// TM129 onward
+#define FOREACH_TM_AFTER_GAP(F) \
+    F(TERA_BLAST)
+
+#define FOREACH_TM(F) \
+    FOREACH_TM_BEFORE_GAP(F) \
+    FOREACH_TM_AFTER_GAP(F)
 
 // HMs are removed; field moves are usable based on learnsets (see field_move.c).
 #define FOREACH_HM(F)

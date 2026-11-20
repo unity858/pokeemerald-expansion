@@ -64,6 +64,7 @@ const struct TmHmIndexKey gTMHMItemMoveIds[NUM_ALL_MACHINES + 1] =
 #undef UNPACK_HM_ITEM_ID
 
 STATIC_ASSERT(BAG_TMHM_COUNT >= NUM_ALL_MACHINES, TmHmPocketHoldsAllMachines);
+STATIC_ASSERT((0 FOREACH_TM_BEFORE_GAP(PLUS_ONE)) == TM_GAP_FIRST - 1, TmsBeforeGapFillUpToGap);
 
 static inline struct ItemSlot NONNULL BagPocket_GetSlotDataGeneric(struct BagPocket *pocket, u32 pocketPos)
 {

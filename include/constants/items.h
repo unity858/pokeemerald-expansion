@@ -1059,20 +1059,26 @@ enum __attribute__((packed)) Item
     ITEM_TM118 = 891,
     ITEM_TM119 = 892,
     ITEM_TM120 = 893,
+    ITEM_TM129 = 894, // TM121-TM128 are unused (see TM_GAP_FIRST)
 
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,
 
     // After ITEMS_COUNT so these aliases don't affect it; they come after
-    // every ITEM_TMxx they refer to (including TM101+ above).
+    // every ITEM_TMxx they refer to (including TM101+ and TM129 above).
     /* Expands to:
      *   ITEM_TM_FOCUS_PUNCH = ITEM_TM01,
      *   ... */
     #define ENUM_TM(n, id) CAT(ITEM_TM_, id) = CAT(ITEM_TM, n),
     #define TO_TMHM_NUMS(a, ...) (__VA_ARGS__)
-    RECURSIVELY(R_ZIP(ENUM_TM, TO_TMHM_NUMS NUMBERS_256, (FOREACH_TM(APPEND_COMMA))))
+    RECURSIVELY(R_ZIP(ENUM_TM, TO_TMHM_NUMS NUMBERS_256, (FOREACH_TM_BEFORE_GAP(APPEND_COMMA))))
+    // TMs after the TM121-TM128 gap. Extend the numbers when adding more;
+    // a missing number leaves ITEM_TM_<MOVE> undeclared, so it can't be missed.
+    #define TM_NUMBERS_AFTER_GAP (129, 130, 131, 132, 133, 134, 135, 136)
+    RECURSIVELY(R_ZIP(ENUM_TM, TM_NUMBERS_AFTER_GAP, (FOREACH_TM_AFTER_GAP(APPEND_COMMA))))
     #undef ENUM_TM
     #undef TO_TMHM_NUMS
+    #undef TM_NUMBERS_AFTER_GAP
 };
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations

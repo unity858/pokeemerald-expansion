@@ -13899,6 +13899,20 @@ const struct ItemInfo gItemsInfo[] =
         .fieldUseFunc = ItemUseOutOfBattle_TMHM,
     },
 
+    [ITEM_TM_TERA_BLAST] =
+    {
+        .name = ITEM_NAME("TM129"),
+        .price = 5000,
+        .description = COMPOUND_STRING(
+            "A blast of energy\n"
+            "that takes on the\n"
+            "user's Tera Type."),
+        .importance = I_REUSABLE_TMS,
+        .pocket = POCKET_TM_HM,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TMHM,
+    },
+
     [ITEM_HM01] = // HM removed; slot kept so item IDs don't shift
     {
         .name = gQuestionMarksItemName,
