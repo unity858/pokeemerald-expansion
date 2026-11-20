@@ -254,8 +254,25 @@ struct NPCFollower
 #include "constants/items.h"
 #define ITEM_FLAGS_COUNT ((ITEMS_COUNT / 8) + ((ITEMS_COUNT % 8) ? 1 : 0))
 
+struct ItemSlot
+{
+    enum Item itemId;
+    u16 quantity;
+};
+
+// R.O.W.E. bag pockets. SaveBlock1 has no room for them, so they live in SaveBlock3.
+struct ExtraBagPockets
+{
+    struct ItemSlot medicine[BAG_MEDICINE_COUNT];
+    struct ItemSlot battleItems[BAG_BATTLE_ITEMS_COUNT];
+    struct ItemSlot typeItems[BAG_TYPE_ITEMS_COUNT];
+    struct ItemSlot megaStones[BAG_MEGA_STONES_COUNT];
+    struct ItemSlot powerUp[BAG_POWER_UP_COUNT];
+};
+
 struct SaveBlock3
 {
+    struct ExtraBagPockets bag;
 #if OW_USE_FAKE_RTC
     struct SiiRtcInfo fakeRTC;
 #endif
@@ -671,12 +688,6 @@ struct WarpData
     s8 warpId;
     //u8 padding;
     s16 x, y;
-};
-
-struct ItemSlot
-{
-    enum Item itemId;
-    u16 quantity;
 };
 
 struct Pokeblock

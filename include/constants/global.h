@@ -115,6 +115,12 @@ enum Language
 #define BAG_POKEBALLS_COUNT 16
 #define BAG_TMHM_COUNT 64
 #define BAG_BERRIES_COUNT 46
+// R.O.W.E. pockets; these are stored in SaveBlock3 (see struct ExtraBagPockets).
+#define BAG_MEDICINE_COUNT 40
+#define BAG_BATTLE_ITEMS_COUNT 70
+#define BAG_TYPE_ITEMS_COUNT 40
+#define BAG_MEGA_STONES_COUNT 50
+#define BAG_POWER_UP_COUNT 60
 
 // Number of facilities for Ranking Hall.
 // 7 facilities for single mode + tower double mode + tower multi mode.

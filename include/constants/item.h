@@ -1,12 +1,18 @@
 #ifndef GUARD_ITEM_CONSTANTS_H
 #define GUARD_ITEM_CONSTANTS_H
 
+// Pocket order follows R.O.W.E.'s bag layout. POCKET_ITEMS must stay 0 (the default pocket).
 enum Pocket
 {
     POCKET_ITEMS,
+    POCKET_MEDICINE,
     POCKET_POKE_BALLS,
-    POCKET_TM_HM,
+    POCKET_BATTLE_ITEMS,
+    POCKET_TYPE_ITEMS,
+    POCKET_MEGA_STONES,
     POCKET_BERRIES,
+    POCKET_POWER_UP,
+    POCKET_TM_HM,
     POCKET_KEY_ITEMS,
     POCKETS_COUNT,
     POCKET_DUMMY = POCKETS_COUNT,
