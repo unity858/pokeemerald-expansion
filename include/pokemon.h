@@ -136,7 +136,7 @@ struct PokemonSubstruct0
     enum Species species:11; // 2047 species.
     enum Type teraType:5; // 30 types.
     enum Item heldItem:10; // 1023 items.
-    u16 exioliteBranch:4; // R.O.W.E. Exiolite: chosen evolution path (index into GetExioliteOption), 16 paths.
+    u16 exioliteBranch:4; // R.O.W.E. Exiolite: chosen evolution path (index into GetExioliteOption); 15 = not chosen yet.
     u16 exiolite:1; // R.O.W.E. Exiolite: uses evolved base stats, can't evolve.
     u16 unused_02:1;
     u32 experience:21;
@@ -918,7 +918,8 @@ bool32 SpeciesHasEggMove(enum Species species, enum Move move);
 const struct Evolution *GetSpeciesEvolutions(enum Species species);
 
 // R.O.W.E. Exiolite (see src/pokemon.c)
-#define EXIOLITE_MAX_OPTIONS 16 // fits MON_DATA_EXIOLITE_BRANCH (4 bits)
+#define EXIOLITE_MAX_OPTIONS 15 // MON_DATA_EXIOLITE_BRANCH is 4 bits; 15 is reserved
+#define EXIOLITE_BRANCH_NONE 15 // branching Pokemon whose path isn't chosen yet
 #define EXIOLITE_MAX_STAGES 4
 struct ExioliteOption
 {
@@ -931,6 +932,9 @@ u32 GetExioliteOptionCount(enum Species species, u32 personality);
 bool32 GetExioliteOption(enum Species species, u32 personality, u32 index, struct ExioliteOption *option);
 enum Species GetExioliteStatSpecies(enum Species species, u32 personality, u32 branch, u32 level);
 enum Species GetMonExioliteStatSpecies(struct Pokemon *mon);
+u32 GetExioliteBranchLevel(enum Species species, u32 personality, u32 index);
+u32 GetExioliteLowestBranchLevel(enum Species species, u32 personality);
+bool32 IsMonExiolitePromptPending(struct Pokemon *mon);
 const u16 *GetSpeciesFormTable(enum Species species);
 const struct FormChange *GetSpeciesFormChanges(enum Species species);
 u8 CalculatePPWithBonus(enum Move move, u8 ppBonuses, u8 moveIndex);

@@ -3716,24 +3716,98 @@ bool32 GetExioliteOption(enum Species species, u32 personality, u32 index, struc
     return search.found;
 }
 
+// Number of leading steps all paths share (the linear part before the first
+// branch point). For a species with one path, that's the whole path.
+static u32 GetExioliteSharedStages(enum Species species, u32 personality, u32 count, struct ExioliteOption *first)
+{
+    struct ExioliteOption option;
+    u32 shared, i, j;
+
+    if (!GetExioliteOption(species, personality, 0, first))
+        return 0;
+    shared = first->numStages;
+    for (i = 1; i < count; i++)
+    {
+        GetExioliteOption(species, personality, i, &option);
+        for (j = 0; j < shared && j < option.numStages; j++)
+        {
+            if (option.species[j] != first->species[j])
+                break;
+        }
+        shared = j;
+    }
+    return shared;
+}
+
+// Level needed before the path at this index can be chosen: every step up to
+// and including its first step after the shared part.
+u32 GetExioliteBranchLevel(enum Species species, u32 personality, u32 index)
+{
+    struct ExioliteOption first, option;
+    u32 count = GetExioliteOptionCount(species, personality);
+    u32 shared = GetExioliteSharedStages(species, personality, count, &first);
+    u32 i, level = 0;
+
+    if (!GetExioliteOption(species, personality, index, &option))
+        return 0;
+    for (i = 0; i <= shared && i < option.numStages; i++)
+        level = max(level, option.level[i]);
+    return level;
+}
+
+u32 GetExioliteLowestBranchLevel(enum Species species, u32 personality)
+{
+    u32 count = GetExioliteOptionCount(species, personality);
+    u32 i, lowest = MAX_LEVEL;
+
+    for (i = 0; i < count; i++)
+        lowest = min(lowest, GetExioliteBranchLevel(species, personality, i));
+    return lowest;
+}
+
 // The species whose base stats an Exiolited Pokemon uses at this level.
+// Without a chosen path (EXIOLITE_BRANCH_NONE, or an index that no longer
+// exists), a branching species only follows the shared part.
 enum Species GetExioliteStatSpecies(enum Species species, u32 personality, u32 branch, u32 level)
 {
     struct ExioliteOption option;
     enum Species statSpecies = species;
-    u32 i;
+    u32 count = GetExioliteOptionCount(species, personality);
+    u32 numStages, i;
 
-    if (!GetExioliteOption(species, personality, branch, &option)
-     && !GetExioliteOption(species, personality, 0, &option))
+    if (count == 0)
         return species;
+    if (count == 1)
+        branch = 0;
 
-    for (i = 0; i < option.numStages; i++)
+    if (branch < count && GetExioliteOption(species, personality, branch, &option))
+        numStages = option.numStages;
+    else
+        numStages = GetExioliteSharedStages(species, personality, count, &option);
+
+    for (i = 0; i < numStages; i++)
     {
         if (option.level[i] > level)
             break;
         statSpecies = option.species[i];
     }
     return statSpecies;
+}
+
+// An Exiolited Pokemon with no path chosen yet, and at least one path it can take now.
+bool32 IsMonExiolitePromptPending(struct Pokemon *mon)
+{
+    enum Species species = GetMonData(mon, MON_DATA_SPECIES);
+    u32 personality = GetMonData(mon, MON_DATA_PERSONALITY);
+    u32 level = GetMonData(mon, MON_DATA_LEVEL);
+    u32 count;
+
+    if (!GetMonData(mon, MON_DATA_EXIOLITE) || GetMonData(mon, MON_DATA_IS_EGG))
+        return FALSE;
+    count = GetExioliteOptionCount(species, personality);
+    if (count < 2 || GetMonData(mon, MON_DATA_EXIOLITE_BRANCH) < count)
+        return FALSE;
+    return GetExioliteLowestBranchLevel(species, personality) <= level;
 }
 
 enum Species GetMonExioliteStatSpecies(struct Pokemon *mon)

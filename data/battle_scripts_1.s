@@ -3125,6 +3125,8 @@ BattleScript_LearnedNewMove::
 	updatechoicemoveonlvlup
 	goto BattleScript_TryLearnMoveLoop
 BattleScript_LearnMoveReturn::
+	setbyte sLEARNMOVE_STATE, 0
+	callnative BS_TryExiolitePrompt
 	return
 
 BattleScript_WeatherAbilityActivates::

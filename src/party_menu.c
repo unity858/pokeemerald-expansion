@@ -5506,16 +5506,21 @@ void ItemUseCB_Feather(u8 taskId, TaskFunc task)
 static const u8 sText_RoweAskPowerUp[] = _("Do you want to power up\n{STR_VAR_1}?");
 static const u8 sText_RoweDonePowerUp[] = _("{STR_VAR_1} became stronger!{PAUSE_UNTIL_PRESS}");
 
-// R.O.W.E. Exiolite: toggles the boost. Turning it on stores the chosen path.
+// R.O.W.E. Exiolite: toggles the boost. Turning it on stores the chosen path,
+// or EXIOLITE_BRANCH_NONE to choose it at a later level-up.
 static void Exiolite_Apply(struct Pokemon *mon, u32 branch)
 {
     static const u8 sText_Removed[] = _("{STR_VAR_1}'s Exiolite boost\nwas removed!{PAUSE_UNTIL_PRESS}");
-    static const u8 sText_Boosted[] = _("{STR_VAR_1} gained {STR_VAR_2}'s\nbase stats!\p{STR_VAR_1} can no longer evolve.{PAUSE_UNTIL_PRESS}");
+    static const u8 sText_Boosted[] = _("{STR_VAR_1} gained {STR_VAR_2}'s\nbase stats!\p");
+    static const u8 sText_NoLongerEvolve[] = _("{STR_VAR_1} can no longer evolve.{PAUSE_UNTIL_PRESS}");
     static const u8 sText_NotYet[] = _("{STR_VAR_1}'s stats didn't change yet.\nThey'll rise at Lv. {STR_VAR_2}.\p{STR_VAR_1} can no longer evolve.{PAUSE_UNTIL_PRESS}");
+    static const u8 sText_ChooseLater[] = _("{STR_VAR_1} can no longer evolve.\nIts stats will rise once it reaches\pLv. {STR_VAR_2}, and you'll choose its\nevolution then.{PAUSE_UNTIL_PRESS}");
+    static const u8 sText_ChooseNextLevel[] = _("{STR_VAR_1} can no longer evolve.\nYou'll choose its evolution at its\pnext level-up.{PAUSE_UNTIL_PRESS}");
     enum Species species = GetMonData(mon, MON_DATA_SPECIES);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY);
     struct ExioliteOption option;
     enum Species statSpecies;
+    u8 *end = gStringVar4;
     u8 value;
 
     if (GetMonData(mon, MON_DATA_EXIOLITE))
@@ -5536,10 +5541,31 @@ static void Exiolite_Apply(struct Pokemon *mon, u32 branch)
     CalculateMonStats(mon);
     GetMonNickname(mon, gStringVar1);
     statSpecies = GetMonExioliteStatSpecies(mon);
-    if (statSpecies != species)
+
+    if (branch == EXIOLITE_BRANCH_NONE)
+    {
+        u32 branchLevel = GetExioliteLowestBranchLevel(species, personality);
+
+        if (statSpecies != species) // the shared part before the branch point already applies
+        {
+            StringCopy(gStringVar2, GetSpeciesName(statSpecies));
+            end = StringExpandPlaceholders(end, sText_Boosted);
+        }
+        if (branchLevel <= GetMonData(mon, MON_DATA_LEVEL))
+        {
+            StringExpandPlaceholders(end, sText_ChooseNextLevel);
+        }
+        else
+        {
+            ConvertIntToDecimalStringN(gStringVar2, branchLevel, STR_CONV_MODE_LEFT_ALIGN, 3);
+            StringExpandPlaceholders(end, sText_ChooseLater);
+        }
+    }
+    else if (statSpecies != species)
     {
         StringCopy(gStringVar2, GetSpeciesName(statSpecies));
-        StringExpandPlaceholders(gStringVar4, sText_Boosted);
+        end = StringExpandPlaceholders(end, sText_Boosted);
+        StringExpandPlaceholders(end, sText_NoLongerEvolve);
     }
     else
     {
@@ -5670,14 +5696,23 @@ static void RoweItem_Start(u8 taskId, TaskFunc task, bool32 cannotUse, const u8 
     gTasks[taskId].func = Task_RoweItemConfirm;
 }
 
-// R.O.W.E. Exiolite. With several evolution paths, a scrolling list of the
-// final evolutions (plus Cancel) asks which one to follow first.
+// R.O.W.E. Exiolite path list: a scrolling list of the final evolutions the
+// Pokemon can choose now, plus "Decide later" (when using the item) or
+// "Not now" (level-up prompt).
 #define EXIOLITE_LIST_VISIBLE   7
 #define EXIOLITE_LABEL_LENGTH   (POKEMON_NAME_LENGTH + 10)
+#define EXIOLITE_LIST_LATER     0xFF
 #define tExioliteListTaskId     data[5]
 #define tExioliteArrowsTaskId   data[6]
 #define tExioliteWindowId       data[7]
-#define tExioliteChooseFunc     8 // word arg, data[8..9]
+#define tExioliteChooseFunc     8  // word arg, data[8..9]: task to return to / continue with
+#define tExioliteLevelUp        data[10]
+
+enum
+{
+    EXIOLITE_LIST_USE,      // using the item; picking a path asks for confirmation
+    EXIOLITE_LIST_LEVEL_UP, // level-up prompt; picking a path sets it right away
+};
 
 struct ExioliteMenu
 {
@@ -5687,6 +5722,7 @@ struct ExioliteMenu
 };
 
 static EWRAM_DATA struct ExioliteMenu *sExioliteMenu = NULL;
+static EWRAM_DATA u8 sExiolitePromptSlot = 0;
 
 static const u8 sText_ExioliteAskUse[] = _("Use the Exiolite on {STR_VAR_1}?\nIt will no longer be able to evolve.");
 static const u8 sText_ExioliteAskRemove[] = _("Remove {STR_VAR_1}'s Exiolite boost?\nIt will be able to evolve again.");
@@ -5749,6 +5785,23 @@ static void Exiolite_StartConfirm(u8 taskId, TaskFunc task, u32 branch)
                    GetMonData(mon, MON_DATA_EXIOLITE) ? sText_ExioliteAskRemove : sText_ExioliteAskUse);
 }
 
+// Paths this Pokemon can choose at its current level (all paths when it has only one).
+static u32 GetEligibleExioliteBranches(struct Pokemon *mon, u8 *branches)
+{
+    enum Species species = GetMonData(mon, MON_DATA_SPECIES);
+    u32 personality = GetMonData(mon, MON_DATA_PERSONALITY);
+    u32 level = GetMonData(mon, MON_DATA_LEVEL);
+    u32 count = GetExioliteOptionCount(species, personality);
+    u32 i, numEligible = 0;
+
+    for (i = 0; i < count; i++)
+    {
+        if (GetExioliteBranchLevel(species, personality, i) <= level)
+            branches[numEligible++] = i;
+    }
+    return numEligible;
+}
+
 static void Exiolite_CloseList(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
@@ -5763,10 +5816,29 @@ static void Exiolite_CloseList(u8 taskId)
     ScheduleBgCopyTilemapToVram(2);
 }
 
+// Level-up prompt: sets the chosen path now, then continues with tExioliteChooseFunc.
+static void Exiolite_SetBranchAfterLevelUp(u8 taskId, u32 branch)
+{
+    static const u8 sText_Boosted[] = _("{STR_VAR_1} gained {STR_VAR_2}'s\nbase stats!{PAUSE_UNTIL_PRESS}");
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
+    u8 value = branch;
+
+    SetMonData(mon, MON_DATA_EXIOLITE_BRANCH, &value);
+    CalculateMonStats(mon);
+    UpdateMonDisplayInfoAfterRareCandy(gPartyMenu.slotId, mon);
+    PlaySE(SE_USE_ITEM);
+    GetMonNickname(mon, gStringVar1);
+    StringCopy(gStringVar2, GetSpeciesName(GetMonExioliteStatSpecies(mon)));
+    StringExpandPlaceholders(gStringVar4, sText_Boosted);
+    DisplayPartyMenuMessage(gStringVar4, TRUE);
+    ScheduleBgCopyTilemapToVram(2);
+}
+
 static void Task_ExioliteChoosePath(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
-    TaskFunc chooseMonFunc = (TaskFunc)GetWordTaskArg(taskId, tExioliteChooseFunc);
+    TaskFunc nextFunc = (TaskFunc)GetWordTaskArg(taskId, tExioliteChooseFunc);
+    bool32 levelUp = tExioliteLevelUp;
     s32 input = ListMenu_ProcessInput(tExioliteListTaskId);
 
     ListMenuGetScrollAndRow(tExioliteListTaskId, &sExioliteMenu->scrollOffset, NULL);
@@ -5775,8 +5847,16 @@ static void Task_ExioliteChoosePath(u8 taskId)
 
     PlaySE(SE_SELECT);
     Exiolite_CloseList(taskId);
-    gTasks[taskId].func = chooseMonFunc;
-    if (input == LIST_CANCEL || input >= EXIOLITE_MAX_OPTIONS)
+    gTasks[taskId].func = nextFunc;
+    if (levelUp)
+    {
+        // "Not now" (or B): asked again at the next level-up.
+        DisplayPartyMenuStdMessage(PARTY_MSG_NONE);
+        if (input != LIST_CANCEL && input != EXIOLITE_LIST_LATER)
+            Exiolite_SetBranchAfterLevelUp(taskId, input);
+        return;
+    }
+    if (input == LIST_CANCEL)
     {
         // Back to choosing a Pokemon; nothing used.
         gPartyMenuUseExitCallback = FALSE;
@@ -5784,10 +5864,11 @@ static void Task_ExioliteChoosePath(u8 taskId)
         return;
     }
     DisplayPartyMenuStdMessage(PARTY_MSG_NONE);
-    Exiolite_StartConfirm(taskId, Task_ClosePartyMenuAfterText, input);
+    Exiolite_StartConfirm(taskId, Task_ClosePartyMenuAfterText,
+                          input == EXIOLITE_LIST_LATER ? EXIOLITE_BRANCH_NONE : (u32)input);
 }
 
-static void Exiolite_ShowPathList(u8 taskId, struct Pokemon *mon, u32 count)
+static void Exiolite_ShowPathList(u8 taskId, struct Pokemon *mon, const u8 *branches, u32 numBranches, u32 mode, TaskFunc nextFunc)
 {
     s16 *data = gTasks[taskId].data;
     enum Species species = GetMonData(mon, MON_DATA_SPECIES);
@@ -5799,38 +5880,41 @@ static void Exiolite_ShowPathList(u8 taskId, struct Pokemon *mon, u32 count)
     u32 duplicates = 0;
 
     sExioliteMenu = AllocZeroed(sizeof(*sExioliteMenu));
-    for (i = 0; i < count; i++)
+    for (i = 0; i < numBranches; i++)
     {
         enum Species leaf;
 
-        GetExioliteOption(species, personality, i, &option);
+        GetExioliteOption(species, personality, branches[i], &option);
         leaf = option.species[option.numStages - 1];
         StringCopy(sExioliteMenu->labels[i], GetSpeciesName(leaf));
         StringAppend(sExioliteMenu->labels[i], GetExioliteRegionSuffix(leaf));
         sExioliteMenu->items[i].name = sExioliteMenu->labels[i];
-        sExioliteMenu->items[i].id = i;
+        sExioliteMenu->items[i].id = branches[i];
     }
     // Labels that are still identical get a suffix (find them all first).
-    for (i = 0; i < count; i++)
+    for (i = 0; i < numBranches; i++)
     {
-        for (j = 0; j < count; j++)
+        for (j = 0; j < numBranches; j++)
         {
             if (j != i && StringCompare(sExioliteMenu->labels[i], sExioliteMenu->labels[j]) == 0)
                 duplicates |= 1u << i;
         }
     }
-    for (i = 0; i < count; i++)
+    for (i = 0; i < numBranches; i++)
     {
         if (duplicates & (1u << i))
         {
-            GetExioliteOption(species, personality, i, &option);
-            AppendExioliteDisambiguation(sExioliteMenu->labels[i], &option, i);
+            GetExioliteOption(species, personality, branches[i], &option);
+            AppendExioliteDisambiguation(sExioliteMenu->labels[i], &option, branches[i]);
         }
     }
-    sExioliteMenu->items[count].name = gText_Cancel2;
-    sExioliteMenu->items[count].id = EXIOLITE_MAX_OPTIONS;
+    if (mode == EXIOLITE_LIST_USE)
+        sExioliteMenu->items[numBranches].name = COMPOUND_STRING("Decide later");
+    else
+        sExioliteMenu->items[numBranches].name = COMPOUND_STRING("Not now");
+    sExioliteMenu->items[numBranches].id = EXIOLITE_LIST_LATER;
 
-    numRows = min(count + 1, EXIOLITE_LIST_VISIBLE);
+    numRows = min(numBranches + 1, EXIOLITE_LIST_VISIBLE);
     // Same area as the Rotom Catalog list: right side, ending at tile row 19.
     SetWindowTemplateFields(&window, 2, 17, 19 - numRows * 2, 12, numRows * 2, 14, 0x2E9);
     tExioliteWindowId = AddWindow(&window);
@@ -5838,7 +5922,7 @@ static void Exiolite_ShowPathList(u8 taskId, struct Pokemon *mon, u32 count)
 
     list.items = sExioliteMenu->items;
     list.moveCursorFunc = ListMenuDefaultCursorMoveFunc;
-    list.totalItems = count + 1;
+    list.totalItems = numBranches + 1;
     list.maxShowed = numRows;
     list.windowId = tExioliteWindowId;
     list.item_X = 8;
@@ -5853,31 +5937,45 @@ static void Exiolite_ShowPathList(u8 taskId, struct Pokemon *mon, u32 count)
     tExioliteListTaskId = ListMenuInit(&list, 0, 0);
 
     tExioliteArrowsTaskId = TASK_NONE;
-    if (count + 1 > numRows)
+    if (numBranches + 1 > numRows)
     {
         tExioliteArrowsTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP,
                                                                          (17 + 12 / 2) * 8,
                                                                          (19 - numRows * 2 - 1) * 8 + 4,
                                                                          19 * 8 + 4,
-                                                                         count + 1 - numRows,
+                                                                         numBranches + 1 - numRows,
                                                                          TAG_ACTIONS_SCROLL_ARROW,
                                                                          TAG_ACTIONS_SCROLL_ARROW,
                                                                          &sExioliteMenu->scrollOffset);
     }
 
-    DisplayPartyMenuStdMessage(PARTY_MSG_EXIOLITE_WHICH_PATH);
+    if (mode == EXIOLITE_LIST_LEVEL_UP)
+    {
+        static const u8 sText_ChooseNow[] = _("{STR_VAR_1} can now choose the\nevolution it takes stats from.");
+        GetMonNickname(mon, gStringVar1);
+        StringExpandPlaceholders(gStringVar4, sText_ChooseNow);
+        DisplayPartyMenuMessage(gStringVar4, FALSE);
+    }
+    else
+    {
+        DisplayPartyMenuStdMessage(PARTY_MSG_EXIOLITE_WHICH_PATH);
+    }
     ScheduleBgCopyTilemapToVram(2);
-    SetWordTaskArg(taskId, tExioliteChooseFunc, (uintptr_t)gTasks[taskId].func);
+    tExioliteLevelUp = (mode == EXIOLITE_LIST_LEVEL_UP);
+    SetWordTaskArg(taskId, tExioliteChooseFunc, (uintptr_t)nextFunc);
     gTasks[taskId].func = Task_ExioliteChoosePath;
 }
 
 // R.O.W.E. Exiolite: see GetExioliteStatSpecies (pokemon.c) for the rules.
 // Refused only for eggs and Pokemon with no evolution path; a second use on an
-// Exiolited Pokemon offers to remove the boost.
+// Exiolited Pokemon offers to remove the boost. A branching Pokemon lists the
+// paths it can take now plus "Decide later"; with none available yet it is
+// applied with no path, chosen at a later level-up.
 void ItemUseCB_Exiolite(u8 taskId, TaskFunc task)
 {
     struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
-    u32 count;
+    u8 branches[EXIOLITE_MAX_OPTIONS];
+    u32 count, numEligible;
 
     if (GetMonData(mon, MON_DATA_EXIOLITE))
     {
@@ -5893,14 +5991,56 @@ void ItemUseCB_Exiolite(u8 taskId, TaskFunc task)
         RoweItem_Start(taskId, task, count == 0, sText_ExioliteAskUse);
         return;
     }
+
+    numEligible = GetEligibleExioliteBranches(mon, branches);
+    if (numEligible == 0)
+    {
+        Exiolite_StartConfirm(taskId, task, EXIOLITE_BRANCH_NONE);
+        return;
+    }
     PlaySE(SE_SELECT);
-    Exiolite_ShowPathList(taskId, mon, count);
+    Exiolite_ShowPathList(taskId, mon, branches, numEligible, EXIOLITE_LIST_USE, gTasks[taskId].func);
+}
+
+// Level-up prompt for an Exiolited Pokemon whose path isn't chosen yet. Returns
+// FALSE (nothing shown) if there's nothing to choose; otherwise shows the list
+// and continues with nextFunc afterwards (after any message).
+static bool32 TryShowExioliteLevelUpPrompt(u8 taskId, TaskFunc nextFunc)
+{
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
+    u8 branches[EXIOLITE_MAX_OPTIONS];
+    u32 numEligible;
+
+    if (!IsMonExiolitePromptPending(mon))
+        return FALSE;
+    numEligible = GetEligibleExioliteBranches(mon, branches);
+    if (numEligible == 0)
+        return FALSE;
+    Exiolite_ShowPathList(taskId, mon, branches, numEligible, EXIOLITE_LIST_LEVEL_UP, nextFunc);
+    return TRUE;
+}
+
+// Party menu opened from battle just for the level-up prompt (see BS_TryExiolitePrompt).
+static void Task_ExioliteBattlePrompt(u8 taskId)
+{
+    gPartyMenu.slotId = sExiolitePromptSlot;
+    gPartyMenuUseExitCallback = TRUE;
+    if (!TryShowExioliteLevelUpPrompt(taskId, Task_ClosePartyMenuAfterText))
+        gTasks[taskId].func = Task_ClosePartyMenu;
+}
+
+void ShowExiolitePromptPartyMenu(u8 slot, MainCallback callback)
+{
+    sExiolitePromptSlot = slot;
+    InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, FALSE,
+                  PARTY_MSG_NONE, Task_ExioliteBattlePrompt, callback);
 }
 
 #undef tExioliteListTaskId
 #undef tExioliteArrowsTaskId
 #undef tExioliteWindowId
 #undef tExioliteChooseFunc
+#undef tExioliteLevelUp
 
 #undef tState
 #undef tMonId
@@ -6718,7 +6858,18 @@ static void CB2_ReturnToPartyMenuUsingRareCandy(void)
     SetMainCallback2(CB2_ShowPartyMenuForItemUse);
 }
 
+static void PartyMenuTryEvolution_Continue(u8 taskId);
+
+// R.O.W.E. Exiolite: after the level-up (and any new moves), an Exiolited
+// Pokemon with no path chosen yet may choose one now. It can't evolve, so the
+// evolution check that follows does nothing for it.
 static void PartyMenuTryEvolution(u8 taskId)
+{
+    if (!TryShowExioliteLevelUpPrompt(taskId, PartyMenuTryEvolution_Continue))
+        PartyMenuTryEvolution_Continue(taskId);
+}
+
+static void PartyMenuTryEvolution_Continue(u8 taskId)
 {
     struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
     enum Species targetSpecies = SPECIES_NONE;

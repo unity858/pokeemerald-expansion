@@ -9055,6 +9055,60 @@ void RestoreTarget(void)
     gBattlerTarget = gBattleStruct->savedBattlerTarget[gBattleStruct->savedTargetCount];
 }
 
+// R.O.W.E. Exiolite: after a level-up in battle (and any new moves), an
+// Exiolited Pokemon with no path chosen yet may choose one, like move learning:
+// the battle screen closes, a party-menu list asks, and the battle screen returns.
+void BS_TryExiolitePrompt(void)
+{
+    NATIVE_ARGS();
+    u32 monId = gBattleStruct->expGetterMonId;
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][monId];
+
+    switch (gBattleScripting.learnMoveState)
+    {
+    case 0:
+        if (monId >= PARTY_SIZE || RECORDED_WILD_BATTLE
+         || (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED))
+         || !IsMonExiolitePromptPending(mon))
+        {
+            gBattlescriptCurrInstr = cmd->nextInstr;
+            return;
+        }
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+        gBattleScripting.learnMoveState++;
+        break;
+    case 1:
+        if (!gPaletteFade.active)
+        {
+            CloseMainBattleScreen();
+            ShowExiolitePromptPartyMenu(monId, ReshowBattleScreenAfterMenu);
+            gBattleScripting.learnMoveState++;
+        }
+        break;
+    case 2:
+        if (!gPaletteFade.active && gMain.callback2 == BattleMainCB2)
+        {
+            enum BattlerId battler;
+
+            // The stats may have changed: update the battler(s) using this Pokemon.
+            for (battler = 0; battler < gBattlersCount; battler++)
+            {
+                if (GetBattlerMon(battler) != mon || gBattleMons[battler].volatiles.transformed)
+                    continue;
+                CopyMonLevelAndBaseStatsToBattleMon(battler, mon, TRUE);
+                if (gBattleMons[battler].volatiles.powerTrick)
+                {
+                    u32 temp;
+                    SWAP(gBattleMons[battler].attack, gBattleMons[battler].defense, temp);
+                }
+            }
+            gBattleScripting.learnMoveState = 0;
+            gBattlescriptCurrInstr = cmd->nextInstr;
+        }
+        break;
+    }
+}
+
 void BS_SaveTarget(void)
 {
     NATIVE_ARGS();
