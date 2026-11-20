@@ -342,7 +342,11 @@ enum __attribute__((packed)) Ability
     ABILITY_SPICY_SPRAY = 318,
     ABILITY_AURA_GUARD = 319,
     ABILITIES_COUNT_GEN9,
-    ABILITIES_COUNT = ABILITIES_COUNT_GEN9,
+
+    // R.O.W.E. abilities (boosted moves are set in Custom data mode only)
+    ABILITY_BLADEMASTER = ABILITIES_COUNT_GEN9,
+    ABILITY_STRIKER,
+    ABILITIES_COUNT,
 };
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H

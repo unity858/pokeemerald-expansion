@@ -32,8 +32,8 @@
 //   Moves kept fully vanilla per user (Cross Poison's Blademaster flag,
 //   Secret Power's and Beak Blast's flag changes).
 //
-// Blademaster / Striker: R.O.W.E.-only properties. No ability uses them yet;
-// the abilities that boost these moves are a later task.
+// Blademaster / Striker: R.O.W.E.-only properties, read by ABILITY_BLADEMASTER
+// (1.5x power) and ABILITY_STRIKER (1.3x power) in src/battle_util.c.
 
 const struct MoveFlagOverride gCustomMoveFlags[MOVES_COUNT] =
 {

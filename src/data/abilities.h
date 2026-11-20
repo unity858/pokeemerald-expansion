@@ -2556,4 +2556,18 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .name = _("Aura Guard"),
         .description = COMPOUND_STRING("Unimplemented."),
     },
+
+    [ABILITY_BLADEMASTER] =
+    {
+        .name = _("Blademaster"),
+        .description = COMPOUND_STRING("Boosts sword moves."),
+        .aiRating = 7,
+    },
+
+    [ABILITY_STRIKER] =
+    {
+        .name = _("Striker"),
+        .description = COMPOUND_STRING("Boosts kicking moves."),
+        .aiRating = 6,
+    },
 };

@@ -541,8 +541,7 @@ static inline bool32 IsSlicingMove(enum Move moveId)
 
 // R.O.W.E.-only move properties (Custom data mode only, see
 // src/data/custom_move_flags.h). Always FALSE in Vanilla mode.
-// NOTE: no ability reads these yet; the Blademaster / Striker abilities are a
-// later task.
+// Read by ABILITY_BLADEMASTER / ABILITY_STRIKER (src/battle_util.c).
 static inline bool32 IsBlademasterBoostedMove(enum Move moveId)
 {
     moveId = SanitizeMoveId(moveId);
