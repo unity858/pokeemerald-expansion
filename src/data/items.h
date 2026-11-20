@@ -16428,6 +16428,23 @@ const struct ItemInfo gItemsInfo[] =
         .iconPic = gItemIcon_IronPill,
         .iconPalette = gItemIconPalette_IronPill,
     },
+
+    [ITEM_SAFARI_PASS] =
+    {
+        .name = ITEM_NAME("Safari Pass"),
+        .pluralName = ITEM_PLURAL_NAME("Safari Passes"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "Allows unrestricted\n"
+            "entrance to Hoenn's\n"
+            "Safari Zone."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .iconPic = gItemIcon_SafariPass,
+        .iconPalette = gItemIconPalette_SafariPass,
+    },
 };
 
 #undef ITEM_NAME

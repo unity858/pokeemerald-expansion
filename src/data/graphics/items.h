@@ -2119,3 +2119,6 @@ const u16 gItemIconPalette_PowerCandy[] = INCGFX_U16("graphics/items/icon_palett
 
 const u32 gItemIcon_IronPill[] = INCGFX_U32("graphics/items/icons/iron_pill.png", ".4bpp.smol");
 const u16 gItemIconPalette_IronPill[] = INCGFX_U16("graphics/items/icon_palettes/iron_pill.pal", ".gbapal");
+
+const u32 gItemIcon_SafariPass[] = INCGFX_U32("graphics/items/icons/safari_pass.png", ".4bpp.smol");
+const u16 gItemIconPalette_SafariPass[] = INCGFX_U16("graphics/items/icon_palettes/safari_pass.pal", ".gbapal");

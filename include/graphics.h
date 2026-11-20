@@ -1776,6 +1776,8 @@ extern const u32 gItemIcon_PowerCandy[];
 extern const u16 gItemIconPalette_PowerCandy[];
 extern const u32 gItemIcon_IronPill[];
 extern const u16 gItemIconPalette_IronPill[];
+extern const u32 gItemIcon_SafariPass[];
+extern const u16 gItemIconPalette_SafariPass[];
 
 extern const u32 gItemIcon_ReturnToFieldArrow[];
 extern const u16 gItemIconPalette_ReturnToFieldArrow[];

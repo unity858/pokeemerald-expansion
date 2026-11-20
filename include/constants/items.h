@@ -1064,6 +1064,7 @@ enum __attribute__((packed)) Item
     // R.O.W.E. items, after the last item so existing item IDs stay put.
     ITEM_POWER_CANDY = 895,
     ITEM_IRON_PILL = 896,
+    ITEM_SAFARI_PASS = 897,
 
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,

@@ -155,6 +155,10 @@ Route121_SafariZoneEntrance_Text_NotEnoughMoney:
 Route121_SafariZoneEntrance_Text_ThatWillBe500Please:
 	.string "That will be ¥500, please.$"
 
+Route121_SafariZoneEntrance_Text_HasSafariPass:
+	.string "Oh! That's a SAFARI PASS.\n"
+	.string "There's no charge for you, then.$"
+
 Route121_SafariZoneEntrance_Text_HereAreYourSafariBalls:
 	.string "Here are your SAFARI BALLS.$"
 

@@ -58,12 +58,16 @@ Route121_SafariZoneEntrance_EventScript_TryEnterSafariZone::
 	checkitem ITEM_POKEBLOCK_CASE
 	goto_if_eq VAR_RESULT, 0, Route121_SafariZoneEntrance_EventScript_NoPokeblockCase
 	call Route121_SafariZoneEntrance_EventScript_CheckHasRoomForPokemon
+	@ R.O.W.E.: the Safari Pass waives the entrance fee.
+	checkitem ITEM_SAFARI_PASS
+	goto_if_eq VAR_RESULT, TRUE, Route121_SafariZoneEntrance_EventScript_EnterWithSafariPass
 	checkmoney 500
 	goto_if_eq VAR_RESULT, 0, Route121_SafariZoneEntrance_EventScript_NotEnoughMoney
 	playse SE_SHOP
 	msgbox Route121_SafariZoneEntrance_Text_ThatWillBe500Please, MSGBOX_DEFAULT
 	removemoney 500
 	updatemoneybox
+Route121_SafariZoneEntrance_EventScript_GiveSafariBallsAndEnter::
 	msgbox Route121_SafariZoneEntrance_Text_HereAreYourSafariBalls, MSGBOX_DEFAULT
 	playfanfare MUS_OBTAIN_ITEM
 	message Route121_SafariZoneEntrance_Text_Received30SafariBalls
@@ -78,6 +82,11 @@ Route121_SafariZoneEntrance_EventScript_TryEnterSafariZone::
 	clearflag FLAG_GOOD_LUCK_SAFARI_ZONE
 	warp MAP_SAFARI_ZONE_SOUTH, 32, 33
 	waitstate
+	end
+
+Route121_SafariZoneEntrance_EventScript_EnterWithSafariPass::
+	msgbox Route121_SafariZoneEntrance_Text_HasSafariPass, MSGBOX_DEFAULT
+	goto Route121_SafariZoneEntrance_EventScript_GiveSafariBallsAndEnter
 	end
 
 Route121_SafariZoneEntrance_EventScript_CheckHasRoomForPokemon::
