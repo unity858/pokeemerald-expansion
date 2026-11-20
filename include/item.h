@@ -269,6 +269,7 @@ u32 GetItemFlingPower(enum Item itemId);
 u32 GetItemStatus1Mask(enum Item itemId);
 u32 GetItemSellPrice(enum Item itemId);
 bool32 IsHoldEffectChoice(enum HoldEffect holdEffect);
+bool32 IsItemTossOrSellBlocked(enum Item itemId);
 ShopCriteriaFunc GetItemShopCriteriaFunc(enum Item itemId);
 bool32 IsItemShopCriteriaFulfilled(enum Item itemId);
 

@@ -1001,6 +1001,12 @@ bool32 IsHoldEffectChoice(enum HoldEffect holdEffect)
         || holdEffect == HOLD_EFFECT_CHOICE_SPECS;
 }
 
+// R.O.W.E.: Mega Stones can't be tossed or sold, but unlike important items they can still be held.
+bool32 IsItemTossOrSellBlocked(enum Item itemId)
+{
+    return GetItemHoldEffect(itemId) == HOLD_EFFECT_MEGA_STONE;
+}
+
 ShopCriteriaFunc GetItemShopCriteriaFunc(enum Item itemId)
 {
     return gItemsInfo[SanitizeItemId(itemId)].shopCriteriaFunc;
