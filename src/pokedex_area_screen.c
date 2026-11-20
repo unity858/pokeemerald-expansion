@@ -121,7 +121,7 @@ static void BuildAreaGlowTilemap(void);
 static void SetAreaHasMon(u16, u16);
 static void SetSpecialMapHasMon(u16, u16);
 static mapsec_u16_t GetRegionMapSectionId(u8, u8);
-static bool8 MapHasSpecies(const struct WildEncounterTypes *, u32, enum Species);
+static bool8 MapHasSpecies(const struct WildPokemonHeader *, u32, enum Species);
 static bool8 MonListHasSpecies(const struct WildPokemonInfo *, enum Species, u16);
 static void DoAreaGlow(void);
 static void Task_ShowPokedexAreaScreen(u8 taskId);
@@ -340,7 +340,7 @@ static void FindMapsWithMon(enum Species species)
         if (GetRegionMapType(headerSectionId) != currentRegionMapType)
             continue;
 
-        if (MapHasSpecies(&gWildMonHeaders[i].encounterTypes[gAreaTimeOfDay], headerSectionId, species))
+        if (MapHasSpecies(&gWildMonHeaders[i], headerSectionId, species))
         {
             switch (gWildMonHeaders[i].mapGroup)
             {
@@ -429,8 +429,24 @@ static mapsec_u16_t GetRegionMapSectionId(u8 mapGroup, u8 mapNum)
     return Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum)->regionMapSectionId;
 }
 
-static bool8 MapHasSpecies(const struct WildEncounterTypes *info, u32 headerSectionId, enum Species species)
+// Mirrors GetTimeOfDayForEncounters(): an area with no table for the shown time of day
+// uses the OW_TIME_OF_DAY_FALLBACK table, as the actual encounters do.
+#define AREA_MONS_INFO(header, member)                                                              \
+    (((header)->encounterTypes[gAreaTimeOfDay].member != NULL || !OW_TIME_OF_DAY_ENCOUNTERS || OW_TIME_OF_DAY_DISABLE_FALLBACK) \
+        ? (header)->encounterTypes[gAreaTimeOfDay].member                                           \
+        : (header)->encounterTypes[OW_TIME_OF_DAY_FALLBACK].member)
+
+static bool8 MapHasSpecies(const struct WildPokemonHeader *header, u32 headerSectionId, enum Species species)
 {
+    struct WildEncounterTypes infoForTime =
+    {
+        .landMonsInfo = AREA_MONS_INFO(header, landMonsInfo),
+        .waterMonsInfo = AREA_MONS_INFO(header, waterMonsInfo),
+        .rockSmashMonsInfo = AREA_MONS_INFO(header, rockSmashMonsInfo),
+        .fishingMonsInfo = AREA_MONS_INFO(header, fishingMonsInfo),
+    };
+    const struct WildEncounterTypes *info = &infoForTime;
+
     // If this is a header for Altering Cave, skip it if it's not the current Altering Cave encounter set
     if (headerSectionId == MAPSEC_ALTERING_CAVE)
     {
