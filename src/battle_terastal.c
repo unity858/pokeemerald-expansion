@@ -77,7 +77,18 @@ bool32 CanTerastallize(enum BattlerId battler)
     if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE && !IsOnPlayerSide(battler))
         return FALSE;
 
-    if (TESTING || !IsOnPlayerSide(battler))
+    // R.O.W.E.: wild Pokemon never Terastallize. Anything on the opposing side
+    // that isn't owned by a trainer counts as wild (normal/double wild, Lure
+    // doubles, static/legendary encounters, Safari, Battle Pyramid wild mons).
+    if (!B_WILD_TERA_ENABLED && !TESTING
+        && !IsOnPlayerSide(battler)
+        && !(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_LINK)))
+        return FALSE;
+
+    // R.O.W.E.: an in-game partner trainer (e.g. multi battles) is an NPC trainer,
+    // so it doesn't need the player's Tera Orb; its Tera is driven by its party data.
+    if (TESTING || !IsOnPlayerSide(battler)
+        || gBattlerBattleController[battler] == BATTLE_CONTROLLER_PLAYER_PARTNER)
     {
         // Skip all other checks in this block, go to HasTrainerUsedGimmick
     }
