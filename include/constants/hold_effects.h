@@ -136,6 +136,9 @@ enum HoldEffect
     HOLD_EFFECT_OGERPON_MASK,
     // Gen2 hold effect
     HOLD_EFFECT_BERSERK_GENE,
+    // R.O.W.E. hold effects
+    HOLD_EFFECT_HEART_SCALE,    // Luvdisc: 1.5x Sp. Def, Alomomola: 1.5x Def
+    HOLD_EFFECT_ODD_KEYSTONE,   // Spiritomb: 1.5x Sp. Def
     HOLD_EFFECT_COUNT
 };
 

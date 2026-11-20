@@ -569,9 +569,8 @@ static enum ItemEffect TryToxicOrb(enum BattlerId battler)
     enum ItemEffect effect = ITEM_NO_EFFECT;
     enum Ability ability = GetBattlerAbility(battler);
 
-    gBattleStruct->ignoreOrbFailure = TRUE;
+    // R.O.W.E.: Toxic Orb respects Safeguard and Flower Veil (Misty Terrain is always respected)
     bool32 canBePoisoned = CanBePoisoned(battler, battler, ability, ability);
-    gBattleStruct->ignoreOrbFailure = FALSE;
 
     if (canBePoisoned) // Corrosion bypasses Poison/Steel-type poison immunity
     {
@@ -594,7 +593,7 @@ static enum ItemEffect TryFlameOrb(enum BattlerId battler)
     bool32 canBeBurned = CanBeBurned(battler, battler, ability);
     gBattleStruct->ignoreOrbFailure = FALSE;
 
-    if (canBeBurned)
+    if (canBeBurned && !IsWaterSportActive()) // R.O.W.E.: Flame Orb fails under Water Sport
     {
         gBattleMons[battler].status1 = STATUS1_BURN;
         gEffectBattler = battler;

@@ -2127,10 +2127,11 @@ bool32 TryChangeBattleTerrain(enum BattlerId battler, enum BattleTerrain terrain
             gBattleMons[i].volatiles.terrainAbilityDone = FALSE;
             ResetParadoxTerrainStat(i);
         }
+        // R.O.W.E.: terrain lasts 8 turns, 10 with Terrain Extender
         if (GetBattlerHoldEffect(battler) == HOLD_EFFECT_TERRAIN_EXTENDER)
-            gFieldTimers.terrainTimer = 8;
+            gFieldTimers.terrainTimer = 10;
         else
-            gFieldTimers.terrainTimer = 5;
+            gFieldTimers.terrainTimer = 8;
         gBattleScripting.battler = battler;
         return TRUE;
     }
@@ -3361,6 +3362,35 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             break;
         case ABILITY_SNOW_WARNING:
             if (shouldAbilityTrigger && TryChangeWeatherWithAbility(battler, GetConfig(B_SNOW_WARNING) >= GEN_9 ? BATTLE_WEATHER_SNOW : BATTLE_WEATHER_HAIL, gLastUsedAbility))
+                effect++;
+            break;
+        case ABILITY_FORECAST:
+            // R.O.W.E.: Castform holding a Damp, Icy or Heat Rock sets that weather on switch-in
+            if (shouldAbilityTrigger && GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_CASTFORM)
+            {
+                u32 rockWeather = BATTLE_WEATHER_COUNT;
+                switch (GetBattlerHoldEffect(battler))
+                {
+                case HOLD_EFFECT_DAMP_ROCK:
+                    rockWeather = BATTLE_WEATHER_RAIN;
+                    break;
+                case HOLD_EFFECT_HEAT_ROCK:
+                    rockWeather = BATTLE_WEATHER_SUN;
+                    break;
+                case HOLD_EFFECT_ICY_ROCK:
+                    rockWeather = GetConfig(B_SNOW_WARNING) >= GEN_9 ? BATTLE_WEATHER_SNOW : BATTLE_WEATHER_HAIL;
+                    break;
+                default:
+                    break;
+                }
+                if (rockWeather != BATTLE_WEATHER_COUNT && TryChangeWeatherWithAbility(battler, rockWeather, gLastUsedAbility))
+                    effect++;
+            }
+            break;
+        case ABILITY_FLOWER_GIFT:
+            // R.O.W.E.: a Flower Gift Pokemon holding a Heat Rock sets sun on switch-in
+            if (shouldAbilityTrigger && GetBattlerHoldEffect(battler) == HOLD_EFFECT_HEAT_ROCK
+             && TryChangeWeatherWithAbility(battler, BATTLE_WEATHER_SUN, gLastUsedAbility))
                 effect++;
             break;
         case ABILITY_ELECTRIC_SURGE:
@@ -6167,11 +6197,8 @@ static inline u32 IsFieldMudSportAffected(enum Type moveType)
     return FALSE;
 }
 
-static inline u32 IsFieldWaterSportAffected(enum Type moveType)
+bool32 IsWaterSportActive(void)
 {
-    if (moveType != TYPE_FIRE)
-        return FALSE;
-
     if (gFieldStatuses & STATUS_FIELD_WATERSPORT)
         return TRUE;
 
@@ -6185,6 +6212,14 @@ static inline u32 IsFieldWaterSportAffected(enum Type moveType)
     }
 
     return FALSE;
+}
+
+static inline u32 IsFieldWaterSportAffected(enum Type moveType)
+{
+    if (moveType != TYPE_FIRE)
+        return FALSE;
+
+    return IsWaterSportActive();
 }
 
 static inline u32 CalcMoveBasePower(struct DamageContext *ctx)
@@ -6769,6 +6804,7 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
         break;
     case HOLD_EFFECT_TYPE_POWER:
     case HOLD_EFFECT_PLATE:
+    case HOLD_EFFECT_MEMORY: // R.O.W.E.: Memories boost their type for any holder
         if (moveType == GetItemSecondaryId(gBattleMons[battlerAtk].item))
             modifier = uq4_12_multiply(modifier, holdEffectModifier);
         break;
@@ -7092,12 +7128,18 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
         break;
     case HOLD_EFFECT_DEEP_SEA_TOOTH:
-        if (gBattleMons[battlerAtk].species == SPECIES_CLAMPERL && IsBattleMoveSpecial(move))
+        // R.O.W.E.: boosts Attack instead of Sp. Atk; Clamperl 2x, Huntail 1.5x
+        if (gBattleMons[battlerAtk].species == SPECIES_CLAMPERL && IsBattleMovePhysical(move))
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
+        else if (gBattleMons[battlerAtk].species == SPECIES_HUNTAIL && IsBattleMovePhysical(move))
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
         break;
     case HOLD_EFFECT_LIGHT_BALL:
         if (atkBaseSpeciesId == SPECIES_PIKACHU && (GetConfig(B_LIGHT_BALL_ATTACK_BOOST) >= GEN_4 || IsBattleMoveSpecial(move)))
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
+        // R.O.W.E.: Raichu and Alolan Raichu get 1.5x Attack and Sp. Atk
+        else if (gBattleMons[battlerAtk].species == SPECIES_RAICHU || gBattleMons[battlerAtk].species == SPECIES_RAICHU_ALOLA)
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
         break;
     case HOLD_EFFECT_CHOICE_BAND:
         if (IsBattleMovePhysical(move) && GetActiveGimmick(battlerAtk) != GIMMICK_DYNAMAX)
@@ -7265,10 +7307,28 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
     case HOLD_EFFECT_DEEP_SEA_SCALE:
         if (gBattleMons[battlerDef].species == SPECIES_CLAMPERL && !usesDefStat)
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
+        // R.O.W.E.: Gorebyss gets 1.5x Sp. Def
+        else if (gBattleMons[battlerDef].species == SPECIES_GOREBYSS && !usesDefStat)
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
         break;
     case HOLD_EFFECT_METAL_POWDER:
-        if (gBattleMons[battlerDef].species == SPECIES_DITTO && usesDefStat && !(gBattleMons[battlerDef].volatiles.transformed))
-            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
+        // R.O.W.E.: Ditto 1.5x Defense (was 2x); any transformed Pokemon 1.25x
+        if (usesDefStat && gBattleMons[battlerDef].volatiles.transformed)
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.25));
+        else if (usesDefStat && gBattleMons[battlerDef].species == SPECIES_DITTO)
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+        break;
+    case HOLD_EFFECT_HEART_SCALE:
+        // R.O.W.E.: Luvdisc 1.5x Sp. Def, Alomomola 1.5x Def
+        if (gBattleMons[battlerDef].species == SPECIES_LUVDISC && !usesDefStat)
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+        else if (gBattleMons[battlerDef].species == SPECIES_ALOMOMOLA && usesDefStat)
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+        break;
+    case HOLD_EFFECT_ODD_KEYSTONE:
+        // R.O.W.E.: Spiritomb 1.5x Sp. Def
+        if (gBattleMons[battlerDef].species == SPECIES_SPIRITOMB && !usesDefStat)
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
         break;
     case HOLD_EFFECT_EVIOLITE:
         {
@@ -7910,7 +7970,8 @@ static inline bool32 IsBattlerLeekAffected(enum BattlerId battler, enum HoldEffe
     if (holdEffect == HOLD_EFFECT_LEEK)
     {
         return GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD
-            || gBattleMons[battler].species == SPECIES_SIRFETCHD;
+            || gBattleMons[battler].species == SPECIES_SIRFETCHD
+            || gBattleMons[battler].species == SPECIES_KARTANA; // R.O.W.E.
     }
     return FALSE;
 }
@@ -8572,6 +8633,12 @@ bool32 CanMegaEvolve(enum BattlerId battler)
     if (HasTrainerUsedGimmick(battler, GIMMICK_MEGA))
         return FALSE;
 
+    // R.O.W.E.: wild Pokemon can only Mega Evolve below 50% HP.
+    if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+     && GetBattlerSide(battler) == B_SIDE_OPPONENT
+     && gBattleMons[battler].hp > gBattleMons[battler].maxHP / 2)
+        return FALSE;
+
     // Check if battler has another gimmick active.
     if (GetActiveGimmick(battler) != GIMMICK_NONE)
         return FALSE;
@@ -8853,6 +8920,8 @@ bool32 CanBattlerGetOrLoseItem(enum BattlerId fromBattler, enum BattlerId battle
     else if (DoesSpeciesUseHoldItemToChangeForm(fromSpecies, itemId) || (DoesSpeciesUseHoldItemToChangeForm(otherSpecies, itemId) && GetConfig(B_KNOCK_OFF_REMOVAL) < GEN_CHAMPIONS))
         return FALSE;
     else if (holdEffect == HOLD_EFFECT_Z_CRYSTAL)
+        return FALSE;
+    else if (holdEffect == HOLD_EFFECT_MEGA_STONE) // R.O.W.E.: Mega Stones can never be removed or given in battle
         return FALSE;
     else if (holdEffect == HOLD_EFFECT_BOOSTER_ENERGY
          && (gSpeciesInfo[fromSpecies].isParadox || gSpeciesInfo[otherSpecies].isParadox))

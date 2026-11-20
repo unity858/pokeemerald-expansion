@@ -4420,6 +4420,8 @@ u32 GetBattlerTotalSpeedStat(enum BattlerId battler, enum Ability ability, enum 
         speed = (speed * 150) / 100;
     else if (holdEffect == HOLD_EFFECT_QUICK_POWDER && gBattleMons[battler].species == SPECIES_DITTO && !(gBattleMons[battler].volatiles.transformed))
         speed *= 2;
+    else if (holdEffect == HOLD_EFFECT_QUICK_POWDER && gBattleMons[battler].volatiles.transformed) // R.O.W.E.: any transformed Pokemon gets 1.5x Speed
+        speed = (speed * 150) / 100;
 
     // various effects
     if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)

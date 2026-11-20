@@ -7906,13 +7906,17 @@ static void ComputeBallData(u32 wildMonBattler, u32 playerBattler, struct BallDa
         break;
     }
     case BALL_LOVE:
-        if (battleMon->species == gBattleMons[playerBattler].species)
         {
             u8 gender1 = GetMonGender(GetBattlerMon(wildMonBattler));
             u8 gender2 = GetMonGender(GetBattlerMon(playerBattler));
 
             if (gender1 != gender2 && gender1 != MON_GENDERLESS && gender2 != MON_GENDERLESS)
-                ball->multiplier = 800;
+            {
+                if (battleMon->species == gBattleMons[playerBattler].species)
+                    ball->multiplier = 800;
+                else // R.O.W.E.: 4x against any opposite-gender target
+                    ball->multiplier = 400;
+            }
         }
         break;
     case BALL_FAST:

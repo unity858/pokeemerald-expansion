@@ -2958,6 +2958,7 @@ const struct ItemInfo gItemsInfo[] =
     {
         .name = ITEM_NAME("Heart Scale"),
         .price = 100,
+        .holdEffect = HOLD_EFFECT_HEART_SCALE,
         .description = COMPOUND_STRING(
             "A lovely scale.\n"
             "It is coveted by\n"
@@ -3016,6 +3017,7 @@ const struct ItemInfo gItemsInfo[] =
     {
         .name = ITEM_NAME("Odd Keystone"),
         .price = 2100,
+        .holdEffect = HOLD_EFFECT_ODD_KEYSTONE,
         .description = COMPOUND_STRING(
             "A vital item. Voices\n"
             "can be heard from\n"
@@ -5230,7 +5232,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Fire Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Fire-\n"
             "type data. Changes\n"
@@ -5251,7 +5253,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Water Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Water-\n"
             "type data. Changes\n"
@@ -5272,7 +5274,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Electric Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Electric-\n"
             "type data. Changes\n"
@@ -5293,7 +5295,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Grass Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Grass-\n"
             "type data. Changes\n"
@@ -5314,7 +5316,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Ice Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Ice-\n"
             "type data. Changes\n"
@@ -5335,7 +5337,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Fighting Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Fighting-\n"
             "type data. Changes\n"
@@ -5356,7 +5358,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Poison Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Poison-\n"
             "type data. Changes\n"
@@ -5377,7 +5379,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Ground Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Ground-\n"
             "type data. Changes\n"
@@ -5398,7 +5400,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Flying Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Flying-\n"
             "type data. Changes\n"
@@ -5419,7 +5421,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Psychic Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Psychic-\n"
             "type data. Changes\n"
@@ -5440,7 +5442,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Bug Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Bug-\n"
             "type data. Changes\n"
@@ -5461,7 +5463,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Rock Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Rock-\n"
             "type data. Changes\n"
@@ -5482,7 +5484,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Ghost Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Ghost-\n"
             "type data. Changes\n"
@@ -5503,7 +5505,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Dragon Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Dragon-\n"
             "type data. Changes\n"
@@ -5524,7 +5526,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Dark Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Dark-\n"
             "type data. Changes\n"
@@ -5545,7 +5547,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Steel Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Steel-\n"
             "type data. Changes\n"
@@ -5566,7 +5568,7 @@ const struct ItemInfo gItemsInfo[] =
         .pluralName = ITEM_PLURAL_NAME("Fairy Memories"),
         .price = 1000,
         .holdEffect = HOLD_EFFECT_MEMORY,
-        .holdEffectParam = 0,
+        .holdEffectParam = TYPE_BOOST_PARAM,
         .description = COMPOUND_STRING(
             "Contains Fairy-\n"
             "type data. Changes\n"
@@ -9752,12 +9754,12 @@ const struct ItemInfo gItemsInfo[] =
     #else
         .price = 10,
     #endif
-        .holdEffect = HOLD_EFFECT_EVASION_UP,
-        .holdEffectParam = 10,
+        .holdEffect = HOLD_EFFECT_NONE,
+        .holdEffectParam = 0,
         .description = COMPOUND_STRING(
-            "A held item that\n"
-            "casts a glare to\n"
-            "reduce accuracy."),
+            "A glittery powder.\n"
+            "It has no effect\n"
+            "when held."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_HELD_ITEM,
         .type = ITEM_USE_BAG_MENU,
@@ -9829,12 +9831,12 @@ const struct ItemInfo gItemsInfo[] =
     #else
         .price = 100,
     #endif
-        .holdEffect = HOLD_EFFECT_QUICK_CLAW,
-        .holdEffectParam = 20,
+        .holdEffect = HOLD_EFFECT_NONE,
+        .holdEffectParam = 0,
         .description = COMPOUND_STRING(
-            "A held item that\n"
-            "occasionally allows\n"
-            "the first strike."),
+            "A light, sharp\n"
+            "claw. It has no\n"
+            "effect when held."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_HELD_ITEM,
         .type = ITEM_USE_BAG_MENU,

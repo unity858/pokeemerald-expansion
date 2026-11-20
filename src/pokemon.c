@@ -4503,6 +4503,10 @@ enum Species GetEvolutionTargetSpecies(struct Pokemon *mon, enum EvolutionMode m
         && (P_KADABRA_EVERSTONE < GEN_4 || species != SPECIES_KADABRA))
         return SPECIES_NONE;
 
+    // R.O.W.E.: Eviolite also prevents evolution while held, including by evolution items
+    if (holdEffect == HOLD_EFFECT_EVIOLITE)
+        return SPECIES_NONE;
+
     switch (mode)
     {
     case EVO_MODE_NORMAL:
