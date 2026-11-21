@@ -46,10 +46,16 @@ data is used (NULL entry = official learnset).
     compatibility. Egg moves follow expansion's convention: they're stored on
     the family's base species (and on species that can hatch without an
     incense, e.g. Marill), which evolutions use.
- 3. Species without any R.O.W.E. learnset data use official data.
+ 3. Species without any R.O.W.E. learnset data use official data. If such a
+    species has a pre-evolution with Custom data, its teachable list is the
+    official one plus rule 1, the HM superset and the chain's inherited
+    compatibility (level-up stays official).
  4. HM moves: Cut/Strength/Flash/Rock Smash come from R.O.W.E.'s tutor lists,
     Fly/Surf/Waterfall from its TM76/94/98 lists, Dive (TM121) from the HM08
     bit of R.O.W.E.'s base (expansion 10f4b48215) plus level-up/egg learners.
+    Custom compatibility with these 8 moves is a superset of Vanilla: anything
+    Vanilla lets a species learn them by (TM, tutor, level-up, egg) is made
+    TM/tutor compatible, before rule 2 so it carries down evolution lines.
  5. Clean-ups: duplicate entries removed, level-up lists sorted by level
     (Lv0 evolution moves, then Lv1 moves first), egg moves defined on an
     evolved species moved to the family's base species.
@@ -652,6 +658,8 @@ def build(repo, rowe):
     added2 = collections.Counter()
     added2_list = []
     inherited_from_official = set()
+    added_hm = collections.Counter()
+    added_hm_list = []
     visiting = set()
 
     def base_parts(s):
@@ -682,17 +690,31 @@ def build(repo, rowe):
         parts |= off_teach[s] & set(not_in_rowe)
         return parts
 
+    # Fully official species whose pre-evolution chain has Custom data: official
+    # teachables + rule 1 + HM superset + the chain's inherited compatibility.
+    inherit_fb = {s for s in repo.order if s not in custom_any
+                  and any(p in custom_any for p in repo.chain(s))}
+
+    def vanilla_hm(s):
+        learn = set(repo.off_teach[s]) | {m for _, m in repo.off_lvl[s]} | set(repo.off_egg[s])
+        learn |= set(repo.off_egg[repo.first_of_chain(s)])
+        return learn & set(HM_MOVES)
+
     def final(s):
         if s in teach:
             return teach[s]
-        if s not in custom_any:
+        if s not in custom_any and s not in inherit_fb:
             teach[s] = off_teach[s]
             src["tm"][s] = src["tutor"][s] = "official"
             return teach[s]
         if s in visiting:
             die(f"cycle computing {s}")
         visiting.add(s)
-        cur = base_parts(s)
+        if s in inherit_fb:
+            cur = set(off_teach[s])
+            src["tm"][s] = src["tutor"][s] = "official+inherited"
+        else:
+            cur = base_parts(s)
         # rule 1
         for _, mv in lvl[s]:
             if mv in teach_universe and mv not in cur:
@@ -704,6 +726,11 @@ def build(repo, rowe):
             cur.add("MOVE_DIVE")
             added1["TM"] += 1
             added1_list.append((s, "MOVE_DIVE", "TM (egg)"))
+        # HM superset: whatever Vanilla lets it learn of the 8 former HM moves
+        for mv in sorted(vanilla_hm(s) - cur):
+            cur.add(mv)
+            added_hm[mv] += 1
+            added_hm_list.append((s, mv))
         # rule 2
         p = repo.prevo.get(s)
         if p is not None:
@@ -735,7 +762,9 @@ def build(repo, rowe):
     stats["TM duplicates removed"] = dup_tm
     stats["tutor duplicates removed"] = dup_tutor
 
-    return dict(stats=stats, lvl=lvl, egg=egg, teach=teach, src=src, custom_tutors=custom_tutors,
+    fb_changed = sorted((s for s in inherit_fb if teach[s] != off_teach[s]), key=repo.species_id.get)
+    return dict(inherit_fb=inherit_fb, fb_changed=fb_changed, added_hm=added_hm,
+                added_hm_list=added_hm_list, vanilla_hm=vanilla_hm, stats=stats, lvl=lvl, egg=egg, teach=teach, src=src, custom_tutors=custom_tutors,
                 tm_set=tm_set, tutor_class=tutor_class, not_in_rowe=not_in_rowe, added1=added1,
                 added1_list=added1_list, added2=added2, added2_list=added2_list, g2=g2,
                 inherited_from_official=inherited_from_official, custom_any=custom_any,
@@ -764,7 +793,7 @@ def emit(repo, res, out_path, rowe_root):
     lvl_seen, teach_seen, egg_seen = {}, {}, {}
     sizes = collections.Counter()
     for s in repo.order:
-        if s not in res["custom_any"]:
+        if s not in res["custom_any"] and s not in res["inherit_fb"]:
             continue
         L = res["lvl"][s]
         if L != repo.off_lvl[s]:
@@ -872,10 +901,15 @@ def verify(repo, res, out_path):
     universe = tm_set | set(tutors) | set(HM_TUTOR_MOVES)
     fails = []
     for s in repo.order:
+        tch = teach(s)
+        missing_hm = res["vanilla_hm"](s) - tch
+        if missing_hm:
+            fails.append(f"HM superset: {s} misses {sorted(missing_hm)}")
         if s not in res["custom_any"]:
-            if s in L or s in T or s in E:
+            if s in L or s in E or (s in T and s not in res["inherit_fb"]):
                 fails.append(f"{s} has no R.O.W.E. data but has Custom entries")
-            continue
+            if s not in res["inherit_fb"]:
+                continue
         tch = teach(s)
         for _, mv in lvl(s):
             if mv in universe and mv not in tch:
@@ -934,7 +968,11 @@ def main():
     print(f"Custom entries emitted: level-up {len(lvl_ptr)}, teachable {len(teach_ptr)}, egg {len(egg_ptr)}")
     print(f"Rule 1 additions: TM {res['added1']['TM']}, tutor {res['added1']['tutor']} "
           f"(+ R.O.W.E. TM/tutor disagreements on dual moves resolved by the merged list: {res['g2']})")
+    print(f"HM superset additions: {sum(res['added_hm'].values())} " +
+          ", ".join(f"{k[5:]} {v}" for k, v in sorted(res['added_hm'].items())))
     print(f"Rule 2 additions: TM-class {res['added2']['TM']}, tutor-class {res['added2']['tutor']}")
+    print(f"Fully official species inheriting from a Custom pre-evolution: {len(res['inherit_fb'])}, "
+          f"teachables changed: {len(res['fb_changed'])}")
     if res["inherited_from_official"]:
         print("  inherited from a pre-evolution using official data: " +
               ", ".join(f"{a}<-{b}" for a, b in sorted(res["inherited_from_official"])))
@@ -951,7 +989,8 @@ def main():
     for mv in HM_MOVES:
         c = sum(1 for s in repo.order if mv in teach(s))
         v = sum(1 for s in repo.order if mv in set(repo.off_teach[s]))
-        print(f"  {mv:16} Custom {c:4}   Vanilla {v:4}")
+        vv = sum(1 for s in repo.order if mv in res["vanilla_hm"](s))
+        print(f"  {mv:16} Custom {c:4}   Vanilla teachable {v:4}   Vanilla any method {vv:4}")
 
     print("\nSpot checks (Custom mode):")
     def show(s, what):
@@ -977,7 +1016,15 @@ def main():
         print(f"  [{'OK' if ok else '--'}] {name}")
     print("  Garchomp level-up: " + show("SPECIES_GARCHOMP", "lvl"))
     print("  Eevee TMs: " + show("SPECIES_EEVEE", "tm"))
+    for s in ("SPECIES_KINGAMBIT", "SPECIES_WYRDEER", "SPECIES_KLEAVOR", "SPECIES_ANNIHILAPE", "SPECIES_URSALUNA"):
+        if s in res["inherit_fb"]:
+            gained = sorted(teach(s) - set(repo.off_teach[s]))
+            print(f"  {s[8:]} gains {len(gained)} over official: " + " ".join(m[5:] for m in gained[:12])
+                  + (" ..." if len(gained) > 12 else ""))
+    print("  Fallback species changed: " + " ".join(s[8:] for s in res["fb_changed"]))
     if args.verbose:
+        for s, mv in res["added_hm_list"]:
+            print(f"  hm {s} {mv}")
         for s, mv, k in res["added1_list"]:
             print(f"  rule1 {s} {mv} {k}")
         for s, mv, p in res["added2_list"]:
