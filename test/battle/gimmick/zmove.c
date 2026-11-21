@@ -995,3 +995,27 @@ SINGLE_BATTLE_TEST("Z-Move: Z-Belch can be selected without eating a Berry")
 TO_DO_BATTLE_TEST("(Z-MOVE) Stat changes from status Z-Moves are not inverted by Contrary")
 TO_DO_BATTLE_TEST("(Z-MOVE) Stat changes from Extreme Evoboost are inverted by Contrary")
 TO_DO_BATTLE_TEST("(Z-MOVE) Stat changes from Clangorous Soulblaze are inverted by Contrary")
+
+DOUBLE_BATTLE_TEST("(Z-MOVE) R.O.W.E.: An Ultra Bursted Pokemon can't use a Z-Move if its trainer already used one")
+{
+    GIVEN {
+        PLAYER(SPECIES_PIKACHU) { Item(ITEM_ELECTRIUM_Z); Moves(MOVE_THUNDERBOLT, MOVE_CELEBRATE); Speed(10); }
+        PLAYER(SPECIES_NECROZMA_DUSK_MANE) { Item(ITEM_ULTRANECROZIUM_Z); Moves(MOVE_PHOTON_GEYSER, MOVE_CELEBRATE); Speed(5); }
+        OPPONENT(SPECIES_WOBBUFFET) { HP(1000); MaxHP(1000); Speed(1); }
+        OPPONENT(SPECIES_WOBBUFFET) { HP(1000); MaxHP(1000); Speed(1); }
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_THUNDERBOLT, gimmick: GIMMICK_Z_MOVE, target: opponentLeft); MOVE(playerRight, MOVE_CELEBRATE, gimmick: GIMMICK_ULTRA_BURST); }
+        TURN { MOVE(playerRight, MOVE_PHOTON_GEYSER, gimmick: GIMMICK_Z_MOVE, target: opponentLeft); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_ULTRA_BURST, playerRight);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_ZMOVE_ACTIVATE, playerLeft);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_GIGAVOLT_HAVOC, playerLeft);
+        NONE_OF {
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_ZMOVE_ACTIVATE, playerRight);
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_LIGHT_THAT_BURNS_THE_SKY, playerRight);
+        }
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_PHOTON_GEYSER, playerRight);
+    } THEN {
+        EXPECT_EQ(playerRight->species, SPECIES_NECROZMA_ULTRA);
+    }
+}

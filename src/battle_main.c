@@ -4821,8 +4821,9 @@ static bool32 TryActivateGimmick(enum BattlerId battler)
         }
         gBattlerAttacker = gBattleScripting.battler = battler;
         gBattleStruct->gimmick.toActivate &= ~(1u << battler);
-        // R.O.W.E.: safety net, a Pokemon can never use a second gimmick in the same battle.
-        if (HasMonUsedGimmick(battler))
+        // R.O.W.E.: safety net, a Pokemon can never use a second gimmick in the same battle
+        // (except a Z-Move after Ultra Burst).
+        if (IsMonBlockedFromGimmick(battler, gBattleStruct->gimmick.usableGimmick[battler]))
             return FALSE;
         if (gGimmicksInfo[gBattleStruct->gimmick.usableGimmick[battler]].ActivateGimmick != NULL)
         {

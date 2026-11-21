@@ -36,6 +36,7 @@ bool32 ShouldTrainerBattlerUseGimmick(enum BattlerId battler, enum Gimmick gimmi
 bool32 HasTrainerUsedGimmick(enum BattlerId battler, enum Gimmick gimmick);
 void SetGimmickAsActivated(enum BattlerId battler, enum Gimmick gimmick);
 bool32 HasMonUsedGimmick(enum BattlerId battler);
+bool32 IsMonBlockedFromGimmick(enum BattlerId battler, enum Gimmick gimmick);
 bool32 CanPrimalRevert(enum BattlerId battler);
 void SetPrimalReverted(enum BattlerId battler);
 

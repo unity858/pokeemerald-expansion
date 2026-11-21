@@ -8683,7 +8683,7 @@ bool32 CanMegaEvolve(enum BattlerId battler)
         && !CheckBagHasItem(ITEM_MEGA_RING, 1))
         return FALSE;
 
-    // Check if Trainer has already Mega Evolved (or Ultra Bursted, which shares the limit).
+    // Check if Trainer has already Mega Evolved.
     if (HasTrainerUsedGimmick(battler, GIMMICK_MEGA))
         return FALSE;
 
@@ -8734,7 +8734,7 @@ bool32 CanUltraBurst(enum BattlerId battler)
         && !CheckBagHasItem(ITEM_Z_POWER_RING, 1))
         return FALSE;
 
-    // Check if Trainer has already Ultra Bursted (or Mega Evolved, which shares the limit).
+    // Check if Trainer has already Ultra Bursted.
     if (HasTrainerUsedGimmick(battler, GIMMICK_ULTRA_BURST))
         return FALSE;
 

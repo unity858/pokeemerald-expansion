@@ -3410,7 +3410,7 @@ void SetFinalChosenTarget(enum BattlerId battler, bool32 checkPartner)
 
     enum Gimmick usableGimmick = gBattleStruct->gimmick.usableGimmick[battler];
     bool32 isAIUsingGimmick = gAiBattleData->aiUsingGimmick & (1u << battler);
-    if (usableGimmick != GIMMICK_NONE && isAIUsingGimmick && !HasTrainerUsedGimmick(battler, usableGimmick) && !HasMonUsedGimmick(battler))
+    if (usableGimmick != GIMMICK_NONE && isAIUsingGimmick && !HasTrainerUsedGimmick(battler, usableGimmick) && !IsMonBlockedFromGimmick(battler, usableGimmick))
     {
         gBattleStruct->gimmick.toActivate |= 1u << battler;
         BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_EXEC_SCRIPT, (chosenMoveIndex) | (RET_GIMMICK) | (chosenTarget << 8));

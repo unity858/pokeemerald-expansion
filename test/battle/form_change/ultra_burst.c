@@ -157,3 +157,44 @@ SINGLE_BATTLE_TEST("Necrozma returns its proper Form upon fainting after Ultra B
         EXPECT_EQ(player->species, species);
     }
 }
+
+DOUBLE_BATTLE_TEST("R.O.W.E.: The same trainer can Mega Evolve one Pokemon and Ultra Burst another in the same turn")
+{
+    GIVEN {
+        PLAYER(SPECIES_VENUSAUR) { Item(ITEM_VENUSAURITE); Speed(2); }
+        PLAYER(SPECIES_NECROZMA_DUSK_MANE) { Item(ITEM_ULTRANECROZIUM_Z); Speed(3); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE, gimmick: GIMMICK_MEGA); MOVE(playerRight, MOVE_CELEBRATE, gimmick: GIMMICK_ULTRA_BURST); }
+    } SCENE {
+        MESSAGE("Bright light is about to burst out of Necrozma!");
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_ULTRA_BURST, playerRight);
+        MESSAGE("Necrozma regained its true power through Ultra Burst!");
+        MESSAGE("Venusaur's Venusaurite is reacting to 1's Mega Ring!");
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_MEGA_EVOLUTION, playerLeft);
+        MESSAGE("Venusaur has Mega Evolved into Mega Venusaur!");
+    } THEN {
+        EXPECT_EQ(playerLeft->species, SPECIES_VENUSAUR_MEGA);
+        EXPECT_EQ(playerRight->species, SPECIES_NECROZMA_ULTRA);
+    }
+}
+
+DOUBLE_BATTLE_TEST("R.O.W.E.: The same trainer can Ultra Burst one Pokemon and Mega Evolve another on a later turn")
+{
+    GIVEN {
+        PLAYER(SPECIES_VENUSAUR) { Item(ITEM_VENUSAURITE); }
+        PLAYER(SPECIES_NECROZMA_DUSK_MANE) { Item(ITEM_ULTRANECROZIUM_Z); }
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerRight, MOVE_CELEBRATE, gimmick: GIMMICK_ULTRA_BURST); }
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE, gimmick: GIMMICK_MEGA); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_ULTRA_BURST, playerRight);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_MEGA_EVOLUTION, playerLeft);
+    } THEN {
+        EXPECT_EQ(playerLeft->species, SPECIES_VENUSAUR_MEGA);
+        EXPECT_EQ(playerRight->species, SPECIES_NECROZMA_ULTRA);
+    }
+}
