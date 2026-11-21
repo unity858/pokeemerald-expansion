@@ -601,6 +601,7 @@ gStdScripts_End::
 	.include "data/maps/Route124_DivingTreasureHuntersHouse/scripts.inc"
 
 	.include "data/scripts/flavor_text.inc"
+	.include "data/scripts/pokemon_mansion.inc"
 
 @ Kanto/Sevii map scripts (linked in every build; converted for Emerald by dev_scripts/kanto)
 	.include "data/maps/BattleColosseum_2P_Frlg/scripts.inc"
@@ -1040,7 +1041,6 @@ gStdScripts_End::
 	.include "data/scripts/seagallop.inc"
 	.include "data/scripts/static_pokemon.inc"
 	.include "data/scripts/aide.inc"
-	.include "data/scripts/pokemon_mansion.inc"
 	.include "data/scripts/pokemon_league.inc"
 	.include "data/scripts/route23.inc"
 	.include "data/text/new_game_intro_frlg.inc"

@@ -684,7 +684,7 @@
 #define FLAG_WORLD_MAP_SIX_ISLAND 0x275 // Kanto/Sevii fly destination (add-kanto)
 #define FLAG_WORLD_MAP_ROUTE4_POKEMON_CENTER_1F 0x276 // Kanto/Sevii fly destination (add-kanto)
 #define FLAG_WORLD_MAP_ROUTE10_POKEMON_CENTER_1F 0x277 // Kanto/Sevii fly destination (add-kanto)
-#define FLAG_UNUSED_0x278  0x278 // Unused Flag
+#define FLAG_POKEMON_MANSION_SWITCH_STATE 0x278 // Pokemon Mansion statue switches in Kanto (add-kanto)
 #define FLAG_UNUSED_0x279  0x279 // Unused Flag
 #define FLAG_UNUSED_0x27A  0x27A // Unused Flag
 #define FLAG_UNUSED_0x27B  0x27B // Unused Flag
@@ -2028,7 +2028,6 @@
 #define FLAG_CINNABAR_GYM_QUIZ_4                         0
 #define FLAG_CINNABAR_GYM_QUIZ_5                         0
 #define FLAG_CINNABAR_GYM_QUIZ_6                         0
-#define FLAG_POKEMON_MANSION_SWITCH_STATE                0
 #define FLAG_OPENED_ROCKET_HIDEOUT                       0
 #define FLAG_GOT_10_COINS_FROM_GAMBLER                   0
 #define FLAG_GOT_20_COINS_FROM_GAMBLER                   0

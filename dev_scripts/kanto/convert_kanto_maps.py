@@ -115,7 +115,7 @@ MAPSCRIPT_CMDS = {'setweather', 'doweather', 'setmetatile', 'setmaplayoutindex',
                   'setobjectxyperm', 'setobjectmovementtype', 'turnobject', 'special_ok'}
 
 # Specials that are harmless / meaningful for both games
-SAFE_SPECIALS = {'SetSeenMon'}
+SAFE_SPECIALS = {'SetSeenMon', 'DrawWholeMapView'}
 
 
 # FLAG_WORLD_MAP_* flags that the Emerald build backs with real (formerly unused) flags,
@@ -159,9 +159,28 @@ class Ctx:
         return tok
 
 
+# FRLG flags that the Emerald build backs with real flags (include/constants/flags.h)
+REAL_FLAGS = {'FLAG_POKEMON_MANSION_SWITCH_STATE'}
+
+# FRLG-only common scripts that are also assembled in the Emerald build (data/event_scripts.s)
+SHARED_SCRIPT_FILES = ['data/scripts/flavor_text.inc', 'data/scripts/pokemon_mansion.inc']
+SHARED_LABELS = set()
+for _f in SHARED_SCRIPT_FILES:
+    for _l in open(os.path.join(ROOT, _f)):
+        _m = re.match(r'^([A-Za-z_]\w*)::?', _l)
+        if _m:
+            SHARED_LABELS.add(_m.group(1))
+
+
+# Labels used by those shared scripts (e.g. texts that live in a map's scripts.inc)
+SHARED_REFS = set()
+for _f in SHARED_SCRIPT_FILES:
+    SHARED_REFS |= set(re.findall(r'\b[A-Za-z_]\w*\b', open(os.path.join(ROOT, _f)).read()))
+
+
 def is_story_flag(ctx, tok):
     t = ctx.resolve(tok)
-    return t.startswith('FLAG_') and not TEMP_FLAG.match(t)
+    return t.startswith('FLAG_') and not TEMP_FLAG.match(t) and t not in REAL_FLAGS
 
 
 def is_story_var(ctx, tok):
@@ -197,6 +216,8 @@ def analyze(ctx, entry, mode):
     def follow(lbl, key=None, is_goto=False):
         if local_label(lbl):
             work.append((lbl, 0))
+        elif lbl in SHARED_LABELS:
+            refs.add(lbl)
         elif mode == 'map' and key is not None and not (lbl in ctx.syms and lbl.startswith('Common_')):
             transforms[key] = '\tend' if is_goto else None
         elif lbl in ctx.syms:
@@ -887,6 +908,7 @@ def convert_map(name, m, preamble, blocks, order, equs, syms, heal_ids, layout_i
         report['map_script_drops'][name] = drops
 
     # --- emit ---
+    emit_refs |= {b.name for b in blocks if b.name in SHARED_REFS and b.name not in SHARED_LABELS}
     data_blocks = collect_data_closure(ctx, emit_refs)
     out = []
     out.append('@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.')
