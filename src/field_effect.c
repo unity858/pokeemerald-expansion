@@ -1,4 +1,5 @@
 #include "global.h"
+#include "regions.h"
 #include "data.h"
 #include "decompress.h"
 #include "event_data.h"
@@ -1389,7 +1390,7 @@ static u8 CreatePokecenterMonitorSprite(s16 x, s16 y)
 {
     u8 spriteId;
     struct Sprite *sprite;
-    if (IS_FRLG)
+    if (IsCurrentMapFrlg())
     {
         spriteId = CreateSpriteAtEnd(&sSpriteTemplate_PokecenterMonitor_FrLg, x + 4, y, 0);
     }

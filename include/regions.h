@@ -18,4 +18,11 @@ static inline enum Region GetCurrentRegion(void)
     return GetRegionForSectionId(gMapHeader.regionMapSectionId);
 }
 
+// TRUE when the current map uses an FRLG layout (Kanto/Sevii maps linked into Emerald),
+// or always in the FRLG builds. Use this instead of IS_FRLG for map/tileset behaviour.
+static inline bool32 IsCurrentMapFrlg(void)
+{
+    return IS_FRLG || (gMapHeader.mapLayout != NULL && gMapHeader.mapLayout->isFrlg);
+}
+
 #endif // GUARD_REGIONS_H
