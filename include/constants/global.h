@@ -113,7 +113,7 @@ enum Language
 #define BAG_ITEMS_COUNT 30
 #define BAG_KEYITEMS_COUNT 30
 #define BAG_POKEBALLS_COUNT 16
-#define BAG_TMHM_COUNT 121 // TM01-TM120 (R.O.W.E.) + TM129, no HMs. Stored in SaveBlock1.
+#define BAG_TMHM_COUNT 122 // TM01-TM120 (R.O.W.E.) + TM121 Dive + TM122 Tera Blast, no HMs. Stored in SaveBlock1.
 #define BAG_BERRIES_COUNT 46
 // R.O.W.E. pockets; these are stored in SaveBlock3 (see struct ExtraBagPockets).
 #define BAG_MEDICINE_COUNT 40

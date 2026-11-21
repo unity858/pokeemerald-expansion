@@ -172,13 +172,6 @@ static inline enum Item GetTMHMItemIdFromMoveId(enum Move move)
 #undef UNPACK_TM_MOVE_TO_ITEM_ID
 #undef UNPACK_HM_MOVE_TO_ITEM_ID
 
-// The number a TM is shown with ("TM129"). TM121-TM128 are unused, so TMs
-// past the gap show TM_GAP_SIZE higher than their index.
-static inline u32 GetTMNumber(enum TMHMIndex index)
-{
-    return (index >= TM_GAP_FIRST) ? index + TM_GAP_SIZE : index;
-}
-
 static inline enum Item GetTMHMItemId(enum TMHMIndex index)
 {
     return gTMHMItemMoveIds[index].itemId;

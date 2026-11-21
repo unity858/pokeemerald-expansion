@@ -57,7 +57,7 @@
 // The buffer for the bag item list needs to be large enough to hold the maximum
 // number of item slots that could fit in a single pocket, + 1 for Cancel.
 // This constant picks the max of the existing pocket sizes.
-// By default, the largest pocket is BAG_TMHM_COUNT at 121.
+// By default, the largest pocket is BAG_TMHM_COUNT at 122.
 #define MAX_POCKET_ITEMS  ((max(BAG_TMHM_COUNT,              \
                             max(BAG_BERRIES_COUNT,           \
                             max(BAG_ITEMS_COUNT,             \
@@ -974,7 +974,7 @@ static void GetItemNameFromPocket(u8 *dest, enum Item itemId)
         else
         {
             // Get TM number
-            ConvertIntToDecimalStringN(gStringVar1, GetTMNumber(GetItemTMHMIndex(itemId)), STR_CONV_MODE_LEADING_ZEROS, GetTMNumber(NUM_TECHNICAL_MACHINES) >= 100 ? 3 : 2);
+            ConvertIntToDecimalStringN(gStringVar1, GetItemTMHMIndex(itemId), STR_CONV_MODE_LEADING_ZEROS, NUM_TECHNICAL_MACHINES >= 100 ? 3 : 2);
             StringExpandPlaceholders(dest, gText_NumberItem_TMBerry);
         }
         break;

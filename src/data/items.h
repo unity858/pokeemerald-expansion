@@ -13904,9 +13904,23 @@ const struct ItemInfo gItemsInfo[] =
         .fieldUseFunc = ItemUseOutOfBattle_TMHM,
     },
 
+    [ITEM_TM_DIVE] =
+    {
+        .name = ITEM_NAME("TM121"),
+        .price = 5000,
+        .description = COMPOUND_STRING(
+            "Dives underwater\n"
+            "the 1st turn, then\n"
+            "attacks next turn."),
+        .importance = I_REUSABLE_TMS,
+        .pocket = POCKET_TM_HM,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TMHM,
+    },
+
     [ITEM_TM_TERA_BLAST] =
     {
-        .name = ITEM_NAME("TM129"),
+        .name = ITEM_NAME("TM122"),
         .price = 5000,
         .description = COMPOUND_STRING(
             "A blast of energy\n"
