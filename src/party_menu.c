@@ -6649,9 +6649,13 @@ void ItemUseCB_RareCandy(u8 taskId, TaskFunc task)
     u16 *itemPtr = &gSpecialVar_ItemId;
     bool8 cannotUseEffect;
     u8 holdEffectParam = GetItemHoldEffectParam(*itemPtr);
+    u32 levelCap = GetRareCandyLevelCap();
+    // R.O.W.E.: at or above the level cap, candies are refused outright (no evolution either).
+    bool32 refusedByLevelCap;
 
     sInitialLevel = GetMonData(mon, MON_DATA_LEVEL);
-    if (!(B_RARE_CANDY_CAP && sInitialLevel >= GetCurrentLevelCap()))
+    refusedByLevelCap = B_RARE_CANDY_CAP && levelCap < MAX_LEVEL && sInitialLevel >= levelCap;
+    if (!(B_RARE_CANDY_CAP && sInitialLevel >= levelCap))
     {
         BufferMonStatsToTaskData(mon, arrayPtr);
         cannotUseEffect = ExecuteTableBasedItemEffect(mon, *itemPtr, gPartyMenu.slotId, 0);
@@ -6671,7 +6675,7 @@ void ItemUseCB_RareCandy(u8 taskId, TaskFunc task)
         sInitialLevel = 0;
         sFinalLevel = 0;
 
-        if (holdEffectParam == 0) // Rare Candy
+        if (holdEffectParam == 0 && !refusedByLevelCap) // Rare Candy
         {
             targetSpecies = GetEvolutionTargetSpecies(mon, EVO_MODE_NORMAL, ITEM_NONE, NULL, &canStopEvo, CHECK_EVO);
         }

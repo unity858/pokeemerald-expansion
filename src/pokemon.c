@@ -1386,6 +1386,7 @@ void CalculateMonStatsCont(struct Pokemon *mon, bool32 updateSpeedStat)
     enum Species species = GetMonData(mon, MON_DATA_SPECIES);
     u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP);
     s32 level = GetLevelFromMonExp(mon);
+    s32 statLevel = level;
     s32 newMaxHP;
 
     u8 nature = GetMonData(mon, MON_DATA_HIDDEN_NATURE);
@@ -1393,10 +1394,19 @@ void CalculateMonStatsCont(struct Pokemon *mon, bool32 updateSpeedStat)
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
+    // R.O.W.E. Normal difficulty level cap: the player's Pokémon keep their real level,
+    // but their stats are calculated as if it were clamped to the cap.
+    if (IsMonAffectedByStatLevelCap(mon))
+    {
+        s32 statCap = GetStatLevelCap();
+        if (statLevel > statCap)
+            statLevel = statCap;
+    }
+
     // R.O.W.E. Exiolite: base stats of the evolution reached at this level.
     if (GetMonData(mon, MON_DATA_EXIOLITE))
         statSpecies = GetExioliteStatSpecies(species, GetMonData(mon, MON_DATA_PERSONALITY),
-                                             GetMonData(mon, MON_DATA_EXIOLITE_BRANCH), level);
+                                             GetMonData(mon, MON_DATA_EXIOLITE_BRANCH), statLevel);
 
     bool32 hyperTrained[NUM_STATS]; //In a battle test, hyper training flag indicates a fixed stat
     s32 iv[NUM_STATS];
@@ -1423,7 +1433,7 @@ void CalculateMonStatsCont(struct Pokemon *mon, bool32 updateSpeedStat)
         // R.O.W.E.: an Exiolited Vigoroth keeps its own Attack and Speed (Slaking's come with Truant).
         if (species == SPECIES_VIGOROTH && (i == STAT_ATK || i == STAT_SPEED))
             baseStat = GetSpeciesBaseStat(species, i);
-        s32 n = (((2 * baseStat + iv[i] + ev[i] / 4) * level) / 100) + 5;
+        s32 n = (((2 * baseStat + iv[i] + ev[i] / 4) * statLevel) / 100) + 5;
         n = ModifyStatByNature(nature, n, i);
         if (B_FRIENDSHIP_BOOST == TRUE)
             n = n + ((n * 10 * friendship) / (MAX_FRIENDSHIP * 100));
@@ -1442,7 +1452,7 @@ void CalculateMonStatsCont(struct Pokemon *mon, bool32 updateSpeedStat)
     else
     {
         s32 n = 2 * GetSpeciesBaseHP(statSpecies) + iv[STAT_HP];
-        newMaxHP = (((n + ev[STAT_HP] / 4) * level) / 100) + level + 10;
+        newMaxHP = (((n + ev[STAT_HP] / 4) * statLevel) / 100) + statLevel + 10;
     }
 
     gBattleScripting.levelUpHP = newMaxHP - oldMaxHP;
@@ -2979,6 +2989,8 @@ u8 GiveCapturedMonToPlayer(struct Pokemon *mon)
 
     CopyMon(&gParties[B_TRAINER_PLAYER][i], mon, sizeof(*mon));
     gPartiesCount[B_TRAINER_PLAYER] = i + 1;
+    // A caught mon's stats were calculated in the enemy party: apply the player's stat level cap.
+    CalculateMonStats(&gParties[B_TRAINER_PLAYER][i]);
     return MON_GIVEN_TO_PARTY;
 }
 
@@ -3999,9 +4011,10 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, enum Item item, u8 partyIndex, 
 
         // Handle ITEM3 effects (Guard Spec, Rare Candy, cure status)
         case 3:
-            // Rare Candy / EXP Candy
+            // Rare Candy / EXP Candy (refused at or above the level cap with B_RARE_CANDY_CAP)
             if ((itemEffect[i] & ITEM3_LEVEL_UP)
-             && GetMonData(mon, MON_DATA_LEVEL) != MAX_LEVEL)
+             && GetMonData(mon, MON_DATA_LEVEL) != MAX_LEVEL
+             && !(B_RARE_CANDY_CAP && GetMonData(mon, MON_DATA_LEVEL) >= GetRareCandyLevelCap()))
             {
                 u8 param = GetItemHoldEffectParam(item);
                 dataUnsigned = 0;
@@ -4015,9 +4028,9 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, enum Item item, u8 partyIndex, 
                     enum Species species = GetMonData(mon, MON_DATA_SPECIES);
                     dataUnsigned = sExpCandyExperienceTable[param - 1] + GetMonData(mon, MON_DATA_EXP);
 
-                    if (B_RARE_CANDY_CAP && B_EXP_CAP_TYPE == EXP_CAP_HARD)
+                    if (B_RARE_CANDY_CAP)
                     {
-                        u32 currentLevelCap = GetCurrentLevelCap();
+                        u32 currentLevelCap = GetRareCandyLevelCap();
                         if (dataUnsigned > gExperienceTables[gSpeciesInfo[species].growthRate][currentLevelCap])
                             dataUnsigned = gExperienceTables[gSpeciesInfo[species].growthRate][currentLevelCap];
                     }

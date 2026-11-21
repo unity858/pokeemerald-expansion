@@ -1,4 +1,5 @@
 #include "global.h"
+#include "caps.h"
 #include "data.h"
 #include "event_data.h"
 #include "script.h"
@@ -21,6 +22,8 @@ void SetCurrentDifficultyLevel(enum DifficultyLevel desiredDifficulty)
         desiredDifficulty = DIFFICULTY_MAX;
 
     VarSet(B_VAR_DIFFICULTY, desiredDifficulty);
+    // The difficulty decides whether the level cap clamps the party's stats.
+    RecalculatePlayerPartyStats();
 }
 
 enum DifficultyLevel GetBattlePartnerDifficultyLevel(u16 partnerId)

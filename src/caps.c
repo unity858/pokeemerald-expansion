@@ -2,11 +2,35 @@
 #include "battle.h"
 #include "event_data.h"
 #include "caps.h"
+#include "difficulty.h"
+#include "level_scaling.h"
 #include "pokemon.h"
 
+// R.O.W.E. level caps by badge count: 16 with no badges, 77 with all 8, MAX_LEVEL once the game is cleared.
+// After Rayquaza (LEVEL_SCALING_STAGE_RAYQUAZA) there is no cap.
+static const u8 sBadgeLevelCaps[LEVEL_SCALING_STAGE_GAME_CLEAR + 1] = {16, 23, 29, 36, 43, 51, 57, 69, 77, MAX_LEVEL};
 
+// The badge-count cap, before the difficulty decides how it applies.
+u32 GetBadgeLevelCap(void)
+{
+    u32 stage = GetLevelScalingBadgeCount();
+
+    if (stage >= ARRAY_COUNT(sBadgeLevelCaps) || sBadgeLevelCaps[stage] > MAX_LEVEL)
+        return MAX_LEVEL;
+    return sBadgeLevelCaps[stage];
+}
+
+// The cap used for EXP gain, level-ups and the Day Care (B_EXP_CAP_TYPE).
+// With LEVEL_CAP_BADGE_COUNT, only Hard has one.
 u32 GetCurrentLevelCap(void)
 {
+    if (B_LEVEL_CAP_TYPE == LEVEL_CAP_BADGE_COUNT)
+    {
+        if (GetLevelScalingDifficulty() == DIFFICULTY_HARD)
+            return GetBadgeLevelCap();
+        return MAX_LEVEL;
+    }
+
     static const u32 sLevelCapFlagMap[][2] =
     {
         // R.O.W.E. caps: the cap is the value paired with the first flag that is NOT set.
@@ -38,6 +62,65 @@ u32 GetCurrentLevelCap(void)
     }
 
     return MAX_LEVEL;
+}
+
+// Normal difficulty: the player's Pokémon keep gaining EXP and levels past the cap,
+// but their stats are calculated as if their level were the cap.
+u32 GetStatLevelCap(void)
+{
+    if (TESTING)
+        return MAX_LEVEL;
+    if (B_LEVEL_CAP_TYPE == LEVEL_CAP_BADGE_COUNT && GetLevelScalingDifficulty() == DIFFICULTY_NORMAL)
+        return GetBadgeLevelCap();
+    return MAX_LEVEL;
+}
+
+// Rare Candies and EXP Candies (B_RARE_CANDY_CAP) are refused at or above this level,
+// and EXP Candies can't raise a Pokémon past it. Easy has no cap.
+u32 GetRareCandyLevelCap(void)
+{
+    if (B_LEVEL_CAP_TYPE == LEVEL_CAP_BADGE_COUNT)
+    {
+        if (GetLevelScalingDifficulty() == DIFFICULTY_EASY)
+            return MAX_LEVEL;
+        return GetBadgeLevelCap();
+    }
+    return GetCurrentLevelCap();
+}
+
+STATIC_ASSERT(B_TRAINER_PLAYER == 0, PlayerPartyIsFirstInGParties);
+
+// The stat clamp only applies to the player's Pokémon. Wild, trainer and partner Pokémon are
+// always created in the non-player gParties slots; every other Pokémon (the player's party,
+// PC withdrawals, gifts, Day Care, box summaries) belongs to the player.
+bool32 IsMonAffectedByStatLevelCap(const struct Pokemon *mon)
+{
+    uintptr_t addr = (uintptr_t)mon;
+    uintptr_t otherPartiesStart = (uintptr_t)&gParties[B_TRAINER_PLAYER + 1][0];
+    uintptr_t otherPartiesEnd = (uintptr_t)gParties + sizeof(gParties);
+
+    return !(addr >= otherPartiesStart && addr < otherPartiesEnd);
+}
+
+void RecalculatePlayerPartyStats(void)
+{
+    for (u32 i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES) != SPECIES_NONE)
+            CalculateMonStats(&gParties[B_TRAINER_PLAYER][i]);
+    }
+}
+
+// Called by FlagSet: the badge-count cap rises with each badge, at game clear and after
+// Rayquaza, so refresh the party's stats (clamped on Normal) when one of those flags is set.
+void TryRecalculateStatsForLevelCapFlag(u16 flagId)
+{
+    if (B_LEVEL_CAP_TYPE != LEVEL_CAP_BADGE_COUNT)
+        return;
+    if ((flagId >= FLAG_BADGE01_GET && flagId <= FLAG_BADGE08_GET)
+     || flagId == FLAG_SYS_GAME_CLEAR
+     || flagId == FLAG_DEFEATED_RAYQUAZA)
+        RecalculatePlayerPartyStats();
 }
 
 u32 GetSoftLevelCapExpValue(u32 level, u32 expValue)

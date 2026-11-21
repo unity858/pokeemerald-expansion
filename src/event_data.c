@@ -1,4 +1,5 @@
 #include "global.h"
+#include "caps.h"
 #include "event_data.h"
 #include "pokedex.h"
 
@@ -223,6 +224,7 @@ u8 FlagSet(u16 id)
     u8 *ptr = GetFlagPointer(id);
     if (ptr)
         *ptr |= 1 << (id & 7);
+    TryRecalculateStatsForLevelCapFlag(id);
     return 0;
 }
 
@@ -239,6 +241,7 @@ u8 FlagClear(u16 id)
     u8 *ptr = GetFlagPointer(id);
     if (ptr)
         *ptr &= ~(1 << (id & 7));
+    TryRecalculateStatsForLevelCapFlag(id);
     return 0;
 }
 
