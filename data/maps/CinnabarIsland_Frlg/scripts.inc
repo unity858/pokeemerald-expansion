@@ -6,6 +6,7 @@ CinnabarIsland_Frlg_MapScripts::
 	.byte 0
 
 CinnabarIsland_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_CINNABAR_ISLAND
 	call CinnabarIsland_EventScript_CheckUnlockGym
 	end
 

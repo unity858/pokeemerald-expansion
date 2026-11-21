@@ -2,7 +2,18 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 FourIsland_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, FourIsland_OnTransition
 	.byte 0
+
+FourIsland_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_FOUR_ISLAND
+	call FourIsland_EventScript_TrySetDayCareManPos
+	end
+
+FourIsland_EventScript_TrySetDayCareManPos::
+
+FourIsland_EventScript_EndSetDayCareManPos::
+	return
 
 FourIsland_EventScript_OldWoman::
 	lock

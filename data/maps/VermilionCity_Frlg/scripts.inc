@@ -2,7 +2,16 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 VermilionCity_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, VermilionCity_OnTransition
 	.byte 0
+
+VermilionCity_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_VERMILION_CITY
+	call VermilionCity_EventScript_HideOaksAide
+	end
+
+VermilionCity_EventScript_HideOaksAide::
+	return
 
 VermilionCity_EventScript_Woman::
 	msgbox VermilionCity_Text_GrimerMultipliesInSludge, MSGBOX_NPC

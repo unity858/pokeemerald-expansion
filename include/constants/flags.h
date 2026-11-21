@@ -664,26 +664,26 @@
 #define FLAG_HIDDEN_ITEM_ROUTE_123_RARE_CANDY                (FLAG_HIDDEN_ITEMS_START + 0x6E)
 #define FLAG_HIDDEN_ITEM_ROUTE_105_BIG_PEARL                 (FLAG_HIDDEN_ITEMS_START + 0x6F)
 
-#define FLAG_UNUSED_0x264  0x264 // Unused Flag
-#define FLAG_UNUSED_0x265  0x265 // Unused Flag
-#define FLAG_UNUSED_0x266  0x266 // Unused Flag
-#define FLAG_UNUSED_0x267  0x267 // Unused Flag
-#define FLAG_UNUSED_0x268  0x268 // Unused Flag
-#define FLAG_UNUSED_0x269  0x269 // Unused Flag
-#define FLAG_UNUSED_0x26A  0x26A // Unused Flag
-#define FLAG_UNUSED_0x26B  0x26B // Unused Flag
-#define FLAG_UNUSED_0x26C  0x26C // Unused Flag
-#define FLAG_UNUSED_0x26D  0x26D // Unused Flag
-#define FLAG_UNUSED_0x26E  0x26E // Unused Flag
-#define FLAG_UNUSED_0x26F  0x26F // Unused Flag
-#define FLAG_UNUSED_0x270  0x270 // Unused Flag
-#define FLAG_UNUSED_0x271  0x271 // Unused Flag
-#define FLAG_UNUSED_0x272  0x272 // Unused Flag
-#define FLAG_UNUSED_0x273  0x273 // Unused Flag
-#define FLAG_UNUSED_0x274  0x274 // Unused Flag
-#define FLAG_UNUSED_0x275  0x275 // Unused Flag
-#define FLAG_UNUSED_0x276  0x276 // Unused Flag
-#define FLAG_UNUSED_0x277  0x277 // Unused Flag
+#define FLAG_WORLD_MAP_PALLET_TOWN 0x264 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_VIRIDIAN_CITY 0x265 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_PEWTER_CITY 0x266 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_CERULEAN_CITY 0x267 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_LAVENDER_TOWN 0x268 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_VERMILION_CITY 0x269 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_CELADON_CITY 0x26A // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_FUCHSIA_CITY 0x26B // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_CINNABAR_ISLAND 0x26C // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_INDIGO_PLATEAU_EXTERIOR 0x26D // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_SAFFRON_CITY 0x26E // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_ONE_ISLAND 0x26F // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_TWO_ISLAND 0x270 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_THREE_ISLAND 0x271 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_FOUR_ISLAND 0x272 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_FIVE_ISLAND 0x273 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_SEVEN_ISLAND 0x274 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_SIX_ISLAND 0x275 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_ROUTE4_POKEMON_CENTER_1F 0x276 // Kanto/Sevii fly destination (add-kanto)
+#define FLAG_WORLD_MAP_ROUTE10_POKEMON_CENTER_1F 0x277 // Kanto/Sevii fly destination (add-kanto)
 #define FLAG_UNUSED_0x278  0x278 // Unused Flag
 #define FLAG_UNUSED_0x279  0x279 // Unused Flag
 #define FLAG_UNUSED_0x27A  0x27A // Unused Flag
@@ -2382,26 +2382,6 @@
 #define FLAG_SYS_UNLOCKED_TANOBY_RUINS                              0
 
 // World Map Flags
-#define FLAG_WORLD_MAP_PALLET_TOWN                                  0
-#define FLAG_WORLD_MAP_VIRIDIAN_CITY                                0
-#define FLAG_WORLD_MAP_PEWTER_CITY                                  0
-#define FLAG_WORLD_MAP_CERULEAN_CITY                                0
-#define FLAG_WORLD_MAP_LAVENDER_TOWN                                0
-#define FLAG_WORLD_MAP_VERMILION_CITY                               0
-#define FLAG_WORLD_MAP_CELADON_CITY                                 0
-#define FLAG_WORLD_MAP_FUCHSIA_CITY                                 0
-#define FLAG_WORLD_MAP_CINNABAR_ISLAND                              0
-#define FLAG_WORLD_MAP_INDIGO_PLATEAU_EXTERIOR                      0
-#define FLAG_WORLD_MAP_SAFFRON_CITY                                 0
-#define FLAG_WORLD_MAP_ONE_ISLAND                                   0
-#define FLAG_WORLD_MAP_TWO_ISLAND                                   0
-#define FLAG_WORLD_MAP_THREE_ISLAND                                 0
-#define FLAG_WORLD_MAP_FOUR_ISLAND                                  0
-#define FLAG_WORLD_MAP_FIVE_ISLAND                                  0
-#define FLAG_WORLD_MAP_SEVEN_ISLAND                                 0
-#define FLAG_WORLD_MAP_SIX_ISLAND                                   0
-#define FLAG_WORLD_MAP_ROUTE4_POKEMON_CENTER_1F                     0
-#define FLAG_WORLD_MAP_ROUTE10_POKEMON_CENTER_1F                    0
 #define FLAG_WORLD_MAP_VIRIDIAN_FOREST                              0
 #define FLAG_WORLD_MAP_MT_MOON_1F                                   0
 #define FLAG_WORLD_MAP_SSANNE_EXTERIOR                              0

@@ -2,7 +2,12 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 LavenderTown_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, LavenderTown_OnTransition
 	.byte 0
+
+LavenderTown_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_LAVENDER_TOWN
+	end
 
 LavenderTown_EventScript_LittleGirl::
 	lock

@@ -8,6 +8,7 @@ PalletTown_Frlg_MapScripts::
 	.byte 0
 
 PalletTown_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_PALLET_TOWN
 	call PalletTown_EventScript_TryReadySignLady
 	end
 

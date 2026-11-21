@@ -118,6 +118,13 @@ MAPSCRIPT_CMDS = {'setweather', 'doweather', 'setmetatile', 'setmaplayoutindex',
 SAFE_SPECIALS = {'SetSeenMon'}
 
 
+# FLAG_WORLD_MAP_* flags that the Emerald build backs with real (formerly unused) flags,
+# so visiting these towns unlocks them as Fly destinations.
+KANTO_FLY_FLAGS = {'FLAG_WORLD_MAP_' + n for n in (
+    'PALLET_TOWN', 'VIRIDIAN_CITY', 'PEWTER_CITY', 'CERULEAN_CITY', 'LAVENDER_TOWN', 'VERMILION_CITY',
+    'CELADON_CITY', 'FUCHSIA_CITY', 'CINNABAR_ISLAND', 'INDIGO_PLATEAU_EXTERIOR', 'SAFFRON_CITY',
+    'ONE_ISLAND', 'TWO_ISLAND', 'THREE_ISLAND', 'FOUR_ISLAND', 'FIVE_ISLAND', 'SIX_ISLAND', 'SEVEN_ISLAND',
+    'ROUTE4_POKEMON_CENTER_1F', 'ROUTE10_POKEMON_CENTER_1F')}
 DROP_MOVEMENTS = {'Common_Movement_FaceOriginalDirection'}
 VAR_FINAL = {}   # story var -> value assumed at runtime (max value any FRLG script sets)
 
@@ -323,6 +330,8 @@ def analyze(ctx, entry, mode):
                         raise Reject('copies story var')
                     transforms[key] = None
                 continue
+            if cmd == 'setworldmapflag' and args and args[0] in KANTO_FLY_FLAGS:
+                continue   # real Emerald flag (include/constants/flags.h): enables flying here
             if cmd in DROP_CMDS:
                 transforms[key] = None
                 continue

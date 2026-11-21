@@ -6,6 +6,7 @@ ThreeIsland_Frlg_MapScripts::
 	.byte 0
 
 ThreeIsland_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_THREE_ISLAND
 	call ThreeIsland_EventScript_HideAntiBikers
 	call ThreeIsland_EventScript_SetAntiBikersMovementAfterBikers
 	end

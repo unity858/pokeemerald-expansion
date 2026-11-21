@@ -2,7 +2,16 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 FuchsiaCity_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, FuchsiaCity_OnTransition
 	.byte 0
+
+FuchsiaCity_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_FUCHSIA_CITY
+	call FuchsiaCity_EventScript_SetOmanyteGfx
+	end
+
+FuchsiaCity_EventScript_SetOmanyteGfx::
+	return
 
 FuchsiaCity_EventScript_LittleBoy::
 	msgbox FuchsiaCity_Text_DidYouTrySafariGame, MSGBOX_NPC

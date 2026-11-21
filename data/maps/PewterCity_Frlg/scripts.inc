@@ -2,7 +2,12 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 PewterCity_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, PewterCity_OnTransition
 	.byte 0
+
+PewterCity_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_PEWTER_CITY
+	end
 
 PewterCity_EventScript_Lass::
 	msgbox PewterCity_Text_ClefairyCameFromMoon, MSGBOX_NPC

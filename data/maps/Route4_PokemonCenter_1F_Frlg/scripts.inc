@@ -7,6 +7,7 @@ Route4_PokemonCenter_1F_Frlg_MapScripts::
 	.byte 0
 
 Route4_PokemonCenter_1F_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_ROUTE4_POKEMON_CENTER_1F
 	setrespawn HEAL_LOCATION_ROUTE4
 	end
 

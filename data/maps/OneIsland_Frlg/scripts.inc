@@ -2,7 +2,12 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 OneIsland_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, OneIsland_OnTransition
 	.byte 0
+
+OneIsland_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_ONE_ISLAND
+	end
 
 OneIsland_EventScript_OldMan::
 	lock

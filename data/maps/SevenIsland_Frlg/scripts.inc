@@ -2,7 +2,12 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 SevenIsland_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, SevenIsland_OnTransition
 	.byte 0
+
+SevenIsland_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_SEVEN_ISLAND
+	end
 
 SevenIsland_EventScript_IslandSign::
 	msgbox SevenIsland_Text_IslandSign, MSGBOX_SIGN

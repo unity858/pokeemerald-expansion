@@ -2,7 +2,12 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 SaffronCity_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, SaffronCity_OnTransition
 	.byte 0
+
+SaffronCity_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_SAFFRON_CITY
+	end
 
 SaffronCity_EventScript_WorkerM::
 	msgbox SaffronCity_Text_YouBeatTeamRocket, MSGBOX_NPC

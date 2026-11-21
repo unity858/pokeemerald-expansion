@@ -2,7 +2,12 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 CeladonCity_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, CeladonCity_OnTransition
 	.byte 0
+
+CeladonCity_OnTransition::
+	setworldmapflag FLAG_WORLD_MAP_CELADON_CITY
+	end
 
 CeladonCity_EventScript_LittleGirl::
 	msgbox CeladonCity_Text_GotMyKoffingInCinnabar, MSGBOX_NPC
