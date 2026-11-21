@@ -116,6 +116,7 @@ void MakeTrainerGenerator(struct TrainerGenerator *trainerGen, const struct Trai
     trainerGen->trainerClass = trainer->trainerClass;
     trainerGen->otID = OTID_STRUCT_RANDOM_NO_SHINY;
     trainerGen->localRngState = GeneratePartySeed(trainer);
+    trainerGen->levelOverride = 0;
 }
 
 void MakePartnerGenerator(struct TrainerGenerator *trainerGen, const struct Trainer *partner)
@@ -130,6 +131,7 @@ void MakePartnerGenerator(struct TrainerGenerator *trainerGen, const struct Trai
     otID = Crc32B((const u8 *)partner, sizeof(struct Trainer));
     trainerGen->otID = OTID_STRUCT_PRESET(otID);
     trainerGen->localRngState = LocalRandomSeed(otID);
+    trainerGen->levelOverride = 0;
 }
 
 void GenerateMonFromTrainerMon(struct Pokemon *mon, const struct TrainerMon *trainerMon, struct TrainerGenerator *trainer)
@@ -147,7 +149,8 @@ void GenerateMonFromTrainerMon(struct Pokemon *mon, const struct TrainerMon *tra
         errorf("Unkwown trainer mon gender value %d", trainerMon->gender);
     personality |= genderValue;
     ModifyPersonalityForNature(&personality, trainerMon->nature);
-    CreateMon(mon, trainerMon->species, trainerMon->lvl, personality, trainer->otID);
+    u32 level = trainer->levelOverride ? trainer->levelOverride : trainerMon->lvl;
+    CreateMon(mon, trainerMon->species, level, personality, trainer->otID);
     if (trainerMon->nickname != NULL)
         SetMonData(mon, MON_DATA_NICKNAME, trainerMon->nickname);
     if (trainerMon->ev) //ev in struct TrainerMon are stored in Showdown order not vanilla Emerald order

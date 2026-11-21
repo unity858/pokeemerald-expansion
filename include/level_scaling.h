@@ -27,4 +27,9 @@ bool32 ShouldScaleWildMonLevels(void);
 u32 GetScaledWildMonLevel(void);
 u32 GetScaledDexNavMonLevel(u32 chain);
 
+struct Trainer;
+bool32 IsLevelScalingBoss(u16 trainerId, const struct Trainer *trainer);
+u32 GetScaledTrainerPartyBaseLevel(u16 trainerId, const struct Trainer *trainer, bool32 isPartner);
+u32 GetScaledTrainerMonLevel(u32 baseLevel, u32 partySlot);
+
 #endif // GUARD_LEVEL_SCALING_H

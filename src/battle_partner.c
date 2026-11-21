@@ -6,6 +6,7 @@
 #include "data.h"
 #include "frontier_util.h"
 #include "difficulty.h"
+#include "level_scaling.h"
 #include "malloc.h"
 #include "string_util.h"
 #include "trainer_util.h"
@@ -42,8 +43,10 @@ void FillPartnerParty(u16 trainerId)
         MakePartnerGenerator(&partnerGen, partner);
         if (trainerId == TRAINER_PARTNER(PARTNER_STEVEN))
             partnerGen.otID = OTID_STRUCT_PRESET(STEVEN_OTID);
+        u32 scaledBaseLevel = GetScaledTrainerPartyBaseLevel(trainerId, partner, TRUE);
         for (i = 0; i < lastIndex && i < partner->partySize; i++)
         {
+            partnerGen.levelOverride = scaledBaseLevel ? GetScaledTrainerMonLevel(scaledBaseLevel, i) : 0;
             GenerateMonFromTrainerMon(&gParties[B_TRAINER_PARTNER][i], &partner->party[i], &partnerGen);
         }
     }

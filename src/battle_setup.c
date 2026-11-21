@@ -26,6 +26,7 @@
 #include "follower_npc.h"
 #include "gym_leader_rematch.h"
 #include "item.h"
+#include "level_scaling.h"
 #include "load_save.h"
 #include "malloc.h"
 #include "metatile_behavior.h"
@@ -2188,7 +2189,8 @@ void SetMultiTrainerBattle(struct ScriptContext *ctx)
     gPartnerTrainerId = TRAINER_PARTNER(ScriptReadHalfword(ctx));
 };
 
-void CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer *trainer)
+// scaledBaseLevel: R.O.W.E. level of party slot 0 (slot i gets +i), or 0 to keep the party data levels.
+static void CreateNPCTrainerPartyWithLevels(struct Pokemon *party, const struct Trainer *trainer, u32 scaledBaseLevel)
 {
     s32 i;
     u8 monsCount;
@@ -2210,16 +2212,24 @@ void CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Traine
     for (i = 0; i < monsCount; i++)
     {
         u32 monIndex = monIndices[i];
+        trainerGen->levelOverride = scaledBaseLevel ? GetScaledTrainerMonLevel(scaledBaseLevel, i) : 0;
         GenerateMonFromTrainerMon(&party[i], &trainer->party[monIndex], trainerGen);
     }
     Free(trainerGen);
 }
 
+void CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer *trainer)
+{
+    CreateNPCTrainerPartyWithLevels(party, trainer, 0);
+}
+
 static void CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
-    if (!GetTrainerStructFromId(trainerNum)->overrideTrainer)
+    const struct Trainer *trainer = GetTrainerStructFromId(trainerNum);
+
+    if (!trainer->overrideTrainer)
     {
-        CreateNPCTrainerPartyFromTrainer(party, GetTrainerStructFromId(trainerNum));
+        CreateNPCTrainerPartyWithLevels(party, trainer, GetScaledTrainerPartyBaseLevel(trainerNum, trainer, FALSE));
         return;
     }
 
@@ -2232,7 +2242,7 @@ static void CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
     tempTrainer.poolSize = origTrainer->poolSize;
     if (tempTrainer.partySize == 0)
         tempTrainer.partySize = origTrainer->partySize;
-    CreateNPCTrainerPartyFromTrainer(party, (const struct Trainer *)(&tempTrainer));
+    CreateNPCTrainerPartyWithLevels(party, &tempTrainer, GetScaledTrainerPartyBaseLevel(trainerNum, &tempTrainer, FALSE));
 }
 
 void CreateTrainerPartyForPlayer(void)

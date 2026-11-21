@@ -1,4 +1,6 @@
 #include "global.h"
+#include "battle.h"
+#include "data.h"
 #include "battle_pike.h"
 #include "battle_pyramid.h"
 #include "difficulty.h"
@@ -7,6 +9,8 @@
 #include "random.h"
 #include "constants/battle_pyramid.h"
 #include "constants/flags.h"
+#include "constants/opponents.h"
+#include "constants/trainers.h"
 
 // R.O.W.E. level scaling tables, indexed by [difficulty][badge count 0-10].
 // Ported from R.O.W.E. src/level_scaling.c.
@@ -131,4 +135,71 @@ u32 GetScaledDexNavMonLevel(u32 chain)
     if (level > maxLevel)
         level = maxLevel;
     return ClampScaledLevel(level);
+}
+
+// Trainer battles that keep the levels from their party data.
+#define LEVEL_SCALING_EXCLUDED_BATTLE_TYPES (BATTLE_TYPE_LINK                 \
+                                           | BATTLE_TYPE_RECORDED           \
+                                           | BATTLE_TYPE_RECORDED_LINK      \
+                                           | BATTLE_TYPE_TOWER_LINK_MULTI   \
+                                           | BATTLE_TYPE_FRONTIER           \
+                                           | BATTLE_TYPE_TRAINER_HILL       \
+                                           | BATTLE_TYPE_SECRET_BASE        \
+                                           | BATTLE_TYPE_EREADER_TRAINER    \
+                                           | BATTLE_TYPE_CATCH_TUTORIAL)
+
+// Bosses: Gym Leaders, Elite Four, Champion and Wally.
+bool32 IsLevelScalingBoss(u16 trainerId, const struct Trainer *trainer)
+{
+    switch (trainer->trainerClass)
+    {
+    case TRAINER_CLASS_LEADER:
+    case TRAINER_CLASS_ELITE_FOUR:
+    case TRAINER_CLASS_CHAMPION:
+        return TRUE;
+    default:
+        break;
+    }
+
+    // Wally shares TRAINER_CLASS_RIVAL with May, Brendan and Steven, so match his trainer IDs.
+    switch (trainerId)
+    {
+    case TRAINER_WALLY_MAUVILLE:
+    case TRAINER_WALLY_VR_1:
+    case TRAINER_WALLY_VR_2:
+    case TRAINER_WALLY_VR_3:
+    case TRAINER_WALLY_VR_4:
+    case TRAINER_WALLY_VR_5:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+// Returns the scaled level of party slot 0, or 0 if this party keeps its data levels.
+// Call once per trainer per battle: the regular trainers' random boost is rolled here.
+u32 GetScaledTrainerPartyBaseLevel(u16 trainerId, const struct Trainer *trainer, bool32 isPartner)
+{
+    if (TESTING)
+        return 0;
+    if (gBattleTypeFlags & LEVEL_SCALING_EXCLUDED_BATTLE_TYPES)
+        return 0;
+
+    if (!isPartner)
+    {
+        // TRAINER_SECRET_BASE, TRAINER_LINK_OPPONENT, TRAINER_UNION_ROOM, ...
+        if (trainerId == TRAINER_NONE || trainerId >= TRAINER_SECRET_BASE)
+            return 0;
+        // Bosses get no random boost, so their ace (last slot) is always the highest.
+        if (IsLevelScalingBoss(trainerId, trainer))
+            return GetLevelScalingBossMinLevel();
+    }
+
+    // Regular trainers and in-game partners (e.g. Steven in the Mossdeep tag battle).
+    return ClampScaledLevel(GetLevelScalingTrainerMinLevel() + RollLevelScalingBoost());
+}
+
+u32 GetScaledTrainerMonLevel(u32 baseLevel, u32 partySlot)
+{
+    return ClampScaledLevel(baseLevel + partySlot);
 }
