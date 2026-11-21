@@ -756,6 +756,11 @@ extern u8 gTriedEvolving;
 
 extern const u16 gFacilityClassToPicIndex[];
 extern const enum TrainerClassID gFacilityClassToTrainerClass[];
+extern const u16 gTutorMoves[];
+extern const u16 gCustomTutorMoves[];
+extern const struct LevelUpMove *const gCustomLevelUpLearnsets[NUM_SPECIES];
+extern const u16 *const gCustomTeachableLearnsets[NUM_SPECIES];
+extern const u16 *const gCustomEggMoveLearnsets[NUM_SPECIES];
 extern const struct SpeciesInfo gSpeciesInfo[];
 
 // Custom data mode species overrides (src/data/custom_species_info.h).
@@ -914,6 +919,7 @@ u32 GetSpeciesBaseStatTotal(enum Species species);
 const struct LevelUpMove *GetSpeciesLevelUpLearnset(enum Species species);
 const u16 *GetSpeciesTeachableLearnset(enum Species species);
 const u16 *GetSpeciesEggMoves(enum Species species);
+const u16 *GetTutorMoves(void);
 bool32 SpeciesHasEggMove(enum Species species, enum Move move);
 const struct Evolution *GetSpeciesEvolutions(enum Species species);
 

@@ -492,6 +492,7 @@ const struct NatureInfo gNaturesInfo[NUM_NATURES] =
 
 #include "data/pokemon/species_info.h"
 #include "data/custom_species_info.h"
+#include "data/custom_learnsets.h"
 
 #define PP_UP_SHIFTS(val)           val,        (val) << 2,        (val) << 4,        (val) << 6
 #define PP_UP_SHIFTS_INV(val) (u8)~(val), (u8)~((val) << 2), (u8)~((val) << 4), (u8)~((val) << 6)
@@ -3393,9 +3394,17 @@ u32 GetSpeciesBaseStatTotal(enum Species species)
     return total;
 }
 
+// Learnset accessors. In Custom data mode the R.O.W.E. learnsets from
+// data/custom_learnsets.h are used; a NULL entry there means the species uses
+// its official learnset for that category. Every learnset reader (level-up
+// learning, evolution moves, trainer/initial movesets, move relearner, Day Care,
+// Pokédex, field moves, AI, Frontier, ...) goes through these accessors.
 const struct LevelUpMove *GetSpeciesLevelUpLearnset(enum Species species)
 {
-    const struct LevelUpMove *learnset = gSpeciesInfo[SanitizeSpeciesId(species)].levelUpLearnset;
+    species = SanitizeSpeciesId(species);
+    const struct LevelUpMove *learnset = gCustomLevelUpLearnsets[species];
+    if (learnset == NULL || !IsCustomDataMode())
+        learnset = gSpeciesInfo[species].levelUpLearnset;
     if (learnset == NULL)
         return gSpeciesInfo[SPECIES_NONE].levelUpLearnset;
     return learnset;
@@ -3403,7 +3412,10 @@ const struct LevelUpMove *GetSpeciesLevelUpLearnset(enum Species species)
 
 const u16 *GetSpeciesTeachableLearnset(enum Species species)
 {
-    const u16 *learnset = gSpeciesInfo[SanitizeSpeciesId(species)].teachableLearnset;
+    species = SanitizeSpeciesId(species);
+    const u16 *learnset = gCustomTeachableLearnsets[species];
+    if (learnset == NULL || !IsCustomDataMode())
+        learnset = gSpeciesInfo[species].teachableLearnset;
     if (learnset == NULL)
         return gSpeciesInfo[SPECIES_NONE].teachableLearnset;
     return learnset;
@@ -3411,10 +3423,20 @@ const u16 *GetSpeciesTeachableLearnset(enum Species species)
 
 const u16 *GetSpeciesEggMoves(enum Species species)
 {
-    const u16 *learnset = gSpeciesInfo[SanitizeSpeciesId(species)].eggMoveLearnset;
+    species = SanitizeSpeciesId(species);
+    const u16 *learnset = gCustomEggMoveLearnsets[species];
+    if (learnset == NULL || !IsCustomDataMode())
+        learnset = gSpeciesInfo[species].eggMoveLearnset;
     if (learnset == NULL)
         return gSpeciesInfo[SPECIES_NONE].eggMoveLearnset;
     return learnset;
+}
+
+// The moves offered by the tutor-move relearner: gTutorMoves in Vanilla mode,
+// gCustomTutorMoves (official tutors + R.O.W.E.'s tutor moves) in Custom mode.
+const u16 *GetTutorMoves(void)
+{
+    return IsCustomDataMode() ? gCustomTutorMoves : gTutorMoves;
 }
 
 //only used in test assumptions at the moment
