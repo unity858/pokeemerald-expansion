@@ -1,7 +1,5 @@
-FiveIsland_LostCave_Entrance_Frlg_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, FiveIsland_LostCave_Entrance_OnTransition
-	.byte 0
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
-FiveIsland_LostCave_Entrance_OnTransition::
-	setworldmapflag FLAG_WORLD_MAP_FIVE_ISLAND_LOST_CAVE_ENTRANCE
-	end
+FiveIsland_LostCave_Entrance_Frlg_MapScripts::
+	.byte 0

@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 CeladonCity_PokemonCenter_1F_Frlg_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, CeladonCity_PokemonCenter_1F_OnTransition
 	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
@@ -5,13 +8,6 @@ CeladonCity_PokemonCenter_1F_Frlg_MapScripts::
 
 CeladonCity_PokemonCenter_1F_OnTransition::
 	setrespawn HEAL_LOCATION_CELADON_CITY
-	end
-
-CeladonCity_PokemonCenter_1F_EventScript_Nurse::
-	lock
-	faceplayer
-	call EventScript_PkmnCenterNurse_Frlg
-	release
 	end
 
 CeladonCity_PokemonCenter_1F_EventScript_Gentleman::
@@ -32,12 +28,23 @@ CeladonCity_PokemonCenter_1F_Text_PokeFluteAwakensSleepingMons::
 	.string "It does so with a sound that only\n"
 	.string "they can hear.$"
 
+
 CeladonCity_PokemonCenter_1F_Text_RodeHereFromFuchsia::
 	.string "I rode here from FUCHSIA.\p"
 	.string "It's an uphill ride on CYCLING\n"
 	.string "ROAD, so I'm exhausted.$"
 
+
 CeladonCity_PokemonCenter_1F_Text_GoToCyclingRoadIfIHadBike::
 	.string "If I had a BIKE, I would go to\n"
 	.string "CYCLING ROAD!$"
 
+
+
+CeladonCity_PokemonCenter_1F_EventScript_NurseEm::
+	setvar VAR_0x800B, LOCALID_CELADON_NURSE
+	call Common_EventScript_PkmnCenterNurse
+	waitmessage
+	waitbuttonpress
+	release
+	end

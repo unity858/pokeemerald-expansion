@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SSAnne_B1F_Room5_Frlg_MapScripts::
 	.byte 0
 
@@ -20,6 +23,6 @@ SSAnne_B1F_Room5_Text_MachokeHasStrengthToMoveRocks::
 	.string "He has enough STRENGTH to move\n"
 	.string "big rocks!$"
 
+
 SSAnne_B1F_Room5_Text_Machoke::
 	.string "MACHOKE: Gwoh! Goggoh!$"
-

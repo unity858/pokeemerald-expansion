@@ -1,10 +1,8 @@
-SilphCo_1F_Frlg_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, SilphCo_1F_OnTransition
-	.byte 0
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
-SilphCo_1F_OnTransition::
-	setworldmapflag FLAG_WORLD_MAP_SILPH_CO_1F
-	end
+SilphCo_1F_Frlg_MapScripts::
+	.byte 0
 
 SilphCo_1F_EventScript_Receptionist::
 	msgbox SilphCo_1F_Text_WelcomePresidentInBoardroom, MSGBOX_NPC
@@ -19,7 +17,7 @@ SilphCo_1F_Text_WelcomePresidentInBoardroom::
 	.string "The PRESIDENT is in the boardroom\n"
 	.string "on 11F.$"
 
+
 SilphCo_1F_Text_FloorSign::
 	.string "SILPH CO. HEAD OFFICE\n"
 	.string "1F$"
-

@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 CeladonCity_DepartmentStore_5F_Frlg_MapScripts::
 	.byte 0
 
@@ -13,17 +16,6 @@ CeladonCity_DepartmentStore_5F_EventScript_FloorSign::
 	msgbox CeladonCity_DepartmentStore_5F_Text_Drugstore, MSGBOX_SIGN
 	end
 
-CeladonCity_DepartmentStore_5F_EventScript_ClerkXItems::
-	lock
-	faceplayer
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemart CeladonCity_DepartmentStore_5F_XItems
-	msgbox gText_PleaseComeAgain
-	release
-	end
-
-	.align 2
 CeladonCity_DepartmentStore_5F_XItems::
 	.2byte ITEM_X_ATTACK
 	.2byte ITEM_X_DEFEND
@@ -36,17 +28,7 @@ CeladonCity_DepartmentStore_5F_XItems::
 	release
 	end
 
-CeladonCity_DepartmentStore_5F_EventScript_ClerkVitamins::
-	lock
-	faceplayer
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemart CeladonCity_DepartmentStore_5F_Vitamins
-	msgbox gText_PleaseComeAgain
-	release
-	end
 
-	.align 2
 CeladonCity_DepartmentStore_5F_Vitamins::
 	.2byte ITEM_HP_UP
 	.2byte ITEM_PROTEIN
@@ -57,6 +39,7 @@ CeladonCity_DepartmentStore_5F_Vitamins::
 	.2byte ITEM_NONE
 	release
 	end
+
 
 CeladonCity_DepartmentStore_5F_Text_ExplainStatEnhancers::
 	.string "POKéMON stat enhancers can be\n"
@@ -70,6 +53,7 @@ CeladonCity_DepartmentStore_5F_Text_ExplainStatEnhancers::
 	.string "CARBOS enhances the base SPEED\n"
 	.string "stat.$"
 
+
 CeladonCity_DepartmentStore_5F_Text_HereForStatEnhancers::
 	.string "I'm here for POKéMON stat\n"
 	.string "enhancers.\p"
@@ -78,6 +62,28 @@ CeladonCity_DepartmentStore_5F_Text_HereForStatEnhancers::
 	.string "IRON increases the base DEFENSE\n"
 	.string "stat.$"
 
+
 CeladonCity_DepartmentStore_5F_Text_Drugstore::
 	.string "5F: DRUGSTORE$"
 
+
+
+CeladonCity_DepartmentStore_5F_EventScript_ClerkEm2::
+	lock
+	faceplayer
+	message gText_HowMayIServeYou
+	waitmessage
+	pokemart CeladonCity_DepartmentStore_5F_XItems
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+CeladonCity_DepartmentStore_5F_EventScript_ClerkEm3::
+	lock
+	faceplayer
+	message gText_HowMayIServeYou
+	waitmessage
+	pokemart CeladonCity_DepartmentStore_5F_Vitamins
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end

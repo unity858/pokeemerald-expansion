@@ -2,7 +2,7 @@
   "id": "MAP_CELADON_CITY_DEPARTMENT_STORE_2F",
   "name": "CeladonCity_DepartmentStore_2F_Frlg",
   "layout": "LAYOUT_CELADON_CITY_DEPARTMENT_STORE_2F",
-  "music": "MUS_RG_POKE_CENTER",
+  "music": "MUS_RUSTBORO",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_CELADON_CITY",
   "requires_flash": false,
@@ -41,7 +41,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "CeladonCity_DepartmentStore_2F_EventScript_ClerkItems",
+      "script": "CeladonCity_DepartmentStore_2F_EventScript_ClerkEm1",
       "flag": "0"
     },
     {
@@ -55,22 +55,8 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "CeladonCity_DepartmentStore_2F_EventScript_ClerkTMs",
+      "script": "CeladonCity_DepartmentStore_2F_EventScript_ClerkEm2",
       "flag": "0"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_WOMAN_1_FRLG",
-      "x": 11,
-      "y": 6,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_WANDER_LEFT_AND_RIGHT",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "CeladonCity_DepartmentStore_2F_EventScript_Woman",
-      "flag": "FLAG_HIDE_POSTGAME_GOSSIPERS"
     }
   ],
   "warp_events": [

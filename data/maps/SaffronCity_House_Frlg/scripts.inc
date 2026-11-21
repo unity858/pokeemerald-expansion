@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SaffronCity_House_Frlg_MapScripts::
 	.byte 0
 
@@ -29,12 +32,15 @@ SaffronCity_House_Text_DontLookAtMyLetter::
 	.string "…Hey!\n"
 	.string "Don't look at my letter!$"
 
+
 SaffronCity_House_Text_Pidgey::
 	.string "PIDGEY: Kurukkoo!$"
+
 
 SaffronCity_House_Text_GettingCopycatPokeDoll::
 	.string "The COPYCAT is cute!\n"
 	.string "I'm getting her a POKé DOLL.$"
+
 
 SaffronCity_House_Text_ExplainPPUp::
 	.string "I was given a PP UP as a gift.\p"
@@ -42,4 +48,3 @@ SaffronCity_House_Text_ExplainPPUp::
 	.string "a POKéMON's move.\p"
 	.string "I should use it on a powerful move\n"
 	.string "with only a few PP.$"
-

@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 FuchsiaCity_PokemonCenter_1F_Frlg_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, FuchsiaCity_PokemonCenter_1F_OnTransition
 	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
@@ -5,13 +8,6 @@ FuchsiaCity_PokemonCenter_1F_Frlg_MapScripts::
 
 FuchsiaCity_PokemonCenter_1F_OnTransition::
 	setrespawn HEAL_LOCATION_FUCHSIA_CITY
-	end
-
-FuchsiaCity_PokemonCenter_1F_EventScript_Nurse::
-	lock
-	faceplayer
-	call EventScript_PkmnCenterNurse_Frlg
-	release
 	end
 
 FuchsiaCity_PokemonCenter_1F_EventScript_Man::
@@ -32,11 +28,13 @@ FuchsiaCity_PokemonCenter_1F_Text_CantBecomeGoodTrainerWithOneMon::
 	.string "But raising many POKéMON evenly\n"
 	.string "is no easy task, either.$"
 
+
 FuchsiaCity_PokemonCenter_1F_Text_PokemonLeagueWestOfViridian::
 	.string "There's a narrow trail west of\n"
 	.string "VIRIDIAN CITY.\p"
 	.string "It goes to the POKéMON LEAGUE HQ.\n"
 	.string "The HQ governs all TRAINERS.$"
+
 
 FuchsiaCity_PokemonCenter_1F_Text_VisitSafariZoneForPokedex::
 	.string "If you're working on a POKéDEX,\n"
@@ -44,3 +42,12 @@ FuchsiaCity_PokemonCenter_1F_Text_VisitSafariZoneForPokedex::
 	.string "All sorts of rare POKéMON breed\n"
 	.string "there.$"
 
+
+
+FuchsiaCity_PokemonCenter_1F_EventScript_NurseEm::
+	setvar VAR_0x800B, LOCALID_FUCHSIA_NURSE
+	call Common_EventScript_PkmnCenterNurse
+	waitmessage
+	waitbuttonpress
+	release
+	end

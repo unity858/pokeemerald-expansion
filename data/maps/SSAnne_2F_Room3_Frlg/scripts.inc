@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SSAnne_2F_Room3_Frlg_MapScripts::
 	.byte 0
 
@@ -13,6 +16,7 @@ SSAnne_2F_Room3_Text_SeenMonsFerryPeople::
 	.string "Ah, yes, I have seen some POKéMON\n"
 	.string "ferry people across the water!$"
 
+
 SSAnne_2F_Room3_Text_SomeTreesCanBeCutDown::
 	.string "Small trees can be chopped down\n"
 	.string "using the move CUT.\p"
@@ -20,4 +24,3 @@ SSAnne_2F_Room3_Text_SomeTreesCanBeCutDown::
 	.string "CUT is an HM technique.\p"
 	.string "Once learned, it is not so easily\n"
 	.string "discarded.$"
-

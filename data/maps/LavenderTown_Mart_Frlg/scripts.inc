@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 LavenderTown_Mart_Frlg_MapScripts::
 	.byte 0
 
@@ -13,17 +16,6 @@ LavenderTown_Mart_EventScript_Youngster::
 	msgbox LavenderTown_Mart_Text_TrainerDuosCanChallengeYou, MSGBOX_NPC
 	end
 
-LavenderTown_Mart_EventScript_Clerk::
-	lock
-	faceplayer
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemart LavenderTown_Mart_Items
-	msgbox gText_PleaseComeAgain
-	release
-	end
-
-	.align 2
 LavenderTown_Mart_Items::
 	.2byte ITEM_GREAT_BALL
 	.2byte ITEM_SUPER_POTION
@@ -38,6 +30,7 @@ LavenderTown_Mart_Items::
 	release
 	end
 
+
 LavenderTown_Mart_Text_SearchingForStatRaiseItems::
 	.string "I'm searching for items that raise\n"
 	.string "the stats of POKéMON.\p"
@@ -47,9 +40,11 @@ LavenderTown_Mart_Text_SearchingForStatRaiseItems::
 	.string "and X SPECIAL are what I'm after.\p"
 	.string "Do you know where I can get them?$"
 
+
 LavenderTown_Mart_Text_DidYouBuyRevives::
 	.string "Did you buy some REVIVES?\n"
 	.string "They revive any fainted POKéMON!$"
+
 
 LavenderTown_Mart_Text_TrainerDuosCanChallengeYou::
 	.string "Sometimes, a TRAINER duo will\n"
@@ -58,8 +53,13 @@ LavenderTown_Mart_Text_TrainerDuosCanChallengeYou::
 	.string "If that happens, you have to send\n"
 	.string "out two POKéMON to battle, too.$"
 
-LavenderTown_Mart_Text_SoldNuggetFromMountainsFor5000::
-	.string "この　あいだ　やまおくで\n"
-	.string "きんのたまを　ひろい　ましてね！\p"
-	.string "つかえない　しなもの　ですが\n"
-	.string "うったら　なんと　5000¥でした$"
+
+LavenderTown_Mart_EventScript_ClerkEm0::
+	lock
+	faceplayer
+	message gText_HowMayIServeYou
+	waitmessage
+	pokemart LavenderTown_Mart_Items
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end

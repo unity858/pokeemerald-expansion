@@ -1,7 +1,5 @@
-SeafoamIslands_1F_Frlg_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, SeafoamIslands_1F_OnTransition
-	.byte 0
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
-SeafoamIslands_1F_OnTransition::
-	setworldmapflag FLAG_WORLD_MAP_SEAFOAM_ISLANDS_1F
-	end
+SeafoamIslands_1F_Frlg_MapScripts::
+	.byte 0

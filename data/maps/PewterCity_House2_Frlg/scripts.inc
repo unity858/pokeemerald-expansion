@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 PewterCity_House2_Frlg_MapScripts::
 	.byte 0
 
@@ -15,6 +18,7 @@ PewterCity_House2_Text_MonsLearnTechniquesAsTheyGrow::
 	.string "But some moves must be taught to\n"
 	.string "them by people.$"
 
+
 PewterCity_House2_Text_MonsEasierCatchIfStatused::
 	.string "A POKéMON becomes easier to \n"
 	.string "catch if it has a status problem.\p"
@@ -22,4 +26,3 @@ PewterCity_House2_Text_MonsEasierCatchIfStatused::
 	.string "Those are all effective.\p"
 	.string "But catching POKéMON is never\n"
 	.string "a sure thing!$"
-

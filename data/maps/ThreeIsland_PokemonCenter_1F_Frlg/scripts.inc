@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 ThreeIsland_PokemonCenter_1F_Frlg_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, ThreeIsland_PokemonCenter_1F_OnTransition
 	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
@@ -5,13 +8,6 @@ ThreeIsland_PokemonCenter_1F_Frlg_MapScripts::
 
 ThreeIsland_PokemonCenter_1F_OnTransition::
 	setrespawn HEAL_LOCATION_THREE_ISLAND
-	end
-
-ThreeIsland_PokemonCenter_1F_EventScript_Nurse::
-	lock
-	faceplayer
-	call EventScript_PkmnCenterNurse_Frlg
-	release
 	end
 
 ThreeIsland_PokemonCenter_1F_EventScript_Sailor::
@@ -33,11 +29,13 @@ ThreeIsland_PokemonCenter_1F_Text_PCNetworkCanLinkWithKanto::
 	.string "I don't know how that came about,\n"
 	.string "but it's fantastic!$"
 
+
 ThreeIsland_PokemonCenter_1F_Text_ImpossibleToSurfBetweenIslands::
 	.string "It's impossible to SURF between the\n"
 	.string "islands around these parts.\p"
 	.string "The tides are too fast and\n"
 	.string "treacherous.$"
+
 
 ThreeIsland_PokemonCenter_1F_Text_AlwaysBerriesInBerryForest::
 	.string "Let's crush BERRIES!\n"
@@ -45,3 +43,12 @@ ThreeIsland_PokemonCenter_1F_Text_AlwaysBerriesInBerryForest::
 	.string "You can always find some BERRIES\n"
 	.string "on the ground in BERRY FOREST.$"
 
+
+
+ThreeIsland_PokemonCenter_1F_EventScript_NurseEm::
+	setvar VAR_0x800B, LOCALID_THREE_ISLAND_NURSE
+	call Common_EventScript_PkmnCenterNurse
+	waitmessage
+	waitbuttonpress
+	release
+	end

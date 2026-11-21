@@ -2,7 +2,7 @@
   "id": "MAP_SIX_ISLAND_DOTTED_HOLE_B2F",
   "name": "SixIsland_DottedHole_B2F_Frlg",
   "layout": "LAYOUT_SIX_ISLAND_DOTTED_HOLE_B2F",
-  "music": "MUS_RG_SEVII_DUNGEON",
+  "music": "MUS_SEALED_CHAMBER",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_DOTTED_HOLE",
   "requires_flash": false,
@@ -54,14 +54,5 @@
     }
   ],
   "coord_events": [],
-  "bg_events": [
-    {
-      "type": "sign",
-      "x": 6,
-      "y": 5,
-      "elevation": 0,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_NORTH",
-      "script": "SixIsland_DottedHole_B2F_EventScript_BrailleLeft"
-    }
-  ]
+  "bg_events": []
 }

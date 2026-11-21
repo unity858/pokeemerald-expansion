@@ -1,17 +1,9 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 FourIsland_Mart_Frlg_MapScripts::
 	.byte 0
 
-FourIsland_Mart_EventScript_Clerk::
-	lock
-	faceplayer
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemart FourIsland_Mart_Items
-	msgbox gText_PleaseComeAgain
-	release
-	end
-
-	.align 2
 FourIsland_Mart_Items::
 	.2byte ITEM_ULTRA_BALL
 	.2byte ITEM_FULL_RESTORE
@@ -25,17 +17,10 @@ FourIsland_Mart_Items::
 	release
 	end
 
+
 FourIsland_Mart_EventScript_Camper::
 	msgbox FourIsland_Mart_Text_IcefallCaveIsFrigid, MSGBOX_NPC
 	end
-
-FourIsland_Mart_Text_LoreleiGrewUpOnThisIsland::
-	.string "We've had a great and powerful\n"
-	.string "TRAINER grow up on this island.\p"
-	.string "I bet even you'd know her.\n"
-	.string "It's LORELEI of the ELITE FOUR!\p"
-	.string "When LORELEI was just a tyke,\n"
-	.string "I taught her about POKéMON.$"
 
 FourIsland_Mart_Text_IcefallCaveIsFrigid::
 	.string "The SEVII ISLANDS are in a warm\n"
@@ -45,3 +30,14 @@ FourIsland_Mart_Text_IcefallCaveIsFrigid::
 	.string "The ICEFALL CAVE is frigid because\n"
 	.string "of the POKéMON that live in it.$"
 
+
+
+FourIsland_Mart_EventScript_ClerkEm0::
+	lock
+	faceplayer
+	message gText_HowMayIServeYou
+	waitmessage
+	pokemart FourIsland_Mart_Items
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end

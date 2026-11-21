@@ -1,7 +1,5 @@
-UndergroundPath_EastWestTunnel_Frlg_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, UndergroundPath_EastWestTunnel_OnTransition
-	.byte 0
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
-UndergroundPath_EastWestTunnel_OnTransition::
-	setworldmapflag FLAG_WORLD_MAP_UNDERGROUND_PATH_EAST_WEST_TUNNEL
-	end
+UndergroundPath_EastWestTunnel_Frlg_MapScripts::
+	.byte 0

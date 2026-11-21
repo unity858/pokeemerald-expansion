@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SSAnne_2F_Room1_Frlg_MapScripts::
 	.byte 0
 
@@ -19,4 +22,3 @@ SSAnne_2F_Room1_Text_SleepingMonLookedLikeThis::
 	.string "all my travels I've never seen\l"
 	.string "any POKéMON sleep like this one!\p"
 	.string "It was something like this!$"
-

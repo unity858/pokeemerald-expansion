@@ -1,9 +1,8 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 CinnabarIsland_PokemonLab_ResearchRoom_Frlg_MapScripts::
 	.byte 0
-
-CinnabarIsland_PokemonLab_ResearchRoom_EventScript_MetronomeTutor::
-	goto EventScript_MetronomeTutor
-	end
 
 CinnabarIsland_PokemonLab_ResearchRoom_EventScript_Scientist::
 	msgbox CinnabarIsland_PokemonLab_ResearchRoom_Text_EeveeCanEvolveIntroThreeMons, MSGBOX_NPC
@@ -21,6 +20,7 @@ CinnabarIsland_PokemonLab_ResearchRoom_Text_EeveeCanEvolveIntroThreeMons::
 	.string "EEVEE can evolve into one of three\n"
 	.string "kinds of POKéMON.$"
 
+
 CinnabarIsland_PokemonLab_ResearchRoom_Text_LegendaryBirdEmail::
 	.string "There's an e-mail message.\p"
 	.string "… … …\p"
@@ -33,6 +33,6 @@ CinnabarIsland_PokemonLab_ResearchRoom_Text_LegendaryBirdEmail::
 	.string "close to CERULEAN.\p"
 	.string "From: POKéMON RESEARCH TEAM…$"
 
+
 CinnabarIsland_PokemonLab_ResearchRoom_Text_AnAmberPipe::
 	.string "An amber pipe!$"
-

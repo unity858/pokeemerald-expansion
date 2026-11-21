@@ -1,10 +1,8 @@
-SafariZone_Center_Frlg_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, SafariZone_Center_OnTransition
-	.byte 0
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
-SafariZone_Center_OnTransition::
-	setworldmapflag FLAG_WORLD_MAP_SAFARI_ZONE_CENTER
-	end
+SafariZone_Center_Frlg_MapScripts::
+	.byte 0
 
 SafariZone_Center_EventScript_RestHouseSign::
 	msgbox SafariZone_Center_Text_RestHouse, MSGBOX_SIGN
@@ -21,11 +19,12 @@ SafariZone_Center_EventScript_AreaSign::
 SafariZone_Center_Text_RestHouse::
 	.string "REST HOUSE$"
 
+
 SafariZone_Center_Text_PressStartToCheckTime::
 	.string "TRAINER TIPS\p"
 	.string "Press START to check\n"
 	.string "remaining time.$"
 
+
 SafariZone_Center_Text_CenterArea::
 	.string "CENTER AREA$"
-

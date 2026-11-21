@@ -2,7 +2,7 @@
   "id": "MAP_SSANNE_KITCHEN",
   "name": "SSAnne_Kitchen_Frlg",
   "layout": "LAYOUT_SSANNE_KITCHEN",
-  "music": "MUS_RG_SS_ANNE",
+  "music": "MUS_SAILING",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_S_S_ANNE",
   "requires_flash": false,
@@ -113,20 +113,6 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "SSAnne_Kitchen_EventScript_Chef7",
       "flag": "0"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 1,
-      "y": 10,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "SSAnne_Kitchen_EventScript_ItemGreatBall",
-      "flag": "FLAG_HIDE_SSANNE_KITCHEN_GREAT_BALL"
     }
   ],
   "warp_events": [
@@ -138,39 +124,6 @@
       "dest_warp_id": "1"
     }
   ],
-  "coord_events": [
-
-  ],
-  "bg_events": [
-    {
-      "type": "hidden_item",
-      "x": 14,
-      "y": 8,
-      "elevation": 0,
-      "item": "ITEM_CHESTO_BERRY",
-      "flag": "FLAG_HIDDEN_ITEM_SSANNE_KITCHEN_CHESTO_BERRY",
-      "quantity": 1,
-      "underfoot": false
-    },
-    {
-      "type": "hidden_item",
-      "x": 14,
-      "y": 4,
-      "elevation": 0,
-      "item": "ITEM_PECHA_BERRY",
-      "flag": "FLAG_HIDDEN_ITEM_SSANNE_KITCHEN_PECHA_BERRY",
-      "quantity": 1,
-      "underfoot": false
-    },
-    {
-      "type": "hidden_item",
-      "x": 14,
-      "y": 6,
-      "elevation": 0,
-      "item": "ITEM_CHERI_BERRY",
-      "flag": "FLAG_HIDDEN_ITEM_SSANNE_KITCHEN_CHERI_BERRY",
-      "quantity": 1,
-      "underfoot": false
-    }
-  ]
+  "coord_events": [],
+  "bg_events": []
 }

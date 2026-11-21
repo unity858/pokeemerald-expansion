@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 CeladonCity_DepartmentStore_4F_Frlg_MapScripts::
 	.byte 0
 
@@ -13,17 +16,6 @@ CeladonCity_DepartmentStore_4F_EventScript_FloorSign::
 	msgbox CeladonCity_DepartmentStore_4F_Text_FloorSign, MSGBOX_SIGN
 	end
 
-CeladonCity_DepartmentStore_4F_EventScript_Clerk::
-	lock
-	faceplayer
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemart CeladonCity_DepartmentStore_4F_Items
-	msgbox gText_PleaseComeAgain
-	release
-	end
-
-	.align 2
 CeladonCity_DepartmentStore_4F_Items::
 	.2byte ITEM_POKE_DOLL
 	.2byte ITEM_RETRO_MAIL
@@ -35,11 +27,13 @@ CeladonCity_DepartmentStore_4F_Items::
 	release
 	end
 
+
 CeladonCity_DepartmentStore_4F_Text_GettingPokeDollAsPresent::
 	.string "I'm getting a present for my\n"
 	.string "girlfriend.\p"
 	.string "I guess a POKé DOLL will be it.\n"
 	.string "It's the popular thing.$"
+
 
 CeladonCity_DepartmentStore_4F_Text_CanRunAwayWithPokeDoll::
 	.string "I heard something useful.\p"
@@ -48,8 +42,20 @@ CeladonCity_DepartmentStore_4F_Text_CanRunAwayWithPokeDoll::
 	.string "You can run away while the wild\n"
 	.string "POKéMON is distracted.$"
 
+
 CeladonCity_DepartmentStore_4F_Text_FloorSign::
 	.string "Express yourself with gifts!\n"
 	.string "4F: WISE MAN GIFTS\p"
 	.string "Evolution Special!\n"
 	.string "Element STONES on sale now!$"
+
+
+CeladonCity_DepartmentStore_4F_EventScript_ClerkEm2::
+	lock
+	faceplayer
+	message gText_HowMayIServeYou
+	waitmessage
+	pokemart CeladonCity_DepartmentStore_4F_Items
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end

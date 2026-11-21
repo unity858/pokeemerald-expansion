@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SaffronCity_CopycatsHouse_1F_Frlg_MapScripts::
 	.byte 0
 
@@ -23,12 +26,13 @@ SaffronCity_CopycatsHouse_1F_Text_DaughterIsSelfCentered::
 	.string "My daughter is so self-centered.\n"
 	.string "She has but a few friends.$"
 
+
 SaffronCity_CopycatsHouse_1F_Text_DaughterLikesToMimicPeople::
 	.string "My daughter likes to mimic people.\n"
 	.string "It's rather vexing.\p"
 	.string "Her mimicry has earned her the\n"
 	.string "nickname COPYCAT around here.$"
 
+
 SaffronCity_CopycatsHouse_1F_Text_Chansey::
 	.string "CHANSEY: Chaan! Sii!$"
-

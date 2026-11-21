@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 Route2_ViridianForest_NorthEntrance_Frlg_MapScripts::
 	.byte 0
 
@@ -19,11 +22,13 @@ Route2_ViridianForest_NorthEntrance_Text_ManyMonsOnlyInForests::
 	.string "You need to be persistent and look\n"
 	.string "everywhere to get different kinds.$"
 
+
 Route2_ViridianForest_NorthEntrance_Text_CanCutSkinnyTrees::
 	.string "Have you noticed the skinny trees\n"
 	.string "on the roadside?\p"
 	.string "They can be cut down by a special\n"
 	.string "POKéMON move, I hear.$"
+
 
 Route2_ViridianForest_NorthEntrance_Text_CanCancelEvolution::
 	.string "Do you know the evolution-cancel\n"
@@ -32,4 +37,3 @@ Route2_ViridianForest_NorthEntrance_Text_CanCancelEvolution::
 	.string "can stop the process.\p"
 	.string "It's a technique for raising\n"
 	.string "POKéMON the way they are.$"
-

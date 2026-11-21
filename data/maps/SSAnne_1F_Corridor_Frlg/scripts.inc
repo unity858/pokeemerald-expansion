@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SSAnne_1F_Corridor_Frlg_MapScripts::
 	.byte 0
 
@@ -17,9 +20,9 @@ SSAnne_1F_Corridor_Text_LeStrongSilentType::
 	.string "… … …\n"
 	.string "Ah! Le strong silent type!$"
 
+
 SSAnne_1F_Corridor_Text_PassengersAreRestless::
 	.string "The passengers are restless from\n"
 	.string "this long voyage.\p"
 	.string "You might be challenged by the\n"
 	.string "more bored ones!$"
-

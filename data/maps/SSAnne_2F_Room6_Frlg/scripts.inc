@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SSAnne_2F_Room6_Frlg_MapScripts::
 	.byte 0
 
@@ -13,6 +16,6 @@ SSAnne_2F_Room6_Text_CaptainIsAwfullySick::
 	.string "The CAPTAIN said he's awfully sick.\n"
 	.string "He was all pale.$"
 
+
 SSAnne_2F_Room6_Text_ManyPeopleGetSeasick::
 	.string "I hear many people get seasick.$"
-
