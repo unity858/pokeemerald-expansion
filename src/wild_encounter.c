@@ -7,6 +7,7 @@
 #include "fishing.h"
 #include "follower_npc.h"
 #include "item.h"
+#include "level_scaling.h"
 #include "random.h"
 #include "field_player_avatar.h"
 #include "link.h"
@@ -375,6 +376,10 @@ u8 ChooseWildMonLevel(const struct WildPokemon *wildPokemon, u8 wildMonIndex, en
     u8 max;
     u8 range;
     u8 rand;
+
+    // R.O.W.E.: badge-based level scaling replaces the table's level range.
+    if (ShouldScaleWildMonLevels())
+        return GetScaledWildMonLevel();
 
     if (LURE_STEP_COUNT == 0)
     {

@@ -18,6 +18,7 @@
 #include "gpu_regs.h"
 #include "graphics.h"
 #include "item.h"
+#include "level_scaling.h"
 #include "international_string_util.h"
 #include "m4a.h"
 #include "map_name_popup.h"
@@ -1207,6 +1208,10 @@ static u8 DexNavTryGenerateMonLevel(enum Species species, enum EncounterType env
 
     if (levelBase == MON_LEVEL_NONEXISTENT)
         return MON_LEVEL_NONEXISTENT;   //species not found in the area
+
+    // R.O.W.E.: badge-based level scaling replaces the map data's level range.
+    if (ShouldScaleWildMonLevels())
+        return GetScaledDexNavMonLevel(gSaveBlock3Ptr->dexNavChain);
 
     if (Random() % 100 < 4)
         levelBonus += 10; //4% chance of having a +10 level

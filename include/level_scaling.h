@@ -23,4 +23,8 @@ u32 GetLevelScalingTrainerMinLevel(void);
 u32 GetLevelScalingBossMinLevel(void);
 u32 ClampScaledLevel(s32 level);
 
+bool32 ShouldScaleWildMonLevels(void);
+u32 GetScaledWildMonLevel(void);
+u32 GetScaledDexNavMonLevel(u32 chain);
+
 #endif // GUARD_LEVEL_SCALING_H

@@ -1,5 +1,6 @@
 #include "global.h"
 #include "event_data.h"
+#include "level_scaling.h"
 #include "main.h"
 #include "mass_outbreak.h"
 #include "overworld.h"
@@ -125,10 +126,16 @@ bool32 IsMassOutbreakActive(void)
 
 bool8 SetUpMassOutbreakEncounter(u8 flags)
 {
-    if (flags & WILD_CHECK_REPEL && !IsWildLevelAllowedByRepel(gSaveBlock1Ptr->outbreakPokemonLevel))
+    u32 level = gSaveBlock1Ptr->outbreakPokemonLevel;
+
+    // R.O.W.E.: outbreak mons scale with badges too (they keep the outbreak's moves).
+    if (ShouldScaleWildMonLevels())
+        level = GetScaledWildMonLevel();
+
+    if (flags & WILD_CHECK_REPEL && !IsWildLevelAllowedByRepel(level))
         return FALSE;
 
-    CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, gSaveBlock1Ptr->outbreakPokemonLevel);
+    CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, level);
     for (u32 i = 0; i < MAX_MON_MOVES; i++)
         SetMonMoveSlot(&gParties[B_TRAINER_OPPONENT_A][0], gSaveBlock1Ptr->outbreakPokemonMoves[i], i);
 

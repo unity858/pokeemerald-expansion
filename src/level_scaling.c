@@ -1,8 +1,11 @@
 #include "global.h"
+#include "battle_pike.h"
+#include "battle_pyramid.h"
 #include "difficulty.h"
 #include "event_data.h"
 #include "level_scaling.h"
 #include "random.h"
+#include "constants/battle_pyramid.h"
 #include "constants/flags.h"
 
 // R.O.W.E. level scaling tables, indexed by [difficulty][badge count 0-10].
@@ -98,4 +101,34 @@ u32 ClampScaledLevel(s32 level)
     if (level > MAX_LEVEL)
         return MAX_LEVEL;
     return level;
+}
+
+// Wild mons in the Battle Pike and Battle Pyramid keep the Frontier's own levels.
+bool32 ShouldScaleWildMonLevels(void)
+{
+    if (TESTING)
+        return FALSE;
+    if (InBattlePike() || CurrentBattlePyramidLocation() != PYRAMID_LOCATION_NONE)
+        return FALSE;
+    return TRUE;
+}
+
+// Rolled per encounter, ignoring the encounter table's min/max levels.
+u32 GetScaledWildMonLevel(void)
+{
+    return ClampScaledLevel(GetLevelScalingWildMinLevel() + RollLevelScalingBoost());
+}
+
+// R.O.W.E. DexNav: the scaled wild level plus chain / 5, with a 2% chance of +10,
+// never above the current boss minimum level.
+u32 GetScaledDexNavMonLevel(u32 chain)
+{
+    u32 level = GetScaledWildMonLevel() + chain / 5;
+    u32 maxLevel = GetLevelScalingBossMinLevel();
+
+    if (Random() % 100 < 2)
+        level += 10;
+    if (level > maxLevel)
+        level = maxLevel;
+    return ClampScaledLevel(level);
 }
