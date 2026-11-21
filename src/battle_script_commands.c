@@ -2205,7 +2205,7 @@ static void Cmd_getexp(void)
                 gBattleStruct->expGettersOrder[orderId] = PARTY_SIZE;
 
             calculatedExp = GetSpeciesExpYield(faintedSpecies) * gBattleMons[gBattlerFainted].level;
-            if (GetConfig(B_SCALED_EXP) >= GEN_5 && GetConfig(B_SCALED_EXP) != GEN_6)
+            if (B_FLAT_EXP_FORMULA || (GetConfig(B_SCALED_EXP) >= GEN_5 && GetConfig(B_SCALED_EXP) != GEN_6))
                 calculatedExp /= 5;
             else
                 calculatedExp /= 7;
@@ -9275,7 +9275,7 @@ void ApplyExperienceMultipliers(s32 *expAmount, u8 expGetterMonId, u8 faintedBat
         *expAmount = (*expAmount * 4915) / 4096;
     if (CheckBagHasItem(ITEM_EXP_CHARM, 1)) //is also for other exp boosting Powers if/when implemented
         *expAmount = (*expAmount * 150) / 100;
-    if (GetConfig(B_SCALED_EXP) >= GEN_5 && GetConfig(B_SCALED_EXP) != GEN_6)
+    if (!B_FLAT_EXP_FORMULA && GetConfig(B_SCALED_EXP) >= GEN_5 && GetConfig(B_SCALED_EXP) != GEN_6)
     {
         // Note: There is an edge case where if a Pokémon receives a large amount of exp, it wouldn't be properly calculated
         //       because of multiplying by scaling factor(the value would simply be larger than an u32 can hold). Hence u64 is needed.
