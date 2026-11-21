@@ -65,7 +65,9 @@ SINGLE_BATTLE_TEST("Primal Reversion happens for Kyogre only when holding Blue O
     }
 }
 
-DOUBLE_BATTLE_TEST("Primal Reversion's order is determined by Speed - opponent faster")
+// R.O.W.E.: only one Pokemon per trainer can Primal Revert. When a trainer's Primal-capable Pokemon enter
+// at the same time, the first one processed (by Speed) reverts and its partner stays in base form.
+DOUBLE_BATTLE_TEST("R.O.W.E.: Primal Reversion's order is determined by Speed and only the faster Pokemon of each trainer reverts - opponent faster")
 {
     GIVEN {
         PLAYER(SPECIES_KYOGRE) { Item(ITEM_BLUE_ORB); Speed(5); }
@@ -79,19 +81,21 @@ DOUBLE_BATTLE_TEST("Primal Reversion's order is determined by Speed - opponent f
         MESSAGE("The opposing Kyogre's Primal Reversion! It reverted to its primal state!");
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, playerRight);
         MESSAGE("Groudon's Primal Reversion! It reverted to its primal state!");
-        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentLeft);
-        MESSAGE("The opposing Groudon's Primal Reversion! It reverted to its primal state!");
-        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, playerLeft);
-        MESSAGE("Kyogre's Primal Reversion! It reverted to its primal state!");
+        NONE_OF {
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentLeft);
+            MESSAGE("The opposing Groudon's Primal Reversion! It reverted to its primal state!");
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, playerLeft);
+            MESSAGE("Kyogre's Primal Reversion! It reverted to its primal state!");
+        }
     } THEN {
-        EXPECT_EQ(playerLeft->species, SPECIES_KYOGRE_PRIMAL);
-        EXPECT_EQ(opponentLeft->species, SPECIES_GROUDON_PRIMAL);
+        EXPECT_EQ(playerLeft->species, SPECIES_KYOGRE);
+        EXPECT_EQ(opponentLeft->species, SPECIES_GROUDON);
         EXPECT_EQ(opponentRight->species, SPECIES_KYOGRE_PRIMAL);
         EXPECT_EQ(playerRight->species, SPECIES_GROUDON_PRIMAL);
     }
 }
 
-DOUBLE_BATTLE_TEST("Primal Reversion's order is determined by Speed - player faster")
+DOUBLE_BATTLE_TEST("R.O.W.E.: Primal Reversion's order is determined by Speed and only the faster Pokemon of each trainer reverts - player faster")
 {
     GIVEN {
         PLAYER(SPECIES_KYOGRE) { Item(ITEM_BLUE_ORB); Speed(20); }
@@ -103,17 +107,65 @@ DOUBLE_BATTLE_TEST("Primal Reversion's order is determined by Speed - player fas
     } SCENE {
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, playerRight);
         MESSAGE("Groudon's Primal Reversion! It reverted to its primal state!");
-        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, playerLeft);
-        MESSAGE("Kyogre's Primal Reversion! It reverted to its primal state!");
+        NONE_OF {
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, playerLeft);
+            MESSAGE("Kyogre's Primal Reversion! It reverted to its primal state!");
+        }
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentLeft);
         MESSAGE("The opposing Groudon's Primal Reversion! It reverted to its primal state!");
-        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentRight);
-        MESSAGE("The opposing Kyogre's Primal Reversion! It reverted to its primal state!");
+        NONE_OF {
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, playerLeft);
+            MESSAGE("Kyogre's Primal Reversion! It reverted to its primal state!");
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentRight);
+            MESSAGE("The opposing Kyogre's Primal Reversion! It reverted to its primal state!");
+        }
     } THEN {
-        EXPECT_EQ(playerLeft->species, SPECIES_KYOGRE_PRIMAL);
+        EXPECT_EQ(playerLeft->species, SPECIES_KYOGRE);
         EXPECT_EQ(opponentLeft->species, SPECIES_GROUDON_PRIMAL);
-        EXPECT_EQ(opponentRight->species, SPECIES_KYOGRE_PRIMAL);
+        EXPECT_EQ(opponentRight->species, SPECIES_KYOGRE);
         EXPECT_EQ(playerRight->species, SPECIES_GROUDON_PRIMAL);
+    }
+}
+
+// R.O.W.E.: once a trainer's Pokemon has Primal Reverted, that trainer's other Primal-capable Pokemon
+// stays in base form when it is sent out later. The Pokemon that already reverted is still Primal on re-entry.
+SINGLE_BATTLE_TEST("R.O.W.E.: A trainer's second Primal-capable Pokemon doesn't Primal Revert when sent out later")
+{
+    bool32 switchBack;
+    PARAMETRIZE { switchBack = FALSE; }
+    PARAMETRIZE { switchBack = TRUE; }
+    GIVEN {
+        PLAYER(SPECIES_KYOGRE) { Item(ITEM_BLUE_ORB); }
+        PLAYER(SPECIES_GROUDON) { Item(ITEM_RED_ORB); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+        TURN { SWITCH(player, 1); }
+        if (switchBack)
+            TURN { SWITCH(player, 0); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, player);
+        MESSAGE("Kyogre's Primal Reversion! It reverted to its primal state!");
+        SEND_IN_MESSAGE("Groudon");
+        if (switchBack) {
+            NONE_OF {
+                ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, player);
+                MESSAGE("Groudon's Primal Reversion! It reverted to its primal state!");
+            }
+            // Primal Kyogre keeps its Primal form while switched out, so it comes back as Primal Kyogre.
+            SEND_IN_MESSAGE("Kyogre");
+            ABILITY_POPUP(player, ABILITY_PRIMORDIAL_SEA);
+        } else {
+            NONE_OF {
+                ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, player);
+                MESSAGE("Groudon's Primal Reversion! It reverted to its primal state!");
+            }
+        }
+    } THEN {
+        if (switchBack)
+            EXPECT_EQ(player->species, SPECIES_KYOGRE_PRIMAL);
+        else
+            EXPECT_EQ(player->species, SPECIES_GROUDON);
     }
 }
 
@@ -236,17 +288,19 @@ SINGLE_BATTLE_TEST("Primal Reversion happens immediately if it was brought in by
 }
 
 
-DOUBLE_BATTLE_TEST("Primal Reversion triggers for multiple battlers if multiple fainted the previous turn")
+// R.O.W.E.: only one Pokemon per trainer can Primal Revert. When a trainer sends out two Primal-capable
+// replacements at once, the faster one reverts and the other stays in base form.
+DOUBLE_BATTLE_TEST("R.O.W.E.: Primal Reversion triggers for only one of a trainer's battlers if multiple fainted the previous turn")
 {
     GIVEN {
         ASSUME(GetMoveTarget(MOVE_EARTHQUAKE) == TARGET_FOES_AND_ALLY);
-        PLAYER(SPECIES_WOBBUFFET);
-        PLAYER(SPECIES_CATERPIE) { HP(1); }
-        PLAYER(SPECIES_RESHIRAM);
-        OPPONENT(SPECIES_CATERPIE) { HP(1); }
-        OPPONENT(SPECIES_CATERPIE) { HP(1); }
-        OPPONENT(SPECIES_KYOGRE) { Item(ITEM_BLUE_ORB); }
-        OPPONENT(SPECIES_GROUDON) { Item(ITEM_RED_ORB); }
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        PLAYER(SPECIES_CATERPIE) { HP(1); Speed(8); }
+        PLAYER(SPECIES_RESHIRAM) { Speed(90); }
+        OPPONENT(SPECIES_CATERPIE) { HP(1); Speed(9); }
+        OPPONENT(SPECIES_CATERPIE) { HP(1); Speed(7); }
+        OPPONENT(SPECIES_KYOGRE) { Item(ITEM_BLUE_ORB); Speed(80); }
+        OPPONENT(SPECIES_GROUDON) { Item(ITEM_RED_ORB); Speed(70); }
     } WHEN {
         TURN { MOVE(playerLeft, MOVE_EARTHQUAKE);
                SEND_OUT(opponentRight, 3);
@@ -254,24 +308,32 @@ DOUBLE_BATTLE_TEST("Primal Reversion triggers for multiple battlers if multiple 
                SEND_OUT(playerRight, 2); }
     } SCENE {
         ANIMATION(ANIM_TYPE_MOVE, MOVE_EARTHQUAKE, playerLeft);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentLeft);
         ABILITY_POPUP(opponentLeft, ABILITY_PRIMORDIAL_SEA);
-        ABILITY_POPUP(opponentRight, ABILITY_DESOLATE_LAND);
+        NONE_OF {
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentRight);
+            MESSAGE("The opposing Groudon's Primal Reversion! It reverted to its primal state!");
+            ABILITY_POPUP(opponentRight, ABILITY_DESOLATE_LAND);
+        }
+    } THEN {
+        EXPECT_EQ(opponentLeft->species, SPECIES_KYOGRE_PRIMAL);
+        EXPECT_EQ(opponentRight->species, SPECIES_GROUDON);
     }
 }
 
-DOUBLE_BATTLE_TEST("Primal Reversion triggers for all battlers if multiple fainted the previous turn")
+DOUBLE_BATTLE_TEST("R.O.W.E.: Primal Reversion triggers for one battler per trainer if multiple fainted the previous turn")
 {
     GIVEN {
         ASSUME(IsExplosionMove(MOVE_EXPLOSION));
         ASSUME(GetMoveTarget(MOVE_EXPLOSION) == TARGET_FOES_AND_ALLY);
-        PLAYER(SPECIES_WOBBUFFET);
-        PLAYER(SPECIES_CATERPIE) { HP(1); }
-        PLAYER(SPECIES_KYOGRE) { Item(ITEM_BLUE_ORB); }
-        PLAYER(SPECIES_GROUDON) { Item(ITEM_RED_ORB); }
-        OPPONENT(SPECIES_CATERPIE) { HP(1); }
-        OPPONENT(SPECIES_CATERPIE) { HP(1); }
-        OPPONENT(SPECIES_KYOGRE) { Item(ITEM_BLUE_ORB); }
-        OPPONENT(SPECIES_GROUDON) { Item(ITEM_RED_ORB); }
+        PLAYER(SPECIES_WOBBUFFET) { Speed(10); }
+        PLAYER(SPECIES_CATERPIE) { HP(1); Speed(8); }
+        PLAYER(SPECIES_KYOGRE) { Item(ITEM_BLUE_ORB); Speed(80); }
+        PLAYER(SPECIES_GROUDON) { Item(ITEM_RED_ORB); Speed(70); }
+        OPPONENT(SPECIES_CATERPIE) { HP(1); Speed(9); }
+        OPPONENT(SPECIES_CATERPIE) { HP(1); Speed(7); }
+        OPPONENT(SPECIES_KYOGRE) { Item(ITEM_BLUE_ORB); Speed(60); }
+        OPPONENT(SPECIES_GROUDON) { Item(ITEM_RED_ORB); Speed(50); }
     } WHEN {
         TURN { MOVE(playerLeft, MOVE_EXPLOSION);
                SEND_OUT(opponentRight, 3);
@@ -280,14 +342,33 @@ DOUBLE_BATTLE_TEST("Primal Reversion triggers for all battlers if multiple faint
                SEND_OUT(playerLeft, 2); }
     } SCENE {
         ANIMATION(ANIM_TYPE_MOVE, MOVE_EXPLOSION, playerLeft);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, playerLeft);
         ABILITY_POPUP(playerLeft, ABILITY_PRIMORDIAL_SEA);
-        ABILITY_POPUP(playerRight, ABILITY_DESOLATE_LAND);
-        ABILITY_POPUP(opponentLeft, ABILITY_PRIMORDIAL_SEA);
-        ABILITY_POPUP(opponentRight, ABILITY_DESOLATE_LAND);
+        NONE_OF {
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, playerRight);
+            MESSAGE("Groudon's Primal Reversion! It reverted to its primal state!");
+            ABILITY_POPUP(playerRight, ABILITY_DESOLATE_LAND);
+        }
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentLeft);
+        // Primordial Sea is already active from the player's Primal Kyogre, so there's no ability popup here.
+        MESSAGE("The opposing Kyogre's Primal Reversion! It reverted to its primal state!");
+        NONE_OF {
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, playerRight);
+            MESSAGE("Groudon's Primal Reversion! It reverted to its primal state!");
+            ABILITY_POPUP(playerRight, ABILITY_DESOLATE_LAND);
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentRight);
+            MESSAGE("The opposing Groudon's Primal Reversion! It reverted to its primal state!");
+            ABILITY_POPUP(opponentRight, ABILITY_DESOLATE_LAND);
+        }
+    } THEN {
+        EXPECT_EQ(playerLeft->species, SPECIES_KYOGRE_PRIMAL);
+        EXPECT_EQ(playerRight->species, SPECIES_GROUDON);
+        EXPECT_EQ(opponentLeft->species, SPECIES_KYOGRE_PRIMAL);
+        EXPECT_EQ(opponentRight->species, SPECIES_GROUDON);
     }
 }
 
-DOUBLE_BATTLE_TEST("Primal Reversion and other switch-in effects trigger for all battlers if multiple fainted the previous turn")
+DOUBLE_BATTLE_TEST("R.O.W.E.: Primal Reversion (one per trainer) and other switch-in effects trigger for all battlers if multiple fainted the previous turn")
 {
     GIVEN {
         ASSUME(IsExplosionMove(MOVE_EXPLOSION));
@@ -319,8 +400,13 @@ DOUBLE_BATTLE_TEST("Primal Reversion and other switch-in effects trigger for all
         ANIMATION(ANIM_TYPE_MOVE, MOVE_EXPLOSION, playerLeft);
         ABILITY_POPUP(playerLeft, ABILITY_INTIMIDATE);
         ABILITY_POPUP(playerRight, ABILITY_TURBOBLAZE);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentLeft);
         ABILITY_POPUP(opponentLeft, ABILITY_PRIMORDIAL_SEA);
-        ABILITY_POPUP(opponentRight, ABILITY_DESOLATE_LAND);
+        NONE_OF {
+            ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_PRIMAL_REVERSION, opponentRight);
+            MESSAGE("The opposing Groudon's Primal Reversion! It reverted to its primal state!");
+            ABILITY_POPUP(opponentRight, ABILITY_DESOLATE_LAND);
+        }
     } THEN {
         EXPECT_NE(playerLeft->hp, playerLeft->maxHP);
         EXPECT_NE(playerRight->hp, playerRight->maxHP);
@@ -330,6 +416,8 @@ DOUBLE_BATTLE_TEST("Primal Reversion and other switch-in effects trigger for all
         EXPECT_EQ(opponentRight->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1);
         EXPECT_EQ(opponentLeft->statStages[STAT_SPEED], DEFAULT_STAT_STAGE - 1);
         EXPECT_EQ(opponentRight->statStages[STAT_SPEED], DEFAULT_STAT_STAGE - 1);
+        EXPECT_EQ(opponentLeft->species, SPECIES_KYOGRE_PRIMAL);
+        EXPECT_EQ(opponentRight->species, SPECIES_GROUDON);
     }
 }
 
