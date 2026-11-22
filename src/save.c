@@ -6,6 +6,7 @@
 #include "task.h"
 #include "decompress.h"
 #include "load_save.h"
+#include "item.h"
 #include "overworld.h"
 #include "hall_of_fame.h"
 #include "pokemon_storage_system.h"
@@ -930,6 +931,7 @@ u8 LoadGameSave(u8 saveType)
     default:
         status = TryLoadSaveSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
         CopyPartyAndObjectsFromSave();
+        MigrateLegacyKeyItems();
         gSaveFileStatus = status;
         gGameContinueCallback = NULL;
         break;
