@@ -289,6 +289,8 @@ struct SaveBlock3
 #if APRICORN_TREE_COUNT > 0
     u8 apricornTrees[NUM_APRICORN_TREE_BYTES];
 #endif
+    // Kept last so saves made before it existed read it as an empty (zeroed) pocket.
+    struct ItemSlot keyItems[BAG_KEYITEMS_COUNT];
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;
@@ -1097,7 +1099,7 @@ struct ExternalEventFlags
 struct Bag
 {
     struct ItemSlot items[BAG_ITEMS_COUNT];
-    struct ItemSlot keyItems[BAG_KEYITEMS_COUNT];
+    struct ItemSlot legacyKeyItems[BAG_LEGACY_KEYITEMS_COUNT]; // Unused, see BAG_LEGACY_KEYITEMS_COUNT
     struct ItemSlot pokeBalls[BAG_POKEBALLS_COUNT];
     struct ItemSlot TMsHMs[BAG_TMHM_COUNT];
     struct ItemSlot berries[BAG_BERRIES_COUNT];

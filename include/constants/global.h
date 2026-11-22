@@ -111,7 +111,13 @@ enum Language
 
 // Bag constants
 #define BAG_ITEMS_COUNT 30
-#define BAG_KEYITEMS_COUNT 30
+// Key Items live in SaveBlock3 (see SaveBlock3.keyItems) so every key item fits: R.O.W.E. puts 80
+// items in this pocket (charms, fossils, Mega Ring, Z-Power Ring, Tera Orb, ...) and key items can't
+// be tossed, so a pocket smaller than that can block story/gimmick items.
+#define BAG_KEYITEMS_COUNT 90
+// The old 30-slot Key Items array stays in SaveBlock1 only to keep its layout; it is emptied into
+// the SaveBlock3 pocket when a save is loaded (see MigrateLegacyKeyItems).
+#define BAG_LEGACY_KEYITEMS_COUNT 30
 #define BAG_POKEBALLS_COUNT 16
 #define BAG_TMHM_COUNT 122 // TM01-TM120 (R.O.W.E.) + TM121 Dive + TM122 Tera Blast, no HMs. Stored in SaveBlock1.
 #define BAG_BERRIES_COUNT 46
