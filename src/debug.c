@@ -302,9 +302,14 @@ static void DebugAction_PCBag_Fill_PCBoxes_Fast(u8 taskId);
 static void DebugAction_PCBag_Fill_PCBoxes_Slow(u8 taskId);
 static void DebugAction_PCBag_Fill_PCItemStorage(u8 taskId);
 static void DebugAction_PCBag_Fill_PocketItems(u8 taskId);
+static void DebugAction_PCBag_Fill_PocketMedicine(u8 taskId);
 static void DebugAction_PCBag_Fill_PocketPokeBalls(u8 taskId);
-static void DebugAction_PCBag_Fill_PocketTMHM(u8 taskId);
+static void DebugAction_PCBag_Fill_PocketBattleItems(u8 taskId);
+static void DebugAction_PCBag_Fill_PocketTypeItems(u8 taskId);
+static void DebugAction_PCBag_Fill_PocketMegaStones(u8 taskId);
 static void DebugAction_PCBag_Fill_PocketBerries(u8 taskId);
+static void DebugAction_PCBag_Fill_PocketPowerUp(u8 taskId);
+static void DebugAction_PCBag_Fill_PocketTMHM(u8 taskId);
 static void DebugAction_PCBag_Fill_PocketKeyItems(u8 taskId);
 static void DebugAction_PCBag_ClearBag(u8 taskId);
 static void DebugAction_PCBag_ClearBoxes(u8 taskId);
@@ -610,9 +615,14 @@ static const struct DebugMenuOption sDebugMenu_Actions_PCBag_Fill[] =
     { COMPOUND_STRING("Fill PC Boxes Slow (LAG!)"), DebugAction_PCBag_Fill_PCBoxes_Slow },
     { COMPOUND_STRING("Fill PC Items") ,            DebugAction_PCBag_Fill_PCItemStorage },
     { COMPOUND_STRING("Fill Pocket Items"),         DebugAction_PCBag_Fill_PocketItems },
+    { COMPOUND_STRING("Fill Pocket Medicine"),      DebugAction_PCBag_Fill_PocketMedicine },
     { COMPOUND_STRING("Fill Pocket Poké Balls"),    DebugAction_PCBag_Fill_PocketPokeBalls },
-    { COMPOUND_STRING("Fill Pocket TMHM"),          DebugAction_PCBag_Fill_PocketTMHM },
+    { COMPOUND_STRING("Fill Pocket Battle Items"),  DebugAction_PCBag_Fill_PocketBattleItems },
+    { COMPOUND_STRING("Fill Pocket Type Items"),    DebugAction_PCBag_Fill_PocketTypeItems },
+    { COMPOUND_STRING("Fill Pocket Mega Stones"),   DebugAction_PCBag_Fill_PocketMegaStones },
     { COMPOUND_STRING("Fill Pocket Berries"),       DebugAction_PCBag_Fill_PocketBerries },
+    { COMPOUND_STRING("Fill Pocket Power-Up"),      DebugAction_PCBag_Fill_PocketPowerUp },
+    { COMPOUND_STRING("Fill Pocket TMs"),           DebugAction_PCBag_Fill_PocketTMHM },
     { COMPOUND_STRING("Fill Pocket Key Items"),     DebugAction_PCBag_Fill_PocketKeyItems },
     { NULL }
 };
@@ -3163,9 +3173,9 @@ UPDATE_GENERIC_INPUT(Quantity, Quantity)
 
 static bool32 DebugSelection_GiveItem_Complete(u8 taskId)
 {
-    AddBagItem(DebugSelection_GetData(taskId, 0), DebugSelection_GetData(taskId, 1));
+    bool32 added = AddBagItem(DebugSelection_GetData(taskId, 0), DebugSelection_GetData(taskId, 1));
     DebugSelectionStep_ReturnToGiveMenu(taskId);
-    PlaySE(SE_SUCCESS);
+    PlaySE(added ? SE_SUCCESS : SE_FAILURE); // Fails when the item's pocket is full
     return TRUE;
 }
 
@@ -3707,59 +3717,75 @@ static void DebugAction_PCBag_Fill_PCItemStorage(u8 taskId)
     }
 }
 
-static void DebugAction_PCBag_Fill_PocketItems(u8 taskId)
+// Adds every item that belongs to the given pocket (per gItemsInfo), in item ID order, until the
+// pocket is full. Unique items (key items, TMs, Mega Stones, ...) are added once, others as a full stack.
+static void Debug_FillBagPocket(enum Pocket pocketId)
 {
     enum Item itemId;
 
     for (itemId = 1; itemId < ITEMS_COUNT; itemId++)
     {
-        if (GetItemPocket(itemId) == POCKET_ITEMS && CheckBagHasSpace(itemId, MAX_BAG_ITEM_CAPACITY))
-            AddBagItem(itemId, MAX_BAG_ITEM_CAPACITY);
+        if (GetItemPocket(itemId) != pocketId)
+            continue;
+        if (pocketId == POCKET_TM_HM && ItemIdToBattleMoveId(itemId) == MOVE_NONE)
+            continue;
+        if (itemId == ITEM_ENIGMA_BERRY_E_READER) // e-Reader placeholder, not a real berry
+            continue;
+
+        u32 count = (GetItemImportance(itemId) || pocketId == POCKET_TM_HM) ? 1 : MAX_BAG_ITEM_CAPACITY;
+        if (!CheckBagHasItem(itemId, count) && CheckBagHasSpace(itemId, count))
+            AddBagItem(itemId, count);
     }
+}
+
+static void DebugAction_PCBag_Fill_PocketItems(u8 taskId)
+{
+    Debug_FillBagPocket(POCKET_ITEMS);
+}
+
+static void DebugAction_PCBag_Fill_PocketMedicine(u8 taskId)
+{
+    Debug_FillBagPocket(POCKET_MEDICINE);
 }
 
 static void DebugAction_PCBag_Fill_PocketPokeBalls(u8 taskId)
 {
-    for (enum PokeBall ballId = BALL_STRANGE; ballId < POKEBALL_COUNT; ballId++)
-    {
-        if (CheckBagHasSpace(gPokeBalls[ballId].itemId, MAX_BAG_ITEM_CAPACITY))
-            AddBagItem(gPokeBalls[ballId].itemId, MAX_BAG_ITEM_CAPACITY);
-    }
+    Debug_FillBagPocket(POCKET_POKE_BALLS);
 }
 
-static void DebugAction_PCBag_Fill_PocketTMHM(u8 taskId)
+static void DebugAction_PCBag_Fill_PocketBattleItems(u8 taskId)
 {
-    u16 index, itemId;
+    Debug_FillBagPocket(POCKET_BATTLE_ITEMS);
+}
 
-    for (index = 0; index < NUM_ALL_MACHINES; index++)
-    {
-        itemId = GetTMHMItemId(index + 1);
-        if (CheckBagHasSpace(itemId, 1) && ItemIdToBattleMoveId(itemId) != MOVE_NONE)
-            AddBagItem(itemId, 1);
-    }
+static void DebugAction_PCBag_Fill_PocketTypeItems(u8 taskId)
+{
+    Debug_FillBagPocket(POCKET_TYPE_ITEMS);
+}
+
+static void DebugAction_PCBag_Fill_PocketMegaStones(u8 taskId)
+{
+    Debug_FillBagPocket(POCKET_MEGA_STONES);
 }
 
 static void DebugAction_PCBag_Fill_PocketBerries(u8 taskId)
 {
-    enum Item itemId;
+    Debug_FillBagPocket(POCKET_BERRIES);
+}
 
-    for (enum BerryId berryId = 1; berryId < NUM_BERRIES; berryId++)
-    {
-        itemId = BerryTypeToItemId(berryId);
-        if (CheckBagHasSpace(itemId, MAX_BAG_ITEM_CAPACITY))
-            AddBagItem(itemId, MAX_BAG_ITEM_CAPACITY);
-    }
+static void DebugAction_PCBag_Fill_PocketPowerUp(u8 taskId)
+{
+    Debug_FillBagPocket(POCKET_POWER_UP);
+}
+
+static void DebugAction_PCBag_Fill_PocketTMHM(u8 taskId)
+{
+    Debug_FillBagPocket(POCKET_TM_HM);
 }
 
 static void DebugAction_PCBag_Fill_PocketKeyItems(u8 taskId)
 {
-    enum Item itemId;
-
-    for (itemId = 1; itemId < ITEMS_COUNT; itemId++)
-    {
-        if (GetItemPocket(itemId) == POCKET_KEY_ITEMS && CheckBagHasSpace(itemId, 1))
-            AddBagItem(itemId, 1);
-    }
+    Debug_FillBagPocket(POCKET_KEY_ITEMS);
 }
 
 static void DebugAction_PCBag_ClearBag(u8 taskId)
