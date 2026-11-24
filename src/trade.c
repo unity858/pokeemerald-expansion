@@ -303,6 +303,7 @@ static void BufferTradeSceneStrings(void);
 static bool8 DoTradeAnim(void);
 static bool8 DoTradeAnim_Cable(void);
 static bool8 DoTradeAnim_Wireless(void);
+static void SetTradebackPartnerSpecies(struct Pokemon *mon, struct Pokemon *partner);
 static void SpriteCB_BouncingPokeball(struct Sprite *);
 static void SpriteCB_BouncingPokeballDepart(struct Sprite *);
 static void SpriteCB_BouncingPokeballDepartEnd(struct Sprite *);
@@ -3338,6 +3339,16 @@ static void BufferTradeSceneStrings(void)
         GetMonData(&gParties[B_TRAINER_PLAYER][gSelectedTradeMonPositions[TRADE_PLAYER]], MON_DATA_NICKNAME, name);
         StringCopy_Nickname(gStringVar2, name);
     }
+    else if (gSpecialVar_0x8005 == INGAME_TRADE_TRADEBACK)
+    {
+        // The "partner" is a copy of the player's own Pokemon, so the
+        // trainer name is the player's (its OT) and the nickname is its own.
+        StringCopy(gStringVar1, gLinkPlayers[1].name);
+        GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_NICKNAME, name);
+        StringCopy_Nickname(gStringVar3, name);
+        GetMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004], MON_DATA_NICKNAME, name);
+        StringCopy_Nickname(gStringVar2, name);
+    }
     else
     {
         ingameTrade = &sIngameTrades[gSpecialVar_0x8005];
@@ -3898,7 +3909,8 @@ static bool8 DoTradeAnim_Cable(void)
                 FREE_AND_SET_NULL(sTradeAnim);
             }
             SetMainCallback2(CB2_ReturnToField);
-            BufferInGameTradeMonName();
+            if (gSpecialVar_0x8005 != INGAME_TRADE_TRADEBACK)
+                BufferInGameTradeMonName();
         }
         break;
     }
@@ -4377,6 +4389,8 @@ static bool8 DoTradeAnim_Wireless(void)
             canEvolveMon = &gParties[B_TRAINER_OPPONENT_A][TRADEMON_FROM_PC];
         else
             canEvolveMon = &gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004];
+        if (gSpecialVar_0x8005 == INGAME_TRADE_TRADEBACK)
+            SetTradebackPartnerSpecies(canEvolveMon, &gParties[B_TRAINER_OPPONENT_A][0]);
         evoTarget = GetEvolutionTargetSpecies(canEvolveMon, EVO_MODE_TRADE, ITEM_NONE, &gParties[B_TRAINER_OPPONENT_A][0], NULL, CHECK_EVO);
         if (evoTarget != SPECIES_NONE)
         {
@@ -4403,7 +4417,8 @@ static bool8 DoTradeAnim_Wireless(void)
                 FREE_AND_SET_NULL(sTradeAnim);
             }
             SetMainCallback2(CB2_ReturnToField);
-            BufferInGameTradeMonName();
+            if (gSpecialVar_0x8005 != INGAME_TRADE_TRADEBACK)
+                BufferInGameTradeMonName();
         }
         break;
     }
@@ -4638,7 +4653,46 @@ enum Species GetTradeSpecies(void)
 
 void CreateInGameTradePokemon(void)
 {
-    CreateInGameTradePokemonInternal(gSpecialVar_0x8004, gSpecialVar_0x8005);
+    // R.O.W.E. Tradeback Guy: the trade partner is an exact copy of the
+    // chosen party Pokemon, so the player gets their own Pokemon back
+    // (and any trade evolution triggers).
+    if (gSpecialVar_0x8005 == INGAME_TRADE_TRADEBACK)
+        gParties[B_TRAINER_OPPONENT_A][0] = gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004];
+    else
+        CreateInGameTradePokemonInternal(gSpecialVar_0x8004, gSpecialVar_0x8005);
+}
+
+// Tradeback Guy refuses Pokemon holding mail (the mail would otherwise be lost).
+void IsSelectedMonHoldingMail(void)
+{
+    gSpecialVar_Result = (GetMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004], MON_DATA_MAIL) != MAIL_NONE);
+}
+
+// For a tradeback there is no real partner. If the Pokemon's trade evolution
+// requires a specific partner species (Karrablast <-> Shelmet), pretend it was
+// traded for that species, so Karrablast -> Escavalier and Shelmet -> Accelgor.
+static void SetTradebackPartnerSpecies(struct Pokemon *mon, struct Pokemon *partner)
+{
+    u32 i, j;
+    const struct Evolution *evolutions = GetSpeciesEvolutions(GetMonData(mon, MON_DATA_SPECIES));
+
+    if (evolutions == NULL)
+        return;
+
+    for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
+    {
+        if (evolutions[i].method != EVO_TRADE || evolutions[i].params == NULL)
+            continue;
+        for (j = 0; evolutions[i].params[j].condition != CONDITIONS_END; j++)
+        {
+            if (evolutions[i].params[j].condition == IF_TRADE_PARTNER_SPECIES)
+            {
+                u16 partnerSpecies = evolutions[i].params[j].arg1;
+                SetMonData(partner, MON_DATA_SPECIES, &partnerSpecies);
+                return;
+            }
+        }
+    }
 }
 
 static void CB2_UpdateLinkTrade(void)

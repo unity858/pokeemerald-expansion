@@ -23,6 +23,11 @@ enum InGameTradeID
     INGAME_TRADE_SEEL,
 };
 
+// R.O.W.E. Tradeback Guy: sentinel trade ID (gSpecialVar_0x8005) meaning
+// "trade the selected party Pokemon back to the player" instead of an entry
+// in sIngameTrades. Lets trade evolutions happen without a real partner.
+#define INGAME_TRADE_TRADEBACK 0xFF
+
 // Return values for CanTradeSelectedMon and CanSpinTradeMon
 enum CanTradeMon
 {

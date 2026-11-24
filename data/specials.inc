@@ -274,6 +274,7 @@ gSpecials::
 	def_special CreateInGameTradePokemon
 	def_special DoInGameTradeScene, waitstate=1
 	def_special GetTradeSpecies
+	def_special IsSelectedMonHoldingMail
 	def_special GetWeekCount
 	def_special RetrieveLotteryNumber
 	def_special PickLotteryCornerTicket
