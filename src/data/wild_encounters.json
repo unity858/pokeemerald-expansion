@@ -1254,12 +1254,12 @@
               {
                 "min_level": 22,
                 "max_level": 22,
-                "species": "SPECIES_LANDORUS_THERIAN"
+                "species": "SPECIES_GLIGAR"
               },
               {
                 "min_level": 22,
                 "max_level": 22,
-                "species": "SPECIES_LANDORUS"
+                "species": "SPECIES_GLIGAR"
               }
             ]
           },
@@ -4163,12 +4163,12 @@
               {
                 "min_level": 35,
                 "max_level": 40,
-                "species": "SPECIES_CARVANHA"
+                "species": "SPECIES_CRAMORANT"
               },
               {
                 "min_level": 40,
                 "max_level": 45,
-                "species": "SPECIES_CARVANHA"
+                "species": "SPECIES_CRAMORANT"
               }
             ]
           }
@@ -5444,12 +5444,12 @@
               {
                 "min_level": 35,
                 "max_level": 40,
-                "species": "SPECIES_WAILMER"
+                "species": "SPECIES_WATTREL"
               },
               {
                 "min_level": 40,
                 "max_level": 45,
-                "species": "SPECIES_WAILMER"
+                "species": "SPECIES_WATTREL"
               }
             ]
           }
@@ -5627,7 +5627,7 @@
               {
                 "min_level": 40,
                 "max_level": 45,
-                "species": "SPECIES_WAILMER"
+                "species": "SPECIES_VELUZA"
               }
             ]
           }
@@ -9829,12 +9829,12 @@
               {
                 "min_level": 32,
                 "max_level": 32,
-                "species": "SPECIES_KYUREM"
+                "species": "SPECIES_FRIGIBAX"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_KYUREM_BLACK"
+                "species": "SPECIES_FRIGIBAX"
               }
             ]
           }
