@@ -901,6 +901,12 @@ static void PlayerNotOnBikeMoving(enum Direction direction, u16 heldKeys)
             gPlayerAvatar.creeping = TRUE;
             PlayerWalkSlow(direction);
         }
+        else if ((heldKeys & B_BUTTON) && !PlayerHasFollowerNPC())
+        {
+            // Fast surf (ported from R.O.W.E.): holding B surfs at Mach Bike top speed.
+            // Skipped with an NPC follower, whose surf movement only exists at the normal surf speed.
+            PlayerWalkFaster(direction);
+        }
         else
         {
             // speed 2 is fast, same speed as running
