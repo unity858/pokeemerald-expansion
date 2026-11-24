@@ -1,6 +1,7 @@
 #include "global.h"
 #include "option_menu.h"
 #include "bg.h"
+#include "difficulty.h"
 #include "gpu_regs.h"
 #include "international_string_util.h"
 #include "main.h"
@@ -58,6 +59,7 @@ static u8 TextSpeed_ProcessInput(u8 selection);
 static void TextSpeed_DrawChoices(u8 selection);
 static u8 BattleScene_ProcessInput(u8 selection);
 static void BattleScene_DrawChoices(u8 selection);
+static bool32 IsBattleStyleLocked(void);
 static u8 BattleStyle_ProcessInput(u8 selection);
 static void BattleStyle_DrawChoices(u8 selection);
 static u8 Sound_ProcessInput(u8 selection);
@@ -249,6 +251,9 @@ void CB2_InitOptionMenu(void)
             gTasks[taskId].tTextSpeed = OPTIONS_TEXT_SPEED_MID;
         gTasks[taskId].tBattleSceneOff = gSaveBlock2Ptr->optionsBattleSceneOff;
         gTasks[taskId].tBattleStyle = gSaveBlock2Ptr->optionsBattleStyle;
+        // Hard difficulty forces SET style: show SET; the saved choice is kept for other difficulties.
+        if (IsBattleStyleLocked())
+            gTasks[taskId].tBattleStyle = OPTIONS_BATTLE_STYLE_SET;
         gTasks[taskId].tSound = gSaveBlock2Ptr->optionsSound;
         gTasks[taskId].tButtonMode = gSaveBlock2Ptr->optionsButtonMode;
         gTasks[taskId].tWindowFrameType = gSaveBlock2Ptr->optionsWindowFrameType;
@@ -327,6 +332,8 @@ static void Task_OptionMenuProcessInput(u8 taskId)
                 BattleScene_DrawChoices(gTasks[taskId].tBattleSceneOff);
             break;
         case MENUITEM_BATTLESTYLE:
+            if (IsBattleStyleLocked())
+                break;
             previousOption = gTasks[taskId].tBattleStyle;
             gTasks[taskId].tBattleStyle = BattleStyle_ProcessInput(gTasks[taskId].tBattleStyle);
 
@@ -370,7 +377,8 @@ static void Task_OptionMenuSave(u8 taskId)
 {
     gSaveBlock2Ptr->optionsTextSpeed = gTasks[taskId].tTextSpeed;
     gSaveBlock2Ptr->optionsBattleSceneOff = gTasks[taskId].tBattleSceneOff;
-    gSaveBlock2Ptr->optionsBattleStyle = gTasks[taskId].tBattleStyle;
+    if (!IsBattleStyleLocked())
+        gSaveBlock2Ptr->optionsBattleStyle = gTasks[taskId].tBattleStyle;
     gSaveBlock2Ptr->optionsSound = gTasks[taskId].tSound;
     gSaveBlock2Ptr->optionsButtonMode = gTasks[taskId].tButtonMode;
     gSaveBlock2Ptr->optionsWindowFrameType = gTasks[taskId].tWindowFrameType;
@@ -395,6 +403,8 @@ static void HighlightOptionMenuItem(u8 index)
     SetGpuReg(REG_OFFSET_WIN0V, WIN_RANGE(index * 16 + 40, index * 16 + 56));
 }
 
+#define OPTION_CHOICE_DISABLED 0xFF
+
 static void DrawOptionMenuChoice(const u8 *text, u8 x, u8 y, u8 style)
 {
     u8 dst[16];
@@ -403,7 +413,13 @@ static void DrawOptionMenuChoice(const u8 *text, u8 x, u8 y, u8 style)
     for (i = 0; *text != EOS && i < ARRAY_COUNT(dst) - 1; i++)
         dst[i] = *(text++);
 
-    if (style != 0)
+    if (style == OPTION_CHOICE_DISABLED)
+    {
+        // Faded gray on white, like R.O.W.E.'s inactive options.
+        dst[2] = TEXT_COLOR_LIGHT_GREEN;
+        dst[5] = TEXT_COLOR_WHITE;
+    }
+    else if (style != 0)
     {
         dst[2] = TEXT_COLOR_RED;
         dst[5] = TEXT_COLOR_LIGHT_RED;
@@ -484,6 +500,11 @@ static void BattleScene_DrawChoices(u8 selection)
     DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleSceneOff, 198), YPOS_BATTLESCENE, styles[1]);
 }
 
+static bool32 IsBattleStyleLocked(void)
+{
+    return GetCurrentDifficultyLevel() == DIFFICULTY_HARD;
+}
+
 static u8 BattleStyle_ProcessInput(u8 selection)
 {
     if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
@@ -502,6 +523,9 @@ static void BattleStyle_DrawChoices(u8 selection)
     styles[0] = 0;
     styles[1] = 0;
     styles[selection] = 1;
+    // On Hard the style is fixed to SET, so grey out SHIFT.
+    if (IsBattleStyleLocked())
+        styles[OPTIONS_BATTLE_STYLE_SHIFT] = OPTION_CHOICE_DISABLED;
 
     DrawOptionMenuChoice(gText_BattleStyleShift, 104, YPOS_BATTLESTYLE, styles[0]);
     DrawOptionMenuChoice(gText_BattleStyleSet, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleStyleSet, 198), YPOS_BATTLESTYLE, styles[1]);
@@ -648,7 +672,18 @@ static void DrawOptionMenuTexts(void)
 
     FillWindowPixelBuffer(WIN_OPTIONS, PIXEL_FILL(1));
     for (i = 0; i < MENUITEM_COUNT; i++)
-        AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, sOptionMenuItemsNames[i], 8, (i * 16) + 1, TEXT_SKIP_DRAW, NULL);
+    {
+        if (i == MENUITEM_BATTLESTYLE && IsBattleStyleLocked())
+        {
+            // Hard forces SET: gray out the label so the row reads as fixed.
+            static const u8 sDisabledColors[3] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_LIGHT_GREEN, TEXT_COLOR_WHITE};
+            AddTextPrinterParameterized4(WIN_OPTIONS, FONT_NORMAL, 8, (i * 16) + 1, 0, 0, sDisabledColors, TEXT_SKIP_DRAW, sOptionMenuItemsNames[i]);
+        }
+        else
+        {
+            AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, sOptionMenuItemsNames[i], 8, (i * 16) + 1, TEXT_SKIP_DRAW, NULL);
+        }
+    }
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }
 

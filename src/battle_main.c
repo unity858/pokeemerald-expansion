@@ -21,6 +21,7 @@
 #include "data.h"
 #include "debug.h"
 #include "decompress.h"
+#include "difficulty.h"
 #include "dexnav.h"
 #include "dma3.h"
 #include "event_data.h"
@@ -2745,6 +2746,9 @@ static void ClearSetBScriptingStruct(void)
 
     gBattleScripting.windowsType = temp;
     gBattleScripting.battleStyle = gSaveBlock2Ptr->optionsBattleStyle;
+    // Hard difficulty always plays SET style, whatever the Options menu says.
+    if (GetCurrentDifficultyLevel() == DIFFICULTY_HARD)
+        gBattleScripting.battleStyle = OPTIONS_BATTLE_STYLE_SET;
     #if TESTING
     gBattleScripting.battleStyle = OPTIONS_BATTLE_STYLE_SET;
     #endif
