@@ -55,6 +55,7 @@ static enum CancelerResult CancelerClearFlags(struct BattleCalcValues *cv)
     gBattleMons[cv->battlerAtk].volatiles.glaiveRush = FALSE;
     gBattleStruct->eventState.atkCancelerBattler = 0;
     gBattleStruct->eventState.moveEndBlock = 0;
+    memset(gBattleStruct->moveDamageMsgHp, 0, sizeof(gBattleStruct->moveDamageMsgHp));
     return CANCELER_RESULT_SUCCESS;
 }
 
@@ -2969,6 +2970,7 @@ static enum CancelerResult CancelerHealthBarUpdate(struct BattleCalcValues *cv)
 
 static bool32 TryMoveDamageUpdate(struct BattleCalcValues *cv)
 {
+    gBattleStruct->moveDamageMsgHp[cv->battlerDef] = 0;
     if (DoesSubstituteBlockMove(cv->battlerAtk, cv->battlerDef, cv->move) && gBattleMons[cv->battlerDef].volatiles.substituteHP)
     {
         if (gBattleMons[cv->battlerDef].volatiles.substituteHP >= gBattleStruct->moveDamage[cv->battlerDef])
@@ -3037,6 +3039,7 @@ static bool32 TryMoveDamageUpdate(struct BattleCalcValues *cv)
             hpLost = hpBefore - gBattleMons[cv->battlerDef].hp;
             if (hpLost != 0)
                 gBattleStruct->innardsOutHpLost[cv->battlerDef] += hpLost;
+            gBattleStruct->moveDamageMsgHp[cv->battlerDef] = hpLost; // shown by critmessage
 
             gProtectStructs[cv->battlerDef].assuranceDoubled = TRUE;
             gProtectStructs[cv->battlerDef].revengeDoubled |= 1u << cv->battlerAtk;

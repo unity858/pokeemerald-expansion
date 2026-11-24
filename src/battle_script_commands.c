@@ -2,6 +2,7 @@
 #include "battle.h"
 #include "battle_hold_effects.h"
 #include "battle_message.h"
+#include "difficulty.h"
 #include "battle_anim.h"
 #include "battle_anim_scripts.h"
 #include "battle_ai_record.h"
@@ -1256,12 +1257,46 @@ static void Cmd_datahpupdate(void)
     gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
+// Easy/Normal: "{target} took {N} damage from {attacker}!" after the HP bar drops,
+// before the critical hit and effectiveness messages. Runs once per target and per hit.
+EWRAM_DATA static u8 sMoveDamageMsgSavedBuff1[TEXT_BUFF_ARRAY_COUNT] = {0};
+EWRAM_DATA static bool8 sMoveDamageMsgRestoreBuff1 = FALSE;
+
+static bool32 TryPrintMoveDamageMessage(void)
+{
+    u32 hpLost = gBattleStruct->moveDamageMsgHp[gBattlerTarget];
+
+    if (sMoveDamageMsgRestoreBuff1)
+    {
+        memcpy(gBattleTextBuff1, sMoveDamageMsgSavedBuff1, sizeof(sMoveDamageMsgSavedBuff1));
+        sMoveDamageMsgRestoreBuff1 = FALSE;
+    }
+
+    if (hpLost == 0)
+        return FALSE;
+
+    gBattleStruct->moveDamageMsgHp[gBattlerTarget] = 0;
+
+    if (GetCurrentDifficultyLevel() == DIFFICULTY_HARD
+     || gSpecialStatuses[gBattlerAttacker].attackerInParty) // Future Sight from a benched user: no one to name
+        return FALSE;
+
+    memcpy(sMoveDamageMsgSavedBuff1, gBattleTextBuff1, sizeof(sMoveDamageMsgSavedBuff1));
+    sMoveDamageMsgRestoreBuff1 = TRUE;
+    PREPARE_HWORD_NUMBER_BUFFER(gBattleTextBuff1, 5, hpLost);
+    BattleScriptCall(BattleScript_MoveDamageDealtMsg); // returns to critmessage
+    return TRUE;
+}
+
 static void Cmd_critmessage(void)
 {
     CMD_ARGS();
 
     if (gBattleControllerExecFlags == 0)
     {
+        if (TryPrintMoveDamageMessage())
+            return;
+
         if (gSpecialStatuses[gBattlerTarget].criticalHit && !IsBattlerUnaffectedByMove(gBattlerTarget))
         {
             if (IsDoubleSpreadMove())

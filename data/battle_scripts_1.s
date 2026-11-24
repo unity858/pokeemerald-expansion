@@ -5232,6 +5232,11 @@ BattleScript_IgnoresAndHitsItself::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_DoSelfConfusionDmg
 
+BattleScript_MoveDamageDealtMsg::
+	printstring STRINGID_MOVEDAMAGEDEALT
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_SubstituteFade::
 	playanimation BS_SCRIPTING, B_ANIM_SUBSTITUTE_FADE
 	printstring STRINGID_PKMNSUBSTITUTEFADED
