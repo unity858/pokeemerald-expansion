@@ -2724,6 +2724,12 @@
 	.byte \selectionType
 	.endm
 
+	@ like chooseboxmon, but only lets the player pick from the party (never the PC)
+	.macro choosepartymononly selectionType:req
+	callnative ChoosePartyMonOnly
+	.byte \selectionType
+	.endm
+
 	@ picks the first mon in party matching the given selectionType (enum PcMonSelectionType)
 	.macro pickpartymon selectionType:req
 	callnative PickPartyMon

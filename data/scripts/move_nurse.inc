@@ -5,7 +5,8 @@
 @                   (include/constants/move_relearner.h) per move actually learned
 @   Tutor moves   - Tutor moves unlocked by Hoenn badge count, free
 @                   (table: src/data/tutor_move_badges.h)
-@ The relearner runs in script mode (chooseboxmon), so each visit to the move
+@ Party Pokemon only (choosepartymononly, never the PC). The relearner runs
+@ in script mode, so each visit to the move
 @ list teaches at most one move and SELECT can't switch to another move type.
 
 Common_EventScript_MoveNurse::
@@ -123,7 +124,7 @@ MoveNurse_EventScript_TutorNeedMoreBadges::
 @ Returns VAR_RESULT TRUE when the chosen mon has a move to learn.
 @ ---------------------------------------------------------------------------
 MoveNurse_EventScript_ChooseMon::
-	chooseboxmon SELECT_PC_MON_MOVE_RELEARNER
+	choosepartymononly SELECT_PC_MON_MOVE_RELEARNER
 	waitstate
 	goto_if_eq VAR_0x8004, PARTY_NOTHING_CHOSEN, MoveNurse_EventScript_ChoseNothing
 	special IsSelectedMonEgg
