@@ -1,32 +1,36 @@
+@ Latios and Latias are two separate statics here (no TV roamer any more).
+@ Both keep the vanilla Southern Island encounter: Lv50, holding a Soul Dew.
+@ Southern Island is only reachable by ferry after the League; the 8-badge check
+@ follows the hack's convention for statics.
 SouthernIsland_Interior_MapScripts::
 	map_script MAP_SCRIPT_ON_RESUME, SouthernIsland_Interior_OnResume
 	map_script MAP_SCRIPT_ON_TRANSITION, SouthernIsland_Interior_OnTransition
 	.byte 0
 
 SouthernIsland_Interior_OnResume:
-	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, SouthernIsland_Interior_EventScript_TryRemoveLati
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
 	end
 
-SouthernIsland_Interior_EventScript_TryRemoveLati::
-	specialvar VAR_RESULT, GetBattleOutcome
-	goto_if_ne VAR_RESULT, B_OUTCOME_CAUGHT, Common_EventScript_NopReturn
-	removeobject LOCALID_SOUTHERN_ISLAND_LATI
-	return
-
 SouthernIsland_Interior_OnTransition:
-	call_if_eq VAR_ROAMER_POKEMON, 0, SouthernIsland_Interior_EventScript_SetUpLatios
-	call_if_ne VAR_ROAMER_POKEMON, 0, SouthernIsland_Interior_EventScript_SetUpLatias
+	call SouthernIsland_Interior_EventScript_SetupLatios
+	call SouthernIsland_Interior_EventScript_SetupLatias
 	call SouthernIsland_Interior_EventScript_SetUpPlayerGfx
 	end
 
-SouthernIsland_Interior_EventScript_SetUpLatios::
-	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_LATIOS
-	setvar VAR_TEMP_4, SPECIES_LATIOS
+SouthernIsland_Interior_EventScript_SetupLatios::
+	setflag FLAG_TEMP_HIDE_STATIC_MON
+	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
+	goto_if_set FLAG_CAUGHT_LATIOS, Common_EventScript_NopReturn
+	goto_if_set FLAG_DEFEATED_LATIOS, Common_EventScript_NopReturn
+	clearflag FLAG_TEMP_HIDE_STATIC_MON
 	return
 
-SouthernIsland_Interior_EventScript_SetUpLatias::
-	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_LATIAS
-	setvar VAR_TEMP_4, SPECIES_LATIAS
+SouthernIsland_Interior_EventScript_SetupLatias::
+	setflag FLAG_TEMP_HIDE_STATIC_MON_2
+	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
+	goto_if_set FLAG_CAUGHT_LATIAS, Common_EventScript_NopReturn
+	goto_if_set FLAG_DEFEATED_LATIAS, Common_EventScript_NopReturn
+	clearflag FLAG_TEMP_HIDE_STATIC_MON_2
 	return
 
 SouthernIsland_Interior_EventScript_SetUpPlayerGfx::
@@ -43,102 +47,65 @@ SouthernIsland_Interior_EventScript_SetMayGfx::
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_RIVAL_MAY_NORMAL
 	return
 
-SouthernIsland_Interior_EventScript_TryLatiEncounter::
-	lockall
-	setvar VAR_0x8008, 12  @ Player's Y coordinate. Not read
-	goto SouthernIsland_Interior_EventScript_Lati
+SouthernIsland_Interior_EventScript_Latios::
+	lock
+	faceplayer
+	setvar VAR_0x8004, SPECIES_LATIOS
+	call SouthernIsland_Interior_EventScript_LatiBattle
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SouthernIsland_Interior_EventScript_CaughtLatios
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SouthernIsland_Interior_EventScript_DefeatedLatios
+	setvar VAR_0x8004, SPECIES_LATIOS
+	goto Common_EventScript_LegendaryFlewAway
 	end
 
-SouthernIsland_Interior_EventScript_Lati::
-	goto_if_set FLAG_TEMP_2, SouthernIsland_Interior_EventScript_Sign
-	goto_if_set FLAG_DEFEATED_LATIAS_OR_LATIOS, SouthernIsland_Interior_EventScript_Sign
-	goto_if_set FLAG_CAUGHT_LATIAS_OR_LATIOS, SouthernIsland_Interior_EventScript_Sign
-	goto_if_unset FLAG_SYS_GAME_CLEAR, SouthernIsland_Interior_EventScript_Sign  @ was FLAG_ENABLE_SHIP_SOUTHERN_ISLAND (Eon Ticket)
-	setflag FLAG_ENCOUNTERED_LATIAS_OR_LATIOS
-	setflag FLAG_TEMP_2
-	special SpawnCameraObject
-	applymovement LOCALID_CAMERA, SouthernIsland_Interior_Movement_CameraPanUp
-	waitmovement 0
-	delay 50
+SouthernIsland_Interior_EventScript_DefeatedLatios::
+	setflag FLAG_DEFEATED_LATIOS
+	setvar VAR_0x8004, SPECIES_LATIOS
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+SouthernIsland_Interior_EventScript_CaughtLatios::
+	setflag FLAG_CAUGHT_LATIOS
+	release
+	end
+
+SouthernIsland_Interior_EventScript_Latias::
+	lock
+	faceplayer
+	setvar VAR_0x8004, SPECIES_LATIAS
+	call SouthernIsland_Interior_EventScript_LatiBattle
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SouthernIsland_Interior_EventScript_CaughtLatias
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SouthernIsland_Interior_EventScript_DefeatedLatias
+	setvar VAR_0x8004, SPECIES_LATIAS
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+SouthernIsland_Interior_EventScript_DefeatedLatias::
+	setflag FLAG_DEFEATED_LATIAS
+	setvar VAR_0x8004, SPECIES_LATIAS
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+SouthernIsland_Interior_EventScript_CaughtLatias::
+	setflag FLAG_CAUGHT_LATIAS
+	release
+	end
+
+@ VAR_0x8004 = species. Vanilla level and held item. Returns the outcome in VAR_RESULT.
+SouthernIsland_Interior_EventScript_LatiBattle::
 	waitse
-	playmoncry VAR_TEMP_4, CRY_MODE_NORMAL
-	delay 30
+	playmoncry VAR_0x8004, CRY_MODE_ENCOUNTER
+	delay 40
 	waitmoncry
-	addobject LOCALID_SOUTHERN_ISLAND_LATI
-	delay 30
-	applymovement LOCALID_CAMERA, SouthernIsland_Interior_Movement_CameraPanDown
-	applymovement LOCALID_SOUTHERN_ISLAND_LATI, SouthernIsland_Interior_Movement_LatiApproach
-	waitmovement 0
-	delay 50
-	special RemoveCameraObject
-	setvar VAR_LAST_TALKED, LOCALID_SOUTHERN_ISLAND_LATI
-	call_if_eq VAR_ROAMER_POKEMON, 0, SouthernIsland_Interior_EventScript_SetLatiosBattleVars
-	call_if_ne VAR_ROAMER_POKEMON, 0, SouthernIsland_Interior_EventScript_SetLatiasBattleVars
+	setvar VAR_0x8005, 50
+	setvar VAR_0x8006, ITEM_SOUL_DEW
+	special CreateEnemyEventMon
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special BattleSetup_StartLatiBattle
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
 	specialvar VAR_RESULT, GetBattleOutcome
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SouthernIsland_Interior_EventScript_LatiDefeated
-	goto_if_eq VAR_RESULT, B_OUTCOME_RAN, SouthernIsland_Interior_EventScript_RanFromLati
-	goto_if_eq VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED, SouthernIsland_Interior_EventScript_RanFromLati
-	setflag FLAG_CAUGHT_LATIAS_OR_LATIOS
-	releaseall
-	end
-
-SouthernIsland_Interior_EventScript_LatiDefeated::
-	setflag FLAG_DEFEATED_LATIAS_OR_LATIOS
-	copyvar VAR_0x8004, VAR_TEMP_4
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SouthernIsland_Interior_EventScript_RanFromLati::
-	copyvar VAR_0x8004, VAR_TEMP_4
-	goto Common_EventScript_LegendaryFlewAway
-	end
+	return
 
 SouthernIsland_Interior_EventScript_Sign::
-	msgbox SouthernIsland_Interior_Text_Sign, MSGBOX_DEFAULT
-	releaseall
+	msgbox SouthernIsland_Interior_Text_Sign, MSGBOX_SIGN
 	end
-
-SouthernIsland_Interior_EventScript_SetLatiosBattleVars::
-	seteventmon SPECIES_LATIOS, 50, ITEM_SOUL_DEW
-	return
-
-SouthernIsland_Interior_EventScript_SetLatiasBattleVars::
-	seteventmon SPECIES_LATIAS, 50, ITEM_SOUL_DEW
-	return
-
-SouthernIsland_Interior_Movement_CameraPanUp:
-	walk_up
-	walk_up
-	walk_up
-	step_end
-
-SouthernIsland_Interior_Movement_CameraPanDown:
-	delay_16
-	delay_16
-	delay_16
-	delay_16
-	delay_16
-	delay_16
-	delay_16
-	walk_down
-	walk_down
-	walk_down
-	walk_in_place_faster_up
-	step_end
-
-SouthernIsland_Interior_Movement_LatiApproach:
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	delay_16
-	delay_16
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	step_end

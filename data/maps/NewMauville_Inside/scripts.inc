@@ -17,6 +17,7 @@ NewMauville_Inside_EventScript_TryRemoveVoltorb::
 	return
 
 NewMauville_Inside_OnTransition:
+	call NewMauville_Inside_EventScript_SetupZapdos
 	setvar VAR_TEMP_1, 0
 	setvar VAR_TEMP_2, 0
 	call_if_unset FLAG_DEFEATED_VOLTORB_1_NEW_MAUVILLE, NewMauville_Inside_EventScript_ShowVoltorb1
@@ -261,3 +262,42 @@ NewMauville_Inside_Text_SteppedOnSwitchGeneratorStopped:
 	.string "… … … … … … … …\p"
 	.string "The generator appears to have\n"
 	.string "stopped…$"
+
+NewMauville_Inside_EventScript_SetupZapdos::
+	setflag FLAG_TEMP_HIDE_STATIC_MON
+	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
+	goto_if_set FLAG_CAUGHT_ZAPDOS, Common_EventScript_NopReturn
+	goto_if_set FLAG_DEFEATED_ZAPDOS, Common_EventScript_NopReturn
+	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	return
+
+NewMauville_Inside_EventScript_Zapdos::
+	lock
+	faceplayer
+	setvar VAR_0x8004, SPECIES_ZAPDOS
+	setvar VAR_0x8006, ITEM_NONE
+	waitse
+	playmoncry SPECIES_ZAPDOS, CRY_MODE_ENCOUNTER
+	message Text_Gyaoo
+	waitmessage
+	waitmoncry
+	delay 10
+	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, 0
+	waitbuttonpress
+	call HackStatic_EventScript_LegendaryBattleNoCry
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, NewMauville_Inside_EventScript_CaughtZapdos
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, NewMauville_Inside_EventScript_DefeatedZapdos
+	setvar VAR_0x8004, SPECIES_ZAPDOS
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+NewMauville_Inside_EventScript_DefeatedZapdos::
+	setflag FLAG_DEFEATED_ZAPDOS
+	setvar VAR_0x8004, SPECIES_ZAPDOS
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+NewMauville_Inside_EventScript_CaughtZapdos::
+	setflag FLAG_CAUGHT_ZAPDOS
+	release
+	end

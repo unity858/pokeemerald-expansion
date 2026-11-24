@@ -1,5 +1,15 @@
 SealedChamber_InnerRoom_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, SealedChamber_InnerRoom_OnTransition
+	map_script MAP_SCRIPT_ON_RESUME, SealedChamber_InnerRoom_OnResume
 	.byte 0
+
+SealedChamber_InnerRoom_OnTransition:
+	call SealedChamber_InnerRoom_EventScript_SetupRegigigas
+	end
+
+SealedChamber_InnerRoom_OnResume:
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	end
 
 SealedChamber_InnerRoom_EventScript_BrailleBackWall::
 	lockall
@@ -67,3 +77,35 @@ SealedChamber_InnerRoom_EventScript_BrailleStoryPart6::
 	releaseall
 	end
 
+SealedChamber_InnerRoom_EventScript_SetupRegigigas::
+	setflag FLAG_TEMP_HIDE_STATIC_MON
+	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
+	specialvar VAR_RESULT, AreOtherRegisCaught
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_NopReturn
+	goto_if_set FLAG_CAUGHT_REGIGIGAS, Common_EventScript_NopReturn
+	goto_if_set FLAG_DEFEATED_REGIGIGAS, Common_EventScript_NopReturn
+	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	return
+
+SealedChamber_InnerRoom_EventScript_Regigigas::
+	lock
+	faceplayer
+	setvar VAR_0x8004, SPECIES_REGIGIGAS
+	setvar VAR_0x8006, ITEM_NONE
+	call HackStatic_EventScript_RegiBattle
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SealedChamber_InnerRoom_EventScript_CaughtRegigigas
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SealedChamber_InnerRoom_EventScript_DefeatedRegigigas
+	setvar VAR_0x8004, SPECIES_REGIGIGAS
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+SealedChamber_InnerRoom_EventScript_DefeatedRegigigas::
+	setflag FLAG_DEFEATED_REGIGIGAS
+	setvar VAR_0x8004, SPECIES_REGIGIGAS
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+SealedChamber_InnerRoom_EventScript_CaughtRegigigas::
+	setflag FLAG_CAUGHT_REGIGIGAS
+	release
+	end
