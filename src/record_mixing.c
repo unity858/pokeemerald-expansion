@@ -960,16 +960,22 @@ static void ReceiveDaycareMailData(struct RecordMixingDaycareMail *records, size
 }
 
 
+// The ferry ticket items are unobtainable in this hack (the ferries are gated by flags),
+// so they are not passed on by record mixing either.
+static bool32 IsFerryTicketItem(enum Item item)
+{
+    return item == ITEM_SS_TICKET || item == ITEM_EON_TICKET || item == ITEM_MYSTIC_TICKET
+        || item == ITEM_AURORA_TICKET || item == ITEM_OLD_SEA_MAP;
+}
+
 static void ReceiveGiftItem(enum Item *item, u8 multiplayerId)
 {
-    if (multiplayerId != 0 && *item != ITEM_NONE && GetItemPocket(*item) == POCKET_KEY_ITEMS)
+    if (multiplayerId != 0 && *item != ITEM_NONE && GetItemPocket(*item) == POCKET_KEY_ITEMS && !IsFerryTicketItem(*item))
     {
         if (!CheckBagHasItem(*item, 1) && !CheckPCHasItem(*item, 1) && AddBagItem(*item, 1))
         {
             VarSet(VAR_TEMP_RECORD_MIX_GIFT_ITEM, *item);
             StringCopy(gStringVar1, gLinkPlayers[0].name);
-            if (*item == ITEM_EON_TICKET)
-                FlagSet(FLAG_ENABLE_SHIP_SOUTHERN_ISLAND);
         }
         else
         {

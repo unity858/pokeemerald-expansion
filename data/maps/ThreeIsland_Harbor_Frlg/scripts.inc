@@ -3,3 +3,9 @@
 
 ThreeIsland_Harbor_Frlg_MapScripts::
 	.byte 0
+
+@ Seagallop ferry (data/scripts/interregion_ferry.inc)
+ThreeIsland_Harbor_EventScript_Sailor::
+	setvar VAR_0x8004, SEAGALLOP_THREE_ISLAND
+	goto InterRegionFerry_EventScript_SeagallopSailor
+	end

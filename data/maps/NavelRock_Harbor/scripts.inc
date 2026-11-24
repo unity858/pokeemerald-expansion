@@ -14,6 +14,7 @@ NavelRock_Harbor_EventScript_Sailor::
 	hideobjectat LOCALID_NAVEL_ROCK_SAILOR, MAP_NAVEL_ROCK_HARBOR
 	setvar VAR_0x8004, LOCALID_NAVEL_ROCK_SS_TIDAL
 	call Common_EventScript_FerryDepartIsland
+	goto_if_set FLAG_SPECIAL_ISLAND_FERRY_FROM_SLATEPORT, Common_EventScript_FerryReturnToSlateport
 	warp MAP_LILYCOVE_CITY_HARBOR, 8, 11
 	waitstate
 	release

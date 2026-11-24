@@ -1052,6 +1052,7 @@ gStdScripts_End::
 
 .endif
 
+	.include "data/scripts/interregion_ferry.inc"
 	.include "data/scripts/std_msgbox.inc"
 	.include "data/scripts/trainer_battle.inc"
 	.include "data/scripts/new_game.inc"
@@ -1332,6 +1333,26 @@ Common_EventScript_FerryDepartIsland::
 	hideplayer
 	call Common_EventScript_FerryDepart
 	return
+
+@ Special-island sailors: name of the harbor they sail back to, in STR_VAR_1
+Common_EventScript_BufferFerryHomePort::
+	bufferstring STR_VAR_1, Ferry_Text_Lilycove
+	goto_if_unset FLAG_SPECIAL_ISLAND_FERRY_FROM_SLATEPORT, Common_EventScript_NopReturn
+	bufferstring STR_VAR_1, Ferry_Text_Slateport
+	return
+
+Ferry_Text_Lilycove:
+	.string "LILYCOVE$"
+
+Ferry_Text_Slateport:
+	.string "SLATEPORT$"
+
+@ Special-island sailors: the player sailed out from Slateport (FLAG_SPECIAL_ISLAND_FERRY_FROM_SLATEPORT)
+Common_EventScript_FerryReturnToSlateport::
+	warp MAP_SLATEPORT_CITY_HARBOR, 8, 11
+	waitstate
+	release
+	end
 
 	.include "data/scripts/cave_of_origin.inc"
 	.include "data/scripts/kecleon.inc"

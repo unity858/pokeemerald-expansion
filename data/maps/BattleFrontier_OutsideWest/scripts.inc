@@ -10,10 +10,7 @@ BattleFrontier_OutsideWest_OnTransition:
 BattleFrontier_OutsideWest_EventScript_FerryAttendant::
 	lock
 	faceplayer
-	msgbox BattleFrontier_OutsideWest_Text_MayISeeYourTicket, MSGBOX_DEFAULT
-	checkitem ITEM_SS_TICKET
-	goto_if_eq VAR_RESULT, FALSE, BattleFrontier_OutsideWest_EventScript_NoSSTicket
-	message BattleFrontier_OutsideWest_Text_WhereWouldYouLikeToGo
+	message InterRegionFerry_Text_ChampionSailsFree
 	waitmessage
 	goto BattleFrontier_OutsideWest_EventScript_ChooseFerryDestination
 	end
@@ -25,11 +22,6 @@ BattleFrontier_OutsideWest_EventScript_ChooseFerryDestination::
 	case 1, BattleFrontier_OutsideWest_EventScript_FerryToLilycove
 	case 2, BattleFrontier_OutsideWest_EventScript_CancelFerrySelect
 	case MULTI_B_PRESSED, BattleFrontier_OutsideWest_EventScript_CancelFerrySelect
-	end
-
-BattleFrontier_OutsideWest_EventScript_NoSSTicket::
-	msgbox BattleFrontier_OutsideWest_Text_MustHaveTicketToBoard, MSGBOX_DEFAULT
-	release
 	end
 
 BattleFrontier_OutsideWest_EventScript_FerryToSlateport::
@@ -314,21 +306,6 @@ BattleFrontier_OutsideWest_Text_ThisIsBattleTower:
 	.string "This is the BATTLE TOWER.\p"
 	.string "TRAINERS bring their best-raised\n"
 	.string "POKéMON for elimination-style matches.$"
-
-BattleFrontier_OutsideWest_Text_MayISeeYourTicket:
-	.string "Hello, are you here for the ferry?\n"
-	.string "May I see your TICKET?$"
-
-BattleFrontier_OutsideWest_Text_MustHaveTicketToBoard:
-	.string "{PLAYER} doesn't have the TICKET…\p"
-	.string "I'm terribly sorry.\p"
-	.string "You must have a TICKET to board\n"
-	.string "the ferry.$"
-
-BattleFrontier_OutsideWest_Text_WhereWouldYouLikeToGo:
-	.string "{PLAYER} flashed the TICKET.\p"
-	.string "Perfect! That's all you need!\p"
-	.string "And where would you like to go?$"
 
 BattleFrontier_OutsideWest_Text_SlateportItIs:
 	.string "SLATEPORT CITY it is, then!$"

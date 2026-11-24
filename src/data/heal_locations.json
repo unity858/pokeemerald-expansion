@@ -267,8 +267,10 @@
       "map": "MAP_INDIGO_PLATEAU_EXTERIOR",
       "x": 11,
       "y": 7,
+      "respawn_x": 13,
+      "respawn_y": 12,
       "respawn_map": "MAP_INDIGO_PLATEAU_POKEMON_CENTER_1F",
-      "respawn_npc": "LOCALID_LEAGUE_NURSE"
+      "respawn_npc": "LOCALID_INDIGO_LEAGUE_NURSE"
     },
     {
       "id": "HEAL_LOCATION_SAFFRON_CITY",
@@ -299,6 +301,8 @@
       "map": "MAP_ONE_ISLAND",
       "x": 14,
       "y": 6,
+      "respawn_x": 5,
+      "respawn_y": 4,
       "respawn_map": "MAP_ONE_ISLAND_POKEMON_CENTER_1F",
       "respawn_npc": "LOCALID_ONE_ISLAND_NURSE"
     },

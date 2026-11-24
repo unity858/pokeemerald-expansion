@@ -27,6 +27,12 @@ VermilionCity_EventScript_OldMan1SSAnneLeft::
 	release
 	end
 
+@ Seagallop ferry to Hoenn and the Sevii Islands (data/scripts/interregion_ferry.inc)
+VermilionCity_EventScript_FerrySailor::
+	setvar VAR_0x8004, SEAGALLOP_VERMILION_CITY
+	goto InterRegionFerry_EventScript_SeagallopSailor
+	end
+
 VermilionCity_EventScript_Sailor::
 	msgbox VermilionCity_Text_SSAnneVisitsOnceAYear, MSGBOX_NPC
 	end

@@ -53,7 +53,7 @@ SouthernIsland_Interior_EventScript_Lati::
 	goto_if_set FLAG_TEMP_2, SouthernIsland_Interior_EventScript_Sign
 	goto_if_set FLAG_DEFEATED_LATIAS_OR_LATIOS, SouthernIsland_Interior_EventScript_Sign
 	goto_if_set FLAG_CAUGHT_LATIAS_OR_LATIOS, SouthernIsland_Interior_EventScript_Sign
-	goto_if_unset FLAG_ENABLE_SHIP_SOUTHERN_ISLAND, SouthernIsland_Interior_EventScript_Sign
+	goto_if_unset FLAG_SYS_GAME_CLEAR, SouthernIsland_Interior_EventScript_Sign  @ was FLAG_ENABLE_SHIP_SOUTHERN_ISLAND (Eon Ticket)
 	setflag FLAG_ENCOUNTERED_LATIAS_OR_LATIOS
 	setflag FLAG_TEMP_2
 	special SpawnCameraObject

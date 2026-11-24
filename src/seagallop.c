@@ -1,6 +1,7 @@
 #include "global.h"
 #include "bg.h"
 #include "event_data.h"
+#include "event_object_movement.h"
 #include "field_screen_effect.h"
 #include "field_weather.h"
 #include "gpu_regs.h"
@@ -25,6 +26,7 @@
 #define PALTAG_FERRY_WAKE 3000
 
 static EWRAM_DATA void *sBg3TilemapBuffer = NULL;
+static EWRAM_DATA u8 sArrivalDirection = DIR_NONE;
 
 static void CB2_SetUpSeagallopScene(void);
 static void VBlankCB_SeaGallop(void);
@@ -65,18 +67,21 @@ static const struct BgTemplate sBGTemplates[] = {
     }
 };
 
-static const s8 sSeag[][4] = {
-    [SEAGALLOP_VERMILION_CITY]  = {MAP_GROUP(MAP_VERMILION_CITY), MAP_NUM(MAP_VERMILION_CITY),      0x17, 0x20},
-    [SEAGALLOP_ONE_ISLAND]      = {MAP_GROUP(MAP_ONE_ISLAND_HARBOR), MAP_NUM(MAP_ONE_ISLAND_HARBOR),   0x08, 0x05},
-    [SEAGALLOP_TWO_ISLAND]      = {MAP_GROUP(MAP_TWO_ISLAND_HARBOR), MAP_NUM(MAP_TWO_ISLAND_HARBOR),   0x08, 0x05},
-    [SEAGALLOP_THREE_ISLAND]    = {MAP_GROUP(MAP_THREE_ISLAND_HARBOR), MAP_NUM(MAP_THREE_ISLAND_HARBOR), 0x08, 0x05},
-    [SEAGALLOP_FOUR_ISLAND]     = {MAP_GROUP(MAP_FOUR_ISLAND_HARBOR), MAP_NUM(MAP_FOUR_ISLAND_HARBOR),  0x08, 0x05},
-    [SEAGALLOP_FIVE_ISLAND]     = {MAP_GROUP(MAP_FIVE_ISLAND_HARBOR), MAP_NUM(MAP_FIVE_ISLAND_HARBOR),  0x08, 0x05},
-    [SEAGALLOP_SIX_ISLAND]      = {MAP_GROUP(MAP_SIX_ISLAND_HARBOR), MAP_NUM(MAP_SIX_ISLAND_HARBOR),   0x08, 0x05},
-    [SEAGALLOP_SEVEN_ISLAND]    = {MAP_GROUP(MAP_SEVEN_ISLAND_HARBOR), MAP_NUM(MAP_SEVEN_ISLAND_HARBOR), 0x08, 0x05},
-    [SEAGALLOP_CINNABAR_ISLAND] = {MAP_GROUP(MAP_CINNABAR_ISLAND), MAP_NUM(MAP_CINNABAR_ISLAND),     0x15, 0x07},
-    [SEAGALLOP_NAVEL_ROCK]      = {MAP_GROUP(MAP_NAVEL_ROCK_HARBOR_FRLG), MAP_NUM(MAP_NAVEL_ROCK_HARBOR_FRLG),   0x08, 0x05},
-    [SEAGALLOP_BIRTH_ISLAND]    = {MAP_GROUP(MAP_BIRTH_ISLAND_HARBOR_FRLG), MAP_NUM(MAP_BIRTH_ISLAND_HARBOR_FRLG), 0x08, 0x05}
+// Map, arrival x/y and the direction the player faces on arrival
+static const s8 sSeag[][5] = {
+    [SEAGALLOP_VERMILION_CITY]  = {MAP_GROUP(MAP_VERMILION_CITY), MAP_NUM(MAP_VERMILION_CITY),      0x17, 0x20, DIR_NORTH},
+    [SEAGALLOP_ONE_ISLAND]      = {MAP_GROUP(MAP_ONE_ISLAND_HARBOR), MAP_NUM(MAP_ONE_ISLAND_HARBOR),   0x08, 0x05, DIR_NORTH},
+    [SEAGALLOP_TWO_ISLAND]      = {MAP_GROUP(MAP_TWO_ISLAND_HARBOR), MAP_NUM(MAP_TWO_ISLAND_HARBOR),   0x08, 0x05, DIR_NORTH},
+    [SEAGALLOP_THREE_ISLAND]    = {MAP_GROUP(MAP_THREE_ISLAND_HARBOR), MAP_NUM(MAP_THREE_ISLAND_HARBOR), 0x08, 0x05, DIR_NORTH},
+    [SEAGALLOP_FOUR_ISLAND]     = {MAP_GROUP(MAP_FOUR_ISLAND_HARBOR), MAP_NUM(MAP_FOUR_ISLAND_HARBOR),  0x08, 0x05, DIR_NORTH},
+    [SEAGALLOP_FIVE_ISLAND]     = {MAP_GROUP(MAP_FIVE_ISLAND_HARBOR), MAP_NUM(MAP_FIVE_ISLAND_HARBOR),  0x08, 0x05, DIR_NORTH},
+    [SEAGALLOP_SIX_ISLAND]      = {MAP_GROUP(MAP_SIX_ISLAND_HARBOR), MAP_NUM(MAP_SIX_ISLAND_HARBOR),   0x08, 0x05, DIR_NORTH},
+    [SEAGALLOP_SEVEN_ISLAND]    = {MAP_GROUP(MAP_SEVEN_ISLAND_HARBOR), MAP_NUM(MAP_SEVEN_ISLAND_HARBOR), 0x08, 0x05, DIR_NORTH},
+    [SEAGALLOP_CINNABAR_ISLAND] = {MAP_GROUP(MAP_CINNABAR_ISLAND), MAP_NUM(MAP_CINNABAR_ISLAND),     0x15, 0x07, DIR_SOUTH},
+    [SEAGALLOP_NAVEL_ROCK]      = {MAP_GROUP(MAP_NAVEL_ROCK_HARBOR_FRLG), MAP_NUM(MAP_NAVEL_ROCK_HARBOR_FRLG),   0x08, 0x05, DIR_NORTH},
+    [SEAGALLOP_BIRTH_ISLAND]    = {MAP_GROUP(MAP_BIRTH_ISLAND_HARBOR_FRLG), MAP_NUM(MAP_BIRTH_ISLAND_HARBOR_FRLG), 0x08, 0x05, DIR_NORTH},
+    [SEAGALLOP_SLATEPORT]       = {MAP_GROUP(MAP_SLATEPORT_CITY_HARBOR), MAP_NUM(MAP_SLATEPORT_CITY_HARBOR), 0x08, 0x0B, DIR_SOUTH},
+    [SEAGALLOP_LILYCOVE]        = {MAP_GROUP(MAP_LILYCOVE_CITY_HARBOR), MAP_NUM(MAP_LILYCOVE_CITY_HARBOR),   0x08, 0x0B, DIR_SOUTH},
 };
 
 // Bitpacked array.  In the commented section, right-most bit is the
@@ -100,7 +105,10 @@ static const u16 sTravelDirectionMatrix[] = {
     [SEAGALLOP_SEVEN_ISLAND]    = 0x440, // 10001000000
     [SEAGALLOP_CINNABAR_ISLAND] = 0x7ff, // 11111111111
     [SEAGALLOP_NAVEL_ROCK]      = 0x6e0, // 11011100000
-    [SEAGALLOP_BIRTH_ISLAND]    = 0x000  // 00000000000
+    [SEAGALLOP_BIRTH_ISLAND]    = 0x000, // 00000000000
+    // Kanto and the Sevii Islands lie east of Hoenn
+    [SEAGALLOP_SLATEPORT]       = 0x7ff, // 0011111111111
+    [SEAGALLOP_LILYCOVE]        = 0x7ff, // 0011111111111
 };
 
 static const union AnimCmd sSpriteAnims_Ferry_WB[] = {
@@ -305,6 +313,15 @@ static void Task_Seagallop_2(u8 taskId)
     }
 }
 
+// Scripted warps otherwise always arrive facing south
+static void FieldCB_SeagallopArrival(void)
+{
+    if (sArrivalDirection != DIR_NONE)
+        ObjectEventTurn(&gObjectEvents[gPlayerAvatar.objectEventId], sArrivalDirection);
+    sArrivalDirection = DIR_NONE;
+    FieldCB_DefaultWarpExit();
+}
+
 static void Task_Seagallop_3(void)
 {
     const s8 * warpInfo;
@@ -314,9 +331,10 @@ static void Task_Seagallop_3(void)
 
     warpInfo = sSeag[gSpecialVar_0x8006];
     SetWarpDestination(warpInfo[0], warpInfo[1], -1, warpInfo[2], warpInfo[3]);
+    sArrivalDirection = warpInfo[4];
     PlayRainStoppingSoundEffect();
     PlaySE(SE_EXIT);
-    gFieldCallback = FieldCB_DefaultWarpExit;
+    gFieldCallback = FieldCB_SeagallopArrival;
     WarpIntoMap();
     SetMainCallback2(CB2_LoadMap);
     ResetInitialPlayerAvatarState();
@@ -463,6 +481,11 @@ u8 GetSeagallopNumber(void)
 
     if (originId == SEAGALLOP_CINNABAR_ISLAND || destId == SEAGALLOP_CINNABAR_ISLAND)
         return 1;
+
+    // Inter-region line to and from Hoenn
+    if (originId == SEAGALLOP_SLATEPORT || originId == SEAGALLOP_LILYCOVE
+     || destId == SEAGALLOP_SLATEPORT || destId == SEAGALLOP_LILYCOVE)
+        return 8;
 
     if (originId == SEAGALLOP_VERMILION_CITY || destId == SEAGALLOP_VERMILION_CITY)
         return 7;

@@ -20,7 +20,8 @@
 	.include "data/scripts/gift_pichu.inc"
 	.include "data/scripts/gift_trainer.inc"
 	.include "data/scripts/gift_battle_card.inc"
-	.include "data/scripts/gift_aurora_ticket.inc"
-	.include "data/scripts/gift_mystic_ticket.inc"
 	.include "data/scripts/gift_altering_cave.inc"
-	.include "data/scripts/gift_old_sea_map.inc"
+
+@ The Aurora Ticket, Mystic Ticket and Old Sea Map gift scripts (data/scripts/gift_*.inc)
+@ are not built: the ticket items are unobtainable and the special islands open
+@ with FLAG_SYS_GAME_CLEAR.

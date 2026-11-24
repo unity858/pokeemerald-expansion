@@ -12,6 +12,18 @@
 #define SEAGALLOP_CINNABAR_ISLAND  8
 #define SEAGALLOP_NAVEL_ROCK       9
 #define SEAGALLOP_BIRTH_ISLAND    10
+// Hoenn ports of the inter-region ferry (data/scripts/interregion_ferry.inc)
+#define SEAGALLOP_SLATEPORT       11
+#define SEAGALLOP_LILYCOVE        12
+
+// Ids of the S.S. TIDAL routes in the Hoenn harbor destination lists.
+// SEAGALLOP_SLATEPORT/SEAGALLOP_LILYCOVE double as the Slateport<->Lilycove route there.
+#define FERRY_DEST_BATTLE_FRONTIER  20
+#define FERRY_DEST_SOUTHERN_ISLAND  21
+#define FERRY_DEST_NAVEL_ROCK       22
+#define FERRY_DEST_BIRTH_ISLAND     23
+#define FERRY_DEST_FARAWAY_ISLAND   24
+#define FERRY_DEST_CANCEL          127 // == MULTI_B_PRESSED
 
 #define SEAGALLOP_MORE           254
 

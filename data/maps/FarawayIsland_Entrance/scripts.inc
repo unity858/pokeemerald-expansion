@@ -19,6 +19,7 @@ FarawayIsland_Entrance_EventScript_ClearWeather::
 FarawayIsland_Entrance_EventScript_Sailor::
 	lock
 	faceplayer
+	call Common_EventScript_BufferFerryHomePort
 	msgbox FarawayIsland_Entrance_Text_SailorReturn, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, FarawayIsland_Entrance_EventScript_AsYouLike
 	msgbox EventTicket_Text_SailHome, MSGBOX_DEFAULT
@@ -29,6 +30,7 @@ FarawayIsland_Entrance_EventScript_Sailor::
 	hideobjectat LOCALID_FARAWAY_ISLAND_SAILOR, MAP_FARAWAY_ISLAND_ENTRANCE
 	setvar VAR_0x8004, LOCALID_FARAWAY_ISLAND_SS_TIDAL
 	call Common_EventScript_FerryDepartIsland
+	goto_if_set FLAG_SPECIAL_ISLAND_FERRY_FROM_SLATEPORT, Common_EventScript_FerryReturnToSlateport
 	warp MAP_LILYCOVE_CITY_HARBOR, 8, 11
 	waitstate
 	release

@@ -392,12 +392,14 @@ PlayersHouse_1F_Text_TicketFromBrineyCameForYou:
 	.string "but you look…stronger, somehow.\p"
 	.string "That's the impression I get.\n"
 	.string "But your old man hasn't given up yet!\p"
-	.string "Oh, yes, I have something for you.\n"
-	.string "This came to you from someone named\l"
-	.string "MR. BRINEY.$"
+	.string "Oh, yes, a message came for you from\n"
+	.string "someone named MR. BRINEY.$"
 
 PlayersHouse_1F_Text_PortsInSlateportLilycove:
-	.string "DAD: Hm, a TICKET for a ferry?\p"
+	.string "DAD: The ferry S.S. TIDAL is finally\n"
+	.string "in service, he says.\p"
+	.string "And as the CHAMPION, you can sail on\n"
+	.string "it free of charge!\p"
 	.string "If I recall, there are ferry ports in\n"
 	.string "SLATEPORT and LILYCOVE.$"
 

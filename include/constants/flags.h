@@ -473,9 +473,9 @@
 
 #define FLAG_DEFEATED_DEOXYS                 0x1AC
 #define FLAG_BATTLED_DEOXYS                  0x1AD
-#define FLAG_SHOWN_EON_TICKET                0x1AE
-#define FLAG_SHOWN_AURORA_TICKET             0x1AF
-#define FLAG_SHOWN_OLD_SEA_MAP               0x1B0
+#define FLAG_SPECIAL_ISLAND_FERRY_FROM_SLATEPORT 0x1AE // Was FLAG_SHOWN_EON_TICKET (ticket items are unobtainable): the special-island sailors sail back to Slateport, not Lilycove
+#define FLAG_SHOWN_AURORA_TICKET             0x1AF // Unused: ticket items are unobtainable, the ferries are gated by FLAG_SYS_GAME_CLEAR
+#define FLAG_SHOWN_OLD_SEA_MAP               0x1B0 // Unused: see FLAG_SHOWN_AURORA_TICKET
 #define FLAG_MOVE_TUTOR_TAUGHT_SWAGGER       0x1B1
 #define FLAG_MOVE_TUTOR_TAUGHT_ROLLOUT       0x1B2
 #define FLAG_MOVE_TUTOR_TAUGHT_FURY_CUTTER   0x1B3
@@ -520,7 +520,7 @@
 
 #define FLAG_UNUSED_0x1DA                    0x1DA // Unused Flag
 
-#define FLAG_SHOWN_MYSTIC_TICKET             0x1DB
+#define FLAG_SHOWN_MYSTIC_TICKET             0x1DB // Unused: see FLAG_SHOWN_AURORA_TICKET
 #define FLAG_DEFEATED_HO_OH                  0x1DC
 #define FLAG_DEFEATED_LUGIA                  0x1DD
 

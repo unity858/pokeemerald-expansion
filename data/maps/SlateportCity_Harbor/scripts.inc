@@ -157,39 +157,75 @@ SlateportCity_Harbor_Movement_PlayerWalkUp:
 SlateportCity_Harbor_EventScript_FerryAttendant::
 	lock
 	faceplayer
-	goto_if_set FLAG_SYS_GAME_CLEAR, SlateportCity_Harbor_EventScript_AskForTicket
+	setvar VAR_0x8004, SEAGALLOP_SLATEPORT
+	goto_if_set FLAG_SYS_GAME_CLEAR, SlateportCity_Harbor_EventScript_AskWhereTo
+	goto_if_set FLAG_BADGE08_GET, InterRegionFerry_EventScript_HoennOfferSevii
 	msgbox SlateportCity_Harbor_Text_FerryServiceUnavailable, MSGBOX_DEFAULT
 	release
 	end
 
-SlateportCity_Harbor_EventScript_AskForTicket::
-	msgbox SlateportCity_Harbor_Text_MayISeeYourTicket, MSGBOX_DEFAULT
-	message SlateportCity_Harbor_Text_FlashedTicketWhereTo
+@ No ticket item is needed: after the Hoenn League every route is open
+SlateportCity_Harbor_EventScript_AskWhereTo::
+	message InterRegionFerry_Text_ChampionSailsFree
 	waitmessage
 	goto SlateportCity_Harbor_EventScript_ChooseDestination
 	end
 
 SlateportCity_Harbor_EventScript_ChooseDestination::
-	goto_if_set FLAG_MET_SCOTT_ON_SS_TIDAL, SlateportCity_Harbor_EventScript_ChooseDestinationWithBattleFrontier
-	multichoicedefault 18, 8, MULTI_SSTIDAL_SLATEPORT_NO_BF, 2, FALSE
+	setvar VAR_0x8004, SEAGALLOP_SLATEPORT
+	dynmultipush InterRegionFerry_Text_LilycoveCity, SEAGALLOP_LILYCOVE
+	call_if_set FLAG_MET_SCOTT_ON_SS_TIDAL, SlateportCity_Harbor_EventScript_PushBattleFrontier
+	dynmultipush InterRegionFerry_Text_SouthernIsland, FERRY_DEST_SOUTHERN_ISLAND
+	dynmultipush InterRegionFerry_Text_NavelRock, FERRY_DEST_NAVEL_ROCK
+	dynmultipush InterRegionFerry_Text_BirthIsland, FERRY_DEST_BIRTH_ISLAND
+	dynmultipush InterRegionFerry_Text_FarawayIsland, FERRY_DEST_FARAWAY_ISLAND
+	call InterRegionFerry_EventScript_PushSeagallopDests
+	call InterRegionFerry_EventScript_ShowDestList
 	switch VAR_RESULT
-	case 0, SlateportCity_Harbor_EventScript_Lilycove
-	case 1, SlateportCity_Harbor_EventScript_CancelDestinationSelect
-	case MULTI_B_PRESSED, SlateportCity_Harbor_EventScript_CancelDestinationSelect
+	case SEAGALLOP_LILYCOVE, SlateportCity_Harbor_EventScript_Lilycove
+	case FERRY_DEST_BATTLE_FRONTIER, SlateportCity_Harbor_EventScript_BattleFrontier
+	case FERRY_DEST_SOUTHERN_ISLAND, SlateportCity_Harbor_EventScript_SouthernIsland
+	case FERRY_DEST_NAVEL_ROCK, SlateportCity_Harbor_EventScript_NavelRock
+	case FERRY_DEST_BIRTH_ISLAND, SlateportCity_Harbor_EventScript_BirthIsland
+	case FERRY_DEST_FARAWAY_ISLAND, SlateportCity_Harbor_EventScript_FarawayIsland
+	case FERRY_DEST_CANCEL, SlateportCity_Harbor_EventScript_CancelDestinationSelect
+	goto InterRegionFerry_EventScript_Sail
 	end
 
-SlateportCity_Harbor_EventScript_ChooseDestinationWithBattleFrontier::
-	multichoicedefault 17, 6, MULTI_SSTIDAL_SLATEPORT_WITH_BF, 2, FALSE
-	switch VAR_RESULT
-	case 0, SlateportCity_Harbor_EventScript_Lilycove
-	case 1, SlateportCity_Harbor_EventScript_BattleFrontier
-	case 2, SlateportCity_Harbor_EventScript_CancelDestinationSelect
-	case MULTI_B_PRESSED, SlateportCity_Harbor_EventScript_CancelDestinationSelect
+SlateportCity_Harbor_EventScript_PushBattleFrontier::
+	dynmultipush InterRegionFerry_Text_BattleFrontier, FERRY_DEST_BATTLE_FRONTIER
+	return
+
+@ The special islands' sailors bring the player back to Slateport when this flag is set
+SlateportCity_Harbor_EventScript_SouthernIsland::
+	setflag FLAG_SPECIAL_ISLAND_FERRY_FROM_SLATEPORT
+	call SlateportCity_Harbor_EventScript_BoardFerry
+	warp MAP_SOUTHERN_ISLAND_EXTERIOR, 13, 22
+	waitstate
+	release
 	end
 
-@ Unused. Should be impossible for player to reach Ferry without having received SS Tidal ticket
-SlateportCity_Harbor_EventScript_NoTicket::
-	msgbox SlateportCity_Harbor_Text_YouMustHaveTicket, MSGBOX_DEFAULT
+SlateportCity_Harbor_EventScript_NavelRock::
+	setflag FLAG_SPECIAL_ISLAND_FERRY_FROM_SLATEPORT
+	call SlateportCity_Harbor_EventScript_BoardFerry
+	warp MAP_NAVEL_ROCK_HARBOR, 8, 4
+	waitstate
+	release
+	end
+
+SlateportCity_Harbor_EventScript_BirthIsland::
+	setflag FLAG_SPECIAL_ISLAND_FERRY_FROM_SLATEPORT
+	call SlateportCity_Harbor_EventScript_BoardFerry
+	warp MAP_BIRTH_ISLAND_HARBOR, 8, 4
+	waitstate
+	release
+	end
+
+SlateportCity_Harbor_EventScript_FarawayIsland::
+	setflag FLAG_SPECIAL_ISLAND_FERRY_FROM_SLATEPORT
+	call SlateportCity_Harbor_EventScript_BoardFerry
+	warp MAP_FARAWAY_ISLAND_ENTRANCE, 13, 38
+	waitstate
 	release
 	end
 
@@ -385,21 +421,6 @@ SlateportCity_Harbor_Text_FerryServiceUnavailable:
 	.string "You're looking for a ship?\p"
 	.string "I'm sorry, the ferry service isn't\n"
 	.string "available at present…$"
-
-SlateportCity_Harbor_Text_MayISeeYourTicket:
-	.string "Hello, are you here for the ferry?\n"
-	.string "May I see your TICKET?$"
-
-SlateportCity_Harbor_Text_YouMustHaveTicket:
-	.string "{PLAYER} doesn't have the TICKET…\p"
-	.string "I'm terribly sorry.\p"
-	.string "You must have a TICKET to board\n"
-	.string "the ferry.$"
-
-SlateportCity_Harbor_Text_FlashedTicketWhereTo:
-	.string "{PLAYER} flashed the TICKET.\p"
-	.string "Perfect! That's all you need!\p"
-	.string "And where would you like to go?$"
 
 SlateportCity_Harbor_Text_SailAnotherTime:
 	.string "Please sail with us another time!$"

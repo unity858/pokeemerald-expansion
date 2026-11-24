@@ -9,6 +9,7 @@ SouthernIsland_Exterior_OnTransition:
 SouthernIsland_Exterior_EventScript_Sailor::
 	lock
 	faceplayer
+	call Common_EventScript_BufferFerryHomePort
 	msgbox EventTicket_Text_SouthernIslandSailBack, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, SouthernIsland_Exterior_EventScript_AsYouLike
 	msgbox EventTicket_Text_SailHome, MSGBOX_DEFAULT
@@ -19,6 +20,7 @@ SouthernIsland_Exterior_EventScript_Sailor::
 	hideobjectat LOCALID_SOUTHERN_ISLAND_SAILOR, MAP_SOUTHERN_ISLAND_EXTERIOR
 	setvar VAR_0x8004, LOCALID_SOUTHERN_ISLAND_SS_TIDAL
 	call Common_EventScript_FerryDepartIsland
+	goto_if_set FLAG_SPECIAL_ISLAND_FERRY_FROM_SLATEPORT, Common_EventScript_FerryReturnToSlateport
 	warp MAP_LILYCOVE_CITY_HARBOR, 8, 11
 	waitstate
 	release
