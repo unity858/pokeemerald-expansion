@@ -5521,6 +5521,10 @@ BattleScript_ActionSelectionItemsCantBeUsed::
 	printselectionstring STRINGID_ITEMSCANTBEUSEDNOW
 	endselectionscript
 
+BattleScript_ActionSelectionItemsCantBeUsedTrainer::
+	printselectionstring STRINGID_ITEMSCANTBEUSEDTRAINER
+	endselectionscript
+
 BattleScript_FlushMessageBox::
 	flushtextbox
 	return

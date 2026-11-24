@@ -28,6 +28,7 @@
 #include "string_util.h"
 #include "task.h"
 #include "test_runner.h"
+#include "difficulty.h"
 #include "trig.h"
 #include "trainer_slide.h"
 #include "window.h"
@@ -11035,6 +11036,19 @@ bool32 IsAllowedToUseBag(void)
     default:
         return TRUE; // Undefined Behavior
     }
+}
+
+// Hack: on Normal and Hard the player can't use the Bag in Trainer battles.
+// Wild battles (including the Safari Zone and catching tutorials) are unaffected.
+bool32 IsBagBlockedByDifficulty(void)
+{
+    enum DifficultyLevel difficulty;
+
+    if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) || gTestRunnerEnabled)
+        return FALSE;
+
+    difficulty = GetCurrentDifficultyLevel();
+    return difficulty == DIFFICULTY_NORMAL || difficulty == DIFFICULTY_HARD;
 }
 
 bool32 IsMimikyuDisguised(enum BattlerId battler)
