@@ -5774,3 +5774,29 @@ bool8 CheckAddCoins(void)
     else
         return TRUE;
 }
+
+// Regigigas appears in the Sealed Chamber once the other five Regis are registered as caught.
+bool8 AreOtherRegisCaught(void)
+{
+    static const u16 sRegis[] =
+    {
+        SPECIES_REGIROCK,
+        SPECIES_REGICE,
+        SPECIES_REGISTEEL,
+        SPECIES_REGIELEKI,
+        SPECIES_REGIDRAGO,
+    };
+
+    for (u32 i = 0; i < ARRAY_COUNT(sRegis); i++)
+    {
+        if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(sRegis[i]), FLAG_GET_CAUGHT))
+            return FALSE;
+    }
+    return TRUE;
+}
+
+// Cresselia on Bond Bridge only appears at night (checked on map load).
+bool8 IsTimeOfDayNight(void)
+{
+    return GetTimeOfDay() == TIME_NIGHT;
+}

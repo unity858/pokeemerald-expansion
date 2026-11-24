@@ -40,5 +40,7 @@ bool32 CheckObjectAtXY(u32, u32);
 bool32 CheckPartyHasSpecies(enum Species);
 bool8 CutMoveRuinValleyCheck(void);
 void CutMoveOpenDottedHoleDoor(void);
+bool8 AreOtherRegisCaught(void);
+bool8 IsTimeOfDayNight(void);
 
 #endif // GUARD_FIELD_SPECIALS_H

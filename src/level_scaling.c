@@ -123,6 +123,16 @@ u32 GetScaledWildMonLevel(void)
     return ClampScaledLevel(GetLevelScalingWildMinLevel() + RollLevelScalingBoost());
 }
 
+// Level of the hack's added static legendaries and gift Pokémon (not the vanilla statics, which
+// keep their fixed levels): the wild level for the current badge stage and difficulty, rolled
+// the same way as a wild encounter at the moment of the battle or gift.
+// This is the one place to change that policy. Scripts read it with
+//   specialvar VAR_0x8005, GetScaledStaticLevel
+u16 GetScaledStaticLevel(void)
+{
+    return GetScaledWildMonLevel();
+}
+
 // R.O.W.E. DexNav: the scaled wild level plus chain / 5, with a 2% chance of +10,
 // never above the current boss minimum level.
 u32 GetScaledDexNavMonLevel(u32 chain)

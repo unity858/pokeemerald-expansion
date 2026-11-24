@@ -59,35 +59,35 @@
 #define FLAG_EGG_MOVES_RELEARNER   0x25 // Move relearner offers Egg moves (P_FLAG_EGG_MOVES)
 #define FLAG_TUTOR_MOVES_RELEARNER 0x26 // Move relearner offers Tutor moves (P_FLAG_TUTOR_MOVES)
 #define FLAG_PERFECT_IV_MODE  0x27 // Set if Perfect IV Mode was chosen on the new-game options screen
-#define FLAG_UNUSED_0x028    0x28 // Unused Flag
-#define FLAG_UNUSED_0x029    0x29 // Unused Flag
-#define FLAG_UNUSED_0x02A    0x2A // Unused Flag
-#define FLAG_UNUSED_0x02B    0x2B // Unused Flag
-#define FLAG_UNUSED_0x02C    0x2C // Unused Flag
-#define FLAG_UNUSED_0x02D    0x2D // Unused Flag
-#define FLAG_UNUSED_0x02E    0x2E // Unused Flag
-#define FLAG_UNUSED_0x02F    0x2F // Unused Flag
-#define FLAG_UNUSED_0x030    0x30 // Unused Flag
-#define FLAG_UNUSED_0x031    0x31 // Unused Flag
-#define FLAG_UNUSED_0x032    0x32 // Unused Flag
-#define FLAG_UNUSED_0x033    0x33 // Unused Flag
-#define FLAG_UNUSED_0x034    0x34 // Unused Flag
-#define FLAG_UNUSED_0x035    0x35 // Unused Flag
-#define FLAG_UNUSED_0x036    0x36 // Unused Flag
-#define FLAG_UNUSED_0x037    0x37 // Unused Flag
-#define FLAG_UNUSED_0x038    0x38 // Unused Flag
-#define FLAG_UNUSED_0x039    0x39 // Unused Flag
-#define FLAG_UNUSED_0x03A    0x3A // Unused Flag
-#define FLAG_UNUSED_0x03B    0x3B // Unused Flag
-#define FLAG_UNUSED_0x03C    0x3C // Unused Flag
-#define FLAG_UNUSED_0x03D    0x3D // Unused Flag
-#define FLAG_UNUSED_0x03E    0x3E // Unused Flag
-#define FLAG_UNUSED_0x03F    0x3F // Unused Flag
-#define FLAG_UNUSED_0x040    0x40 // Unused Flag
-#define FLAG_UNUSED_0x041    0x41 // Unused Flag
-#define FLAG_UNUSED_0x042    0x42 // Unused Flag
-#define FLAG_UNUSED_0x043    0x43 // Unused Flag
-#define FLAG_UNUSED_0x044    0x44 // Unused Flag
+#define FLAG_DEFEATED_ARTICUNO       0x28 // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_ARTICUNO         0x29 // Hack static: caught, gone for good
+#define FLAG_DEFEATED_ZAPDOS         0x2A // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_ZAPDOS           0x2B // Hack static: caught, gone for good
+#define FLAG_DEFEATED_MOLTRES        0x2C // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_MOLTRES          0x2D // Hack static: caught, gone for good
+#define FLAG_DEFEATED_LATIAS         0x2E // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_LATIAS           0x2F // Hack static: caught, gone for good
+#define FLAG_DEFEATED_REGIGIGAS      0x30 // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_REGIGIGAS        0x31 // Hack static: caught, gone for good
+#define FLAG_DEFEATED_CRESSELIA      0x32 // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_CRESSELIA        0x33 // Hack static: caught, gone for good
+#define FLAG_DEFEATED_TAPU_KOKO      0x34 // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_TAPU_KOKO        0x35 // Hack static: caught, gone for good
+#define FLAG_DEFEATED_TAPU_LELE      0x36 // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_TAPU_LELE        0x37 // Hack static: caught, gone for good
+#define FLAG_DEFEATED_TAPU_BULU      0x38 // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_TAPU_BULU        0x39 // Hack static: caught, gone for good
+#define FLAG_DEFEATED_TAPU_FINI      0x3A // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_TAPU_FINI        0x3B // Hack static: caught, gone for good
+#define FLAG_DEFEATED_REGIELEKI      0x3C // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_REGIELEKI        0x3D // Hack static: caught, gone for good
+#define FLAG_DEFEATED_REGIDRAGO      0x3E // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_REGIDRAGO        0x3F // Hack static: caught, gone for good
+#define FLAG_DEFEATED_KYUREM         0x40 // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_KYUREM           0x41 // Hack static: caught, gone for good
+#define FLAG_RECEIVED_TYPE_NULL      0x42 // Hack gift: received
+#define FLAG_RECEIVED_POIPOLE        0x43 // Hack gift: received
+#define FLAG_RECEIVED_KUBFU          0x44 // Hack gift: received
 #define FLAG_UNUSED_0x045    0x45 // Unused Flag
 #define FLAG_UNUSED_0x046    0x46 // Unused Flag
 #define FLAG_UNUSED_0x047    0x47 // Unused Flag
@@ -499,8 +499,10 @@
 #define FLAG_DEFEATED_ELECTRODE_2_AQUA_HIDEOUT 0x1C5
 #define FLAG_DEFEATED_SUDOWOODO              0x1C6
 #define FLAG_DEFEATED_MEW                    0x1C7
-#define FLAG_DEFEATED_LATIAS_OR_LATIOS       0x1C8
-#define FLAG_CAUGHT_LATIAS_OR_LATIOS         0x1C9
+#define FLAG_DEFEATED_LATIAS_OR_LATIOS       0x1C8 // Southern Island Latios (Latias has its own flags)
+#define FLAG_CAUGHT_LATIAS_OR_LATIOS         0x1C9 // Southern Island Latios
+#define FLAG_DEFEATED_LATIOS                 FLAG_DEFEATED_LATIAS_OR_LATIOS
+#define FLAG_CAUGHT_LATIOS                   FLAG_CAUGHT_LATIAS_OR_LATIOS
 #define FLAG_CAUGHT_MEW                      0x1CA
 #define FLAG_MET_SCOTT_AFTER_OBTAINING_STONE_BADGE 0x1CB
 #define FLAG_MET_SCOTT_IN_VERDANTURF         0x1CC
@@ -1661,6 +1663,8 @@
 #define FLAG_TEMP_REGICE_PUZZLE_FAILED          FLAG_TEMP_3
 #define FLAG_TEMP_HIDE_FOLLOWER                 FLAG_TEMP_E
 #define FLAG_TEMP_HIDE_MIRAGE_ISLAND_BERRY_TREE FLAG_TEMP_11
+#define FLAG_TEMP_HIDE_STATIC_MON               FLAG_TEMP_8  // Object flag of the hack's static legendaries, set up on map load
+#define FLAG_TEMP_HIDE_STATIC_MON_2             FLAG_TEMP_9  // Same, for a second static on the same map
 
 // FRLG flags
 

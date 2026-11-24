@@ -26,6 +26,7 @@ u32 ClampScaledLevel(s32 level);
 bool32 ShouldScaleWildMonLevels(void);
 u32 GetScaledWildMonLevel(void);
 u32 GetScaledDexNavMonLevel(u32 chain);
+u16 GetScaledStaticLevel(void);
 
 struct Trainer;
 bool32 IsLevelScalingBoss(u16 trainerId, const struct Trainer *trainer);

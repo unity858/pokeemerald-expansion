@@ -30,6 +30,20 @@ EverGrandeCity_HallOfFame_EventScript_ResetDefeatedEventLegendaries::
 	clearflag FLAG_DEFEATED_DEOXYS
 	clearflag FLAG_DEFEATED_LUGIA
 	clearflag FLAG_DEFEATED_HO_OH
+	@ The hack's added statics (data/scripts/hack_statics.inc)
+	clearflag FLAG_DEFEATED_LATIAS
+	clearflag FLAG_DEFEATED_ARTICUNO
+	clearflag FLAG_DEFEATED_ZAPDOS
+	clearflag FLAG_DEFEATED_MOLTRES
+	clearflag FLAG_DEFEATED_REGIGIGAS
+	clearflag FLAG_DEFEATED_CRESSELIA
+	clearflag FLAG_DEFEATED_TAPU_KOKO
+	clearflag FLAG_DEFEATED_TAPU_LELE
+	clearflag FLAG_DEFEATED_TAPU_BULU
+	clearflag FLAG_DEFEATED_TAPU_FINI
+	clearflag FLAG_DEFEATED_REGIELEKI
+	clearflag FLAG_DEFEATED_REGIDRAGO
+	clearflag FLAG_DEFEATED_KYUREM
 	return
 
 EverGrandeCity_HallOfFame_EventScript_SetDesertUnderpassCommentReady::

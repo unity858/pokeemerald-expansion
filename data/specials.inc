@@ -642,3 +642,6 @@ gSpecials::
 	def_special CheckAddCoins
 	def_special MoveNurse_GetTutorAvailability
 	def_special MoveNurse_BufferEggMovePrice
+	def_special GetScaledStaticLevel
+	def_special AreOtherRegisCaught
+	def_special IsTimeOfDayNight
