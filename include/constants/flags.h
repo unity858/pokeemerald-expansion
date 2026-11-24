@@ -92,13 +92,13 @@
 #define FLAG_CAUGHT_TERRAKION        0x46 // Hack static: caught, gone for good
 #define FLAG_DEFEATED_COBALION       0x47 // Hack static: knocked out, back after the next Hall of Fame
 #define FLAG_CAUGHT_COBALION         0x48 // Hack static: caught, gone for good
-#define FLAG_UNUSED_0x049    0x49 // Unused Flag
-#define FLAG_UNUSED_0x04A    0x4A // Unused Flag
-#define FLAG_UNUSED_0x04B    0x4B // Unused Flag
-#define FLAG_UNUSED_0x04C    0x4C // Unused Flag
-#define FLAG_UNUSED_0x04D    0x4D // Unused Flag
-#define FLAG_UNUSED_0x04E    0x4E // Unused Flag
-#define FLAG_UNUSED_0x04F    0x4F // Unused Flag
+#define FLAG_DEFEATED_WO_CHIEN       0x49 // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_WO_CHIEN         0x4A // Hack static: caught, gone for good
+#define FLAG_DEFEATED_TING_LU        0x4B // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_TING_LU          0x4C // Hack static: caught, gone for good
+#define FLAG_DEFEATED_CHIEN_PAO      0x4D // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_CHIEN_PAO        0x4E // Hack static: caught, gone for good
+#define FLAG_DEFEATED_CHI_YU         0x4F // Hack static: knocked out, back after the next Hall of Fame
 
 // Scripts
 #define FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA_STILL  0x50
@@ -106,7 +106,7 @@
 #define FLAG_RESCUED_BIRCH                       0x52
 #define FLAG_LEGENDARIES_IN_SOOTOPOLIS           0x53
 
-#define FLAG_UNUSED_0x054                    0x54  // Unused Flag
+#define FLAG_CAUGHT_CHI_YU                   0x54  // Hack static: caught, gone for good
 #define FLAG_UNUSED_0x055                    0x55  // Unused Flag
 
 #define FLAG_HIDE_CONTEST_POKE_BALL          0x56  // Always set after new game, object it hides is added directly

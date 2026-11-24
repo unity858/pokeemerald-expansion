@@ -2,4 +2,45 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 SevenIsland_TanobyRuins_RixyChamber_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, SevenIsland_TanobyRuins_RixyChamber_OnTransition
+	map_script MAP_SCRIPT_ON_RESUME, SevenIsland_TanobyRuins_RixyChamber_OnResume
 	.byte 0
+
+SevenIsland_TanobyRuins_RixyChamber_OnTransition:
+	call SevenIsland_TanobyRuins_RixyChamber_EventScript_SetupChiYu
+	end
+
+SevenIsland_TanobyRuins_RixyChamber_OnResume:
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	end
+
+SevenIsland_TanobyRuins_RixyChamber_EventScript_SetupChiYu::
+	setflag FLAG_TEMP_HIDE_STATIC_MON
+	goto_if_unset FLAG_SYS_GAME_CLEAR, Common_EventScript_NopReturn
+	goto_if_set FLAG_CAUGHT_CHI_YU, Common_EventScript_NopReturn
+	goto_if_set FLAG_DEFEATED_CHI_YU, Common_EventScript_NopReturn
+	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	return
+
+SevenIsland_TanobyRuins_RixyChamber_EventScript_ChiYu::
+	lock
+	faceplayer
+	setvar VAR_0x8004, SPECIES_CHI_YU
+	setvar VAR_0x8006, ITEM_NONE
+	call HackStatic_EventScript_LegendaryBattle
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SevenIsland_TanobyRuins_RixyChamber_EventScript_CaughtChiYu
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SevenIsland_TanobyRuins_RixyChamber_EventScript_DefeatedChiYu
+	setvar VAR_0x8004, SPECIES_CHI_YU
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+SevenIsland_TanobyRuins_RixyChamber_EventScript_DefeatedChiYu::
+	setflag FLAG_DEFEATED_CHI_YU
+	setvar VAR_0x8004, SPECIES_CHI_YU
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+SevenIsland_TanobyRuins_RixyChamber_EventScript_CaughtChiYu::
+	setflag FLAG_CAUGHT_CHI_YU
+	release
+	end

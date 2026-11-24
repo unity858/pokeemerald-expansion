@@ -46,6 +46,10 @@ EverGrandeCity_HallOfFame_EventScript_ResetDefeatedEventLegendaries::
 	clearflag FLAG_DEFEATED_KYUREM
 	clearflag FLAG_DEFEATED_TERRAKION
 	clearflag FLAG_DEFEATED_COBALION
+	clearflag FLAG_DEFEATED_WO_CHIEN
+	clearflag FLAG_DEFEATED_TING_LU
+	clearflag FLAG_DEFEATED_CHIEN_PAO
+	clearflag FLAG_DEFEATED_CHI_YU
 	return
 
 EverGrandeCity_HallOfFame_EventScript_SetDesertUnderpassCommentReady::
