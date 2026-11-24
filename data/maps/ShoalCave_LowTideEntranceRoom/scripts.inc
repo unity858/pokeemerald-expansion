@@ -22,6 +22,8 @@ ShoalCave_LowTideEntranceRoom_EventScript_ShellBellExpert::
 	call_if_set FLAG_SYS_SHOAL_ITEM, ShoalCave_LowTideEntranceRoom_EventScript_ResetShoalItems
 	goto_if_unset FLAG_BADGE08_GET, ShoalCave_LowTideEntranceRoom_EventScript_ShellBellCheck
 	goto_if_unset FLAG_RECEIVED_KUBFU, ShoalCave_LowTideEntranceRoom_EventScript_GiveKubfu
+	call ShoalCave_LowTideEntranceRoom_EventScript_CheckScrolls
+	goto_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_GiveScrollsLater
 ShoalCave_LowTideEntranceRoom_EventScript_ShellBellCheck::
 	checkitem ITEM_SHOAL_SALT, 4
 	goto_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_NotEnoughShoalSaltOrShells
@@ -101,10 +103,66 @@ ShoalCave_LowTideEntranceRoom_EventScript_GiveKubfu::
 	call HackGift_EventScript_GiveMon
 	goto_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_KubfuEnd
 	setflag FLAG_RECEIVED_KUBFU
+	msgbox ShoalCave_LowTideEntranceRoom_Text_OfferScrolls, MSGBOX_DEFAULT
+	call ShoalCave_LowTideEntranceRoom_EventScript_GiveMissingScrolls
 	msgbox ShoalCave_LowTideEntranceRoom_Text_KubfuReceived, MSGBOX_DEFAULT
 ShoalCave_LowTideEntranceRoom_EventScript_KubfuEnd::
 	release
 	end
+
+@ Kubfu's two scrolls come with it. Players who got Kubfu before the scrolls were
+@ added (or whose Bag was full) get any missing scroll on their next talk.
+@ Returns VAR_RESULT = TRUE if the player has both scrolls.
+ShoalCave_LowTideEntranceRoom_EventScript_CheckScrolls::
+	checkitem ITEM_SCROLL_OF_DARKNESS
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_NopReturn
+	checkitem ITEM_SCROLL_OF_WATERS
+	return
+
+ShoalCave_LowTideEntranceRoom_EventScript_GiveScrollsLater::
+	msgbox ShoalCave_LowTideEntranceRoom_Text_ForgotScrolls, MSGBOX_DEFAULT
+	call ShoalCave_LowTideEntranceRoom_EventScript_GiveMissingScrolls
+	msgbox ShoalCave_LowTideEntranceRoom_Text_ExplainScrolls, MSGBOX_DEFAULT
+	release
+	end
+
+ShoalCave_LowTideEntranceRoom_EventScript_GiveMissingScrolls::
+	checkitem ITEM_SCROLL_OF_DARKNESS
+	call_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_GiveScrollOfDarkness
+	checkitem ITEM_SCROLL_OF_WATERS
+	call_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_GiveScrollOfWaters
+	return
+
+ShoalCave_LowTideEntranceRoom_EventScript_GiveScrollOfDarkness::
+	giveitem ITEM_SCROLL_OF_DARKNESS
+	call_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_ScrollBagFull
+	return
+
+ShoalCave_LowTideEntranceRoom_EventScript_GiveScrollOfWaters::
+	giveitem ITEM_SCROLL_OF_WATERS
+	call_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_ScrollBagFull
+	return
+
+ShoalCave_LowTideEntranceRoom_EventScript_ScrollBagFull::
+	msgbox gText_TooBadBagIsFull, MSGBOX_DEFAULT
+	return
+
+ShoalCave_LowTideEntranceRoom_Text_OfferScrolls:
+	.string "And these scrolls go with it.\n"
+	.string "They're as old as this cave.$"
+
+ShoalCave_LowTideEntranceRoom_Text_ForgotScrolls:
+	.string "Ah, it's you! I forgot to give you\n"
+	.string "these when you took that little\l"
+	.string "one with you.$"
+
+ShoalCave_LowTideEntranceRoom_Text_ExplainScrolls:
+	.string "The SCROLL OF DARKNESS teaches\n"
+	.string "the strikes of the dark.\p"
+	.string "The SCROLL OF WATERS teaches\n"
+	.string "the flow of the tides.\p"
+	.string "Only one path can be chosen, so\n"
+	.string "choose well.$"
 
 ShoalCave_LowTideEntranceRoom_Text_OfferKubfu:
 	.string "Hmm… You've become quite a strong\n"
@@ -116,9 +174,9 @@ ShoalCave_LowTideEntranceRoom_Text_OfferKubfu:
 	.string "Please, take it with you.$"
 
 ShoalCave_LowTideEntranceRoom_Text_KubfuReceived:
-	.string "Train it well, and one day it'll\n"
-	.string "master a fighting style of its\l"
-	.string "own.\p"
+	.string "Train it well, and show it one of\n"
+	.string "those scrolls when it's ready.\l"
+	.string "It'll master the style it reads.\p"
 	.string "And bring me SHOAL SALT and\n"
 	.string "SHOAL SHELLS, and I'll still make\l"
 	.string "you a SHELL BELL!$"
