@@ -21,6 +21,7 @@
 #include "trainer_pokemon_sprites.h"
 #include "trig.h"
 #include "window.h"
+#include "constants/regions.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
 
@@ -110,15 +111,21 @@ static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
     {8, 4},
 };
 
-#define GRASS_STARTER (IS_FRLG ? SPECIES_BULBASAUR  : SPECIES_TREECKO)
-#define FIRE_STARTER  (IS_FRLG ? SPECIES_CHARMANDER : SPECIES_TORCHIC)
-#define WATER_STARTER (IS_FRLG ? SPECIES_SQUIRTLE   : SPECIES_MUDKIP )
-
-static const u16 sStarterMon[STARTER_MON_COUNT] =
+// Starters offered in Birch's bag, by the favorite region the player told the rival
+// (VAR_FAVORITE_REGION, an enum Region). Each row is in grass / fire / water order,
+// which matches the slot index stored in VAR_STARTER_MON. Regions without a row
+// (REGION_NONE, REGION_HISUI) fall back to Hoenn.
+static const u16 sStarterMon[REGIONS_COUNT][STARTER_MON_COUNT] =
 {
-    GRASS_STARTER,
-    FIRE_STARTER,
-    WATER_STARTER,
+    [REGION_KANTO]  = {SPECIES_BULBASAUR,  SPECIES_CHARMANDER, SPECIES_SQUIRTLE},
+    [REGION_JOHTO]  = {SPECIES_CHIKORITA,  SPECIES_CYNDAQUIL,  SPECIES_TOTODILE},
+    [REGION_HOENN]  = {SPECIES_TREECKO,    SPECIES_TORCHIC,    SPECIES_MUDKIP},
+    [REGION_SINNOH] = {SPECIES_TURTWIG,    SPECIES_CHIMCHAR,   SPECIES_PIPLUP},
+    [REGION_UNOVA]  = {SPECIES_SNIVY,      SPECIES_TEPIG,      SPECIES_OSHAWOTT},
+    [REGION_KALOS]  = {SPECIES_CHESPIN,    SPECIES_FENNEKIN,   SPECIES_FROAKIE},
+    [REGION_ALOLA]  = {SPECIES_ROWLET,     SPECIES_LITTEN,     SPECIES_POPPLIO},
+    [REGION_GALAR]  = {SPECIES_GROOKEY,    SPECIES_SCORBUNNY,  SPECIES_SOBBLE},
+    [REGION_PALDEA] = {SPECIES_SPRIGATITO, SPECIES_FUECOCO,    SPECIES_QUAXLY},
 };
 
 static const struct BgTemplate sBgTemplates[3] =
@@ -347,11 +354,24 @@ static const struct SpriteTemplate sSpriteTemplate_StarterCircle =
 };
 
 // .text
+static enum Region GetStarterRegion(void)
+{
+    u32 region;
+
+    if (IS_FRLG)
+        return REGION_KANTO;
+
+    region = VarGet(VAR_FAVORITE_REGION);
+    if (region >= REGIONS_COUNT || sStarterMon[region][0] == SPECIES_NONE)
+        return REGION_HOENN;
+    return region;
+}
+
 u16 GetStarterPokemon(u16 chosenStarterId)
 {
-    if (chosenStarterId > STARTER_MON_COUNT)
+    if (chosenStarterId >= STARTER_MON_COUNT)
         chosenStarterId = 0;
-    return sStarterMon[chosenStarterId];
+    return sStarterMon[GetStarterRegion()][chosenStarterId];
 }
 
 static void VblankCB_StarterChoose(void)

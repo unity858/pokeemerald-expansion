@@ -1553,6 +1553,13 @@ bool8 IsStarterInParty(void)
     return FALSE;
 }
 
+// Buffers the species name of the starter the player chose (follows VAR_FAVORITE_REGION)
+// into gStringVar1.
+void BufferStarterSpeciesName(void)
+{
+    StringCopy(gStringVar1, GetSpeciesName(GetStarterPokemon(VarGet(VAR_STARTER_MON))));
+}
+
 bool8 ScriptCheckFreePokemonStorageSpace(void)
 {
     return CheckFreePokemonStorageSpace();
