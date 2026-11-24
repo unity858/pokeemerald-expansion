@@ -27873,29 +27873,29 @@
             "encounter_rate": 2,
             "mons": [
               {
-                "min_level": 5,
-                "max_level": 20,
-                "species": "SPECIES_TENTACOOL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 20,
-                "max_level": 35,
-                "species": "SPECIES_TENTACOOL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_TENTACOOL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_TENTACRUEL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_TENTACRUEL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               }
             ]
           },
@@ -27903,54 +27903,54 @@
             "encounter_rate": 20,
             "mons": [
               {
-                "min_level": 5,
-                "max_level": 5,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 5,
-                "max_level": 5,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_HORSEA"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_HORSEA"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_HORSEA"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_QWILFISH"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_GYARADOS"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 25,
-                "max_level": 35,
-                "species": "SPECIES_SEADRA"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 25,
-                "max_level": 35,
-                "species": "SPECIES_PSYDUCK"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               }
             ]
           }
@@ -27962,29 +27962,29 @@
             "encounter_rate": 2,
             "mons": [
               {
-                "min_level": 5,
-                "max_level": 20,
-                "species": "SPECIES_TENTACOOL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 20,
-                "max_level": 35,
-                "species": "SPECIES_TENTACOOL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_MANTINE"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_TENTACRUEL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_TENTACRUEL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               }
             ]
           },
@@ -27992,54 +27992,54 @@
             "encounter_rate": 20,
             "mons": [
               {
-                "min_level": 5,
-                "max_level": 5,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 5,
-                "max_level": 5,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_KRABBY"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_KRABBY"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_KRABBY"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_REMORAID"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_GYARADOS"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 25,
-                "max_level": 35,
-                "species": "SPECIES_KINGLER"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 25,
-                "max_level": 35,
-                "species": "SPECIES_SLOWPOKE"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               }
             ]
           }
@@ -28053,62 +28053,62 @@
               {
                 "min_level": 50,
                 "max_level": 50,
-                "species": "SPECIES_NIHILEGO"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_XURKITREE"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_BUZZWOLE"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_KARTANA"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_BLACEPHALON"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_NIHILEGO"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_XURKITREE"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_BUZZWOLE"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_KARTANA"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_BLACEPHALON"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
                 "species": "SPECIES_CELESTEELA"
               },
               {
                 "min_level": 50,
                 "max_level": 50,
-                "species": "SPECIES_GUZZLORD"
+                "species": "SPECIES_XURKITREE"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BUZZWOLE"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_KARTANA"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BLACEPHALON"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BUZZWOLE"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_KARTANA"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BLACEPHALON"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_KARTANA"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BLACEPHALON"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_KARTANA"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BLACEPHALON"
               }
             ]
           }
@@ -28122,62 +28122,62 @@
               {
                 "min_level": 50,
                 "max_level": 50,
-                "species": "SPECIES_NIHILEGO"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_XURKITREE"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_BUZZWOLE"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_KARTANA"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_BLACEPHALON"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_NIHILEGO"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_XURKITREE"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_BUZZWOLE"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_KARTANA"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
-                "species": "SPECIES_BLACEPHALON"
-              },
-              {
-                "min_level": 50,
-                "max_level": 50,
                 "species": "SPECIES_CELESTEELA"
               },
               {
                 "min_level": 50,
                 "max_level": 50,
-                "species": "SPECIES_GUZZLORD"
+                "species": "SPECIES_XURKITREE"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BUZZWOLE"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_KARTANA"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BLACEPHALON"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BUZZWOLE"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_KARTANA"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BLACEPHALON"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_KARTANA"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BLACEPHALON"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_KARTANA"
+              },
+              {
+                "min_level": 50,
+                "max_level": 50,
+                "species": "SPECIES_BLACEPHALON"
               }
             ]
           }
@@ -28191,32 +28191,12 @@
               {
                 "min_level": 52,
                 "max_level": 52,
-                "species": "SPECIES_GUZZLORD"
-              },
-              {
-                "min_level": 52,
-                "max_level": 52,
-                "species": "SPECIES_CELESTEELA"
-              },
-              {
-                "min_level": 52,
-                "max_level": 52,
-                "species": "SPECIES_STAKATAKA"
-              },
-              {
-                "min_level": 52,
-                "max_level": 52,
-                "species": "SPECIES_GUZZLORD"
-              },
-              {
-                "min_level": 52,
-                "max_level": 52,
-                "species": "SPECIES_CELESTEELA"
-              },
-              {
-                "min_level": 52,
-                "max_level": 52,
                 "species": "SPECIES_BUZZWOLE"
+              },
+              {
+                "min_level": 52,
+                "max_level": 52,
+                "species": "SPECIES_CELESTEELA"
               },
               {
                 "min_level": 52,
@@ -28231,7 +28211,27 @@
               {
                 "min_level": 52,
                 "max_level": 52,
-                "species": "SPECIES_NIHILEGO"
+                "species": "SPECIES_XURKITREE"
+              },
+              {
+                "min_level": 52,
+                "max_level": 52,
+                "species": "SPECIES_BLACEPHALON"
+              },
+              {
+                "min_level": 52,
+                "max_level": 52,
+                "species": "SPECIES_STAKATAKA"
+              },
+              {
+                "min_level": 52,
+                "max_level": 52,
+                "species": "SPECIES_KARTANA"
+              },
+              {
+                "min_level": 52,
+                "max_level": 52,
+                "species": "SPECIES_BLACEPHALON"
               },
               {
                 "min_level": 52,
@@ -28290,32 +28290,12 @@
               {
                 "min_level": 52,
                 "max_level": 52,
-                "species": "SPECIES_GUZZLORD"
-              },
-              {
-                "min_level": 52,
-                "max_level": 52,
-                "species": "SPECIES_CELESTEELA"
-              },
-              {
-                "min_level": 52,
-                "max_level": 52,
-                "species": "SPECIES_STAKATAKA"
-              },
-              {
-                "min_level": 52,
-                "max_level": 52,
-                "species": "SPECIES_GUZZLORD"
-              },
-              {
-                "min_level": 52,
-                "max_level": 52,
-                "species": "SPECIES_CELESTEELA"
-              },
-              {
-                "min_level": 52,
-                "max_level": 52,
                 "species": "SPECIES_BUZZWOLE"
+              },
+              {
+                "min_level": 52,
+                "max_level": 52,
+                "species": "SPECIES_CELESTEELA"
               },
               {
                 "min_level": 52,
@@ -28330,7 +28310,27 @@
               {
                 "min_level": 52,
                 "max_level": 52,
-                "species": "SPECIES_NIHILEGO"
+                "species": "SPECIES_XURKITREE"
+              },
+              {
+                "min_level": 52,
+                "max_level": 52,
+                "species": "SPECIES_BLACEPHALON"
+              },
+              {
+                "min_level": 52,
+                "max_level": 52,
+                "species": "SPECIES_STAKATAKA"
+              },
+              {
+                "min_level": 52,
+                "max_level": 52,
+                "species": "SPECIES_KARTANA"
+              },
+              {
+                "min_level": 52,
+                "max_level": 52,
+                "species": "SPECIES_BLACEPHALON"
               },
               {
                 "min_level": 52,
@@ -28387,29 +28387,29 @@
             "encounter_rate": 2,
             "mons": [
               {
-                "min_level": 5,
-                "max_level": 20,
-                "species": "SPECIES_TENTACOOL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 20,
-                "max_level": 35,
-                "species": "SPECIES_TENTACOOL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_TENTACOOL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_TENTACRUEL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_TENTACRUEL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               }
             ]
           },
@@ -28417,54 +28417,54 @@
             "encounter_rate": 20,
             "mons": [
               {
-                "min_level": 5,
-                "max_level": 5,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 5,
-                "max_level": 5,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_HORSEA"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_HORSEA"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_HORSEA"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_QWILFISH"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_GYARADOS"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 25,
-                "max_level": 35,
-                "species": "SPECIES_SEADRA"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 25,
-                "max_level": 35,
-                "species": "SPECIES_PSYDUCK"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               }
             ]
           }
@@ -28476,29 +28476,29 @@
             "encounter_rate": 2,
             "mons": [
               {
-                "min_level": 5,
-                "max_level": 20,
-                "species": "SPECIES_TENTACOOL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 20,
-                "max_level": 35,
-                "species": "SPECIES_TENTACOOL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_MANTINE"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_TENTACRUEL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 35,
-                "max_level": 40,
-                "species": "SPECIES_TENTACRUEL"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               }
             ]
           },
@@ -28506,54 +28506,54 @@
             "encounter_rate": 20,
             "mons": [
               {
-                "min_level": 5,
-                "max_level": 5,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 5,
-                "max_level": 5,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_KRABBY"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_MAGIKARP"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_KRABBY"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_KRABBY"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_REMORAID"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_GYARADOS"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_NIHILEGO"
               },
               {
-                "min_level": 25,
-                "max_level": 35,
-                "species": "SPECIES_KINGLER"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               },
               {
-                "min_level": 25,
-                "max_level": 35,
-                "species": "SPECIES_SLOWPOKE"
+                "min_level": 45,
+                "max_level": 50,
+                "species": "SPECIES_GUZZLORD"
               }
             ]
           }
