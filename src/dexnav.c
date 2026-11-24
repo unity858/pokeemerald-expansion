@@ -1494,7 +1494,7 @@ static u8 GetEncounterLevelFromMapData(enum Species species, enum EncounterType 
 
         for (i = 0; i < NUM_LAND_MONS_ENCOUNTER_SLOTS; i++)
         {
-            if (landMonsInfo->wildPokemon[i].species == species)
+            if (GetWildEncounterSpecies(landMonsInfo->wildPokemon[i].species) == species)
             {
                 min = (min < landMonsInfo->wildPokemon[i].minLevel) ? min : landMonsInfo->wildPokemon[i].minLevel;
                 max = (max > landMonsInfo->wildPokemon[i].maxLevel) ? max : landMonsInfo->wildPokemon[i].maxLevel;
@@ -1706,7 +1706,7 @@ static bool8 CapturedAllLandMons(u32 headerId)
     {
         for (i = 0; i < NUM_LAND_MONS_ENCOUNTER_SLOTS; ++i)
         {
-            species = landMonsInfo->wildPokemon[i].species;
+            species = GetWildEncounterSpecies(landMonsInfo->wildPokemon[i].species);
             if (species != SPECIES_NONE)
             {
                 if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
@@ -1928,9 +1928,9 @@ static void DexNavLoadEncounterData(void)
     {
         for (i = 0; i < NUM_LAND_MONS_ENCOUNTER_SLOTS; i++)
         {
-            species = landMonsInfo->wildPokemon[i].species;
+            species = GetWildEncounterSpecies(landMonsInfo->wildPokemon[i].species);
             if (species != SPECIES_NONE && !SpeciesInArray(species, 0))
-                sDexNavUiDataPtr->landSpecies[grassIndex++] = landMonsInfo->wildPokemon[i].species;
+                sDexNavUiDataPtr->landSpecies[grassIndex++] = species;
         }
     }
 
@@ -2530,7 +2530,7 @@ bool32 TryFindHiddenPokemon(void)
                 const struct WildPokemonInfo *landMonsInfo = gWildMonHeaders[headerId].encounterTypes[GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND)].landMonsInfo;
                 if (landMonsInfo == NULL)
                     return FALSE;
-                species = landMonsInfo->wildPokemon[ChooseWildMonIndex_Land()].species;
+                species = GetWildEncounterSpecies(landMonsInfo->wildPokemon[ChooseWildMonIndex_Land()].species);
                 environment = ENCOUNTER_TYPE_LAND;
             }
             break;
