@@ -1,106 +1,83 @@
 LilycoveCity_MoveDeletersHouse_MapScripts::
 	.byte 0
 
-LilycoveCity_MoveDeletersHouse_EventScript_MoveDeleter::
-	lockall
-	applymovement LOCALID_MOVE_DELETER, Common_Movement_FacePlayer
+@ Trades a WATER starter of the player's choice for 1 Blue Shard (see data/scripts/starter_shard_trade.inc)
+LilycoveCity_MoveDeletersHouse_EventScript_WaterStarters::
+	lock
+	faceplayer
+	checkitem ITEM_BLUE_SHARD
+	goto_if_eq VAR_RESULT, FALSE, LilycoveCity_MoveDeletersHouse_EventScript_StarterNoShard
+	playse SE_PIN
+	applymovement VAR_LAST_TALKED, Common_Movement_ExclamationMark
 	waitmovement 0
-	msgbox LilycoveCity_MoveDeletersHouse_Text_ICanMakeMonForgetMove, MSGBOX_YESNO
+	applymovement VAR_LAST_TALKED, Common_Movement_Delay48
+	waitmovement 0
+	msgbox LilycoveCity_MoveDeletersHouse_Text_StarterOffer, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, StarterShardTrade_EventScript_Declined
+	message StarterShardTrade_Text_WhichOne
+	waitmessage
+	dynmultichoice 30, 1, FALSE, 6, 0, DYN_MULTICHOICE_CB_NONE, StarterShardTrade_Text_Squirtle, StarterShardTrade_Text_Totodile, StarterShardTrade_Text_Mudkip, StarterShardTrade_Text_Piplup, StarterShardTrade_Text_Oshawott, StarterShardTrade_Text_Froakie, StarterShardTrade_Text_Popplio, StarterShardTrade_Text_Sobble, StarterShardTrade_Text_Quaxly
+	setvar VAR_0x800A, ITEM_BLUE_SHARD
+	setvar VAR_0x8009, ITEM_NONE
 	switch VAR_RESULT
-	case YES, LilycoveCity_MoveDeletersHouse_EventScript_ChooseMonAndMoveToForget
-	case NO, LilycoveCity_MoveDeletersHouse_EventScript_ComeAgain
-	releaseall
+	case 0, LilycoveCity_MoveDeletersHouse_EventScript_Squirtle
+	case 1, LilycoveCity_MoveDeletersHouse_EventScript_Totodile
+	case 2, LilycoveCity_MoveDeletersHouse_EventScript_Mudkip
+	case 3, LilycoveCity_MoveDeletersHouse_EventScript_Piplup
+	case 4, LilycoveCity_MoveDeletersHouse_EventScript_Oshawott
+	case 5, LilycoveCity_MoveDeletersHouse_EventScript_Froakie
+	case 6, LilycoveCity_MoveDeletersHouse_EventScript_Popplio
+	case 7, LilycoveCity_MoveDeletersHouse_EventScript_Sobble
+	case 8, LilycoveCity_MoveDeletersHouse_EventScript_Quaxly
+	goto StarterShardTrade_EventScript_Declined
 	end
 
-LilycoveCity_MoveDeletersHouse_EventScript_ChooseMonAndMoveToForget::
-	msgbox LilycoveCity_MoveDeletersHouse_Text_WhichMonShouldForget, MSGBOX_DEFAULT
-	chooseboxmon SELECT_PC_MON_MOVE_DELETER
-	waitstate
-	goto_if_eq VAR_0x8004, PARTY_NOTHING_CHOSEN, LilycoveCity_MoveDeletersHouse_EventScript_ComeAgain
-	special IsSelectedMonEgg
-	goto_if_eq VAR_RESULT, TRUE, LilycoveCity_MoveDeletersHouse_EventScript_EggCantForgetMoves
-	special GetNumMovesSelectedMonHas
-	goto_if_eq VAR_RESULT, 1, LilycoveCity_MoveDeletersHouse_EventScript_MonOnlyKnowsOneMove
-	msgbox LilycoveCity_MoveDeletersHouse_Text_WhichMoveShouldBeForgotten, MSGBOX_DEFAULT
-	fadescreen FADE_TO_BLACK
-	special MoveDeleterChooseMoveToForget
-	fadescreen FADE_FROM_BLACK
-	goto_if_eq VAR_0x8005, MAX_MON_MOVES, LilycoveCity_MoveDeletersHouse_EventScript_ChooseMonAndMoveToForget
-	special BufferMoveDeleterNicknameAndMove
-	msgbox LilycoveCity_MoveDeletersHouse_Text_MonsMoveShouldBeForgotten, MSGBOX_YESNO
-	switch VAR_RESULT
-	case YES, LilycoveCity_MoveDeletersHouse_EventScript_TryForgetMove
-	case NO, LilycoveCity_MoveDeletersHouse_EventScript_ComeAgain
-	releaseall
+LilycoveCity_MoveDeletersHouse_EventScript_Squirtle::
+	setvar VAR_0x8008, SPECIES_SQUIRTLE
+	setvar VAR_0x8009, ITEM_BLASTOISINITE
+	goto StarterShardTrade_EventScript_Give
+LilycoveCity_MoveDeletersHouse_EventScript_Totodile::
+	setvar VAR_0x8008, SPECIES_TOTODILE
+	setvar VAR_0x8009, ITEM_FERALIGITE
+	goto StarterShardTrade_EventScript_Give
+LilycoveCity_MoveDeletersHouse_EventScript_Mudkip::
+	setvar VAR_0x8008, SPECIES_MUDKIP
+	setvar VAR_0x8009, ITEM_SWAMPERTITE
+	goto StarterShardTrade_EventScript_Give
+LilycoveCity_MoveDeletersHouse_EventScript_Piplup::
+	setvar VAR_0x8008, SPECIES_PIPLUP
+	goto StarterShardTrade_EventScript_Give
+LilycoveCity_MoveDeletersHouse_EventScript_Oshawott::
+	setvar VAR_0x8008, SPECIES_OSHAWOTT
+	goto StarterShardTrade_EventScript_Give
+LilycoveCity_MoveDeletersHouse_EventScript_Froakie::
+	setvar VAR_0x8008, SPECIES_FROAKIE
+	setvar VAR_0x8009, ITEM_GRENINJITE
+	goto StarterShardTrade_EventScript_Give
+LilycoveCity_MoveDeletersHouse_EventScript_Popplio::
+	setvar VAR_0x8008, SPECIES_POPPLIO
+	goto StarterShardTrade_EventScript_Give
+LilycoveCity_MoveDeletersHouse_EventScript_Sobble::
+	setvar VAR_0x8008, SPECIES_SOBBLE
+	goto StarterShardTrade_EventScript_Give
+LilycoveCity_MoveDeletersHouse_EventScript_Quaxly::
+	setvar VAR_0x8008, SPECIES_QUAXLY
+	goto StarterShardTrade_EventScript_Give
+
+LilycoveCity_MoveDeletersHouse_EventScript_StarterNoShard::
+	msgbox LilycoveCity_MoveDeletersHouse_Text_StarterNoShard, MSGBOX_DEFAULT
+	release
 	end
 
-LilycoveCity_MoveDeletersHouse_EventScript_TryForgetMove::
-	special IsLastMonThatKnowsSurf
-	goto_if_eq VAR_RESULT, TRUE, LilycoveCity_MoveDeletersHouse_EventScript_LastMonWithSurf
-	special MoveDeleterForgetMove
-	playfanfare MUS_MOVE_DELETED
-	waitfanfare
-	msgbox LilycoveCity_MoveDeletersHouse_Text_MonHasForgottenMove, MSGBOX_DEFAULT
-	releaseall
-	end
-
-LilycoveCity_MoveDeletersHouse_EventScript_MonOnlyKnowsOneMove::
-	special BufferMoveDeleterNicknameAndMove
-	msgbox LilycoveCity_MoveDeletersHouse_Text_MonOnlyKnowsOneMove, MSGBOX_DEFAULT
-	releaseall
-	end
-
-LilycoveCity_MoveDeletersHouse_EventScript_EggCantForgetMoves::
-	msgbox LilycoveCity_MoveDeletersHouse_Text_EggCantForgetMoves, MSGBOX_DEFAULT
-	releaseall
-	end
-
-LilycoveCity_MoveDeletersHouse_EventScript_ComeAgain::
-	msgbox LilycoveCity_MoveDeletersHouse_Text_ComeAgain, MSGBOX_DEFAULT
-	releaseall
-	end
-
-LilycoveCity_MoveDeletersHouse_EventScript_LastMonWithSurf::
-	special BufferMoveDeleterNicknameAndMove
-	msgbox LilycoveCity_MoveDeletersHouse_Text_CantForgetSurf, MSGBOX_DEFAULT
-	releaseall
-	end
-
-LilycoveCity_MoveDeletersHouse_Text_ICanMakeMonForgetMove:
+LilycoveCity_MoveDeletersHouse_Text_StarterNoShard:
 	.string "Uh…\n"
-	.string "Oh, yes, I'm the MOVE DELETER.\p"
-	.string "I can make POKéMON forget their moves.\p"
-	.string "Would you like me to do that?$"
+	.string "Oh, I don't delete moves anymore.\p"
+	.string "These days I raise WATER-type\n"
+	.string "POKéMON instead.\p"
+	.string "If you bring me a BLUE SHARD, I'll\n"
+	.string "trade you one of them for it.$"
 
-LilycoveCity_MoveDeletersHouse_Text_WhichMonShouldForget:
-	.string "Which POKéMON should forget a move?$"
-
-LilycoveCity_MoveDeletersHouse_Text_WhichMoveShouldBeForgotten:
-	.string "Which move should be forgotten?$"
-
-LilycoveCity_MoveDeletersHouse_Text_MonOnlyKnowsOneMove:
-	.string "{STR_VAR_1} knows only one move\n"
-	.string "so it can't be forgotten…$"
-
-LilycoveCity_MoveDeletersHouse_Text_MonsMoveShouldBeForgotten:
-	.string "Hm! {STR_VAR_1}'s {STR_VAR_2}?\n"
-	.string "That move should be forgotten?$"
-
-LilycoveCity_MoveDeletersHouse_Text_MonHasForgottenMove:
-	.string "It worked to perfection!\p"
-	.string "{STR_VAR_1} has forgotten\n"
-	.string "{STR_VAR_2} completely.$"
-
-LilycoveCity_MoveDeletersHouse_Text_ComeAgain:
-	.string "Come again if there are moves that\n"
-	.string "need to be forgotten.$"
-
-LilycoveCity_MoveDeletersHouse_Text_EggCantForgetMoves:
-	.string "What?\n"
-	.string "No EGG should know any moves.$"
-
-LilycoveCity_MoveDeletersHouse_Text_CantForgetSurf:
-	.string "Hm!\p"
-	.string "Your {STR_VAR_1} doesn't seem willing\n"
-	.string "to forget SURF.$"
-
+LilycoveCity_MoveDeletersHouse_Text_StarterOffer:
+	.string "Hm! Is that a BLUE SHARD?\p"
+	.string "Do you want to trade it for one\n"
+	.string "of my WATER-type POKéMON?$"

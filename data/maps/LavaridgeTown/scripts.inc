@@ -205,8 +205,72 @@ LavaridgeTown_EventScript_EnteredHotSprings::
 	incrementgamestat GAME_STAT_ENTERED_HOT_SPRINGS
 	end
 
+@ Trades a FIRE starter of the player's choice for 1 Red Shard (see data/scripts/starter_shard_trade.inc)
 LavaridgeTown_EventScript_ExpertM::
-	msgbox LavaridgeTown_Text_HotSpringsNeverRunDry, MSGBOX_NPC
+	lock
+	faceplayer
+	checkitem ITEM_RED_SHARD
+	goto_if_eq VAR_RESULT, FALSE, LavaridgeTown_EventScript_FireStarterNoShard
+	playse SE_PIN
+	applymovement VAR_LAST_TALKED, Common_Movement_ExclamationMark
+	waitmovement 0
+	applymovement VAR_LAST_TALKED, Common_Movement_Delay48
+	waitmovement 0
+	msgbox LavaridgeTown_Text_FireStarterOffer, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, StarterShardTrade_EventScript_Declined
+	message StarterShardTrade_Text_WhichOne
+	waitmessage
+	dynmultichoice 30, 1, FALSE, 6, 0, DYN_MULTICHOICE_CB_NONE, StarterShardTrade_Text_Charmander, StarterShardTrade_Text_Cyndaquil, StarterShardTrade_Text_Torchic, StarterShardTrade_Text_Chimchar, StarterShardTrade_Text_Tepig, StarterShardTrade_Text_Fennekin, StarterShardTrade_Text_Litten, StarterShardTrade_Text_Scorbunny, StarterShardTrade_Text_Fuecoco
+	setvar VAR_0x800A, ITEM_RED_SHARD
+	setvar VAR_0x8009, ITEM_NONE
+	switch VAR_RESULT
+	case 0, LavaridgeTown_EventScript_Charmander
+	case 1, LavaridgeTown_EventScript_Cyndaquil
+	case 2, LavaridgeTown_EventScript_Torchic
+	case 3, LavaridgeTown_EventScript_Chimchar
+	case 4, LavaridgeTown_EventScript_Tepig
+	case 5, LavaridgeTown_EventScript_Fennekin
+	case 6, LavaridgeTown_EventScript_Litten
+	case 7, LavaridgeTown_EventScript_Scorbunny
+	case 8, LavaridgeTown_EventScript_Fuecoco
+	goto StarterShardTrade_EventScript_Declined
+	end
+
+LavaridgeTown_EventScript_Charmander::
+	setvar VAR_0x8008, SPECIES_CHARMANDER
+	setvar VAR_0x8009, ITEM_CHARIZARDITE_X
+	goto StarterShardTrade_EventScript_Give
+LavaridgeTown_EventScript_Cyndaquil::
+	setvar VAR_0x8008, SPECIES_CYNDAQUIL
+	goto StarterShardTrade_EventScript_Give
+LavaridgeTown_EventScript_Torchic::
+	setvar VAR_0x8008, SPECIES_TORCHIC
+	setvar VAR_0x8009, ITEM_BLAZIKENITE
+	goto StarterShardTrade_EventScript_Give
+LavaridgeTown_EventScript_Chimchar::
+	setvar VAR_0x8008, SPECIES_CHIMCHAR
+	goto StarterShardTrade_EventScript_Give
+LavaridgeTown_EventScript_Tepig::
+	setvar VAR_0x8008, SPECIES_TEPIG
+	setvar VAR_0x8009, ITEM_EMBOARITE
+	goto StarterShardTrade_EventScript_Give
+LavaridgeTown_EventScript_Fennekin::
+	setvar VAR_0x8008, SPECIES_FENNEKIN
+	setvar VAR_0x8009, ITEM_DELPHOXITE
+	goto StarterShardTrade_EventScript_Give
+LavaridgeTown_EventScript_Litten::
+	setvar VAR_0x8008, SPECIES_LITTEN
+	goto StarterShardTrade_EventScript_Give
+LavaridgeTown_EventScript_Scorbunny::
+	setvar VAR_0x8008, SPECIES_SCORBUNNY
+	goto StarterShardTrade_EventScript_Give
+LavaridgeTown_EventScript_Fuecoco::
+	setvar VAR_0x8008, SPECIES_FUECOCO
+	goto StarterShardTrade_EventScript_Give
+
+LavaridgeTown_EventScript_FireStarterNoShard::
+	msgbox LavaridgeTown_Text_FireStarterNoShard, MSGBOX_DEFAULT
+	release
 	end
 
 LavaridgeTown_EventScript_OldMan::
@@ -351,14 +415,16 @@ LavaridgeTown_Text_EverySoOftenEggFoundAtDayCare:
 	.string "the POKéMON DAY CARE.\p"
 	.string "Or at least that's how the rumor goes.$"
 
-LavaridgeTown_Text_HotSpringsNeverRunDry:
-	.string "We draw as much hot water as we need,\n"
-	.string "and yet the hot springs never run dry.\p"
-	.string "Isn't it magical?\p"
-	.string "These hot springs appear near active\n"
-	.string "volcanoes. Veins of water under the\l"
-	.string "ground are heated by magma to well up\l"
-	.string "as hot springs.$"
+LavaridgeTown_Text_FireStarterNoShard:
+	.string "I've raised POKéMON as fiery as the\n"
+	.string "magma under this town.\p"
+	.string "If you bring me a RED SHARD, I'll\n"
+	.string "trade you one of them for it.$"
+
+LavaridgeTown_Text_FireStarterOffer:
+	.string "Is that a RED SHARD?\p"
+	.string "Do you want to trade it for one\n"
+	.string "of my FIRE-type POKéMON?$"
 
 LavaridgeTown_Text_PokemonNippedBackside:
 	.string "Being buried in this hot sand is…\n"

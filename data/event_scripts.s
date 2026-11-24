@@ -1053,6 +1053,7 @@ gStdScripts_End::
 .endif
 
 	.include "data/scripts/interregion_ferry.inc"
+	.include "data/scripts/starter_shard_trade.inc"
 	.include "data/scripts/std_msgbox.inc"
 	.include "data/scripts/trainer_battle.inc"
 	.include "data/scripts/new_game.inc"
