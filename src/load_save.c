@@ -28,7 +28,8 @@ struct LoadedSaveData
 {
  /*0x0000*/ struct Bag bag;
  /*0x02E8*/ struct Mail mail[MAIL_COUNT];
-    struct ExtraBagPockets extraBag; // R.O.W.E. pockets stored in SaveBlock3
+    struct SaveBlock2BagPockets sb2Bag; // Pockets stored in SaveBlock2
+    struct ExtraBagPockets extraBag; // Pockets stored in SaveBlock3
     struct ItemSlot keyItems[BAG_KEYITEMS_COUNT]; // Key Items, stored in SaveBlock3
 };
 
@@ -261,6 +262,7 @@ void LoadPlayerBag(void)
 
     // load player bag.
     memcpy(&gLoadedSaveData.bag, &gSaveBlock1Ptr->bag, sizeof(struct Bag));
+    memcpy(&gLoadedSaveData.sb2Bag, &gSaveBlock2Ptr->bag, sizeof(struct SaveBlock2BagPockets));
     memcpy(&gLoadedSaveData.extraBag, &gSaveBlock3Ptr->bag, sizeof(struct ExtraBagPockets));
     memcpy(gLoadedSaveData.keyItems, gSaveBlock3Ptr->keyItems, sizeof(gSaveBlock3Ptr->keyItems));
 
@@ -278,6 +280,7 @@ void SavePlayerBag(void)
 
     // save player bag.
     memcpy(&gSaveBlock1Ptr->bag, &gLoadedSaveData.bag, sizeof(struct Bag));
+    memcpy(&gSaveBlock2Ptr->bag, &gLoadedSaveData.sb2Bag, sizeof(struct SaveBlock2BagPockets));
     memcpy(&gSaveBlock3Ptr->bag, &gLoadedSaveData.extraBag, sizeof(struct ExtraBagPockets));
     memcpy(gSaveBlock3Ptr->keyItems, gLoadedSaveData.keyItems, sizeof(gSaveBlock3Ptr->keyItems));
 

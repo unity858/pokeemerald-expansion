@@ -172,12 +172,11 @@ void SetBagItemsPointers(void)
     gBagPockets[POCKET_TM_HM].capacity = BAG_TMHM_COUNT;
     gBagPockets[POCKET_TM_HM].id = POCKET_TM_HM;
 
-    gBagPockets[POCKET_BERRIES].itemSlots = gSaveBlock1Ptr->bag.berries;
+    gBagPockets[POCKET_BERRIES].itemSlots = gSaveBlock2Ptr->bag.berries;
     gBagPockets[POCKET_BERRIES].capacity = BAG_BERRIES_COUNT;
     gBagPockets[POCKET_BERRIES].id = POCKET_BERRIES;
 
-    // R.O.W.E. pockets (stored in SaveBlock3)
-    gBagPockets[POCKET_MEDICINE].itemSlots = gSaveBlock3Ptr->bag.medicine;
+    gBagPockets[POCKET_MEDICINE].itemSlots = gSaveBlock2Ptr->bag.medicine;
     gBagPockets[POCKET_MEDICINE].capacity = BAG_MEDICINE_COUNT;
     gBagPockets[POCKET_MEDICINE].id = POCKET_MEDICINE;
 
@@ -193,7 +192,7 @@ void SetBagItemsPointers(void)
     gBagPockets[POCKET_MEGA_STONES].capacity = BAG_MEGA_STONES_COUNT;
     gBagPockets[POCKET_MEGA_STONES].id = POCKET_MEGA_STONES;
 
-    gBagPockets[POCKET_POWER_UP].itemSlots = gSaveBlock3Ptr->bag.powerUp;
+    gBagPockets[POCKET_POWER_UP].itemSlots = gSaveBlock2Ptr->bag.powerUp;
     gBagPockets[POCKET_POWER_UP].capacity = BAG_POWER_UP_COUNT;
     gBagPockets[POCKET_POWER_UP].id = POCKET_POWER_UP;
 }
@@ -224,7 +223,7 @@ u8 *CopyItemNameHandlePlural(enum Item itemId, u8 *dst, u32 quantity)
 
 bool32 IsBagPocketNonEmpty(enum Pocket pocketId)
 {
-    u8 i;
+    u32 i;
 
     for (i = 0; i < gBagPockets[pocketId].capacity; i++)
     {
@@ -593,35 +592,9 @@ void MoveItemSlotInPC(struct ItemSlot *itemSlots, u32 from, u32 to)
 void ClearBag(void)
 {
     CpuFastFill(0, &gSaveBlock1Ptr->bag, sizeof(struct Bag));
+    CpuFill16(0, &gSaveBlock2Ptr->bag, sizeof(struct SaveBlock2BagPockets));
     CpuFill16(0, &gSaveBlock3Ptr->bag, sizeof(struct ExtraBagPockets));
     CpuFill16(0, gSaveBlock3Ptr->keyItems, sizeof(gSaveBlock3Ptr->keyItems));
-}
-
-// Saves made while Key Items were a 30-slot pocket in SaveBlock1 keep them in bag.legacyKeyItems.
-// Move them into the SaveBlock3 pocket. Both use the same quantity encryption, so slots are copied as is.
-void MigrateLegacyKeyItems(void)
-{
-    struct ItemSlot *legacy = gSaveBlock1Ptr->bag.legacyKeyItems;
-    struct ItemSlot *pocket = gSaveBlock3Ptr->keyItems;
-    u32 i, j;
-
-    for (i = 0; i < BAG_LEGACY_KEYITEMS_COUNT; i++)
-    {
-        if (legacy[i].itemId == ITEM_NONE)
-            continue;
-
-        for (j = 0; j < BAG_KEYITEMS_COUNT; j++)
-        {
-            if (pocket[j].itemId == legacy[i].itemId)
-                break; // Already there, drop the duplicate
-            if (pocket[j].itemId == ITEM_NONE)
-            {
-                pocket[j] = legacy[i];
-                break;
-            }
-        }
-    }
-    memset(legacy, 0, sizeof(gSaveBlock1Ptr->bag.legacyKeyItems));
 }
 
 static inline u16 NONNULL BagPocket_CountTotalItemQuantity(struct BagPocket *pocket, enum Item itemId)

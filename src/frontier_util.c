@@ -2369,14 +2369,18 @@ static void Print2PRecord(s32 position, s32 x, s32 y, struct RankingHall2P *hall
 
 static void Fill1PRecords(struct RankingHall1P *dst, s32 hallFacilityId, s32 lvlMode)
 {
-#if FREE_RECORD_MIXING_HALL_RECORDS == FALSE
     s32 i, j;
     struct RankingHall1P record1P[HALL_RECORDS_COUNT + 1];
     struct PlayerHallRecords *playerHallRecords = AllocZeroed(sizeof(struct PlayerHallRecords));
     GetPlayerHallRecords(playerHallRecords);
 
+#if FREE_RECORD_MIXING_HALL_RECORDS == FALSE
     for (i = 0; i < HALL_RECORDS_COUNT; i++)
         record1P[i] = gSaveBlock2Ptr->hallRecords1P[hallFacilityId][lvlMode][i];
+#else
+    // No records from record mixing are kept; rank only the player's own record.
+    memset(record1P, 0, sizeof(record1P[0]) * HALL_RECORDS_COUNT);
+#endif //FREE_RECORD_MIXING_HALL_RECORDS
 
     record1P[HALL_RECORDS_COUNT] = playerHallRecords->onePlayer[hallFacilityId][lvlMode];
 
@@ -2400,19 +2404,22 @@ static void Fill1PRecords(struct RankingHall1P *dst, s32 hallFacilityId, s32 lvl
     }
 
     Free(playerHallRecords);
-#endif //FREE_RECORD_MIXING_HALL_RECORDS
 }
 
 static void Fill2PRecords(struct RankingHall2P *dst, s32 lvlMode)
 {
-#if FREE_RECORD_MIXING_HALL_RECORDS == FALSE
     s32 i, j;
     struct RankingHall2P record2P[HALL_RECORDS_COUNT + 1];
     struct PlayerHallRecords *playerHallRecords = AllocZeroed(sizeof(struct PlayerHallRecords));
     GetPlayerHallRecords(playerHallRecords);
 
+#if FREE_RECORD_MIXING_HALL_RECORDS == FALSE
     for (i = 0; i < HALL_RECORDS_COUNT; i++)
         record2P[i] = gSaveBlock2Ptr->hallRecords2P[lvlMode][i];
+#else
+    // No records from record mixing are kept; rank only the player's own record.
+    memset(record2P, 0, sizeof(record2P[0]) * HALL_RECORDS_COUNT);
+#endif //FREE_RECORD_MIXING_HALL_RECORDS
 
     record2P[HALL_RECORDS_COUNT] = playerHallRecords->twoPlayers[lvlMode];
 
@@ -2436,7 +2443,6 @@ static void Fill2PRecords(struct RankingHall2P *dst, s32 lvlMode)
     }
 
     Free(playerHallRecords);
-#endif //FREE_RECORD_MIXING_HALL_RECORDS
 }
 
 static void PrintHallRecords(s32 hallFacilityId, s32 lvlMode)

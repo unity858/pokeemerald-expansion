@@ -931,7 +931,6 @@ u8 LoadGameSave(u8 saveType)
     default:
         status = TryLoadSaveSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
         CopyPartyAndObjectsFromSave();
-        MigrateLegacyKeyItems();
         gSaveFileStatus = status;
         gGameContinueCallback = NULL;
         break;

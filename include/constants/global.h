@@ -110,23 +110,27 @@ enum Language
 #define ROAMER_COUNT 1 // Number of maximum concurrent active roamers
 
 // Bag constants
-#define BAG_ITEMS_COUNT 30
-// Key Items live in SaveBlock3 (see SaveBlock3.keyItems) so every key item fits: R.O.W.E. puts 80
-// items in this pocket (charms, fossils, Mega Ring, Z-Power Ring, Tera Orb, ...) and key items can't
+// Every pocket has at least one slot per item assigned to it in src/data/items.h (unobtainable
+// placeholders such as ITEM_NONE and the removed HM01-HM08 slots excluded), so a pocket can never fill up.
+// Pockets are split over the save blocks by size; see struct Bag (SaveBlock1),
+// struct SaveBlock2BagPockets (SaveBlock2) and struct ExtraBagPockets (SaveBlock3).
+// The bag UI keeps per-pocket counts in u8s (with one extra "Close Bag" row), so stay below 255.
+// SaveBlock1
+#define BAG_ITEMS_COUNT 122   // 131 Items-pocket entries - ITEM_NONE - HM01-HM08 placeholders
+#define BAG_POKEBALLS_COUNT 28
+#define BAG_TMHM_COUNT 122 // TM01-TM120 (R.O.W.E.) + TM121 Dive + TM122 Tera Blast, no HMs.
+// SaveBlock2
+#define BAG_POWER_UP_COUNT 175
+#define BAG_BERRIES_COUNT 68  // includes the e-Reader Enigma Berry
+#define BAG_MEDICINE_COUNT 46
+// SaveBlock3
+#define BAG_BATTLE_ITEMS_COUNT 155
+#define BAG_TYPE_ITEMS_COUNT 40  // 35 items assigned
+#define BAG_MEGA_STONES_COUNT 92
+// Key Items live in SaveBlock3 (see SaveBlock3.keyItems) so every key item fits: R.O.W.E. puts 75
+// items in this pocket (charms, Mega Ring, Z-Power Ring, Tera Orb, ...) and key items can't
 // be tossed, so a pocket smaller than that can block story/gimmick items.
 #define BAG_KEYITEMS_COUNT 90
-// The old 30-slot Key Items array stays in SaveBlock1 only to keep its layout; it is emptied into
-// the SaveBlock3 pocket when a save is loaded (see MigrateLegacyKeyItems).
-#define BAG_LEGACY_KEYITEMS_COUNT 30
-#define BAG_POKEBALLS_COUNT 16
-#define BAG_TMHM_COUNT 122 // TM01-TM120 (R.O.W.E.) + TM121 Dive + TM122 Tera Blast, no HMs. Stored in SaveBlock1.
-#define BAG_BERRIES_COUNT 46
-// R.O.W.E. pockets; these are stored in SaveBlock3 (see struct ExtraBagPockets).
-#define BAG_MEDICINE_COUNT 40
-#define BAG_BATTLE_ITEMS_COUNT 70
-#define BAG_TYPE_ITEMS_COUNT 40
-#define BAG_MEGA_STONES_COUNT 50
-#define BAG_POWER_UP_COUNT 60
 
 // Number of facilities for Ranking Hall.
 // 7 facilities for single mode + tower double mode + tower multi mode.

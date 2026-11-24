@@ -260,14 +260,20 @@ struct ItemSlot
     u16 quantity;
 };
 
-// R.O.W.E. bag pockets. SaveBlock1 has no room for them, so they live in SaveBlock3.
+// Bag pockets stored in SaveBlock3 (SaveBlock1 has no room for them).
 struct ExtraBagPockets
 {
-    struct ItemSlot medicine[BAG_MEDICINE_COUNT];
     struct ItemSlot battleItems[BAG_BATTLE_ITEMS_COUNT];
     struct ItemSlot typeItems[BAG_TYPE_ITEMS_COUNT];
     struct ItemSlot megaStones[BAG_MEGA_STONES_COUNT];
+};
+
+// Bag pockets stored in SaveBlock2 (in the space freed by FREE_RECORD_MIXING_HALL_RECORDS).
+struct SaveBlock2BagPockets
+{
     struct ItemSlot powerUp[BAG_POWER_UP_COUNT];
+    struct ItemSlot berries[BAG_BERRIES_COUNT];
+    struct ItemSlot medicine[BAG_MEDICINE_COUNT];
 };
 
 struct SaveBlock3
@@ -647,6 +653,7 @@ struct SaveBlock2
 #endif //FREE_RECORD_MIXING_HALL_RECORDS
     /*0x624*/ u16 contestLinkResults[CONTEST_CATEGORIES_COUNT][CONTESTANT_COUNT];
     /*0x64C*/ struct BattleFrontier frontier;
+              struct SaveBlock2BagPockets bag;
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
@@ -1104,10 +1111,8 @@ struct ExternalEventFlags
 struct Bag
 {
     struct ItemSlot items[BAG_ITEMS_COUNT];
-    struct ItemSlot legacyKeyItems[BAG_LEGACY_KEYITEMS_COUNT]; // Unused, see BAG_LEGACY_KEYITEMS_COUNT
     struct ItemSlot pokeBalls[BAG_POKEBALLS_COUNT];
     struct ItemSlot TMsHMs[BAG_TMHM_COUNT];
-    struct ItemSlot berries[BAG_BERRIES_COUNT];
 };
 
 struct SaveBlock1

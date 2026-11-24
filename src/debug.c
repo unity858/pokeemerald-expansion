@@ -3731,6 +3731,8 @@ static void Debug_FillBagPocket(enum Pocket pocketId)
             continue;
         if (itemId == ITEM_ENIGMA_BERRY_E_READER) // e-Reader placeholder, not a real berry
             continue;
+        if (itemId >= ITEM_HM01 && itemId <= ITEM_HM08) // removed HMs, "????????" placeholders
+            continue;
 
         u32 count = (GetItemImportance(itemId) || pocketId == POCKET_TM_HM) ? 1 : MAX_BAG_ITEM_CAPACITY;
         if (!CheckBagHasItem(itemId, count) && CheckBagHasSpace(itemId, count))
