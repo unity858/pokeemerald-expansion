@@ -5800,3 +5800,23 @@ bool8 IsTimeOfDayNight(void)
 {
     return GetTimeOfDay() == TIME_NIGHT;
 }
+
+// Weather Institute: the Reveal Glass is only handed to a player travelling with one of the
+// Forces of Nature (Tornadus, Thundurus, Landorus or Enamorus, any form). Eggs don't count.
+bool8 IsForcesOfNatureInParty(void)
+{
+    for (u32 i = 0; i < CalculatePlayerPartyCount(); i++)
+    {
+        switch (GET_BASE_SPECIES_ID(GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES_OR_EGG)))
+        {
+        case SPECIES_TORNADUS:
+        case SPECIES_THUNDURUS:
+        case SPECIES_LANDORUS:
+        case SPECIES_ENAMORUS:
+            return TRUE;
+        default:
+            break;
+        }
+    }
+    return FALSE;
+}

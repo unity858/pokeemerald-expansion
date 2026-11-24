@@ -324,3 +324,67 @@ Route119_WeatherInstitute_2F_Text_NoAbnormalWeather:
 	.string "The occasional rainfall is a blessing,\n"
 	.string "really.$"
 
+
+@ Reveal Glass: given to a player with Tornadus, Thundurus, Landorus or Enamorus in the
+@ party who doesn't have one in the Bag (so a lost Reveal Glass can be given again).
+Route119_WeatherInstitute_2F_EventScript_RevealGlassScientist::
+	lock
+	faceplayer
+	checkitem ITEM_REVEAL_GLASS
+	goto_if_eq VAR_RESULT, TRUE, Route119_WeatherInstitute_2F_EventScript_HasRevealGlass
+	specialvar VAR_RESULT, IsForcesOfNatureInParty
+	goto_if_eq VAR_RESULT, FALSE, Route119_WeatherInstitute_2F_EventScript_NoForceOfNature
+	msgbox Route119_WeatherInstitute_2F_Text_GiveRevealGlass, MSGBOX_DEFAULT
+	giveitem ITEM_REVEAL_GLASS
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	msgbox Route119_WeatherInstitute_2F_Text_ExplainRevealGlass, MSGBOX_DEFAULT
+	release
+	end
+
+Route119_WeatherInstitute_2F_EventScript_NoForceOfNature::
+	msgbox Route119_WeatherInstitute_2F_Text_RevealGlassHint, MSGBOX_DEFAULT
+	release
+	end
+
+Route119_WeatherInstitute_2F_EventScript_HasRevealGlass::
+	msgbox Route119_WeatherInstitute_2F_Text_GladRevealGlassUseful, MSGBOX_DEFAULT
+	release
+	end
+
+Route119_WeatherInstitute_2F_Text_RevealGlassHint:
+	.string "Wind, thunder, the fertile earth…\n"
+	.string "Every storm we record is the work\l"
+	.string "of the forces of nature.\p"
+	.string "Some say those forces once took\n"
+	.string "the shape of POKéMON.\p"
+	.string "I keep an old mirror here, the\n"
+	.string "REVEAL GLASS. It's said to react\l"
+	.string "to those POKéMON.\p"
+	.string "If you ever travel with one of\n"
+	.string "them, come see me. The glass\l"
+	.string "belongs with such a TRAINER.$"
+
+Route119_WeatherInstitute_2F_Text_GiveRevealGlass:
+	.string "Whoa! My instruments are going\n"
+	.string "haywire… Gusts, static, pressure\l"
+	.string "swings, all at once!\p"
+	.string "That POKéMON with you… It's one\n"
+	.string "of the forces of nature, isn't it?\p"
+	.string "Then this old mirror belongs with\n"
+	.string "you. Please, take it.$"
+
+Route119_WeatherInstitute_2F_Text_ExplainRevealGlass:
+	.string "The REVEAL GLASS shows the true\n"
+	.string "form of the forces of nature.\p"
+	.string "Hold it up to such a POKéMON, and\n"
+	.string "it will change between its\l"
+	.string "Incarnate and Therian Formes.\p"
+	.string "The weather has a will of its own.\n"
+	.string "Treat it with respect!$"
+
+Route119_WeatherInstitute_2F_Text_GladRevealGlassUseful:
+	.string "Is the REVEAL GLASS serving you\n"
+	.string "well? I'm glad it's being put to\l"
+	.string "use instead of gathering dust.\p"
+	.string "Wind, rain, thunder… Nature never\n"
+	.string "stops showing us new faces.$"

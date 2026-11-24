@@ -42,5 +42,6 @@ bool8 CutMoveRuinValleyCheck(void);
 void CutMoveOpenDottedHoleDoor(void);
 bool8 AreOtherRegisCaught(void);
 bool8 IsTimeOfDayNight(void);
+bool8 IsForcesOfNatureInParty(void);
 
 #endif // GUARD_FIELD_SPECIALS_H

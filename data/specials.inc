@@ -645,3 +645,4 @@ gSpecials::
 	def_special GetScaledStaticLevel
 	def_special AreOtherRegisCaught
 	def_special IsTimeOfDayNight
+	def_special IsForcesOfNatureInParty
