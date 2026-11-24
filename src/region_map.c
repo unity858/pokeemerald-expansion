@@ -626,6 +626,10 @@ static const mapsec_u16_t sRedOutlineFlyDestinations[][2] =
         MAPSEC_BATTLE_FRONTIER
     },
     {
+        FLAG_LANDMARK_SOUTHERN_ISLAND,
+        MAPSEC_SOUTHERN_ISLAND
+    },
+    {
         -1,
         MAPSEC_NONE
     }
@@ -1462,7 +1466,8 @@ static u8 GetMapsecType(mapsec_u16_t mapSecId)
     case MAPSEC_BATTLE_FRONTIER:
         return FlagGet(FLAG_LANDMARK_BATTLE_FRONTIER) ? MAPSECTYPE_BATTLE_FRONTIER : MAPSECTYPE_NONE;
     case MAPSEC_SOUTHERN_ISLAND:
-        return FlagGet(FLAG_LANDMARK_SOUTHERN_ISLAND) ? MAPSECTYPE_ROUTE : MAPSECTYPE_NONE;
+        // Fly-only spot like the Battle Frontier (no Pokemon Center, never a respawn point)
+        return FlagGet(FLAG_LANDMARK_SOUTHERN_ISLAND) ? MAPSECTYPE_BATTLE_FRONTIER : MAPSECTYPE_NONE;
     case MAPSEC_PALLET_TOWN:
         return FlagGet(FLAG_WORLD_MAP_PALLET_TOWN) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
     case MAPSEC_VIRIDIAN_CITY:
@@ -2371,7 +2376,7 @@ static void CreateFlyDestIcons(void)
 }
 
 // Draw a red outline box on the mapsec if its corresponding flag has been set
-// Only used for Battle Frontier, but set up to handle more
+// Used for the Battle Frontier and Southern Island
 static void TryCreateRedOutlineFlyDestIcons(void)
 {
     u16 i;
