@@ -23,7 +23,14 @@ EventScript_BufferPocketNameAndTryFanfare::
 	case POCKET_POKE_BALLS, EventScript_BufferPokeballsPocket
 	case POCKET_TM_HM,      EventScript_BufferTMHMsPocket
 	case POCKET_BERRIES,    EventScript_BufferBerriesPocket
-	end
+	case POCKET_MEDICINE,     EventScript_BufferMedicinePocket
+	case POCKET_BATTLE_ITEMS, EventScript_BufferBattleItemsPocket
+	case POCKET_TYPE_ITEMS,   EventScript_BufferTypeItemsPocket
+	case POCKET_MEGA_STONES,  EventScript_BufferMegaStonesPocket
+	case POCKET_POWER_UP,     EventScript_BufferPowerUpPocket
+	@ Never fall through to `end`: that would end the caller's script (and every
+	@ item ball, hidden item and giveitem using it) before the item is handled.
+	goto EventScript_BufferItemsPocket
 
 EventScript_BufferItemsPocket::
 	bufferstdstring STR_VAR_3, STDSTRING_ITEMS
@@ -47,6 +54,31 @@ EventScript_BufferTMHMsPocket::
 
 EventScript_BufferBerriesPocket::
 	bufferstdstring STR_VAR_3, STDSTRING_BERRIES
+	call_if_eq VAR_0x8007, TRUE, EventScript_PlayFanfareObtainedItem
+	return
+
+EventScript_BufferMedicinePocket::
+	bufferstdstring STR_VAR_3, STDSTRING_MEDICINE
+	call_if_eq VAR_0x8007, TRUE, EventScript_PlayFanfareObtainedItem
+	return
+
+EventScript_BufferBattleItemsPocket::
+	bufferstdstring STR_VAR_3, STDSTRING_BATTLE_ITEMS
+	call_if_eq VAR_0x8007, TRUE, EventScript_PlayFanfareObtainedItem
+	return
+
+EventScript_BufferTypeItemsPocket::
+	bufferstdstring STR_VAR_3, STDSTRING_TYPE_ITEMS
+	call_if_eq VAR_0x8007, TRUE, EventScript_PlayFanfareObtainedItem
+	return
+
+EventScript_BufferMegaStonesPocket::
+	bufferstdstring STR_VAR_3, STDSTRING_MEGA_STONES
+	call_if_eq VAR_0x8007, TRUE, EventScript_PlayFanfareObtainedItem
+	return
+
+EventScript_BufferPowerUpPocket::
+	bufferstdstring STR_VAR_3, STDSTRING_POWER_UP
 	call_if_eq VAR_0x8007, TRUE, EventScript_PlayFanfareObtainedItem
 	return
 
@@ -256,7 +288,12 @@ EventScript_BufferPutAwayPocketName::
 	case POCKET_POKE_BALLS,  EventScript_BufferPutAwayPocketPokeBalls
 	case POCKET_TM_HM,     EventScript_BufferPutAwayPocketTMCase
 	case POCKET_BERRIES, EventScript_BufferPutAwayPocketBerryPouch
-	end
+	case POCKET_MEDICINE,     EventScript_BufferPutAwayPocketMedicine
+	case POCKET_BATTLE_ITEMS, EventScript_BufferPutAwayPocketBattleItems
+	case POCKET_TYPE_ITEMS,   EventScript_BufferPutAwayPocketTypeItems
+	case POCKET_MEGA_STONES,  EventScript_BufferPutAwayPocketMegaStones
+	case POCKET_POWER_UP,     EventScript_BufferPutAwayPocketPowerUp
+	goto EventScript_BufferPutAwayPocketItems
 
 EventScript_BufferPutAwayPocketItems::
 	bufferstdstring STR_VAR_3, STDSTRING_ITEMS
@@ -276,6 +313,26 @@ EventScript_BufferPutAwayPocketTMCase::
 
 EventScript_BufferPutAwayPocketBerryPouch::
 	bufferstdstring STR_VAR_3, STDSTRING_BERRIES
+	return
+
+EventScript_BufferPutAwayPocketMedicine::
+	bufferstdstring STR_VAR_3, STDSTRING_MEDICINE
+	return
+
+EventScript_BufferPutAwayPocketBattleItems::
+	bufferstdstring STR_VAR_3, STDSTRING_BATTLE_ITEMS
+	return
+
+EventScript_BufferPutAwayPocketTypeItems::
+	bufferstdstring STR_VAR_3, STDSTRING_TYPE_ITEMS
+	return
+
+EventScript_BufferPutAwayPocketMegaStones::
+	bufferstdstring STR_VAR_3, STDSTRING_MEGA_STONES
+	return
+
+EventScript_BufferPutAwayPocketPowerUp::
+	bufferstdstring STR_VAR_3, STDSTRING_POWER_UP
 	return
 
 EventScript_TryPickUpHiddenCoins::
