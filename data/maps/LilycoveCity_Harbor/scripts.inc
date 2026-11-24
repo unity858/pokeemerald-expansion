@@ -4,11 +4,18 @@ LilycoveCity_Harbor_MapScripts::
 
 LilycoveCity_Harbor_OnTransition:
 	setescapewarp MAP_LILYCOVE_CITY, 12, 33
+	@ The boat to Southern Island runs from 8 badges
+	call_if_set FLAG_BADGE08_GET, LilycoveCity_Harbor_EventScript_ShowSSTidal
 	end
 
+LilycoveCity_Harbor_EventScript_ShowSSTidal::
+	clearflag FLAG_HIDE_LILYCOVE_HARBOR_SSTIDAL
+	return
+
 @ The ferry is gated by flags only, no ticket items:
-@   8 badges        Seagallop to the Sevii Islands (data/scripts/interregion_ferry.inc)
-@   Hoenn League    every route, incl. the special islands and Vermilion City
+@   8 badges        Seagallop to the Sevii Islands and the boat to Southern Island
+@                   (InterRegionFerry_EventScript_HoennOfferSevii)
+@   Hoenn League    every route, incl. the other special islands and Vermilion City
 LilycoveCity_Harbor_EventScript_FerryAttendant::
 	lock
 	faceplayer

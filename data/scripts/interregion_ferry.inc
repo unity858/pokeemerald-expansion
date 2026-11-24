@@ -3,6 +3,7 @@
 @
 @ Unlocks (flags only, no ticket items):
 @   Sevii Islands  FLAG_BADGE08_GET (or FLAG_SYS_GAME_CLEAR)
+@   Southern Island FLAG_BADGE08_GET (Hoenn harbors; boat, not the Seagallop)
 @   Vermilion City FLAG_SYS_GAME_CLEAR
 @
 @ Ports call these with VAR_0x8004 = SEAGALLOP_* id of the port the player is at.
@@ -91,12 +92,24 @@ InterRegionFerry_EventScript_ShowDestList::
 	return
 
 @ Hoenn harbor attendant before the Hoenn League is beaten, with 8 badges:
-@ the S.S. TIDAL isn't running yet, but the Seagallop to the Sevii Islands is.
+@ the S.S. TIDAL isn't running yet, but the Seagallop to the Sevii Islands is,
+@ and so is the boat to Southern Island. VAR_0x8004 = SEAGALLOP_SLATEPORT/LILYCOVE.
 InterRegionFerry_EventScript_HoennOfferSevii::
-	msgbox InterRegionFerry_Text_SeagallopToSeviiIsCalling, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, NO, InterRegionFerry_EventScript_SailAnotherTime
-	setvar VAR_RESULT, SEAGALLOP_ONE_ISLAND
+	message InterRegionFerry_Text_SeagallopToSeviiIsCalling
+	waitmessage
+	call InterRegionFerry_EventScript_PushSeviiIslands
+	dynmultipush InterRegionFerry_Text_SouthernIsland, FERRY_DEST_SOUTHERN_ISLAND
+	call InterRegionFerry_EventScript_ShowDestList
+	goto_if_eq VAR_RESULT, FERRY_DEST_CANCEL, InterRegionFerry_EventScript_SailAnotherTime
+	goto_if_eq VAR_RESULT, FERRY_DEST_SOUTHERN_ISLAND, InterRegionFerry_EventScript_HoennToSouthernIsland
 	goto InterRegionFerry_EventScript_Sail
+	end
+
+@ Reuses the harbors' own Southern Island trips, so the island's sailor knows
+@ which harbor to bring the player back to.
+InterRegionFerry_EventScript_HoennToSouthernIsland::
+	goto_if_eq VAR_0x8004, SEAGALLOP_SLATEPORT, SlateportCity_Harbor_EventScript_SouthernIsland
+	goto LilycoveCity_Harbor_EventScript_GoToSouthernIsland
 	end
 
 @ VAR_0x8004 = origin port, VAR_RESULT = destination port
@@ -126,8 +139,8 @@ InterRegionFerry_Text_SeagallopToSeviiIsCalling:
 	.string "But the SEAGALLOP HI-SPEED calls here\n"
 	.string "for TRAINERS with all eight HOENN\l"
 	.string "GYM BADGES.\p"
-	.string "Would you like to sail to ONE ISLAND\n"
-	.string "in the SEVII ISLANDS?$"
+	.string "We can also take you to SOUTHERN\n"
+	.string "ISLAND. Where would you like to sail?$"
 
 InterRegionFerry_Text_AllAboardSeagallopNum:
 	.string "All right!\n"
