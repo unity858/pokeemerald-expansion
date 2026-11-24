@@ -10,11 +10,14 @@ SeafoamIslands_B4F_Frlg_MapScripts::
 	.byte 0
 
 SeafoamIslands_B4F_OnResume::
-	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	call SeafoamIslands_B4F_EventScript_TryRemoveArticuno
 	end
 
+SeafoamIslands_B4F_EventScript_TryRemoveArticuno::
+	goto_if_ne VAR_RESULT, B_OUTCOME_CAUGHT, Common_EventScript_NopReturn
+	return
+
 SeafoamIslands_B4F_OnTransition::
-	call SeafoamIslands_B4F_EventScript_SetupArticuno
 	call SeafoamIslands_B4F_EventScript_SetNoCurrentLayout
 	end
 
@@ -48,42 +51,3 @@ SeafoamIslands_B4F_Text_BouldersMightChangeWaterFlow::
 SeafoamIslands_B4F_Text_DangerFastCurrent::
 	.string "DANGER\n"
 	.string "Fast current!$"
-
-SeafoamIslands_B4F_EventScript_SetupArticuno::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_ARTICUNO, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_ARTICUNO, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
-	return
-
-SeafoamIslands_B4F_EventScript_Articuno::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_ARTICUNO
-	setvar VAR_0x8006, ITEM_NONE
-	waitse
-	playmoncry SPECIES_ARTICUNO, CRY_MODE_ENCOUNTER
-	message Text_Gyaoo
-	waitmessage
-	waitmoncry
-	delay 10
-	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, 0
-	waitbuttonpress
-	call HackStatic_EventScript_LegendaryBattleNoCry
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SeafoamIslands_B4F_EventScript_CaughtArticuno
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SeafoamIslands_B4F_EventScript_DefeatedArticuno
-	setvar VAR_0x8004, SPECIES_ARTICUNO
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SeafoamIslands_B4F_EventScript_DefeatedArticuno::
-	setflag FLAG_DEFEATED_ARTICUNO
-	setvar VAR_0x8004, SPECIES_ARTICUNO
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SeafoamIslands_B4F_EventScript_CaughtArticuno::
-	setflag FLAG_CAUGHT_ARTICUNO
-	release
-	end
