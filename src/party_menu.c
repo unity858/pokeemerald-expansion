@@ -45,6 +45,7 @@
 #include "menu_specialized.h"
 #include "metatile_behavior.h"
 #include "move_relearner.h"
+#include "new_game_options.h"
 #include "overworld.h"
 #include "palette.h"
 #include "party_menu.h"
@@ -6063,13 +6064,16 @@ void ItemUseCB_PowerCandy(u8 taskId, TaskFunc task)
 }
 
 // R.O.W.E. Iron Pill: Speed IV and Speed EVs become 0. Refused if both already are.
+// In Perfect IV Mode the Speed IV always reads 31, so only the Speed EVs can change:
+// refused when they are already 0.
 void ItemUseCB_IronPill(u8 taskId, TaskFunc task)
 {
     static const u8 sText_AskIronPill[] = _("Do you want to slow down\n{STR_VAR_1}?");
     struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gPartyMenu.slotId];
 
     RoweItem_Start(taskId, task,
-                   GetMonData(mon, MON_DATA_SPEED_IV) == 0 && GetMonData(mon, MON_DATA_SPEED_EV) == 0,
+                   (IsPerfectIvMode() || GetMonData(mon, MON_DATA_SPEED_IV) == 0)
+                    && GetMonData(mon, MON_DATA_SPEED_EV) == 0,
                    sText_AskIronPill);
 }
 

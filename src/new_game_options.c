@@ -38,6 +38,7 @@ enum
 {
     MENUITEM_DIFFICULTY,
     MENUITEM_DATAMODE,
+    MENUITEM_PERFECT_IVS,
     MENUITEM_OK,
     MENUITEM_COUNT,
 };
@@ -59,11 +60,14 @@ enum
 #define tMenuSelection  data[0]
 #define tDifficulty     data[1]
 #define tDataMode       data[2]
+#define tPerfectIvs     data[3]
 
-#define OPTIONS_WIN_HEIGHT 8
+// One 16px row per menu item plus the note line
+#define OPTIONS_WIN_HEIGHT ((MENUITEM_COUNT + 1) * 2)
 
 #define YPOS_DIFFICULTY (MENUITEM_DIFFICULTY * 16)
 #define YPOS_DATAMODE   (MENUITEM_DATAMODE * 16)
+#define YPOS_PERFECTIVS (MENUITEM_PERFECT_IVS * 16)
 #define YPOS_NOTE       (MENUITEM_COUNT * 16)
 
 #define CHOICES_LEFT    96
@@ -74,6 +78,7 @@ struct PendingNewGameOptions
     bool8 chosen;
     u8 difficulty; // enum DifficultyLevel
     u8 dataMode;   // enum NewGameDataMode
+    bool8 perfectIvs;
 };
 
 // Not part of the save. Holds the choices until NewGameInitData has run.
@@ -86,6 +91,7 @@ static void Task_NewGameOptionsFadeOutToMainMenu(u8 taskId);
 static void HighlightNewGameOptionsItem(u8 index);
 static void Difficulty_DrawChoices(u8 selection);
 static void DataMode_DrawChoices(u8 selection);
+static void PerfectIvs_DrawChoices(u8 selection);
 static void DrawHeaderText(void);
 static void DrawNewGameOptionsTexts(void);
 static void DrawBgWindowFrames(void);
@@ -96,12 +102,15 @@ static const u8 sText_Medium[]      = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MEDIUM
 static const u8 sText_Hard[]        = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}HARD");
 static const u8 sText_Vanilla[]     = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}VANILLA");
 static const u8 sText_Custom[]      = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}CUSTOM");
+static const u8 sText_Off[]         = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}OFF");
+static const u8 sText_On[]          = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}ON");
 static const u8 sText_Note[]        = _("These can't be changed later.");
 
 static const u8 *const sNewGameOptionsItemNames[MENUITEM_COUNT] =
 {
     [MENUITEM_DIFFICULTY] = COMPOUND_STRING("DIFFICULTY"),
     [MENUITEM_DATAMODE]   = COMPOUND_STRING("DATA"),
+    [MENUITEM_PERFECT_IVS] = COMPOUND_STRING("PERFECT IVS"),
     [MENUITEM_OK]         = COMPOUND_STRING("OK"),
 };
 
@@ -167,6 +176,7 @@ void NewGameOptions_ApplyToSave(void)
 {
     u8 difficulty = DIFFICULTY_NORMAL;
     u8 dataMode = DATA_MODE_VANILLA;
+    bool8 perfectIvs = FALSE;
 
     if (sPendingOptions.chosen)
     {
@@ -174,6 +184,7 @@ void NewGameOptions_ApplyToSave(void)
             difficulty = sPendingOptions.difficulty;
         if (sPendingOptions.dataMode < DATA_MODE_COUNT)
             dataMode = sPendingOptions.dataMode;
+        perfectIvs = (sPendingOptions.perfectIvs != FALSE);
     }
 
     SetCurrentDifficultyLevel(difficulty);
@@ -182,6 +193,12 @@ void NewGameOptions_ApplyToSave(void)
         FlagSet(FLAG_CUSTOM_DATA_MODE);
     else
         FlagClear(FLAG_CUSTOM_DATA_MODE);
+#endif
+#ifdef FLAG_PERFECT_IV_MODE
+    if (perfectIvs)
+        FlagSet(FLAG_PERFECT_IV_MODE);
+    else
+        FlagClear(FLAG_PERFECT_IV_MODE);
 #endif
 
     // Consumed; a later new game must go through the screen again.
@@ -200,6 +217,15 @@ bool32 IsCustomDataMode(void)
 enum NewGameDataMode GetDataMode(void)
 {
     return IsCustomDataMode() ? DATA_MODE_CUSTOM : DATA_MODE_VANILLA;
+}
+
+bool32 IsPerfectIvMode(void)
+{
+#ifdef FLAG_PERFECT_IV_MODE
+    return FlagGet(FLAG_PERFECT_IV_MODE);
+#else
+    return FALSE;
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -296,14 +322,16 @@ void CB2_InitNewGameOptions(void)
     {
         u8 taskId = CreateTask(Task_NewGameOptionsFadeIn, 0);
 
-        // Defaults: Medium / Vanilla
+        // Defaults: Medium / Vanilla / Perfect IVs off
         gTasks[taskId].tMenuSelection = MENUITEM_DIFFICULTY;
         gTasks[taskId].tDifficulty = CHOICE_MEDIUM;
         gTasks[taskId].tDataMode = DATA_MODE_VANILLA;
+        gTasks[taskId].tPerfectIvs = FALSE;
         sPendingOptions.chosen = FALSE;
 
         Difficulty_DrawChoices(gTasks[taskId].tDifficulty);
         DataMode_DrawChoices(gTasks[taskId].tDataMode);
+        PerfectIvs_DrawChoices(gTasks[taskId].tPerfectIvs);
         HighlightNewGameOptionsItem(gTasks[taskId].tMenuSelection);
 
         CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
@@ -339,6 +367,7 @@ static void Task_NewGameOptionsProcessInput(u8 taskId)
         PlaySE(SE_SELECT);
         sPendingOptions.difficulty = sChoiceToDifficulty[tDifficulty];
         sPendingOptions.dataMode = tDataMode;
+        sPendingOptions.perfectIvs = tPerfectIvs;
         sPendingOptions.chosen = TRUE;
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
         gTasks[taskId].func = Task_NewGameOptionsFadeOutToBirch;
@@ -380,6 +409,10 @@ static void Task_NewGameOptionsProcessInput(u8 taskId)
         case MENUITEM_DATAMODE:
             tDataMode ^= 1;
             DataMode_DrawChoices(tDataMode);
+            break;
+        case MENUITEM_PERFECT_IVS:
+            tPerfectIvs ^= 1;
+            PerfectIvs_DrawChoices(tPerfectIvs);
             break;
         default:
             // Nothing to change on the OK row
@@ -461,6 +494,13 @@ static void DataMode_DrawChoices(u8 selection)
 
     DrawNewGameOptionsChoice(sText_Vanilla, CHOICES_LEFT, YPOS_DATAMODE, styles[DATA_MODE_VANILLA]);
     DrawNewGameOptionsChoice(sText_Custom, GetStringRightAlignXOffset(FONT_NORMAL, sText_Custom, CHOICES_RIGHT), YPOS_DATAMODE, styles[DATA_MODE_CUSTOM]);
+}
+
+static void PerfectIvs_DrawChoices(u8 selection)
+{
+    // OFF on the left like VANILLA, ON on the right like CUSTOM
+    DrawNewGameOptionsChoice(sText_Off, CHOICES_LEFT, YPOS_PERFECTIVS, selection == FALSE);
+    DrawNewGameOptionsChoice(sText_On, GetStringRightAlignXOffset(FONT_NORMAL, sText_On, CHOICES_RIGHT), YPOS_PERFECTIVS, selection != FALSE);
 }
 
 static void DrawHeaderText(void)

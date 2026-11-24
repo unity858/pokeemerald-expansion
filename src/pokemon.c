@@ -2051,6 +2051,12 @@ static ALWAYS_INLINE bool32 IsEggOrBadEgg(struct BoxPokemon *boxMon)
  * safety we have a GetBoxMonData macro (in include/pokemon.h) which
  * dispatches to either GetBoxMonData2 or GetBoxMonData3 based on the
  * number of arguments. */
+// R.O.W.E. Perfect IV Mode (new-game option): every Pokemon - the player's, wild,
+// trainers', gifts, eggs, trades - reads as having 31 in every IV. The stored IVs
+// are left untouched; only reads are overridden, so stat calculation, Hidden Power
+// (always Dark), the summary screen and IV-based items all agree.
+#define PERFECT_IV_OR(iv) (IsPerfectIvMode() ? MAX_PER_STAT_IVS : (iv))
+
 u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
 {
     s32 i;
@@ -2235,22 +2241,22 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
             retVal = GetSubstruct3(boxMon)->otGender;
             break;
         case MON_DATA_HP_IV:
-            retVal = GetSubstruct3(boxMon)->hpIV;
+            retVal = PERFECT_IV_OR(GetSubstruct3(boxMon)->hpIV);
             break;
         case MON_DATA_ATK_IV:
-            retVal = GetSubstruct3(boxMon)->attackIV;
+            retVal = PERFECT_IV_OR(GetSubstruct3(boxMon)->attackIV);
             break;
         case MON_DATA_DEF_IV:
-            retVal = GetSubstruct3(boxMon)->defenseIV;
+            retVal = PERFECT_IV_OR(GetSubstruct3(boxMon)->defenseIV);
             break;
         case MON_DATA_SPEED_IV:
-            retVal = GetSubstruct3(boxMon)->speedIV;
+            retVal = PERFECT_IV_OR(GetSubstruct3(boxMon)->speedIV);
             break;
         case MON_DATA_SPATK_IV:
-            retVal = GetSubstruct3(boxMon)->spAttackIV;
+            retVal = PERFECT_IV_OR(GetSubstruct3(boxMon)->spAttackIV);
             break;
         case MON_DATA_SPDEF_IV:
-            retVal = GetSubstruct3(boxMon)->spDefenseIV;
+            retVal = PERFECT_IV_OR(GetSubstruct3(boxMon)->spDefenseIV);
             break;
         case MON_DATA_IS_EGG:
             retVal = IsEggOrBadEgg(boxMon);
@@ -2320,12 +2326,12 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_IVS:
         {
             struct PokemonSubstruct3 *substruct3 = GetSubstruct3(boxMon);
-            retVal = substruct3->hpIV
-                    | (substruct3->attackIV << 5)
-                    | (substruct3->defenseIV << 10)
-                    | (substruct3->speedIV << 15)
-                    | (substruct3->spAttackIV << 20)
-                    | (substruct3->spDefenseIV << 25);
+            retVal = PERFECT_IV_OR(substruct3->hpIV)
+                    | (PERFECT_IV_OR(substruct3->attackIV) << 5)
+                    | (PERFECT_IV_OR(substruct3->defenseIV) << 10)
+                    | (PERFECT_IV_OR(substruct3->speedIV) << 15)
+                    | (PERFECT_IV_OR(substruct3->spAttackIV) << 20)
+                    | (PERFECT_IV_OR(substruct3->spDefenseIV) << 25);
             break;
         }
         case MON_DATA_KNOWN_MOVES:
@@ -2529,6 +2535,8 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
 
     return retVal;
 }
+
+#undef PERFECT_IV_OR
 
 u32 GetBoxMonData2(struct BoxPokemon *boxMon, s32 field)
 {

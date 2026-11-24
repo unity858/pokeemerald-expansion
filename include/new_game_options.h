@@ -13,8 +13,8 @@ enum NewGameDataMode
 
 void CB2_InitNewGameOptions(void);
 
-// Writes the pending choices into the save (B_VAR_DIFFICULTY and
-// FLAG_CUSTOM_DATA_MODE). Must be called after NewGameInitData, which
+// Writes the pending choices into the save (B_VAR_DIFFICULTY,
+// FLAG_CUSTOM_DATA_MODE and FLAG_PERFECT_IV_MODE). Must be called after NewGameInitData, which
 // clears all flags and vars.
 void NewGameOptions_ApplyToSave(void);
 
@@ -22,5 +22,7 @@ void NewGameOptions_ApplyToSave(void);
 // Difficulty: use GetCurrentDifficultyLevel() from difficulty.h.
 bool32 IsCustomDataMode(void);
 enum NewGameDataMode GetDataMode(void);
+// R.O.W.E. Perfect IV Mode: every Pokemon's IVs read as 31 (see GetBoxMonData3).
+bool32 IsPerfectIvMode(void);
 
 #endif // GUARD_NEW_GAME_OPTIONS_H

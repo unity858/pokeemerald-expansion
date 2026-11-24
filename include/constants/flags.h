@@ -58,7 +58,7 @@
 #define FLAG_SYS_DETECTOR_MODE 0x24 // DexNav: lets the player stumble on hidden Pokémon (DN_FLAG_DETECTOR_MODE)
 #define FLAG_EGG_MOVES_RELEARNER   0x25 // Move relearner offers Egg moves (P_FLAG_EGG_MOVES)
 #define FLAG_TUTOR_MOVES_RELEARNER 0x26 // Move relearner offers Tutor moves (P_FLAG_TUTOR_MOVES)
-#define FLAG_UNUSED_0x027    0x27 // Unused Flag
+#define FLAG_PERFECT_IV_MODE  0x27 // Set if Perfect IV Mode was chosen on the new-game options screen
 #define FLAG_UNUSED_0x028    0x28 // Unused Flag
 #define FLAG_UNUSED_0x029    0x29 // Unused Flag
 #define FLAG_UNUSED_0x02A    0x2A // Unused Flag
