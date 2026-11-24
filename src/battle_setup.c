@@ -1057,15 +1057,6 @@ static void TryUpdateGymLeaderRematchFromTrainer(void)
         UpdateGymLeaderRematch();
 }
 
-static u16 GetTrainerAFlag(void)
-{
-    return TRAINER_FLAGS_START + TRAINER_BATTLE_PARAM.opponentA;
-}
-
-static u16 GetTrainerBFlag(void)
-{
-    return TRAINER_FLAGS_START + TRAINER_BATTLE_PARAM.opponentB;
-}
 
 static bool32 IsPlayerDefeated(u32 battleOutcome)
 {
@@ -1374,7 +1365,7 @@ void ConfigureApproachingFacilityTrainerBattle(struct ApproachingTrainer *approa
 bool32 GetTrainerFlagFromScriptPointer(const u8 *data)
 {
     TrainerBattleParameter *temp = (TrainerBattleParameter*)(data + TRAINERBATTLE_OPCODE_OFFSET);
-    return FlagGet(TRAINER_FLAGS_START + temp->params.opponentA);
+    return HasTrainerBeenFought(temp->params.opponentA);
 }
 
 bool32 GetRematchFromScriptPointer(const u8 *data)
@@ -1412,34 +1403,82 @@ bool8 GetTrainerFlag(void)
     else if (InTrainerHill())
         return GetHillTrainerFlag(gSelectedObjectEvent);
     else
-        return FlagGet(GetTrainerAFlag());
+        return HasTrainerBeenFought(TRAINER_BATTLE_PARAM.opponentA);
 }
 
 static void SetBattledTrainersFlags(void)
 {
     if (TRAINER_BATTLE_PARAM.opponentB != 0)
-        FlagSet(GetTrainerBFlag());
-    FlagSet(GetTrainerAFlag());
+        SetTrainerFlag(TRAINER_BATTLE_PARAM.opponentB);
+    SetTrainerFlag(TRAINER_BATTLE_PARAM.opponentA);
 }
 
 static void UNUSED SetBattledTrainerFlag(void)
 {
-    FlagSet(GetTrainerAFlag());
+    SetTrainerFlag(TRAINER_BATTLE_PARAM.opponentA);
+}
+
+// Trainer IDs below TRAINER_FLAGS_COUNT use the trainer flags in SaveBlock1's flag array.
+// The trainer IDs above them (the Kanto trainers) use gSaveBlock3Ptr->kantoTrainerFlags.
+// IDs past the last trainer (partners, TRAINER_SECRET_BASE, ...) have no flag.
+static u8 *GetExtraTrainerFlagByte(u16 trainerId, u8 *mask)
+{
+#if EXTRA_TRAINER_FLAGS_BYTES > 0
+    u32 index = trainerId - TRAINER_FLAGS_COUNT;
+
+    if (trainerId < TRAINER_FLAGS_COUNT || index >= EXTRA_TRAINER_FLAGS_COUNT)
+        return NULL;
+    *mask = 1 << (index % 8);
+    return &gSaveBlock3Ptr->kantoTrainerFlags[index / 8];
+#else
+    return NULL;
+#endif
 }
 
 bool8 HasTrainerBeenFought(u16 trainerId)
 {
-    return FlagGet(TRAINER_FLAGS_START + trainerId);
+    u8 mask, *byte;
+
+    if (trainerId < TRAINER_FLAGS_COUNT)
+        return FlagGet(TRAINER_FLAGS_START + trainerId);
+    byte = GetExtraTrainerFlagByte(trainerId, &mask);
+    return byte != NULL && (*byte & mask) != 0;
 }
 
 void SetTrainerFlag(u16 trainerId)
 {
-    FlagSet(TRAINER_FLAGS_START + trainerId);
+    u8 mask, *byte;
+
+    if (trainerId < TRAINER_FLAGS_COUNT)
+    {
+        FlagSet(TRAINER_FLAGS_START + trainerId);
+        return;
+    }
+    byte = GetExtraTrainerFlagByte(trainerId, &mask);
+    if (byte != NULL)
+        *byte |= mask;
 }
 
 void ClearTrainerFlag(u16 trainerId)
 {
-    FlagClear(TRAINER_FLAGS_START + trainerId);
+    u8 mask, *byte;
+
+    if (trainerId < TRAINER_FLAGS_COUNT)
+    {
+        FlagClear(TRAINER_FLAGS_START + trainerId);
+        return;
+    }
+    byte = GetExtraTrainerFlagByte(trainerId, &mask);
+    if (byte != NULL)
+        *byte &= ~mask;
+}
+
+void ToggleTrainerFlag(u16 trainerId)
+{
+    if (HasTrainerBeenFought(trainerId))
+        ClearTrainerFlag(trainerId);
+    else
+        SetTrainerFlag(trainerId);
 }
 
 void BattleSetup_StartTrainerBattle(void)

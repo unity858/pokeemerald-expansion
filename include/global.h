@@ -291,6 +291,11 @@ struct SaveBlock3
 #endif
     // Kept last so saves made before it existed read it as an empty (zeroed) pocket.
     struct ItemSlot keyItems[BAG_KEYITEMS_COUNT];
+#if EXTRA_TRAINER_FLAGS_BYTES > 0
+    // Defeated flags for trainer IDs >= TRAINER_FLAGS_COUNT (the Kanto trainers).
+    // At the end so saves made before it existed read it as all undefeated.
+    u8 kantoTrainerFlags[EXTRA_TRAINER_FLAGS_BYTES];
+#endif
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;

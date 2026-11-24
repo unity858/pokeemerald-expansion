@@ -61,6 +61,7 @@ static void WarpToTruck(void);
 static void ResetMiniGamesRecords(void);
 static void ResetItemFlags(void);
 static void ResetDexNav(void);
+static void ResetExtraTrainerFlags(void);
 static void EnableStartingFeatures(void);
 
 EWRAM_DATA bool8 gDifferentSaveFile = FALSE;
@@ -234,6 +235,7 @@ void NewGameInitData(void)
     SetCurrentDifficultyLevel(DIFFICULTY_NORMAL);
     ResetItemFlags();
     ResetDexNav();
+    ResetExtraTrainerFlags();
     ClearFollowerNPCData();
     EnableStartingFeatures();
 }
@@ -244,6 +246,14 @@ static void ResetMiniGamesRecords(void)
     SetBerryPowder(&gSaveBlock2Ptr->berryCrush.berryPowderAmount, 0);
     ResetPokemonJumpRecords();
     CpuFill16(0, &gSaveBlock2Ptr->berryPick, sizeof(struct BerryPickingResults));
+}
+
+// Defeated flags of the Kanto trainers (trainer IDs above the SaveBlock1 trainer flags).
+static void ResetExtraTrainerFlags(void)
+{
+#if EXTRA_TRAINER_FLAGS_BYTES > 0
+    memset(gSaveBlock3Ptr->kantoTrainerFlags, 0, sizeof(gSaveBlock3Ptr->kantoTrainerFlags));
+#endif
 }
 
 static void ResetItemFlags(void)

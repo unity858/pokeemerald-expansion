@@ -1337,11 +1337,12 @@
 #define FLAG_UNUSED_0x4FF                                           0x4FF // Unused Flag
 
 // Trainer Flags
-// Trainer flags occupy 0x500 - 0x85F, the last 9 of which are unused
+// Trainer flags occupy 0x500 - 0x85F (trainer IDs 0 - 863; IDs 855 - 863 are the first Kanto trainers).
+// Higher trainer IDs (the other Kanto trainers) use gSaveBlock3Ptr->kantoTrainerFlags.
 // See constants/opponents.h. The values there + FLAG_TRAINER_FLAG_START are the flag IDs
 
 #define TRAINER_FLAGS_START                                         0x500
-#define TRAINER_FLAGS_END                                           (TRAINER_FLAGS_START + MAX_TRAINERS_COUNT - 1) // 0x85F
+#define TRAINER_FLAGS_END                                           (TRAINER_FLAGS_START + TRAINER_FLAGS_COUNT - 1) // 0x85F
 
 // System Flags
 

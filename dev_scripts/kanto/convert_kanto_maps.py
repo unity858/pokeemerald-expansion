@@ -29,6 +29,9 @@ What it does, per map:
   * map scripts: reduced to weather / respawn / metatile / layout changes,
     with story flags folded as "set".  No FRLG flag or var is referenced.
   * music: replaced by Hoenn songs (see music_for_map)
+
+Run dev_scripts/kanto/add_kanto_trainers.py afterwards (same <orig_maps_dir>) to put
+the stationary FRLG trainers, Gym Leaders, Elite Four and Champion back.
 """
 
 import json
