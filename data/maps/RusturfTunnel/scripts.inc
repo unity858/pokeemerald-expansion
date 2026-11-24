@@ -1,7 +1,12 @@
 RusturfTunnel_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, RusturfTunnel_OnTransition
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, RusturfTunnel_OnFrame
+	map_script MAP_SCRIPT_ON_RESUME, RusturfTunnel_OnResume
 	.byte 0
+
+RusturfTunnel_OnResume:
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	end
 
 RusturfTunnel_OnFrame:
 	map_script_2 VAR_RUSTURF_TUNNEL_STATE, 4, RusturfTunnel_EventScript_ClearTunnelScene
@@ -9,6 +14,7 @@ RusturfTunnel_OnFrame:
 	.2byte 0
 
 RusturfTunnel_OnTransition:
+	call RusturfTunnel_EventScript_SetupTerrakion
 	call_if_eq VAR_RUSTURF_TUNNEL_STATE, 2, RusturfTunnel_EventScript_SetAquaGruntAndPeekoPos
 	end
 
@@ -523,3 +529,36 @@ RusturfTunnel_Text_MikePostBattle:
 	.string "protect POKéMON, right?\l"
 	.string "There's a feel-good story!$"
 
+
+@ Terrakion: in the tunnel's upper alcove (the dead end north of the main
+@ passage, entered at x=8), off every scripted path. After the 8th badge.
+RusturfTunnel_EventScript_SetupTerrakion::
+	setflag FLAG_TEMP_HIDE_STATIC_MON
+	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
+	goto_if_set FLAG_CAUGHT_TERRAKION, Common_EventScript_NopReturn
+	goto_if_set FLAG_DEFEATED_TERRAKION, Common_EventScript_NopReturn
+	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	return
+
+RusturfTunnel_EventScript_Terrakion::
+	lock
+	faceplayer
+	setvar VAR_0x8004, SPECIES_TERRAKION
+	setvar VAR_0x8006, ITEM_NONE
+	call HackStatic_EventScript_LegendaryBattle
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, RusturfTunnel_EventScript_CaughtTerrakion
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, RusturfTunnel_EventScript_DefeatedTerrakion
+	setvar VAR_0x8004, SPECIES_TERRAKION
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+RusturfTunnel_EventScript_DefeatedTerrakion::
+	setflag FLAG_DEFEATED_TERRAKION
+	setvar VAR_0x8004, SPECIES_TERRAKION
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+RusturfTunnel_EventScript_CaughtTerrakion::
+	setflag FLAG_CAUGHT_TERRAKION
+	release
+	end

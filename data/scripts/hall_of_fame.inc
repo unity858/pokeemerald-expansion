@@ -44,6 +44,8 @@ EverGrandeCity_HallOfFame_EventScript_ResetDefeatedEventLegendaries::
 	clearflag FLAG_DEFEATED_REGIELEKI
 	clearflag FLAG_DEFEATED_REGIDRAGO
 	clearflag FLAG_DEFEATED_KYUREM
+	clearflag FLAG_DEFEATED_TERRAKION
+	clearflag FLAG_DEFEATED_COBALION
 	return
 
 EverGrandeCity_HallOfFame_EventScript_SetDesertUnderpassCommentReady::

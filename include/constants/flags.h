@@ -88,10 +88,10 @@
 #define FLAG_RECEIVED_TYPE_NULL      0x42 // Hack gift: received
 #define FLAG_RECEIVED_POIPOLE        0x43 // Hack gift: received
 #define FLAG_RECEIVED_KUBFU          0x44 // Hack gift: received
-#define FLAG_UNUSED_0x045    0x45 // Unused Flag
-#define FLAG_UNUSED_0x046    0x46 // Unused Flag
-#define FLAG_UNUSED_0x047    0x47 // Unused Flag
-#define FLAG_UNUSED_0x048    0x48 // Unused Flag
+#define FLAG_DEFEATED_TERRAKION      0x45 // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_TERRAKION        0x46 // Hack static: caught, gone for good
+#define FLAG_DEFEATED_COBALION       0x47 // Hack static: knocked out, back after the next Hall of Fame
+#define FLAG_CAUGHT_COBALION         0x48 // Hack static: caught, gone for good
 #define FLAG_UNUSED_0x049    0x49 // Unused Flag
 #define FLAG_UNUSED_0x04A    0x4A // Unused Flag
 #define FLAG_UNUSED_0x04B    0x4B // Unused Flag
