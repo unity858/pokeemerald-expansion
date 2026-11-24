@@ -589,8 +589,8 @@ LilycoveCity_Text_StrangeCaveInCove:
 LilycoveCity_Text_GoingToMoveDeleterForHMs:
 	.string "I'm going to teach my POKéMON some new\n"
 	.string "moves for entering a CONTEST.\p"
-	.string "So, I'm going to see the MOVE DELETER\n"
-	.string "and make it forget HM moves.$"
+	.string "So, I'm going to ask the move nurse\n"
+	.string "at the POKéMON CENTER to help.$"
 
 LilycoveCity_Text_ImFromKanto:
 	.string "I came from KANTO.\p"
@@ -710,8 +710,9 @@ LilycoveCity_Text_DepartmentStoreSign:
 	.string "you need!”$"
 
 LilycoveCity_Text_MoveDeletersHouseSign:
-	.string "MOVE DELETER'S HOUSE\p"
-	.string "“Unwanted POKéMON moves deleted.”$"
+	.string "WATER POKéMON TRAINER'S HOUSE\p"
+	.string "“WATER POKéMON traded for\n"
+	.string "BLUE SHARDS.”$"
 
 LilycoveCity_Text_DoYouKnowAboutBerryBlender:
 	.string "Do you know about the machine\n"
