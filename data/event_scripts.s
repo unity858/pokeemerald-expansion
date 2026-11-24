@@ -56,6 +56,7 @@
 #include "constants/pokemon.h"
 #include "constants/pokemon_size_record.h"
 #include "constants/random_mon_generation.h"
+#include "constants/regions.h"
 #include "constants/rtc.h"
 #include "constants/roulette.h"
 #include "constants/script_menu.h"
@@ -1738,3 +1739,4 @@ EventScript_PalletTown_PlayersHouse_2F_TurnOnPC::
 	.include "data/scripts/battle_frontier.inc"
 	.include "data/scripts/apricorn_tree.inc"
 	.include "data/scripts/wild_encounter.inc"
+	.include "data/scripts/favorite_region.inc"
