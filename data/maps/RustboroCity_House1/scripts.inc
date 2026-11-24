@@ -8,7 +8,8 @@ RustboroCity_House1_EventScript_Trader::
 	faceplayer
 	msgbox RustboroCity_House1_Text_TradebackGuyIntro, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, RustboroCity_House1_EventScript_TradebackDecline
-	special ChoosePartyMon
+	chooseboxmon SELECT_PC_MON_NORMAL
+	waitstate
 	goto_if_eq VAR_0x8004, PARTY_NOTHING_CHOSEN, RustboroCity_House1_EventScript_TradebackDecline
 	special IsSelectedMonEgg
 	goto_if_eq VAR_RESULT, TRUE, RustboroCity_House1_EventScript_TradebackEgg

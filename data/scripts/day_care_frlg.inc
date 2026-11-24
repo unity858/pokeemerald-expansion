@@ -16,7 +16,8 @@ Route5_PokemonDayCare_EventScript_TryGiveMon::
 	msgbox Route5_PokemonDayCare_Text_WhichMonShouldIRaise
 	fadescreen FADE_TO_BLACK
 	hidemoneybox
-	special ChooseSendDaycareMon
+	chooseboxmon SELECT_PC_MON_DAYCARE
+	waitstate
 	showmoneybox 0, 0
 	goto_if_ge VAR_0x8004, PARTY_SIZE, Route5_PokemonDayCare_EventScript_ComeAgain
 	specialvar VAR_RESULT, CountPartyAliveNonEggMons_IgnoreVar0x8004Slot

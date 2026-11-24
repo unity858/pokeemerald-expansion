@@ -174,13 +174,6 @@ void ChooseBoxMon(struct ScriptContext *ctx)
     }
 }
 
-// Like ChooseBoxMon, but always uses the party menu (no PC boxes).
-void ChoosePartyMonOnly(struct ScriptContext *ctx)
-{
-    sSelectionType = ScriptReadByte(ctx);
-    sPcMonSelectionTypes[sSelectionType].partyMonBackup();
-}
-
 void PickPartyMon(struct ScriptContext *ctx)
 {
     sSelectionType = ScriptReadByte(ctx);

@@ -544,7 +544,8 @@ CapeBrinkTutor_EventScript_NoLeadStarter::
 	end
 
 EventScript_ChooseMoveTutorMon::
-	special ChooseMonForMoveTutor
+	chooseboxmon SELECT_PC_MON_MOVE_TUTOR
+	waitstate
 	lock
 	faceplayer
 	return

@@ -1562,7 +1562,8 @@ EventScript_GetInGameTradeSpeciesInfo::
 	return
 
 EventScript_ChooseMonForInGameTrade::
-	special ChoosePartyMon
+	chooseboxmon SELECT_PC_MON_TRADE
+	waitstate
 	lock
 	faceplayer
 	return
