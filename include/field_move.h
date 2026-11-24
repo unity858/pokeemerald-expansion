@@ -38,6 +38,9 @@ bool32 IsHMFieldMove(enum FieldMove fieldMove);
 u32 GetMonFieldMoveQualifiedMask(struct Pokemon *mon);
 bool32 MonQualifiesForFieldMove(struct Pokemon *mon, enum FieldMove fieldMove);
 
+#define MAX_PRE_EVO_CHAIN 8 // guard against malformed evolution data loops
+u32 GetPreEvolutionChain(enum Species species, enum Species *chain);
+
 static inline bool32 SetUpFieldMove(enum FieldMove fieldMove)
 {
     return gFieldMoveInfo[fieldMove].fieldMoveFunc();

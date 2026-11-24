@@ -8,6 +8,7 @@
 #include "data.h"
 #include "decompress.h"
 #include "event_data.h"
+#include "field_move.h"
 #include "field_screen_effect.h"
 #include "gpu_regs.h"
 #include "item.h"
@@ -32,6 +33,7 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "data/tutor_moves.h"
+#include "data/tutor_move_badges.h"
 
 // The different versions of hearts are selected using animation
 // commands.
@@ -260,14 +262,17 @@ static bool32 IsLevelUpMoveRelearnerActive(void);
 static bool32 IsEggMoveRelearnerActive(void);
 static bool32 IsTMMoveRelearnerActive(void);
 static bool32 IsTutorMoveRelearnerActive(void);
+static bool32 IsBadgeTutorMoveRelearnerActive(void);
 static bool32 HasRelearnerLevelUpMoves(struct BoxPokemon *boxMon);
 static bool32 HasRelearnerEggMoves(struct BoxPokemon *boxMon);
 static bool32 HasRelearnerTMMoves(struct BoxPokemon *boxMon);
 static bool32 HasRelearnerTutorMoves(struct BoxPokemon *boxMon);
+static bool32 HasRelearnerBadgeTutorMoves(struct BoxPokemon *boxMon);
 static u32 GetRelearnerLevelUpMoves(struct BoxPokemon *mon, u16 *moves);
 static u32 GetRelearnerEggMoves(struct BoxPokemon *mon, u16 *moves);
 static u32 GetRelearnerTMMoves(struct BoxPokemon *mon, u16 *moves);
 static u32 GetRelearnerTutorMoves(struct BoxPokemon *mon, u16 *moves);
+static u32 GetRelearnerBadgeTutorMoves(struct BoxPokemon *mon, u16 *moves);
 
 static void Task_MoveRelearner_HandleInput(u8 taskId);
 static void Task_MoveRelearner_LearnMove(u8 taskId);
@@ -299,6 +304,12 @@ static const struct RelearnType sRelearnTypes[MOVE_RELEARNER_COUNT] =
         .isActive = IsTutorMoveRelearnerActive,
         .hasMoveToRelearn = HasRelearnerTutorMoves,
         .getMoves = GetRelearnerTutorMoves,
+        .moveText = MoveRelearner_Text_TutorMoveLWR
+    },
+    [MOVE_RELEARNER_BADGE_TUTOR_MOVES] = {
+        .isActive = IsBadgeTutorMoveRelearnerActive,
+        .hasMoveToRelearn = HasRelearnerBadgeTutorMoves,
+        .getMoves = GetRelearnerBadgeTutorMoves,
         .moveText = MoveRelearner_Text_TutorMoveLWR
     },
 };
@@ -944,22 +955,37 @@ static u32 GetRelearnerLevelUpMoves(struct BoxPokemon *mon, u16 *moves)
     return numMoves;
 }
 
+// Egg moves come from the mon's pre-evolution chain, earliest stage first, so
+// Charizard gets Charmander's Egg moves. The later stages are added too
+// (duplicates skipped): that covers families whose incense-free parent has
+// its own Egg move list (Munchlax/Snorlax, Azurill/Marill, Budew/Roselia), and
+// a base form without an Egg move list (possible in Custom data mode) falls
+// back to the next stage that has one. Evolved stages normally have no list of
+// their own, so for most families this is exactly the base form's list.
 static u32 GetRelearnerEggMoves(struct BoxPokemon *mon, u16 *moves)
 {
-    enum Species species = GetBoxMonData(mon, MON_DATA_SPECIES);
+    enum Species chain[MAX_PRE_EVO_CHAIN];
+    u32 chainCount = GetPreEvolutionChain(GetBoxMonData(mon, MON_DATA_SPECIES), chain);
     u32 numMoves = 0;
-    while (GetSpeciesPreEvolution(species) != SPECIES_NONE)
-        species = GetSpeciesPreEvolution(species);
 
-    const u16 *eggMoves = GetSpeciesEggMoves(species);
-
-    if (eggMoves[0] == MOVE_UNAVAILABLE)
-        return 0;
-
-    for (u32 i = 0; eggMoves[i] != MOVE_UNAVAILABLE; i++)
+    for (s32 stage = chainCount - 1; stage >= 0; stage--)
     {
-        if (!BoxMonKnowsMove(mon, eggMoves[i]))
-            moves[numMoves++] = eggMoves[i];
+        const u16 *eggMoves = GetSpeciesEggMoves(chain[stage]);
+
+        for (u32 i = 0; eggMoves[i] != MOVE_UNAVAILABLE && numMoves < MAX_RELEARNER_MOVES; i++)
+        {
+            bool32 alreadyInList = FALSE;
+
+            if (BoxMonKnowsMove(mon, eggMoves[i]))
+                continue;
+            for (u32 j = 0; j < numMoves; j++)
+            {
+                if (moves[j] == eggMoves[i])
+                    alreadyInList = TRUE;
+            }
+            if (!alreadyInList)
+                moves[numMoves++] = eggMoves[i];
+        }
     }
 
     return numMoves;
@@ -1009,6 +1035,104 @@ static u32 GetRelearnerTutorMoves(struct BoxPokemon *mon, u16 *moves)
     }
 
     return numMoves;
+}
+
+// Hoenn Gym Badges owned (counted, so the gyms can be done in any order).
+static u32 CountHoennBadges(void)
+{
+    u32 badges = 0;
+
+    for (u32 flag = FLAG_BADGE01_GET; flag <= FLAG_BADGE08_GET; flag++)
+    {
+        if (FlagGet(flag))
+            badges++;
+    }
+    return badges;
+}
+
+// Badge requirement from src/data/tutor_move_badges.h, clamped to 1-8 so
+// every Tutor move is unlocked at 8 badges.
+static u32 GetTutorMoveBadgeRequirement(enum Move move)
+{
+    u32 badges = (move < MOVES_COUNT) ? sTutorMoveBadgeRequirements[move] : 0;
+
+    if (badges == 0)
+        badges = TUTOR_MOVE_DEFAULT_BADGES;
+    if (badges < 1)
+        badges = 1;
+    if (badges > NUM_BADGES)
+        badges = NUM_BADGES;
+    return badges;
+}
+
+static bool32 IsTutorMoveUnlockedByBadges(enum Move move, u32 badges)
+{
+    return badges >= GetTutorMoveBadgeRequirement(move);
+}
+
+// Tutor moves for the Pokemon Center Move Nurse: the regular Tutor list,
+// limited to moves whose badge requirement has been met.
+static u32 GetRelearnerBadgeTutorMoves(struct BoxPokemon *mon, u16 *moves)
+{
+    enum Species species = GetBoxMonData(mon, MON_DATA_SPECIES);
+    const u16 *tutorMoves = GetTutorMoves();
+    u32 badges = CountHoennBadges();
+    u32 numMoves = 0;
+
+    for (u32 i = 0; tutorMoves[i] != MOVE_UNAVAILABLE && numMoves < MAX_RELEARNER_MOVES; i++)
+    {
+        enum Move move = tutorMoves[i];
+
+        if (!IsTutorMoveUnlockedByBadges(move, badges))
+            continue;
+        if (!CanLearnTeachableMove(species, move))
+            continue;
+        if (!BoxMonKnowsMove(mon, move))
+            moves[numMoves++] = move;
+    }
+
+    return numMoves;
+}
+
+static bool32 HasRelearnerBadgeTutorMoves(struct BoxPokemon *boxMon)
+{
+    u16 moves[MAX_RELEARNER_MOVES];
+    return GetRelearnerBadgeTutorMoves(boxMon, moves) != 0;
+}
+
+// Only reachable through the Move Nurse's script, which sets the state itself.
+// It counts as active only while that script session is using it: the summary
+// screen's relearner never cycles into it, but the forget-a-move summary screen
+// (which re-checks the current state) keeps it instead of switching to another
+// move list mid-session.
+static bool32 IsBadgeTutorMoveRelearnerActive(void)
+{
+    return gRelearnMode == RELEARN_MODE_SCRIPT && gMoveRelearnerState == MOVE_RELEARNER_BADGE_TUTOR_MOVES;
+}
+
+// VAR_RESULT = MOVE_NURSE_TUTOR_AVAILABLE if at least one Tutor move is
+// unlocked by the player's Hoenn badges, otherwise MOVE_NURSE_TUTOR_NO_BADGES
+// or MOVE_NURSE_TUTOR_NEED_MORE.
+void MoveNurse_GetTutorAvailability(void)
+{
+    const u16 *tutorMoves = GetTutorMoves();
+    u32 badges = CountHoennBadges();
+
+    gSpecialVar_Result = (badges == 0) ? MOVE_NURSE_TUTOR_NO_BADGES : MOVE_NURSE_TUTOR_NEED_MORE;
+    for (u32 i = 0; tutorMoves[i] != MOVE_UNAVAILABLE; i++)
+    {
+        if (IsTutorMoveUnlockedByBadges(tutorMoves[i], badges))
+        {
+            gSpecialVar_Result = MOVE_NURSE_TUTOR_AVAILABLE;
+            return;
+        }
+    }
+}
+
+// Buffers MOVE_NURSE_EGG_MOVE_PRICE into gStringVar1, for the price shown in the Move Nurse text.
+void MoveNurse_BufferEggMovePrice(void)
+{
+    ConvertIntToDecimalStringN(gStringVar1, MOVE_NURSE_EGG_MOVE_PRICE, STR_CONV_MODE_LEFT_ALIGN, 7);
 }
 
 void Special_HasMoveToRelearn(void)
@@ -1061,22 +1185,8 @@ static bool32 HasRelearnerLevelUpMoves(struct BoxPokemon *boxMon)
 
 static bool32 HasRelearnerEggMoves(struct BoxPokemon *boxMon)
 {
-    enum Species species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
-    while (GetSpeciesPreEvolution(species) != SPECIES_NONE)
-        species = GetSpeciesPreEvolution(species);
-
-    const u16 *eggMoves = GetSpeciesEggMoves(species);
-
-    if (eggMoves[0] == MOVE_UNAVAILABLE)
-        return FALSE;
-
-    for (u32 i = 0; eggMoves[i] != MOVE_UNAVAILABLE; i++)
-    {
-        if (!BoxMonKnowsMove(boxMon, eggMoves[i]))
-            return TRUE;
-    }
-
-    return FALSE;
+    u16 moves[MAX_RELEARNER_MOVES];
+    return GetRelearnerEggMoves(boxMon, moves) != 0;
 }
 
 static bool32 HasRelearnerTMMoves(struct BoxPokemon *boxMon)
@@ -1129,6 +1239,10 @@ static bool32 IsLevelUpMoveRelearnerActive(void)
 
 static bool32 IsEggMoveRelearnerActive(void)
 {
+    // A script that picked Egg moves itself (the Pokemon Center Move Nurse)
+    // keeps them for the whole session, even if the relearner flag is unset.
+    if (gRelearnMode == RELEARN_MODE_SCRIPT && gMoveRelearnerState == MOVE_RELEARNER_EGG_MOVES)
+        return TRUE;
     return (FlagGet(P_FLAG_EGG_MOVES) || P_ENABLE_MOVE_RELEARNERS);
 }
 

@@ -235,10 +235,9 @@ static bool32 SpeciesLearnablesContainMove(enum Species species, enum Move move)
     return CanLearnTeachableMove(species, move);
 }
 
-#define MAX_PRE_EVO_CHAIN 8 // guard against malformed evolution data loops
-
 // Fills chain with species followed by each pre-evolution; returns the count.
-static u32 GetPreEvolutionChain(enum Species species, enum Species *chain)
+// chain must hold MAX_PRE_EVO_CHAIN entries (include/field_move.h).
+u32 GetPreEvolutionChain(enum Species species, enum Species *chain)
 {
     u32 count = 0;
 
