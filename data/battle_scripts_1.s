@@ -5237,6 +5237,12 @@ BattleScript_MoveDamageDealtMsg::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_SubstituteDamaged::
+	printstring STRINGID_SUBSTITUTEDAMAGED
+	return
+
+BattleScript_SubstituteDamagedAndFade::
+	printstring STRINGID_SUBSTITUTEDAMAGED
 BattleScript_SubstituteFade::
 	playanimation BS_SCRIPTING, B_ANIM_SUBSTITUTE_FADE
 	printstring STRINGID_PKMNSUBSTITUTEFADED

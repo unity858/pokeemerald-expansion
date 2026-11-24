@@ -2947,13 +2947,10 @@ static enum CancelerResult CancelerHealthBarUpdate(struct BattleCalcValues *cv)
 {
     for (enum BattlerId battlerDef = 0; battlerDef < gBattlersCount; battlerDef++)
     {
-        if (DoesSubstituteBlockMove(cv->battlerAtk, battlerDef, cv->move))
-        {
-            PrepareStringBattle(STRINGID_SUBSTITUTEDAMAGED, battlerDef);
-            continue;
-        }
-
+        // Only battlers this move is hitting. A substitute-protected target gets no HP bar;
+        // its "The substitute took damage" message is printed per target in TryMoveDamageUpdate.
         if (ShouldSkipBattlerForDamage(cv->battlerAtk, battlerDef)
+         || DoesSubstituteBlockMove(cv->battlerAtk, battlerDef, cv->move)
          || DoesDisguiseBlockMove(battlerDef, cv->move)
          || DoesIceFaceBlockMove(battlerDef, cv->move))
             continue;
@@ -2984,14 +2981,13 @@ static bool32 TryMoveDamageUpdate(struct BattleCalcValues *cv)
             gBattleStruct->moveDamage[cv->battlerDef] = gBattleMons[cv->battlerDef].volatiles.substituteHP;
             gBattleMons[cv->battlerDef].volatiles.substituteHP = 0;
         }
-        // check substitute fading
+        // "The substitute took damage for X!", then check substitute fading
+        gBattleScripting.battler = cv->battlerDef;
         if (gBattleMons[cv->battlerDef].volatiles.substituteHP == 0)
-        {
-            gBattleScripting.battler = cv->battlerDef;
-            BattleScriptCall(BattleScript_SubstituteFade);
-            return TRUE;
-        }
-        return FALSE;
+            BattleScriptCall(BattleScript_SubstituteDamagedAndFade);
+        else
+            BattleScriptCall(BattleScript_SubstituteDamaged);
+        return TRUE;
     }
     else if (DoesDisguiseBlockMove(cv->battlerDef, cv->move) || DoesIceFaceBlockMove(cv->battlerDef, cv->move))
     {
