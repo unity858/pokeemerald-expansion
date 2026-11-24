@@ -2,7 +2,17 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 FiveIsland_MemorialPillar_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, FiveIsland_MemorialPillar_OnTransition
+	map_script MAP_SCRIPT_ON_RESUME, FiveIsland_MemorialPillar_OnResume
 	.byte 0
+
+FiveIsland_MemorialPillar_OnTransition:
+	call FiveIsland_MemorialPillar_EventScript_SetupTapuLele
+	end
+
+FiveIsland_MemorialPillar_OnResume:
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	end
 
 FiveIsland_MemorialPillar_EventScript_MemorialMan::
 	lock
@@ -90,3 +100,34 @@ FiveIsland_MemorialPillar_Text_HaroldDefeat::
 FiveIsland_MemorialPillar_Text_HaroldPostBattle::
 	.string "It fills me with happiness when\n"
 	.string "bird POKéMON beg playfully…$"
+
+FiveIsland_MemorialPillar_EventScript_SetupTapuLele::
+	setflag FLAG_TEMP_HIDE_STATIC_MON
+	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
+	goto_if_set FLAG_CAUGHT_TAPU_LELE, Common_EventScript_NopReturn
+	goto_if_set FLAG_DEFEATED_TAPU_LELE, Common_EventScript_NopReturn
+	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	return
+
+FiveIsland_MemorialPillar_EventScript_TapuLele::
+	lock
+	faceplayer
+	setvar VAR_0x8004, SPECIES_TAPU_LELE
+	setvar VAR_0x8006, ITEM_NONE
+	call HackStatic_EventScript_LegendaryBattle
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, FiveIsland_MemorialPillar_EventScript_CaughtTapuLele
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, FiveIsland_MemorialPillar_EventScript_DefeatedTapuLele
+	setvar VAR_0x8004, SPECIES_TAPU_LELE
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+FiveIsland_MemorialPillar_EventScript_DefeatedTapuLele::
+	setflag FLAG_DEFEATED_TAPU_LELE
+	setvar VAR_0x8004, SPECIES_TAPU_LELE
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+FiveIsland_MemorialPillar_EventScript_CaughtTapuLele::
+	setflag FLAG_CAUGHT_TAPU_LELE
+	release
+	end

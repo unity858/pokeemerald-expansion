@@ -2,7 +2,17 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 OneIsland_TreasureBeach_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, OneIsland_TreasureBeach_OnTransition
+	map_script MAP_SCRIPT_ON_RESUME, OneIsland_TreasureBeach_OnResume
 	.byte 0
+
+OneIsland_TreasureBeach_OnTransition:
+	call OneIsland_TreasureBeach_EventScript_SetupTapuFini
+	end
+
+OneIsland_TreasureBeach_OnResume:
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	end
 
 OneIsland_TreasureBeach_EventScript_Boy::
 	msgbox OneIsland_TreasureBeach_Text_GoodThingsWashUpOnBeach, MSGBOX_NPC
@@ -32,3 +42,34 @@ OneIsland_TreasureBeach_Text_AmaraDefeat::
 OneIsland_TreasureBeach_Text_AmaraPostBattle::
 	.string "The sea is pleasantly warm in these\n"
 	.string "parts.$"
+
+OneIsland_TreasureBeach_EventScript_SetupTapuFini::
+	setflag FLAG_TEMP_HIDE_STATIC_MON
+	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
+	goto_if_set FLAG_CAUGHT_TAPU_FINI, Common_EventScript_NopReturn
+	goto_if_set FLAG_DEFEATED_TAPU_FINI, Common_EventScript_NopReturn
+	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	return
+
+OneIsland_TreasureBeach_EventScript_TapuFini::
+	lock
+	faceplayer
+	setvar VAR_0x8004, SPECIES_TAPU_FINI
+	setvar VAR_0x8006, ITEM_NONE
+	call HackStatic_EventScript_LegendaryBattle
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, OneIsland_TreasureBeach_EventScript_CaughtTapuFini
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, OneIsland_TreasureBeach_EventScript_DefeatedTapuFini
+	setvar VAR_0x8004, SPECIES_TAPU_FINI
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+OneIsland_TreasureBeach_EventScript_DefeatedTapuFini::
+	setflag FLAG_DEFEATED_TAPU_FINI
+	setvar VAR_0x8004, SPECIES_TAPU_FINI
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+OneIsland_TreasureBeach_EventScript_CaughtTapuFini::
+	setflag FLAG_CAUGHT_TAPU_FINI
+	release
+	end
