@@ -380,3 +380,55 @@ RustboroCity_DevonCorp_2F_Text_WhatToWorkOnNext:
 	.string "One couldn't ask for a better\n"
 	.string "environment as an engineer.$"
 
+@ Type: Null gift, ported from R.O.W.E. (its Devon researcher at the same spot).
+@ R.O.W.E. gave Porygon Lv10 first and Type: Null Lv25 after TM04 (7th Gym).
+@ Here: Type: Null only, after the 8th Gym Badge, at the scaled wild level.
+RustboroCity_DevonCorp_2F_EventScript_TypeNullScientist::
+	lock
+	faceplayer
+	call_if_eq VAR_FOSSIL_RESURRECTION_STATE, 1, RustboroCity_DevonCorp_2F_EventScript_SetFossilReady
+	goto_if_set FLAG_RECEIVED_TYPE_NULL, RustboroCity_DevonCorp_2F_EventScript_WorkOnNext
+	goto_if_unset FLAG_BADGE08_GET, RustboroCity_DevonCorp_2F_EventScript_TypeNullNotReady
+	msgbox RustboroCity_DevonCorp_2F_Text_OfferTypeNull, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, RustboroCity_DevonCorp_2F_EventScript_DeclineTypeNull
+	setvar VAR_0x8008, SPECIES_TYPE_NULL
+	call HackGift_EventScript_GiveMon
+	goto_if_eq VAR_RESULT, FALSE, RustboroCity_DevonCorp_2F_EventScript_TypeNullEnd
+	setflag FLAG_RECEIVED_TYPE_NULL
+	msgbox RustboroCity_DevonCorp_2F_Text_TreatTypeNullWithCare, MSGBOX_DEFAULT
+RustboroCity_DevonCorp_2F_EventScript_TypeNullEnd::
+	release
+	end
+
+RustboroCity_DevonCorp_2F_EventScript_TypeNullNotReady::
+	msgbox RustboroCity_DevonCorp_2F_Text_TypeNullNotReady, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_DevonCorp_2F_EventScript_DeclineTypeNull::
+	msgbox RustboroCity_DevonCorp_2F_Text_DeclinedTypeNull, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_DevonCorp_2F_Text_TypeNullNotReady:
+	.string "I'm developing a new POKéMON\n"
+	.string "species using some data our\l"
+	.string "company had lying around.\p"
+	.string "It's far too strong for a novice.\n"
+	.string "Come back once you have all\l"
+	.string "eight GYM BADGES.$"
+
+RustboroCity_DevonCorp_2F_Text_OfferTypeNull:
+	.string "I just developed a new POKéMON\n"
+	.string "species using some available data\l"
+	.string "our company had lying around.\p"
+	.string "Do you want it?$"
+
+RustboroCity_DevonCorp_2F_Text_DeclinedTypeNull:
+	.string "That's a shame.\p"
+	.string "It's really strong, you should\n"
+	.string "give it a try.$"
+
+RustboroCity_DevonCorp_2F_Text_TreatTypeNullWithCare:
+	.string "Please treat it with care.\n"
+	.string "It certainly can grow stronger.$"

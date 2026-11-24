@@ -20,6 +20,9 @@ ShoalCave_LowTideEntranceRoom_EventScript_ShellBellExpert::
 	faceplayer
 	dotimebasedevents
 	call_if_set FLAG_SYS_SHOAL_ITEM, ShoalCave_LowTideEntranceRoom_EventScript_ResetShoalItems
+	goto_if_unset FLAG_BADGE08_GET, ShoalCave_LowTideEntranceRoom_EventScript_ShellBellCheck
+	goto_if_unset FLAG_RECEIVED_KUBFU, ShoalCave_LowTideEntranceRoom_EventScript_GiveKubfu
+ShoalCave_LowTideEntranceRoom_EventScript_ShellBellCheck::
 	checkitem ITEM_SHOAL_SALT, 4
 	goto_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_NotEnoughShoalSaltOrShells
 	checkitem ITEM_SHOAL_SHELL, 4
@@ -89,3 +92,33 @@ ShoalCave_LowTideEntranceRoom_EventScript_ResetShoalItems::
 	clearflag FLAG_RECEIVED_SHOAL_SHELL_4
 	clearflag FLAG_SYS_SHOAL_ITEM
 	return
+
+@ Kubfu gift: the first time he's spoken to after the 8th Gym Badge, the Shell Bell
+@ man gives Kubfu (scaled wild level). Afterwards he's back to his Shell Bell routine.
+ShoalCave_LowTideEntranceRoom_EventScript_GiveKubfu::
+	msgbox ShoalCave_LowTideEntranceRoom_Text_OfferKubfu, MSGBOX_DEFAULT
+	setvar VAR_0x8008, SPECIES_KUBFU
+	call HackGift_EventScript_GiveMon
+	goto_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_KubfuEnd
+	setflag FLAG_RECEIVED_KUBFU
+	msgbox ShoalCave_LowTideEntranceRoom_Text_KubfuReceived, MSGBOX_DEFAULT
+ShoalCave_LowTideEntranceRoom_EventScript_KubfuEnd::
+	release
+	end
+
+ShoalCave_LowTideEntranceRoom_Text_OfferKubfu:
+	.string "Hmm… You've become quite a strong\n"
+	.string "TRAINER, haven't you?\p"
+	.string "This little one wandered into the\n"
+	.string "cave and has trained against the\l"
+	.string "tides ever since.\p"
+	.string "It wants a strong partner.\n"
+	.string "Please, take it with you.$"
+
+ShoalCave_LowTideEntranceRoom_Text_KubfuReceived:
+	.string "Train it well, and one day it'll\n"
+	.string "master a fighting style of its\l"
+	.string "own.\p"
+	.string "And bring me SHOAL SALT and\n"
+	.string "SHOAL SHELLS, and I'll still make\l"
+	.string "you a SHELL BELL!$"
