@@ -750,3 +750,32 @@ TEST("BoxPokemon encryption works")
     EXPECT_EQ(GetMonData(&mon, MON_DATA_DYNAMAX_LEVEL), 3);
     EXPECT_EQ(GetMonData(&mon, MON_DATA_OT_GENDER), 0);
 }
+
+#ifdef FLAG_CUSTOM_DATA_MODE
+TEST("Phione evolves into Manaphy at Lv. 50 with friendship 220 and Mystic Water only in Custom data mode")
+{
+    bool32 custom = FALSE, expectEvo = FALSE;
+    u32 level = 50, friendship = 220;
+    enum Item item = ITEM_MYSTIC_WATER;
+    struct Pokemon mon;
+
+    PARAMETRIZE { custom = TRUE;  expectEvo = TRUE; }
+    PARAMETRIZE { custom = FALSE; expectEvo = FALSE; }
+    PARAMETRIZE { custom = TRUE;  level = 49; }
+    PARAMETRIZE { custom = TRUE;  friendship = 219; }
+    PARAMETRIZE { custom = TRUE;  item = ITEM_NONE; }
+    PARAMETRIZE { custom = TRUE;  item = ITEM_EVERSTONE; }
+
+    if (custom)
+        FlagSet(FLAG_CUSTOM_DATA_MODE);
+    else
+        FlagClear(FLAG_CUSTOM_DATA_MODE);
+    CreateMon(&mon, SPECIES_PHIONE, level, 0, OTID_STRUCT_PLAYER_ID);
+    SetMonData(&mon, MON_DATA_FRIENDSHIP, &friendship);
+    SetMonData(&mon, MON_DATA_HELD_ITEM, &item);
+    EXPECT_EQ(GetEvolutionTargetSpecies(&mon, EVO_MODE_NORMAL, ITEM_NONE, NULL, NULL, DO_EVO),
+              expectEvo ? SPECIES_MANAPHY : SPECIES_NONE);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_HELD_ITEM), item); // Mystic Water is kept
+    FlagClear(FLAG_CUSTOM_DATA_MODE);
+}
+#endif

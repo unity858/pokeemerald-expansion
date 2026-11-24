@@ -1,5 +1,6 @@
-// Species base stat, ability, type, wild held item, EV yield, catch rate, exp yield
-// and gender ratio overrides for Custom data mode (ported from R.O.W.E.).
+// Species base stat, ability, type, wild held item, EV yield, catch rate, exp yield,
+// gender ratio and evolution overrides for Custom data mode (ported from R.O.W.E.,
+// except the evolution overrides).
 //
 // Applied by GetSpeciesBaseHP/.../GetSpeciesBaseSpeed (and so GetSpeciesBaseStat,
 // stat calculation, Pokédex, Battle Dome, AI, ...) and by GetSpeciesAbility
@@ -25,6 +26,10 @@
 // genderRatio (GetSpeciesGenderRatio: gender from personality, trainer and
 // wild mon generation, HGSS Pokédex) holds CUSTOM_GENDER_RATIO(r) because
 // MON_MALE is 0; 0 = keep vanilla.
+// evolutions (GetSpeciesEvolutions: level-up/item/trade evolution, Exiolite,
+// pre-evolutions, breeding, HGSS Pokédex evolution page) is an EVOLUTION(...)
+// list in the gSpeciesInfo format that replaces the whole vanilla list;
+// NULL = keep vanilla. Not from R.O.W.E.: custom to this hack.
 // Comments show vanilla (current gSpeciesInfo) -> custom.
 //
 // Only R.O.W.E.'s own edits are listed: values were diffed against the
@@ -385,6 +390,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_MESPRIT] = { .abilities[0] = ABILITY_TELEPATHY, .abilities[1] = ABILITY_LEVITATE }, // Slot 1: Levitate->Telepathy, Slot 2: None->Levitate
     [SPECIES_AZELF] = { .abilities[0] = ABILITY_TELEPATHY, .abilities[1] = ABILITY_LEVITATE }, // Slot 1: Levitate->Telepathy, Slot 2: None->Levitate
     [SPECIES_GIRATINA_ORIGIN] = { .abilities[2] = ABILITY_TELEPATHY }, // Hidden: None->Telepathy
+    [SPECIES_PHIONE] = { .evolutions = EVOLUTION({EVO_LEVEL, 50, SPECIES_MANAPHY, CONDITIONS({IF_MIN_FRIENDSHIP, 220}, {IF_HOLD_ITEM, ITEM_MYSTIC_WATER, EVO_KEEP_HELD_ITEM})}) }, // Evolutions: None->Manaphy (Lv. 50, friendship 220, holding Mystic Water; the item is kept)
     [SPECIES_SNIVY] = { .abilities[1] = ABILITY_CONTRARY }, // Slot 2: None->Contrary
     [SPECIES_SERVINE] = { .abilities[1] = ABILITY_CONTRARY }, // Slot 2: None->Contrary
     [SPECIES_SERPERIOR] = { .baseAttack = 65, .baseSpAttack = 85, .abilities[1] = ABILITY_CONTRARY, .types[1] = TYPE_DRAGON }, // Atk 75->65, SpA 75->85, Slot 2: None->Contrary, Type2 Grass→Dragon

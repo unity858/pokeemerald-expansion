@@ -269,6 +269,7 @@ enum BodyColor
 
 #define F_SUMMARY_SCREEN_FLIP_SPRITE 0x80
 
+#define EVO_KEEP_HELD_ITEM                1      // IF_HOLD_ITEM arg2: the held item is not consumed on evolution.
 #define EVOLUTIONS_END                    0xFFFF // Not an actual evolution, used to mark the end of an evolution array.
 
 enum EvolutionConditions {
@@ -280,7 +281,7 @@ enum EvolutionConditions {
     IF_ATK_GT_DEF,                      // The Pokémon's Attack is greater than its Defense stat.
     IF_ATK_EQ_DEF,                      // The Pokémon's Attack is equal to its Defense stat.
     IF_ATK_LT_DEF,                      // The Pokémon's Attack is lower than its Defense stat.
-    IF_HOLD_ITEM,                       // The Pokémon is holding a specific item.
+    IF_HOLD_ITEM,                       // The Pokémon is holding a specific item. It is consumed on evolution unless arg2 is EVO_KEEP_HELD_ITEM.
     // Gen 3
     IF_PID_UPPER_MODULO_10_GT,          // The Pokémon's upper personality value's modulo by 10 is greater than the defined value.
     IF_PID_UPPER_MODULO_10_EQ,          // The Pokémon's upper personality value's modulo by 10 is equal to the defined value.

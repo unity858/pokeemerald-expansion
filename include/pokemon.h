@@ -764,8 +764,8 @@ extern const u16 *const gCustomEggMoveLearnsets[NUM_SPECIES];
 extern const struct SpeciesInfo gSpeciesInfo[];
 
 // Custom data mode species overrides (src/data/custom_species_info.h).
-// Consulted by GetSpeciesBaseHP/.../GetSpeciesBaseSpeed, GetSpeciesAbility and
-// GetSpeciesType only when IsCustomDataMode() is TRUE. 0 (ABILITY_NONE /
+// Consulted by GetSpeciesBaseHP/.../GetSpeciesBaseSpeed, GetSpeciesAbility,
+// GetSpeciesType, GetSpeciesEvolutions etc. only when IsCustomDataMode() is TRUE. 0 (ABILITY_NONE /
 // TYPE_NONE) = keep vanilla. TYPE_NONE is 0 and never a real species type
 // (TYPE_NORMAL is 1), so 0 is a safe "no override" sentinel for types.
 struct SpeciesInfoOverride
@@ -791,6 +791,11 @@ struct SpeciesInfoOverride
     // MON_MALE is 0, so gender ratios are stored as CUSTOM_GENDER_RATIO(r)
     // (= r | 0x100); 0 = keep vanilla.
     u16 genderRatio;
+    // Evolution list (EVOLUTION(...), same format as gSpeciesInfo), read by
+    // GetSpeciesEvolutions. NULL = keep vanilla. It replaces the whole vanilla
+    // list, so a species that keeps its vanilla evolutions and gains one must
+    // list them all.
+    const struct Evolution *evolutions;
 };
 
 #define CUSTOM_GENDER_RATIO(r) ((r) | 0x100)

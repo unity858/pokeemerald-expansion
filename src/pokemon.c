@@ -3459,9 +3459,16 @@ bool32 SpeciesHasEggMove(enum Species species, enum Move move)
     return FALSE;
 }
 
+// Evolutions, with the Custom data mode override (custom_species_info.h): a
+// non-NULL gCustomSpeciesInfo[].evolutions replaces the vanilla list.
 const struct Evolution *GetSpeciesEvolutions(enum Species species)
 {
-    const struct Evolution *evolutions = gSpeciesInfo[SanitizeSpeciesId(species)].evolutions;
+    const struct Evolution *evolutions;
+
+    species = SanitizeSpeciesId(species);
+    if (gCustomSpeciesInfo[species].evolutions != NULL && IsCustomDataMode())
+        return gCustomSpeciesInfo[species].evolutions;
+    evolutions = gSpeciesInfo[species].evolutions;
     if (evolutions == NULL)
         return gSpeciesInfo[SPECIES_NONE].evolutions;
     return evolutions;
@@ -4695,7 +4702,8 @@ bool32 DoesMonMeetAdditionalConditions(struct Pokemon *mon, const struct Evoluti
             if (heldItem == params[i].arg1)
             {
                 currentCondition = TRUE;
-                removeHoldItem = TRUE;
+                if (params[i].arg2 != EVO_KEEP_HELD_ITEM)
+                    removeHoldItem = TRUE;
             }
             break;
         // Gen 3
