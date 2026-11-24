@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SSAnne_2F_Room5_Frlg_MapScripts::
 	.byte 0
 
@@ -15,8 +18,8 @@ SSAnne_2F_Room5_Text_HaveYouGoneToSafariZone::
 	.string "There are many kinds of rare\n"
 	.string "POKéMON.$"
 
+
 SSAnne_2F_Room5_Text_WeThinkSafariZoneIsAwesome::
 	.string "Me and my daddy think the SAFARI\n"
 	.string "ZONE is awesome!\l"
 	.string "I wish we could go there again.$"
-

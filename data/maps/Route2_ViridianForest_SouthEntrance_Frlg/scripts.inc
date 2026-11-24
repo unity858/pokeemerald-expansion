@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 Route2_ViridianForest_SouthEntrance_Frlg_MapScripts::
 	.byte 0
 
@@ -14,8 +17,8 @@ Route2_ViridianForest_SouthEntrance_Text_ForestIsMaze::
 	.string "It's a natural maze in there.\l"
 	.string "Be careful you don't get lost.$"
 
+
 Route2_ViridianForest_SouthEntrance_Text_RattataHasWickedBite::
 	.string "RATTATA may be small, but don't\n"
 	.string "underestimate its wicked bite.\p"
 	.string "Have you caught one already?$"
-

@@ -148,7 +148,7 @@ u32 GetScaledDexNavMonLevel(u32 chain)
                                            | BATTLE_TYPE_EREADER_TRAINER    \
                                            | BATTLE_TYPE_CATCH_TUTORIAL)
 
-// Bosses: Gym Leaders, Elite Four, Champion and Wally.
+// Bosses: Gym Leaders, Elite Four, Champion (Hoenn and Kanto) and Wally.
 bool32 IsLevelScalingBoss(u16 trainerId, const struct Trainer *trainer)
 {
     switch (trainer->trainerClass)
@@ -156,6 +156,10 @@ bool32 IsLevelScalingBoss(u16 trainerId, const struct Trainer *trainer)
     case TRAINER_CLASS_LEADER:
     case TRAINER_CLASS_ELITE_FOUR:
     case TRAINER_CLASS_CHAMPION:
+    // Kanto Gym Leaders, Elite Four and Champion (TRAINER_KANTO_*)
+    case TRAINER_CLASS_LEADER_FRLG:
+    case TRAINER_CLASS_ELITE_FOUR_FRLG:
+    case TRAINER_CLASS_CHAMPION_FRLG:
         return TRUE;
     default:
         break;

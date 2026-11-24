@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SafariZone_Center_RestHouse_Frlg_MapScripts::
 	.byte 0
 
@@ -13,7 +16,7 @@ SafariZone_Center_Text_WhereDidErikGo::
 	.string "SARA: Where did my boyfriend,\n"
 	.string "ERIK, go?$"
 
+
 SafariZone_Center_Text_CatchingMonsAsGifts::
 	.string "I'm catching POKéMON to take home\n"
 	.string "as gifts.$"
-

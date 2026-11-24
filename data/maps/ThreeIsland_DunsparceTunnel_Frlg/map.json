@@ -2,7 +2,7 @@
   "id": "MAP_THREE_ISLAND_DUNSPARCE_TUNNEL",
   "name": "ThreeIsland_DunsparceTunnel_Frlg",
   "layout": "LAYOUT_THREE_ISLAND_DUNSPARCE_TUNNEL",
-  "music": "MUS_RG_VIRIDIAN_FOREST",
+  "music": "MUS_PETALBURG_WOODS",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_THREE_ISLE_PATH",
   "requires_flash": false,
@@ -48,19 +48,6 @@
       "dest_warp_id": "1"
     }
   ],
-  "coord_events": [
-
-  ],
-  "bg_events": [
-    {
-      "type": "hidden_item",
-      "x": 21,
-      "y": 3,
-      "elevation": 0,
-      "item": "ITEM_NUGGET",
-      "flag": "FLAG_HIDDEN_ITEM_THREE_ISLAND_DUNSPARCE_TUNNEL_NUGGET",
-      "quantity": 1,
-      "underfoot": false
-    }
-  ]
+  "coord_events": [],
+  "bg_events": []
 }

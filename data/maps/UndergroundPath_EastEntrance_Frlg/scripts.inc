@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 UndergroundPath_EastEntrance_Frlg_MapScripts::
 	.byte 0
 
@@ -9,4 +12,3 @@ UndergroundPath_EastEntrance_Text_DoYouGoToCeladonDeptStore::
 	.string "The DEPARTMENT STORE in CELADON\n"
 	.string "has a great selection.\p"
 	.string "Do you go there very often?$"
-

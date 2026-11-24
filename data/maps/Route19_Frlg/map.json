@@ -2,7 +2,7 @@
   "id": "MAP_ROUTE19",
   "name": "Route19_Frlg",
   "layout": "LAYOUT_ROUTE19",
-  "music": "MUS_RG_ROUTE3",
+  "music": "MUS_ROUTE104",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_ROUTE_19",
   "requires_flash": false,
@@ -38,7 +38,7 @@
       "movement_range_y": 3,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "Route19_EventScript_Reece",
+      "script": "Route19_EventScript_KT_Reece",
       "flag": "0"
     },
     {
@@ -52,7 +52,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "Route19_EventScript_Richard",
+      "script": "Route19_EventScript_KT_Richard",
       "flag": "0"
     },
     {
@@ -66,7 +66,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "Route19_EventScript_Tony",
+      "script": "Route19_EventScript_KT_Tony",
       "flag": "0"
     },
     {
@@ -80,7 +80,7 @@
       "movement_range_y": 3,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route19_EventScript_Matthew",
+      "script": "Route19_EventScript_KT_Matthew",
       "flag": "0"
     },
     {
@@ -94,7 +94,7 @@
       "movement_range_y": 2,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route19_EventScript_Douglas",
+      "script": "Route19_EventScript_KT_Douglas",
       "flag": "0"
     },
     {
@@ -108,7 +108,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "6",
-      "script": "Route19_EventScript_David",
+      "script": "Route19_EventScript_KT_David",
       "flag": "0"
     },
     {
@@ -122,7 +122,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route19_EventScript_Axle",
+      "script": "Route19_EventScript_KT_Axle",
       "flag": "0"
     },
     {
@@ -136,7 +136,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route19_EventScript_Alice",
+      "script": "Route19_EventScript_KT_Alice",
       "flag": "0"
     },
     {
@@ -150,7 +150,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route19_EventScript_Connie",
+      "script": "Route19_EventScript_KT_Connie",
       "flag": "0"
     },
     {
@@ -164,7 +164,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route19_EventScript_Anya",
+      "script": "Route19_EventScript_KT_Anya",
       "flag": "0"
     },
     {
@@ -178,7 +178,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route19_EventScript_Lia",
+      "script": "Route19_EventScript_KT_Lia",
       "flag": "0"
     },
     {
@@ -192,7 +192,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route19_EventScript_Luc",
+      "script": "Route19_EventScript_KT_Luc",
       "flag": "0"
     }
   ],

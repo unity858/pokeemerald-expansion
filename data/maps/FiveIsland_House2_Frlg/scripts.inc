@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 FiveIsland_House2_Frlg_MapScripts::
 	.byte 0
 
@@ -12,4 +15,3 @@ FiveIsland_House2_Text_MeadowBelongedToFamily::
 	.string "built on it.\p"
 	.string "It would be preferable to having\n"
 	.string "those thugs run wild on it!$"
-

@@ -2,7 +2,7 @@
   "id": "MAP_SIX_ISLAND",
   "name": "SixIsland_Frlg",
   "layout": "LAYOUT_SIX_ISLAND",
-  "music": "MUS_RG_SEVII_67",
+  "music": "MUS_LITTLEROOT",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_SIX_ISLAND",
   "requires_flash": false,
@@ -81,9 +81,7 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [
-
-  ],
+  "coord_events": [],
   "bg_events": [
     {
       "type": "sign",
@@ -92,16 +90,6 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "SixIsland_EventScript_IslandSign"
-    },
-    {
-      "type": "hidden_item",
-      "x": 9,
-      "y": 7,
-      "elevation": 3,
-      "item": "ITEM_LEPPA_BERRY",
-      "flag": "FLAG_HIDDEN_ITEM_SIX_ISLAND_LEPPA_BERRY",
-      "quantity": 1,
-      "underfoot": false
     }
   ]
 }

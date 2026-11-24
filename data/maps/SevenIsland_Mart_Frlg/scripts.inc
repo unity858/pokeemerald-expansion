@@ -1,17 +1,9 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SevenIsland_Mart_Frlg_MapScripts::
 	.byte 0
 
-SevenIsland_Mart_EventScript_Clerk::
-	lock
-	faceplayer
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemart SevenIsland_Mart_Items
-	msgbox gText_PleaseComeAgain
-	release
-	end
-
-	.align 2
 SevenIsland_Mart_Items::
 	.2byte ITEM_ULTRA_BALL
 	.2byte ITEM_GREAT_BALL
@@ -25,6 +17,7 @@ SevenIsland_Mart_Items::
 	.2byte ITEM_NONE
 	release
 	end
+
 
 SevenIsland_Mart_EventScript_Lass::
 	msgbox SevenIsland_Mart_Text_MonHavePersonalitiesOfTheirOwn, MSGBOX_NPC
@@ -44,9 +37,11 @@ SevenIsland_Mart_Text_MonHavePersonalitiesOfTheirOwn::
 	.string "My PIKACHU has a HASTY nature,\n"
 	.string "so it grew to be a speedy POKéMON.$"
 
+
 SevenIsland_Mart_Text_PreparationsCompleteForRuins::
 	.string "Okay, preparations are complete\n"
 	.string "for me to explore the RUINS.$"
+
 
 SevenIsland_Mart_Text_NeedToFishOnSevenIsland::
 	.string "I need to fish on SEVEN ISLAND.\p"
@@ -55,3 +50,14 @@ SevenIsland_Mart_Text_NeedToFishOnSevenIsland::
 	.string "I'd better stock up on some\n"
 	.string "POKé BALLS first, though.$"
 
+
+
+SevenIsland_Mart_EventScript_ClerkEm0::
+	lock
+	faceplayer
+	message gText_HowMayIServeYou
+	waitmessage
+	pokemart SevenIsland_Mart_Items
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end

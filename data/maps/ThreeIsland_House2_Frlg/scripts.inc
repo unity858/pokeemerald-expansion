@@ -1,10 +1,12 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 ThreeIsland_House2_Frlg_MapScripts::
 	.byte 0
 
 ThreeIsland_House2_EventScript_Man::
 	lock
 	faceplayer
-	famechecker FAMECHECKER_SABRINA, 1
 	msgbox ThreeIsland_House2_Text_IAdmireSabrina
 	release
 	end
@@ -21,6 +23,7 @@ ThreeIsland_House2_Text_CantMakeThisSpoonBend::
 	.string "Maybe I really don't have any\n"
 	.string "psychic powers.$"
 
+
 ThreeIsland_House2_Text_IAdmireSabrina::
 	.string "You know about a girl GYM LEADER\n"
 	.string "in SAFFRON CITY?\p"
@@ -29,4 +32,3 @@ ThreeIsland_House2_Text_IAdmireSabrina::
 	.string "I admire her, I really do.\p"
 	.string "I've heard that she's one cool\n"
 	.string "customer and beautiful, too.$"
-

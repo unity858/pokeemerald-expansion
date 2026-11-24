@@ -2,7 +2,7 @@
   "id": "MAP_MT_EMBER_RUBY_PATH_B3F",
   "name": "MtEmber_RubyPath_B3F_Frlg",
   "layout": "LAYOUT_MT_EMBER_RUBY_PATH_B3F",
-  "music": "MUS_RG_SEVII_CAVE",
+  "music": "MUS_MT_CHIMNEY",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_MT_EMBER",
   "requires_flash": false,
@@ -71,7 +71,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_RockSmash",
-      "flag": "FLAG_TEMP_12"
+      "flag": "0"
     },
     {
       "type": "object",
@@ -85,7 +85,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_RockSmash",
-      "flag": "FLAG_TEMP_13"
+      "flag": "0"
     },
     {
       "type": "object",
@@ -99,7 +99,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_RockSmash",
-      "flag": "FLAG_TEMP_14"
+      "flag": "0"
     },
     {
       "type": "object",
@@ -113,7 +113,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_RockSmash",
-      "flag": "FLAG_TEMP_15"
+      "flag": "0"
     },
     {
       "type": "object",
@@ -127,7 +127,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_RockSmash",
-      "flag": "FLAG_TEMP_16"
+      "flag": "0"
     },
     {
       "type": "object",
@@ -141,7 +141,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_RockSmash",
-      "flag": "FLAG_TEMP_17"
+      "flag": "0"
     },
     {
       "type": "object",

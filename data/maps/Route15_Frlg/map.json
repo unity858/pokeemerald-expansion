@@ -2,7 +2,7 @@
   "id": "MAP_ROUTE15",
   "name": "Route15_Frlg",
   "layout": "LAYOUT_ROUTE15",
-  "music": "MUS_RG_ROUTE11",
+  "music": "MUS_ROUTE101",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_ROUTE_15",
   "requires_flash": false,
@@ -28,6 +28,14 @@
   ],
   "object_events": [
     {
+      "type": "clone",
+      "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE_FRLG",
+      "x": 73,
+      "y": 7,
+      "target_local_id": "LOCALID_ROUTE14_BORDER_TREE",
+      "target_map": "MAP_ROUTE14"
+    },
+    {
       "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_PICNICKER_FRLG",
       "x": 22,
@@ -38,7 +46,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route15_EventScript_Yazmin",
+      "script": "Route15_EventScript_KT_Yazmin",
       "flag": "0"
     },
     {
@@ -52,7 +60,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "5",
-      "script": "Route15_EventScript_Edwin",
+      "script": "Route15_EventScript_KT_Edwin",
       "flag": "0"
     },
     {
@@ -66,7 +74,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "Route15_EventScript_Chester",
+      "script": "Route15_EventScript_KT_Chester",
       "flag": "0"
     },
     {
@@ -80,7 +88,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route15_EventScript_Kindra",
+      "script": "Route15_EventScript_KT_Kindra",
       "flag": "0"
     },
     {
@@ -94,7 +102,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "Route15_EventScript_Olivia",
+      "script": "Route15_EventScript_KT_Olivia",
       "flag": "0"
     },
     {
@@ -108,7 +116,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "Route15_EventScript_Alex",
+      "script": "Route15_EventScript_KT_Alex",
       "flag": "0"
     },
     {
@@ -122,7 +130,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route15_EventScript_Ernest",
+      "script": "Route15_EventScript_KT_Ernest",
       "flag": "0"
     },
     {
@@ -136,7 +144,7 @@
       "movement_range_y": 4,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route15_EventScript_Becky",
+      "script": "Route15_EventScript_KT_Becky",
       "flag": "0"
     },
     {
@@ -150,7 +158,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "Route15_EventScript_Grace",
+      "script": "Route15_EventScript_KT_Grace",
       "flag": "0"
     },
     {
@@ -164,22 +172,8 @@
       "movement_range_y": 4,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route15_EventScript_Celia",
+      "script": "Route15_EventScript_KT_Celia",
       "flag": "0"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 20,
-      "y": 6,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "Route15_EventScript_ItemTM18",
-      "flag": "FLAG_HIDE_ROUTE15_TM18"
     },
     {
       "type": "object",
@@ -192,7 +186,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route15_EventScript_Ron",
+      "script": "Route15_EventScript_KT_Ron",
       "flag": "0"
     },
     {
@@ -206,16 +200,8 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route15_EventScript_Mya",
+      "script": "Route15_EventScript_KT_Mya",
       "flag": "0"
-    },
-    {
-      "type": "clone",
-      "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE_FRLG",
-      "x": 73,
-      "y": 7,
-      "target_local_id": "LOCALID_ROUTE14_BORDER_TREE",
-      "target_map": "MAP_ROUTE14"
     }
   ],
   "warp_events": [

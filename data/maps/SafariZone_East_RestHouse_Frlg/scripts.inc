@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SafariZone_East_RestHouse_Frlg_MapScripts::
 	.byte 0
 
@@ -17,11 +20,12 @@ SafariZone_East_Text_HowManyDidYouCatch::
 	.string "How many did you catch?\n"
 	.string "I'm bushed from the effort!$"
 
+
 SafariZone_East_Text_CaughtChanseyAllWorthwhile::
 	.string "I caught a CHANSEY!\p"
 	.string "That makes this all worthwhile.$"
 
+
 SafariZone_East_Text_TiredFromAllTheFun::
 	.string "Whew!\n"
 	.string "I'm tired from all the fun!$"
-

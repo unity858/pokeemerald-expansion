@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 FuchsiaCity_House1_Frlg_MapScripts::
 	.byte 0
 
@@ -8,7 +11,6 @@ FuchsiaCity_House1_EventScript_Woman::
 FuchsiaCity_House1_EventScript_OldMan::
 	lock
 	faceplayer
-	famechecker FAMECHECKER_BILL, 2
 	msgbox FuchsiaCity_House1_Text_BillIsMyGrandson
 	release
 	end
@@ -22,6 +24,7 @@ FuchsiaCity_House1_Text_WardenIsOldHasFalseTeeth::
 	.string "but he's still very much active.\p"
 	.string "All his teeth are false, though.$"
 
+
 FuchsiaCity_House1_Text_BillIsMyGrandson::
 	.string "Hmm?\n"
 	.string "You've met BILL?\p"
@@ -29,8 +32,8 @@ FuchsiaCity_House1_Text_BillIsMyGrandson::
 	.string "He always liked collecting things,\n"
 	.string "even as a child!$"
 
+
 FuchsiaCity_House1_Text_BillFilesHisOwnMonData::
 	.string "BILL files his own POKéMON data on\n"
 	.string "his PC.\p"
 	.string "Did he show you?$"
-

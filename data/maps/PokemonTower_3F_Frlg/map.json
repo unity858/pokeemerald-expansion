@@ -2,7 +2,7 @@
   "id": "MAP_POKEMON_TOWER_3F",
   "name": "PokemonTower_3F_Frlg",
   "layout": "LAYOUT_POKEMON_TOWER_3F",
-  "music": "MUS_RG_POKE_TOWER",
+  "music": "MUS_MT_PYRE",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_POKEMON_TOWER",
   "requires_flash": false,
@@ -27,7 +27,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "PokemonTower_3F_EventScript_Patricia",
+      "script": "PokemonTower_3F_EventScript_KT_Patricia",
       "flag": "0"
     },
     {
@@ -41,7 +41,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "PokemonTower_3F_EventScript_Carly",
+      "script": "PokemonTower_3F_EventScript_KT_Carly",
       "flag": "0"
     },
     {
@@ -55,22 +55,8 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "PokemonTower_3F_EventScript_Hope",
+      "script": "PokemonTower_3F_EventScript_KT_Hope",
       "flag": "0"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 13,
-      "y": 2,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "PokemonTower_3F_EventScript_ItemEscapeRope",
-      "flag": "FLAG_HIDE_POKEMON_TOWER_3F_ESCAPE_ROPE"
     }
   ],
   "warp_events": [

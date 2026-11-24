@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 LavenderTown_PokemonCenter_1F_Frlg_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, LavenderTown_PokemonCenter_1F_OnTransition
 	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
@@ -5,13 +8,6 @@ LavenderTown_PokemonCenter_1F_Frlg_MapScripts::
 
 LavenderTown_PokemonCenter_1F_OnTransition::
 	setrespawn HEAL_LOCATION_LAVENDER_TOWN
-	end
-
-LavenderTown_PokemonCenter_1F_EventScript_Nurse::
-	lock
-	faceplayer
-	call EventScript_PkmnCenterNurse_Frlg
-	release
 	end
 
 LavenderTown_PokemonCenter_1F_EventScript_Gentleman::
@@ -32,13 +28,24 @@ LavenderTown_PokemonCenter_1F_Text_RocketsDoAnythingForMoney::
 	.string "There is no job too dirty, no deed\n"
 	.string "too heinous, no crime too wicked!$"
 
+
 LavenderTown_PokemonCenter_1F_Text_CubonesMotherKilledByRockets::
 	.string "I saw CUBONE's mother trying to\n"
 	.string "escape from TEAM ROCKET.\p"
 	.string "She was killed trying to get away…$"
+
 
 LavenderTown_PokemonCenter_1F_Text_PeoplePayForCuboneSkulls::
 	.string "You know how the CUBONE species\n"
 	.string "wears skulls, right?\p"
 	.string "People will pay a lot for one.$"
 
+
+
+LavenderTown_PokemonCenter_1F_EventScript_NurseEm::
+	setvar VAR_0x800B, LOCALID_LAVENDER_NURSE
+	call Common_EventScript_PkmnCenterNurse
+	waitmessage
+	waitbuttonpress
+	release
+	end

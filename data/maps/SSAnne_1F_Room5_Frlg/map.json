@@ -2,7 +2,7 @@
   "id": "MAP_SSANNE_1F_ROOM5",
   "name": "SSAnne_1F_Room5_Frlg",
   "layout": "LAYOUT_SSANNE_ROOM1",
-  "music": "MUS_RG_SS_ANNE",
+  "music": "MUS_SAILING",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_S_S_ANNE",
   "requires_flash": false,
@@ -27,7 +27,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "SSAnne_1F_Room5_EventScript_Arthur",
+      "script": "SSAnne_1F_Room5_EventScript_KT_Arthur",
       "flag": "0"
     }
   ],

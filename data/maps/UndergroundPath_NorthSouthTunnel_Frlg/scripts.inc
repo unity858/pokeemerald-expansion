@@ -1,7 +1,5 @@
-UndergroundPath_NorthSouthTunnel_Frlg_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, UndergroundPath_NorthSouthTunnel_OnTransition
-	.byte 0
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
-UndergroundPath_NorthSouthTunnel_OnTransition::
-	setworldmapflag FLAG_WORLD_MAP_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL
-	end
+UndergroundPath_NorthSouthTunnel_Frlg_MapScripts::
+	.byte 0

@@ -601,9 +601,10 @@ gStdScripts_End::
 	.include "data/maps/Route119_House/scripts.inc"
 	.include "data/maps/Route124_DivingTreasureHuntersHouse/scripts.inc"
 
-.if IS_FRLG
+	.include "data/scripts/flavor_text.inc"
+	.include "data/scripts/pokemon_mansion.inc"
 
-@ FRLG scripts
+@ Kanto/Sevii map scripts (linked in every build; converted for Emerald by dev_scripts/kanto)
 	.include "data/maps/BattleColosseum_2P_Frlg/scripts.inc"
 	.include "data/maps/TradeCenter_Frlg/scripts.inc"
 	.include "data/maps/RecordCorner_Frlg/scripts.inc"
@@ -1023,6 +1024,9 @@ gStdScripts_End::
 	.include "data/maps/SixIsland_WaterPath_House2_Frlg/scripts.inc"
 	.include "data/maps/SevenIsland_SevaultCanyon_House_Frlg/scripts.inc"
 
+.if IS_FRLG
+
+@ FRLG scripts
 	.include "data/scripts/trainer_tower.inc"
 	.include "data/scripts/fame_checker_frlg.inc"
 	.include "data/text/fame_checker_frlg.inc"
@@ -1038,14 +1042,12 @@ gStdScripts_End::
 	.include "data/scripts/seagallop.inc"
 	.include "data/scripts/static_pokemon.inc"
 	.include "data/scripts/aide.inc"
-	.include "data/scripts/pokemon_mansion.inc"
 	.include "data/scripts/pokemon_league.inc"
 	.include "data/scripts/route23.inc"
 	.include "data/text/new_game_intro_frlg.inc"
 	.include "data/scripts/trainers_frlg.inc"
 	.include "data/text/trainers_frlg.inc"
 	.include "data/text/ingame_trade_frlg.inc"
-	.include "data/scripts/flavor_text.inc"
 	.include "data/scripts/pkmn_center_nurse_frlg.inc"
 
 .endif

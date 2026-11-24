@@ -1,19 +1,5 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 VermilionCity_PokemonCenter_2F_Frlg_MapScripts::
-	map_script MAP_SCRIPT_ON_FRAME_TABLE, CableClub_OnFrame_Frlg
-	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, CableClub_OnWarp_Frlg
-	map_script MAP_SCRIPT_ON_LOAD, CableClub_OnLoad_Frlg
-	map_script MAP_SCRIPT_ON_TRANSITION, CableClub_OnTransition_Frlg
 	.byte 0
-
-@ The below 3 are unused and leftover from RS
-VermilionCity_PokemonCenter_2F_EventScript_Colosseum::
-	call CableClub_EventScript_Colosseum_Frlg
-	end
-
-VermilionCity_PokemonCenter_2F_EventScript_TradeCenter::
-	call CableClub_EventScript_TradeCenter_Frlg
-	end
-
-VermilionCity_PokemonCenter_2F_EventScript_RecordCorner::
-	call CableClub_EventScript_RecordCorner_Frlg
-	end

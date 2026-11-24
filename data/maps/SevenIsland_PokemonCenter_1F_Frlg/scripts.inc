@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SevenIsland_PokemonCenter_1F_Frlg_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, SevenIsland_PokemonCenter_1F_OnTransition
 	map_script MAP_SCRIPT_ON_RESUME, CableClub_OnResume
@@ -5,13 +8,6 @@ SevenIsland_PokemonCenter_1F_Frlg_MapScripts::
 
 SevenIsland_PokemonCenter_1F_OnTransition::
 	setrespawn HEAL_LOCATION_SEVEN_ISLAND
-	end
-
-SevenIsland_PokemonCenter_1F_EventScript_Nurse::
-	lock
-	faceplayer
-	call EventScript_PkmnCenterNurse_Frlg
-	release
 	end
 
 SevenIsland_PokemonCenter_1F_EventScript_OldMan::
@@ -33,6 +29,7 @@ SevenIsland_PokemonCenter_1F_Text_EventsDependingOnConnections::
 	.string "They are for you to discover on\n"
 	.string "your own.$"
 
+
 SevenIsland_PokemonCenter_1F_Text_DidYouRideSeagallopHere::
 	.string "Did you ride a SEAGALLOP ferry\n"
 	.string "to get here?\p"
@@ -41,7 +38,17 @@ SevenIsland_PokemonCenter_1F_Text_DidYouRideSeagallopHere::
 	.string "I don't know where they all go,\n"
 	.string "though.$"
 
+
 SevenIsland_PokemonCenter_1F_Text_CheckOutTrainerTower::
 	.string "If you're confident, you should\n"
 	.string "check out TRAINER TOWER.$"
 
+
+
+SevenIsland_PokemonCenter_1F_EventScript_NurseEm::
+	setvar VAR_0x800B, LOCALID_SEVEN_ISLAND_NURSE
+	call Common_EventScript_PkmnCenterNurse
+	waitmessage
+	waitbuttonpress
+	release
+	end

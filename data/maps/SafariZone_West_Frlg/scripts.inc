@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SafariZone_West_Frlg_MapScripts::
 	.byte 0
 
@@ -20,6 +23,7 @@ SafariZone_West_EventScript_AreaSign::
 SafariZone_West_Text_RestHouse::
 	.string "REST HOUSE$"
 
+
 SafariZone_West_Text_PleaseFindWardensLostTeeth::
 	.string "REQUEST NOTICE\p"
 	.string "Please find the SAFARI WARDEN's\n"
@@ -28,12 +32,13 @@ SafariZone_West_Text_PleaseFindWardensLostTeeth::
 	.string "Reward offered!\n"
 	.string "Contact: WARDEN$"
 
+
 SafariZone_West_Text_SearchForSecretHouse::
 	.string "TRAINER TIPS\p"
 	.string "Zone Exploration Campaign!\n"
 	.string "The Search for the SECRET HOUSE!$"
 
+
 SafariZone_West_Text_AreaSign::
 	.string "AREA 3\n"
 	.string "EAST: CENTER AREA$"
-

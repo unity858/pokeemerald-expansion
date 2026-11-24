@@ -2,7 +2,7 @@
   "id": "MAP_ROUTE13",
   "name": "Route13_Frlg",
   "layout": "LAYOUT_ROUTE13",
-  "music": "MUS_RG_ROUTE11",
+  "music": "MUS_ROUTE101",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_ROUTE_13",
   "requires_flash": false,
@@ -29,6 +29,20 @@
   "object_events": [
     {
       "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE_FRLG",
+      "x": 44,
+      "y": 5,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EventScript_CutTree",
+      "flag": "0"
+    },
+    {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_PICNICKER_FRLG",
       "x": 62,
       "y": 6,
@@ -38,7 +52,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route13_EventScript_Alma",
+      "script": "Route13_EventScript_KT_Alma",
       "flag": "0"
     },
     {
@@ -52,7 +66,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route13_EventScript_Sebastian",
+      "script": "Route13_EventScript_KT_Sebastian",
       "flag": "0"
     },
     {
@@ -66,7 +80,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route13_EventScript_Susie",
+      "script": "Route13_EventScript_KT_Susie",
       "flag": "0"
     },
     {
@@ -80,7 +94,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "Route13_EventScript_Sheila",
+      "script": "Route13_EventScript_KT_Sheila",
       "flag": "0"
     },
     {
@@ -94,7 +108,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "Route13_EventScript_Lola",
+      "script": "Route13_EventScript_KT_Lola",
       "flag": "0"
     },
     {
@@ -108,7 +122,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route13_EventScript_Valerie",
+      "script": "Route13_EventScript_KT_Valerie",
       "flag": "0"
     },
     {
@@ -122,7 +136,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "Route13_EventScript_Gwen",
+      "script": "Route13_EventScript_KT_Gwen",
       "flag": "0"
     },
     {
@@ -136,7 +150,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "Route13_EventScript_Robert",
+      "script": "Route13_EventScript_KT_Robert",
       "flag": "0"
     },
     {
@@ -150,7 +164,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "Route13_EventScript_Perry",
+      "script": "Route13_EventScript_KT_Perry",
       "flag": "0"
     },
     {
@@ -164,22 +178,8 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route13_EventScript_Jared",
+      "script": "Route13_EventScript_KT_Jared",
       "flag": "0"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE_FRLG",
-      "x": 44,
-      "y": 5,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "EventScript_CutTree",
-      "flag": "FLAG_TEMP_12"
     }
   ],
   "warp_events": [],
@@ -208,16 +208,6 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "Route13_EventScript_TrainerTips1"
-    },
-    {
-      "type": "hidden_item",
-      "x": 23,
-      "y": 14,
-      "elevation": 3,
-      "item": "ITEM_PP_UP",
-      "flag": "FLAG_HIDDEN_ITEM_ROUTE13_PP_UP",
-      "quantity": 1,
-      "underfoot": false
     }
   ]
 }

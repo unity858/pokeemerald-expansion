@@ -2,7 +2,7 @@
   "id": "MAP_SIX_ISLAND_WATER_PATH",
   "name": "SixIsland_WaterPath_Frlg",
   "layout": "LAYOUT_SIX_ISLAND_WATER_PATH",
-  "music": "MUS_RG_SEVII_ROUTE",
+  "music": "MUS_ROUTE101",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_WATER_PATH",
   "requires_flash": false,
@@ -43,7 +43,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SixIsland_WaterPath_EventScript_Rose",
+      "script": "SixIsland_WaterPath_EventScript_KT_Rose",
       "flag": "0"
     },
     {
@@ -57,7 +57,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SixIsland_WaterPath_EventScript_Edward",
+      "script": "SixIsland_WaterPath_EventScript_KT_Edward",
       "flag": "0"
     },
     {
@@ -71,7 +71,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "SixIsland_WaterPath_EventScript_Samir",
+      "script": "SixIsland_WaterPath_EventScript_KT_Samir",
       "flag": "0"
     },
     {
@@ -85,7 +85,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "SixIsland_WaterPath_EventScript_Denise",
+      "script": "SixIsland_WaterPath_EventScript_KT_Denise",
       "flag": "0"
     },
     {
@@ -99,7 +99,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "SixIsland_WaterPath_EventScript_Miu",
+      "script": "SixIsland_WaterPath_EventScript_KT_Miu",
       "flag": "0"
     },
     {
@@ -113,7 +113,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "SixIsland_WaterPath_EventScript_Mia",
+      "script": "SixIsland_WaterPath_EventScript_KT_Mia",
       "flag": "0"
     },
     {
@@ -127,36 +127,8 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "SixIsland_WaterPath_EventScript_Earl",
+      "script": "SixIsland_WaterPath_EventScript_KT_Earl",
       "flag": "0"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 17,
-      "y": 19,
-      "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "SixIsland_WaterPath_EventScript_ItemElixir",
-      "flag": "FLAG_HIDE_SIX_ISLAND_WATER_PATH_ELIXIR"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 17,
-      "y": 87,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "SixIsland_WaterPath_EventScript_ItemDragonScale",
-      "flag": "FLAG_HIDE_SIX_ISLAND_WATER_PATH_DRAGON_SCALE"
     }
   ],
   "warp_events": [
@@ -175,9 +147,7 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [
-
-  ],
+  "coord_events": [],
   "bg_events": [
     {
       "type": "sign",
@@ -186,36 +156,6 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "SixIsland_WaterPath_EventScript_HornWantedSign"
-    },
-    {
-      "type": "hidden_item",
-      "x": 15,
-      "y": 76,
-      "elevation": 3,
-      "item": "ITEM_ASPEAR_BERRY",
-      "flag": "FLAG_HIDDEN_ITEM_SIX_ISLAND_WATER_PATH_ASPEAR_BERRY",
-      "quantity": 1,
-      "underfoot": false
-    },
-    {
-      "type": "hidden_item",
-      "x": 3,
-      "y": 8,
-      "elevation": 3,
-      "item": "ITEM_ORAN_BERRY",
-      "flag": "FLAG_HIDDEN_ITEM_SIX_ISLAND_WATER_PATH_ORAN_BERRY",
-      "quantity": 1,
-      "underfoot": false
-    },
-    {
-      "type": "hidden_item",
-      "x": 13,
-      "y": 63,
-      "elevation": 3,
-      "item": "ITEM_PINAP_BERRY",
-      "flag": "FLAG_HIDDEN_ITEM_SIX_ISLAND_WATER_PATH_PINAP_BERRY",
-      "quantity": 1,
-      "underfoot": false
     },
     {
       "type": "sign",

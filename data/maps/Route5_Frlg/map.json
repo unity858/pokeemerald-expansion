@@ -2,7 +2,7 @@
   "id": "MAP_ROUTE5",
   "name": "Route5_Frlg",
   "layout": "LAYOUT_ROUTE5",
-  "music": "MUS_RG_ROUTE3",
+  "music": "MUS_ROUTE101",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_ROUTE_5",
   "requires_flash": false,
@@ -26,9 +26,7 @@
       "direction": "down"
     }
   ],
-  "object_events": [
-
-  ],
+  "object_events": [],
   "warp_events": [
     {
       "x": 31,
@@ -59,9 +57,7 @@
       "dest_warp_id": "1"
     }
   ],
-  "coord_events": [
-
-  ],
+  "coord_events": [],
   "bg_events": [
     {
       "type": "sign",

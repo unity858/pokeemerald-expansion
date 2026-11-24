@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 DiglettsCave_SouthEntrance_Frlg_MapScripts::
 	.byte 0
 
@@ -10,4 +13,3 @@ DiglettsCave_SouthEntrance_Text_DiglettDugThisTunnel::
 	.string "DIGLETT dug this long tunnel!\p"
 	.string "It goes right to VIRIDIAN CITY,\n"
 	.string "they tell me.$"
-

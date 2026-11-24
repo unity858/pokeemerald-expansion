@@ -1,4 +1,5 @@
 #include "global.h"
+#include "regions.h"
 #include "battle_setup.h"
 #include "bike.h"
 #include "coord_event_weather.h"
@@ -480,7 +481,7 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
 
     if (MetatileBehavior_IsPlayerFacingTVScreen(metatileBehavior, direction) == TRUE)
     {
-        if (IS_FRLG)
+        if (IsCurrentMapFrlg())
             return EventScript_PlayerFacingTVScreen;
         else
             return EventScript_TV;
@@ -523,7 +524,7 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
         return EventScript_Questionnaire;
     if (MetatileBehavior_IsTrainerHillTimer(metatileBehavior) == TRUE)
         return EventScript_TrainerHillTimer;
-    if (IS_FRLG)
+    if (IsCurrentMapFrlg())
     {
         if (MetatileBehavior_IsFood(metatileBehavior) == TRUE)
             return EventScript_Food;
@@ -535,8 +536,10 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
             return EventScript_VideoGame;
         if (MetatileBehavior_IsBurglary(metatileBehavior) == TRUE)
             return EventScript_Burglary;
+#if IS_FRLG
         if (MetatileBehavior_IsTrainerTowerMonitor(metatileBehavior) == TRUE)
             return TrainerTower_EventScript_ShowTime;
+#endif
         if (MetatileBehavior_IsComputer(metatileBehavior) == TRUE)
             return EventScript_Computer;
         if (MetatileBehavior_IsCabinet(metatileBehavior) == TRUE)
@@ -563,10 +566,12 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
             return EventScript_BlinkingLights;
         if (MetatileBehavior_IsNeatlyLinedUpTools(metatileBehavior) == TRUE)
             return EventScript_NeatlyLinedUpTools;
+#if IS_FRLG
         if (MetatileBehavior_IsPlayerFacingCableClubWirelessMonitor(metatileBehavior, direction) == TRUE)
             return CableClub_EventScript_ShowWirelessCommunicationScreen_Frlg;
         if (MetatileBehavior_IsPlayerFacingBattleRecords(metatileBehavior, direction) == TRUE)
             return CableClub_EventScript_ShowBattleRecords_Frlg;
+#endif
         if (MetatileBehavior_IsIndigoPlateauSign1(metatileBehavior) == TRUE)
         {
             if (direction != DIR_NORTH)

@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 FuchsiaCity_Mart_Frlg_MapScripts::
 	.byte 0
 
@@ -9,17 +12,6 @@ FuchsiaCity_Mart_EventScript_Gentleman::
 	msgbox FuchsiaCity_Mart_Text_DontTheyHaveSafariZonePennants, MSGBOX_NPC
 	end
 
-FuchsiaCity_Mart_EventScript_Clerk::
-	lock
-	faceplayer
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemart FuchsiaCity_Mart_Items
-	msgbox gText_PleaseComeAgain
-	release
-	end
-
-	.align 2
 FuchsiaCity_Mart_Items::
 	.2byte ITEM_ULTRA_BALL
 	.2byte ITEM_GREAT_BALL
@@ -31,13 +23,26 @@ FuchsiaCity_Mart_Items::
 	release
 	end
 
+
 FuchsiaCity_Mart_Text_DontTheyHaveSafariZonePennants::
 	.string "Don't they have any pennants\n"
 	.string "promoting the SAFARI ZONE?\p"
 	.string "How about some paper lanterns?\n"
 	.string "Aren't there even any calendars?$"
 
+
 FuchsiaCity_Mart_Text_DidYouTryXSpeed::
 	.string "Did you try X SPEED?\n"
 	.string "It speeds up a POKéMON in battle.$"
 
+
+
+FuchsiaCity_Mart_EventScript_ClerkEm0::
+	lock
+	faceplayer
+	message gText_HowMayIServeYou
+	waitmessage
+	pokemart FuchsiaCity_Mart_Items
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end

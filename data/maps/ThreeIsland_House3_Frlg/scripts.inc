@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 ThreeIsland_House3_Frlg_MapScripts::
 	.byte 0
 
@@ -9,4 +12,3 @@ ThreeIsland_House3_Text_WantedToLiveSomewhereQuiet::
 	.string "I bought this house because I\n"
 	.string "wanted to live somewhere quiet.\p"
 	.string "Today, I think I'll go out fishing.$"
-

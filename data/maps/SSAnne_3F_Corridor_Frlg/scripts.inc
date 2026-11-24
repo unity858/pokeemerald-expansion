@@ -1,3 +1,6 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 SSAnne_3F_Corridor_Frlg_MapScripts::
 	.byte 0
 
@@ -10,4 +13,3 @@ SSAnne_3F_Corridor_Text_CaptainTeachesCutToMons::
 	.string "He's awesome at using CUT.\p"
 	.string "They say he even teaches CUT\n"
 	.string "to POKéMON!$"
-

@@ -1,17 +1,9 @@
+@ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
+@ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+
 ThreeIsland_Mart_Frlg_MapScripts::
 	.byte 0
 
-ThreeIsland_Mart_EventScript_Clerk::
-	lock
-	faceplayer
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemart ThreeIsland_Mart_Items
-	msgbox gText_PleaseComeAgain
-	release
-	end
-
-	.align 2
 ThreeIsland_Mart_Items::
 	.2byte ITEM_ULTRA_BALL
 	.2byte ITEM_HYPER_POTION
@@ -22,6 +14,7 @@ ThreeIsland_Mart_Items::
 	.2byte ITEM_NONE
 	release
 	end
+
 
 ThreeIsland_Mart_EventScript_Picnicker::
 	msgbox ThreeIsland_Mart_Text_TrueThatCeldadonDeptStoreBigger, MSGBOX_NPC
@@ -40,6 +33,7 @@ ThreeIsland_Mart_Text_TrueThatCeldadonDeptStoreBigger::
 	.string "CELADON DEPT. STORE is several\n"
 	.string "times bigger than this shop?$"
 
+
 ThreeIsland_Mart_Text_PeopleHealWithBerriesFromForest::
 	.string "I sometimes buy medicine here.\p"
 	.string "But a lot of people heal POKéMON\n"
@@ -47,8 +41,20 @@ ThreeIsland_Mart_Text_PeopleHealWithBerriesFromForest::
 	.string "After all, BERRIES are free and\n"
 	.string "they never run out.$"
 
+
 ThreeIsland_Mart_Text_BikersWereAboutToTrashMart::
 	.string "Those BIKERS were about to trash\n"
 	.string "this POKéMON MART.\p"
 	.string "Am I glad they decided to leave!$"
 
+
+
+ThreeIsland_Mart_EventScript_ClerkEm0::
+	lock
+	faceplayer
+	message gText_HowMayIServeYou
+	waitmessage
+	pokemart ThreeIsland_Mart_Items
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end

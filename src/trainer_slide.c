@@ -56,13 +56,25 @@ static bool32 ShouldRunTrainerSlideLastLowHp(u32 lastId, enum BattlerId battler,
 static void SetTrainerSlideParameters(enum BattlerId battler, u32* lastId, u32* trainerId, u32* retValue);
 static bool32 IsSlideInitalizedOrPlayed(enum BattlerId battler, enum TrainerSlideType slideId);
 
-// Partner trainers must be added as TRAINER_PARTNER(PARTNER_XXXX)
-static const u8* const sTrainerSlides[DIFFICULTY_COUNT][TRAINER_PARTNER(PARTNER_COUNT)][TRAINER_SLIDE_COUNT] =
+// The Kanto trainers (KANTO_TRAINERS_START and up) have no trainer slides and are left out of
+// this table to save ROM (about 300 bytes per trainer).
+#define SLIDE_TRAINERS_COUNT (IS_FRLG ? MAX_TRAINERS_COUNT : KANTO_TRAINERS_START)
+static const u8* const sTrainerSlides[DIFFICULTY_COUNT][SLIDE_TRAINERS_COUNT][TRAINER_SLIDE_COUNT] =
 {
     [DIFFICULTY_NORMAL] =
     {
     },
 };
+
+// Partner trainers are added as [PARTNER_XXXX]
+static const u8* const sPartnerTrainerSlides[DIFFICULTY_COUNT][PARTNER_COUNT][TRAINER_SLIDE_COUNT] =
+{
+    [DIFFICULTY_NORMAL] =
+    {
+    },
+};
+
+static const u8* const sNoTrainerSlides[TRAINER_SLIDE_COUNT] = {0};
 
 static const u8* const sFrontierTrainerSlides[DIFFICULTY_COUNT][FRONTIER_TRAINERS_COUNT][TRAINER_SLIDE_COUNT] =
 {
@@ -127,8 +139,12 @@ static const u8* const *GetTrainerSlideArray(enum DifficultyLevel difficulty, u3
 #else
     if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
         return sFrontierTrainerSlides[difficulty][trainerId];
-    else
+    else if (trainerId < SLIDE_TRAINERS_COUNT)
         return sTrainerSlides[difficulty][trainerId];
+    else if (trainerId >= TRAINER_PARTNER(PARTNER_NONE) && trainerId < TRAINER_PARTNER(PARTNER_COUNT))
+        return sPartnerTrainerSlides[difficulty][trainerId - TRAINER_PARTNER(PARTNER_NONE)];
+    else
+        return sNoTrainerSlides;
 #endif // TESTING
 }
 

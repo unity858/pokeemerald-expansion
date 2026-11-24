@@ -2,7 +2,7 @@
   "id": "MAP_SAFFRON_CITY_GYM",
   "name": "SaffronCity_Gym_Frlg",
   "layout": "LAYOUT_SAFFRON_CITY_GYM",
-  "music": "MUS_RG_GYM",
+  "music": "MUS_GYM",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_SAFFRON_CITY",
   "requires_flash": false,
@@ -18,6 +18,20 @@
   "object_events": [
     {
       "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_GYM_GUY",
+      "x": 15,
+      "y": 20,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "SaffronCity_Gym_EventScript_GymGuy",
+      "flag": "0"
+    },
+    {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_COOLTRAINER_M",
       "x": 24,
       "y": 18,
@@ -27,7 +41,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SaffronCity_Gym_EventScript_Cameron",
+      "script": "SaffronCity_Gym_EventScript_KT_Cameron",
       "flag": "0"
     },
     {
@@ -41,7 +55,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SaffronCity_Gym_EventScript_Johan",
+      "script": "SaffronCity_Gym_EventScript_KT_Johan",
       "flag": "0"
     },
     {
@@ -55,7 +69,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SaffronCity_Gym_EventScript_Preston",
+      "script": "SaffronCity_Gym_EventScript_KT_Preston",
       "flag": "0"
     },
     {
@@ -69,7 +83,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SaffronCity_Gym_EventScript_Amanda",
+      "script": "SaffronCity_Gym_EventScript_KT_Amanda",
       "flag": "0"
     },
     {
@@ -83,7 +97,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SaffronCity_Gym_EventScript_Stacy",
+      "script": "SaffronCity_Gym_EventScript_KT_Stacy",
       "flag": "0"
     },
     {
@@ -97,7 +111,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SaffronCity_Gym_EventScript_Tasha",
+      "script": "SaffronCity_Gym_EventScript_KT_Tasha",
       "flag": "0"
     },
     {
@@ -111,7 +125,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "SaffronCity_Gym_EventScript_Sabrina",
+      "script": "SaffronCity_Gym_EventScript_KT_Sabrina",
       "flag": "0"
     },
     {
@@ -125,21 +139,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SaffronCity_Gym_EventScript_Tyron",
-      "flag": "0"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_GYM_GUY",
-      "x": 15,
-      "y": 20,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "SaffronCity_Gym_EventScript_GymGuy",
+      "script": "SaffronCity_Gym_EventScript_KT_Tyron",
       "flag": "0"
     }
   ],

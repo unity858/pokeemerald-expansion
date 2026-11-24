@@ -2,7 +2,7 @@
   "id": "MAP_SIX_ISLAND_PATTERN_BUSH",
   "name": "SixIsland_PatternBush_Frlg",
   "layout": "LAYOUT_SIX_ISLAND_PATTERN_BUSH",
-  "music": "MUS_RG_VIRIDIAN_FOREST",
+  "music": "MUS_PETALBURG_WOODS",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_PATTERN_BUSH",
   "requires_flash": false,
@@ -27,7 +27,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SixIsland_PatternBush_EventScript_Bethany",
+      "script": "SixIsland_PatternBush_EventScript_KT_Bethany",
       "flag": "0"
     },
     {
@@ -41,7 +41,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "SixIsland_PatternBush_EventScript_Allison",
+      "script": "SixIsland_PatternBush_EventScript_KT_Allison",
       "flag": "0"
     },
     {
@@ -55,7 +55,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "SixIsland_PatternBush_EventScript_Garret",
+      "script": "SixIsland_PatternBush_EventScript_KT_Garret",
       "flag": "0"
     },
     {
@@ -69,7 +69,7 @@
       "movement_range_y": 2,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "SixIsland_PatternBush_EventScript_Jonah",
+      "script": "SixIsland_PatternBush_EventScript_KT_Jonah",
       "flag": "0"
     },
     {
@@ -83,7 +83,7 @@
       "movement_range_y": 5,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "SixIsland_PatternBush_EventScript_Vance",
+      "script": "SixIsland_PatternBush_EventScript_KT_Vance",
       "flag": "0"
     },
     {
@@ -97,7 +97,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "SixIsland_PatternBush_EventScript_Nash",
+      "script": "SixIsland_PatternBush_EventScript_KT_Nash",
       "flag": "0"
     },
     {
@@ -111,7 +111,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "SixIsland_PatternBush_EventScript_Cordell",
+      "script": "SixIsland_PatternBush_EventScript_KT_Cordell",
       "flag": "0"
     },
     {
@@ -125,7 +125,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "5",
-      "script": "SixIsland_PatternBush_EventScript_Dalia",
+      "script": "SixIsland_PatternBush_EventScript_KT_Dalia",
       "flag": "0"
     },
     {
@@ -139,7 +139,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SixIsland_PatternBush_EventScript_Joana",
+      "script": "SixIsland_PatternBush_EventScript_KT_Joana",
       "flag": "0"
     },
     {
@@ -153,7 +153,7 @@
       "movement_range_y": 2,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SixIsland_PatternBush_EventScript_Riley",
+      "script": "SixIsland_PatternBush_EventScript_KT_Riley",
       "flag": "0"
     },
     {
@@ -167,7 +167,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "SixIsland_PatternBush_EventScript_Marcy",
+      "script": "SixIsland_PatternBush_EventScript_KT_Marcy",
       "flag": "0"
     },
     {
@@ -181,7 +181,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "SixIsland_PatternBush_EventScript_Layton",
+      "script": "SixIsland_PatternBush_EventScript_KT_Layton",
       "flag": "0"
     }
   ],
@@ -229,10 +229,6 @@
       "dest_warp_id": "3"
     }
   ],
-  "coord_events": [
-
-  ],
-  "bg_events": [
-
-  ]
+  "coord_events": [],
+  "bg_events": []
 }

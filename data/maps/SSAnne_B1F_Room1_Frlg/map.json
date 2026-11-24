@@ -2,7 +2,7 @@
   "id": "MAP_SSANNE_B1F_ROOM1",
   "name": "SSAnne_B1F_Room1_Frlg",
   "layout": "LAYOUT_SSANNE_ROOM2",
-  "music": "MUS_RG_SS_ANNE",
+  "music": "MUS_SAILING",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_S_S_ANNE",
   "requires_flash": false,
@@ -27,7 +27,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "SSAnne_B1F_Room1_EventScript_Barny",
+      "script": "SSAnne_B1F_Room1_EventScript_KT_Barny",
       "flag": "0"
     },
     {
@@ -41,7 +41,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "SSAnne_B1F_Room1_EventScript_Phillip",
+      "script": "SSAnne_B1F_Room1_EventScript_KT_Phillip",
       "flag": "0"
     }
   ],

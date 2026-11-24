@@ -2,7 +2,7 @@
   "id": "MAP_POKEMON_LEAGUE_AGATHAS_ROOM",
   "name": "PokemonLeague_AgathasRoom_Frlg",
   "layout": "LAYOUT_POKEMON_LEAGUE_AGATHAS_ROOM",
-  "music": "MUS_RG_POKE_TOWER",
+  "music": "MUS_VICTORY_ROAD",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_POKEMON_LEAGUE",
   "requires_flash": false,
@@ -27,7 +27,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "PokemonLeague_AgathasRoom_EventScript_Agatha",
+      "script": "PokemonLeague_AgathasRoom_EventScript_KT_Agatha",
       "flag": "0"
     }
   ],

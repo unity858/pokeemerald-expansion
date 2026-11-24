@@ -2,7 +2,7 @@
   "id": "MAP_ROCK_TUNNEL_1F",
   "name": "RockTunnel_1F_Frlg",
   "layout": "LAYOUT_ROCK_TUNNEL_1F",
-  "music": "MUS_RG_MT_MOON",
+  "music": "MUS_PETALBURG_WOODS",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_ROCK_TUNNEL",
   "requires_flash": true,
@@ -27,7 +27,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "RockTunnel_1F_EventScript_Dana",
+      "script": "RockTunnel_1F_EventScript_KT_Dana",
       "flag": "0"
     },
     {
@@ -41,7 +41,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "RockTunnel_1F_EventScript_Ariana",
+      "script": "RockTunnel_1F_EventScript_KT_Ariana",
       "flag": "0"
     },
     {
@@ -55,7 +55,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "5",
-      "script": "RockTunnel_1F_EventScript_Leah",
+      "script": "RockTunnel_1F_EventScript_KT_Leah",
       "flag": "0"
     },
     {
@@ -69,7 +69,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "RockTunnel_1F_EventScript_Lucas",
+      "script": "RockTunnel_1F_EventScript_KT_Lucas",
       "flag": "0"
     },
     {
@@ -83,7 +83,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "RockTunnel_1F_EventScript_Oliver",
+      "script": "RockTunnel_1F_EventScript_KT_Oliver",
       "flag": "0"
     },
     {
@@ -97,7 +97,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "RockTunnel_1F_EventScript_Lenny",
+      "script": "RockTunnel_1F_EventScript_KT_Lenny",
       "flag": "0"
     },
     {
@@ -111,50 +111,8 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
-      "script": "RockTunnel_1F_EventScript_Ashton",
+      "script": "RockTunnel_1F_EventScript_KT_Ashton",
       "flag": "0"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 37,
-      "y": 5,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "RockTunnel_1F_EventScript_ItemRepel",
-      "flag": "FLAG_HIDE_ROCK_TUNNEL_1F_REPEL"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 33,
-      "y": 22,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "RockTunnel_1F_EventScript_ItemPearl",
-      "flag": "FLAG_HIDE_ROCK_TUNNEL_1F_PEARL"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 22,
-      "y": 22,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "RockTunnel_1F_EventScript_ItemEscapeRope",
-      "flag": "FLAG_HIDE_ROCK_TUNNEL_1F_ESCAPE_ROPE"
     }
   ],
   "warp_events": [

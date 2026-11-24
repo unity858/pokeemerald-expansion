@@ -2371,7 +2371,7 @@ static const struct DebugSelectionStep sTrainerSelectionStep = {
     .stepConfirm = DebugSelectionStep_GenericInputConfirm,
     .minValue = 0,
     .maxValue = TRAINERS_COUNT - 1,
-    .digits = 3,
+    .digits = 4, // Kanto trainer IDs go past 999
 };
 
 static const struct DebugSelectionStep sPartnerSelectionStep = {
@@ -2445,7 +2445,7 @@ static void DebugAction_Trainers_SetRematch(u8 taskId)
 
     if (rematchId == -1)
     {
-        FlagToggle(TRAINER_FLAGS_START + sDebugMenuListData->data[0]);
+        ToggleTrainerFlag(sDebugMenuListData->data[0]);
         return;
     }
 
@@ -2456,7 +2456,7 @@ static void DebugAction_Trainers_SetRematch(u8 taskId)
 
         if (!HasTrainerBeenFought(gRematchTable[rematchId].trainerIds[i]))
         {
-            FlagToggle(TRAINER_FLAGS_START + gRematchTable[rematchId].trainerIds[i]);
+            ToggleTrainerFlag(gRematchTable[rematchId].trainerIds[i]);
             return;
         }
     }
@@ -2466,7 +2466,7 @@ static void DebugAction_Trainers_SetRematch(u8 taskId)
         if (gRematchTable[rematchId].trainerIds[i] == 0)
             break;
 
-        FlagToggle(TRAINER_FLAGS_START + gRematchTable[rematchId].trainerIds[i]);
+        ToggleTrainerFlag(gRematchTable[rematchId].trainerIds[i]);
     }
 }
 

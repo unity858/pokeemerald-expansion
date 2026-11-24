@@ -2,7 +2,7 @@
   "id": "MAP_ROUTE11",
   "name": "Route11_Frlg",
   "layout": "LAYOUT_ROUTE11",
-  "music": "MUS_RG_ROUTE11",
+  "music": "MUS_ROUTE101",
   "region": "REGION_KANTO",
   "region_map_section": "MAPSEC_ROUTE_11",
   "requires_flash": false,
@@ -38,7 +38,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "Route11_EventScript_Eddie",
+      "script": "Route11_EventScript_KT_Eddie",
       "flag": "0"
     },
     {
@@ -52,7 +52,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route11_EventScript_Hugo",
+      "script": "Route11_EventScript_KT_Hugo",
       "flag": "0"
     },
     {
@@ -66,7 +66,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "Route11_EventScript_Dillon",
+      "script": "Route11_EventScript_KT_Dillon",
       "flag": "0"
     },
     {
@@ -80,7 +80,7 @@
       "movement_range_y": 4,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route11_EventScript_Dave",
+      "script": "Route11_EventScript_KT_Dave",
       "flag": "0"
     },
     {
@@ -94,7 +94,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route11_EventScript_Jasper",
+      "script": "Route11_EventScript_KT_Jasper",
       "flag": "0"
     },
     {
@@ -108,7 +108,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route11_EventScript_Darian",
+      "script": "Route11_EventScript_KT_Darian",
       "flag": "0"
     },
     {
@@ -122,7 +122,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "Route11_EventScript_Braxton",
+      "script": "Route11_EventScript_KT_Braxton",
       "flag": "0"
     },
     {
@@ -136,7 +136,7 @@
       "movement_range_y": 4,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route11_EventScript_Yasu",
+      "script": "Route11_EventScript_KT_Yasu",
       "flag": "0"
     },
     {
@@ -150,7 +150,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route11_EventScript_Dirk",
+      "script": "Route11_EventScript_KT_Dirk",
       "flag": "0"
     },
     {
@@ -164,50 +164,8 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "6",
-      "script": "Route11_EventScript_Bernie",
+      "script": "Route11_EventScript_KT_Bernie",
       "flag": "0"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 42,
-      "y": 12,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "Route11_EventScript_ItemXDefend",
-      "flag": "FLAG_HIDE_ROUTE11_X_DEFEND"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 63,
-      "y": 13,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "Route11_EventScript_ItemGreatBall",
-      "flag": "FLAG_HIDE_ROUTE11_GREAT_BALL"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 13,
-      "y": 3,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "Route11_EventScript_ItemAwakening",
-      "flag": "FLAG_HIDE_ROUTE11_AWAKENING"
     }
   ],
   "warp_events": [
@@ -242,16 +200,6 @@
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "Route11_EventScript_DiglettsCaveSign"
-    },
-    {
-      "type": "hidden_item",
-      "x": 58,
-      "y": 5,
-      "elevation": 0,
-      "item": "ITEM_ESCAPE_ROPE",
-      "flag": "FLAG_HIDDEN_ITEM_ROUTE11_ESCAPE_ROPE",
-      "quantity": 1,
-      "underfoot": false
     }
   ]
 }
