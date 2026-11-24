@@ -111,6 +111,27 @@ SPECIES_FALLBACK_RULES = [
 ]
 MOVE_MANUAL = {"MOVE_SMELLING_SALT": "MOVE_SMELLING_SALTS"}
 
+# Hand override: evolutions that exist only in Custom data mode
+# (gCustomSpeciesInfo[].evolutions in src/data/custom_species_info.h). The ROM's
+# gSpeciesInfo only has the vanilla evolutions, so rule 2 (teachable
+# inheritance) would not see these. Listed as evolved species -> pre-evolution;
+# used ONLY for rule 2 (and its check), not for egg moves or level-up data.
+#  * Phione evolves into Manaphy (Lv. 50, friendship, Mystic Water), so Manaphy
+#    keeps every Phione teachable move (Endure, Heal Bell, Icy Wind, Knock Off,
+#    Mud-Slap, Signal Beam, Snore, Swift, U-turn, Waterfall, Water Pulse,
+#    Whirlpool, ...). R.O.W.E.'s own Manaphy lists already include them; this
+#    keeps it so if those lists ever change.
+CUSTOM_EVO_PREVOS = {"SPECIES_MANAPHY": "SPECIES_PHIONE"}
+CUSTOM_EVO_COMMENT = {
+    "SPECIES_MANAPHY": "// Includes all of Phione's Custom teachable moves (Phione evolves into Manaphy\n"
+                       "// in Custom mode; see CUSTOM_EVO_PREVOS in make_custom_learnsets.py).\n",
+}
+
+
+def teach_prevo(repo, s):
+    """Pre-evolution used for teachable inheritance (rule 2)."""
+    return CUSTOM_EVO_PREVOS.get(s, repo.prevo.get(s))
+
 
 def die(msg):
     print("ERROR: " + msg, file=sys.stderr)
@@ -732,7 +753,7 @@ def build(repo, rowe):
             added_hm[mv] += 1
             added_hm_list.append((s, mv))
         # rule 2
-        p = repo.prevo.get(s)
+        p = teach_prevo(repo, s)
         if p is not None:
             pf = final(p)
             if p not in custom_any:
@@ -812,7 +833,8 @@ def emit(repo, res, out_path, rowe_root):
                 name = f"sCustom{camel(s)}TeachableLearnset"
                 teach_seen[key] = name
                 body = "".join(f"    {mv},\n" for mv in key)
-                arrays.append(f"static const u16 {name}[] = {{\n{body}    MOVE_UNAVAILABLE,\n}};\n")
+                note = CUSTOM_EVO_COMMENT.get(s, "")
+                arrays.append(f"{note}static const u16 {name}[] = {{\n{body}    MOVE_UNAVAILABLE,\n}};\n")
                 sizes["teachable"] += 2 * (len(key) + 1)
             teach_ptr[s] = teach_seen[key]
     for s in repo.order:
@@ -916,7 +938,7 @@ def verify(repo, res, out_path):
                 fails.append(f"rule 1: {s} learns {mv} by level-up but isn't TM/tutor compatible")
         if "MOVE_DIVE" in eggs(s) and "MOVE_DIVE" not in tch:
             fails.append(f"rule 1: {s} has Dive egg move but no TM121")
-        p = repo.prevo.get(s)
+        p = teach_prevo(repo, s)
         if p is not None and not teach(p) <= tch:
             fails.append(f"rule 2: {s} misses {sorted(teach(p) - tch)[:5]} from {p}")
         lv = lvl(s)

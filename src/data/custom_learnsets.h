@@ -38382,6 +38382,8 @@ static const struct LevelUpMove sCustomManaphyLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+// Includes all of Phione's Custom teachable moves (Phione evolves into Manaphy
+// in Custom mode; see CUSTOM_EVO_PREVOS in make_custom_learnsets.py).
 static const u16 sCustomManaphyTeachableLearnset[] = {
     MOVE_BLIZZARD,
     MOVE_CALM_MIND,
