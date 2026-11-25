@@ -2,7 +2,17 @@
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
 
 FourIsland_LoreleisHouse_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, FourIsland_LoreleisHouse_OnTransition
 	.byte 0
+
+@ Lorelei is in Icefall Cave until her Team Rocket scene there is done.
+FourIsland_LoreleisHouse_OnTransition:
+	call_if_unset FLAG_ICEFALL_CAVE_ROCKETS_DEFEATED, FourIsland_LoreleisHouse_EventScript_HideLorelei
+	end
+
+FourIsland_LoreleisHouse_EventScript_HideLorelei:
+	setflag FLAG_TEMP_1
+	return
 
 FourIsland_LoreleisHouse_EventScript_Lorelei::
 	lock

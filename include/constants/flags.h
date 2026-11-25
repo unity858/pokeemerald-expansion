@@ -59,7 +59,7 @@
 #define FLAG_EGG_MOVES_RELEARNER   0x25 // Move relearner offers Egg moves (P_FLAG_EGG_MOVES)
 #define FLAG_TUTOR_MOVES_RELEARNER 0x26 // Move relearner offers Tutor moves (P_FLAG_TUTOR_MOVES)
 #define FLAG_PERFECT_IV_MODE  0x27 // Set if Perfect IV Mode was chosen on the new-game options screen
-#define FLAG_UNUSED_0x028    0x28 // Unused Flag
+#define FLAG_ICEFALL_CAVE_ROCKETS_DEFEATED 0x28 // Lorelei's Icefall Cave Rocket scene done: hides the Rockets and Lorelei there and the Ruin Valley scientist; shows Lorelei at home
 #define FLAG_UNUSED_0x029    0x29 // Unused Flag
 #define FLAG_UNUSED_0x02A    0x2A // Unused Flag
 #define FLAG_UNUSED_0x02B    0x2B // Unused Flag
