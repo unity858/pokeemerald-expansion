@@ -9338,7 +9338,7 @@
     {
       "id": "LAYOUT_ROUTE136",
       "name": "Route136_Layout",
-      "width": 31,
+      "width": 26,
       "height": 20,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Petalburg",
@@ -9349,7 +9349,7 @@
     {
       "id": "LAYOUT_ROUTE137",
       "name": "Route137_Layout",
-      "width": 16,
+      "width": 21,
       "height": 80,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Dewford",
