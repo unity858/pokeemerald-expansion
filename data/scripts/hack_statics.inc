@@ -42,6 +42,18 @@ HackStatic_EventScript_GyaooBattle::
 	waitbuttonpress
 	goto HackStatic_EventScript_LegendaryBattleNoCry
 
+@ Mewtwo (Cerulean Cave): FRLG's "Mew!" with its cry, the FRLG legendary music, then the battle.
+HackStatic_EventScript_MewtwoBattle::
+	waitse
+	playmoncry VAR_0x8004, CRY_MODE_ENCOUNTER
+	message HackStatic_Text_Mew
+	waitmessage
+	waitmoncry
+	delay 20
+	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, 0
+	waitbuttonpress
+	goto HackStatic_EventScript_LegendaryBattleNoCry
+
 HackStatic_EventScript_RegiBattle::
 	call HackStatic_EventScript_CryAndCreateMon
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
@@ -135,3 +147,6 @@ HackGift_EventScript_ReceivedFanfare::
 
 HackGift_Text_PlayerReceivedMon:
 	.string "{PLAYER} received {STR_VAR_1}!$"
+
+HackStatic_Text_Mew:
+	.string "Mew!$"

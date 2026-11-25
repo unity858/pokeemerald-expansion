@@ -3079,7 +3079,7 @@
 	@ starts the battle with VAR_0x8004 = species and VAR_0x8006 = held item and
 	@ returns the outcome in VAR_RESULT (data/scripts/hack_statics.inc):
 	@ HackStatic_EventScript_LegendaryBattle (default), HackStatic_EventScript_GyaooBattle
-	@ (Kanto birds) or HackStatic_EventScript_RegiBattle.
+	@ (Kanto birds), HackStatic_EventScript_MewtwoBattle or HackStatic_EventScript_RegiBattle.
 	.macro staticencounter id:req, species:req, battle=HackStatic_EventScript_LegendaryBattle, item=ITEM_NONE
 	lock
 	faceplayer
