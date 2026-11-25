@@ -529,15 +529,41 @@ void CreateWildMon(enum Species species, u8 level)
 #define TRY_GET_ABILITY_INFLUENCED_WILD_MON_INDEX(wildPokemon, type, ability, ptr, count) TryGetAbilityInfluencedWildMonIndex(wildPokemon, type, ability, ptr)
 #endif
 
-// Species a wild table slot actually yields. Pheromosa (Seven Island, 1% slot)
-// is postgame only: until FLAG_SYS_GAME_CLEAR its slot yields Buzzwole, a fellow
-// Bug/Fighting Ultra Beast, so type-based slot picks (Static etc.) are unaffected.
-// Used by every wild species pick and by DexNav; the Pokédex area/habitat screens
-// read the raw tables and still list Pheromosa.
+// Wild species that stay hidden until a flag is set: until then, every slot holding
+// `species` yields `substitute` instead. Used by every wild species pick (land, water,
+// fishing, ability-influenced slot picks, Match Call, DexNav); the Pokédex area/habitat
+// screens read the raw tables and still list the gated species.
+struct WildSpeciesGate
+{
+    u16 species;
+    u16 flag;
+    u16 substitute;
+};
+
+static const struct WildSpeciesGate sWildSpeciesGates[] =
+{
+    // Seven Island, Sevault Canyon: a fellow Bug/Fighting Ultra Beast.
+    { SPECIES_PHEROMOSA,    FLAG_SYS_GAME_CLEAR, SPECIES_BUZZWOLE },
+    // Six Island, Ruin Valley water.
+    { SPECIES_IRON_BUNDLE,  FLAG_SYS_GAME_CLEAR, SPECIES_RAGING_BOLT },
+    // Six Island, Dotted Hole B1F and B2F.
+    { SPECIES_FLUTTER_MANE, FLAG_SYS_GAME_CLEAR, SPECIES_IRON_THORNS },
+    { SPECIES_ROARING_MOON, FLAG_SYS_GAME_CLEAR, SPECIES_IRON_VALIANT },
+};
+
 enum Species GetWildEncounterSpecies(enum Species species)
 {
-    if (species == SPECIES_PHEROMOSA && !FlagGet(FLAG_SYS_GAME_CLEAR))
-        return SPECIES_BUZZWOLE;
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sWildSpeciesGates); i++)
+    {
+        if (sWildSpeciesGates[i].species == species)
+        {
+            if (!FlagGet(sWildSpeciesGates[i].flag))
+                return sWildSpeciesGates[i].substitute;
+            break;
+        }
+    }
     return species;
 }
 
@@ -1131,7 +1157,8 @@ static bool8 TryGetRandomWildMonIndexByType(const struct WildPokemon *wildMon, e
 
     for (validMonCount = 0, i = 0; i < numMon; i++)
     {
-        if (GetSpeciesType(wildMon[i].species, 0) == type || GetSpeciesType(wildMon[i].species, 1) == type)
+        enum Species species = GetWildEncounterSpecies(wildMon[i].species);
+        if (GetSpeciesType(species, 0) == type || GetSpeciesType(species, 1) == type)
             validIndexes[validMonCount++] = i;
     }
 
