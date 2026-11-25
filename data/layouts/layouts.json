@@ -9338,7 +9338,7 @@
     {
       "id": "LAYOUT_ROUTE136",
       "name": "Route136_Layout",
-      "width": 48,
+      "width": 31,
       "height": 20,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Petalburg",
