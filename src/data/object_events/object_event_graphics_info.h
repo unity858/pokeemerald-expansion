@@ -4414,6 +4414,25 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PokeBall = {
     .images = sPicTable_PokeBall,
 };
 
+// Orange item ball ported from R.O.W.E. (TM_ball.png), used for TM and Mega Stone item balls.
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ItemBallTm = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_ITEM_BALL_TM,
+    .reflectionPaletteTag = OBJ_EVENT_PAL_TAG_NONE,
+    .size = 128,
+    .width = 16,
+    .height = 16,
+    .paletteSlot = PALSLOT_NPC_SPECIAL,
+    .shadowSize = SHADOW_SIZE_M,
+    .inanimate = TRUE,
+    .compressed = FALSE,
+    .tracks = TRACKS_NONE,
+    .oam = &gObjectEventBaseOam_16x16,
+    .subspriteTables = sOamTables_16x16,
+    .anims = sAnimTable_Inanimate,
+    .images = sPicTable_ItemBallTm,
+};
+
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Follower = {
     .tileTag = TAG_NONE,
     .paletteTag = OBJ_EVENT_PAL_TAG_DYNAMIC,
