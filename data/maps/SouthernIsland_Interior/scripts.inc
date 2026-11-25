@@ -1,5 +1,6 @@
 @ Latios and Latias are two separate statics here (no TV roamer any more).
-@ Both keep the vanilla Southern Island encounter: Lv50, holding a Soul Dew.
+@ Both keep the vanilla Southern Island encounter at Lv50, holding Latiosite / Latiasite.
+@ A Soul Dew item ball sits one tile above each of them.
 @ Southern Island is reachable at 8 badges (Hoenn harbor ferry, or surfing
 @ Route 135); the 8-badge check follows the hack's convention for statics.
 SouthernIsland_Interior_MapScripts::

@@ -55,6 +55,32 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "SouthernIsland_Interior_EventScript_Latias",
       "flag": "FLAG_TEMP_HIDE_STATIC_MON_2"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 12,
+      "y": 7,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_SOUL_DEW",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_ITEM_SOUTHERN_ISLAND_INTERIOR_SOUL_DEW_1"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 14,
+      "y": 7,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_SOUL_DEW",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_ITEM_SOUTHERN_ISLAND_INTERIOR_SOUL_DEW_2"
     }
   ],
   "warp_events": [
