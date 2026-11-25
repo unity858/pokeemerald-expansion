@@ -9338,7 +9338,7 @@
     {
       "id": "LAYOUT_ROUTE136",
       "name": "Route136_Layout",
-      "width": 32,
+      "width": 48,
       "height": 20,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Petalburg",
@@ -9350,7 +9350,7 @@
       "id": "LAYOUT_ROUTE137",
       "name": "Route137_Layout",
       "width": 16,
-      "height": 40,
+      "height": 80,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Dewford",
       "border_filepath": "data/layouts/Route137/border.bin",
