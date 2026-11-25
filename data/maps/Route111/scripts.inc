@@ -1,6 +1,7 @@
 Route111_MapScripts::
 	map_script MAP_SCRIPT_ON_LOAD, Route111_OnLoad
 	map_script MAP_SCRIPT_ON_TRANSITION, Route111_OnTransition
+	map_script MAP_SCRIPT_ON_RESUME, Route111_OnResume
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, Route111_OnWarp
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, Route111_OnFrame
 	.byte 0
@@ -45,8 +46,21 @@ Route111_OnTransition:
 	call_if_eq VAR_MIRAGE_TOWER_STATE, 2, Route111_EventScript_SetMirageTowerGone
 	call Route111_EventScript_CheckSetSandstorm
 	call GabbyAndTy_EventScript_UpdateLocation
+	call Route111_EventScript_SetupLandorus
 	goto_if_not_defeated TRAINER_VICKY, Route111_EventScript_SetWinstratesNotDefeated
 	end
+
+Route111_OnResume:
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	end
+
+@ Landorus, in the dead-end pocket east of the Sandstorm TM. Shown from the 8th badge.
+Route111_EventScript_SetupLandorus::
+	setupstaticenc STATIC_ENC_LANDORUS, FLAG_TEMP_HIDE_STATIC_MON
+	return
+
+Route111_EventScript_Landorus::
+	staticencounter STATIC_ENC_LANDORUS, SPECIES_LANDORUS
 
 Route111_EventScript_SetFallingPlayerGfx::
 	checkplayergender

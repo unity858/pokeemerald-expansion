@@ -52,8 +52,9 @@
 #define STATIC_ENC_GOUGING_FIRE  27
 #define STATIC_ENC_ZYGARDE       28
 #define STATIC_ENC_MEWTWO        29
+#define STATIC_ENC_LANDORUS      30
 
-#define STATIC_ENC_COUNT         30
+#define STATIC_ENC_COUNT         31
 
 // Capacity reserved in the save: the one constant to raise if the encounters ever
 // outgrow it (in steps of 4 IDs = 1 byte). 128 IDs = 32 bytes of SaveBlock3; the plan
