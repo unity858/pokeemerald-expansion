@@ -20,4 +20,4 @@ SixIsland_DottedHole_SapphireRoom_Frlg_EventScript_SetupZygarde::
 	return
 
 SixIsland_DottedHole_SapphireRoom_Frlg_EventScript_Zygarde::
-	staticencounter STATIC_ENC_ZYGARDE, SPECIES_ZYGARDE_50
+	staticencounter STATIC_ENC_ZYGARDE, SPECIES_ZYGARDE_50_POWER_CONSTRUCT
