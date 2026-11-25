@@ -6,21 +6,67 @@ SixIsland_RuinValley_Frlg_MapScripts::
 	.byte 0
 
 SixIsland_RuinValley_OnLoad::
-	call SixIsland_RuinValley_EventScript_OpenDottedHoleDoor
+	call_if_set FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE, SixIsland_RuinValley_EventScript_OpenDottedHoleDoor
 	end
 
 SixIsland_RuinValley_EventScript_OpenDottedHoleDoor::
 	setmetatile 24, 24, METATILE_SeviiIslands67_DottedHoleDoor_Open, 0
 	return
 
+@ Stands on the tile the braille is cut from, (24,25), until Lorelei's
+@ Team Rocket scene in Icefall Cave is done (FLAG_ICEFALL_CAVE_ROCKETS_DEFEATED).
+SixIsland_RuinValley_EventScript_Scientist::
+	lock
+	msgbox SixIsland_RuinValley_Text_CantFigureOutHowToGetInside
+	applymovement LOCALID_RUIN_VALLEY_SCIENTIST, Common_Movement_FacePlayer
+	waitmovement 0
+	msgbox SixIsland_RuinValley_Text_IFoundThisPlace
+	applymovement LOCALID_RUIN_VALLEY_SCIENTIST, Common_Movement_FaceOriginalDirection
+	waitmovement 0
+	release
+	end
+
+@ Using Cut from (24,25) facing the door opens it: CutMoveRuinValleyCheck and
+@ CutMoveOpenDottedHoleDoor (src/field_specials.c) set FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE.
 SixIsland_RuinValley_EventScript_DottedHoleDoor::
 	lockall
-	goto SixIsland_RuinValley_EventScript_DottedHoleDoorOpen
+	goto_if_set FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE, SixIsland_RuinValley_EventScript_DottedHoleDoorOpen
+	msgbox SixIsland_RuinValley_Text_CheckDoorMoreThoroughly, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, SixIsland_RuinValley_EventScript_IgnoreDottedHoleDoor
+	msgbox SixIsland_RuinValley_Text_SeveralDotsOnTheDoor
+	braillemsgbox Braille_Text_Cut
+	releaseall
+	end
 
 SixIsland_RuinValley_EventScript_DottedHoleDoorOpen::
 	msgbox SixIsland_RuinValley_Text_DoorIsOpen
 	releaseall
 	end
+
+SixIsland_RuinValley_EventScript_IgnoreDottedHoleDoor::
+	msgbox SixIsland_RuinValley_Text_LeftDoorAlone
+	releaseall
+	end
+
+SixIsland_RuinValley_Text_CantFigureOutHowToGetInside::
+	.string "I can't figure out how I'm supposed\n"
+	.string "to get inside.$"
+
+SixIsland_RuinValley_Text_IFoundThisPlace::
+	.string "Let me tell you, I found this\n"
+	.string "place.\p"
+	.string "Don't look so envious, will you?$"
+
+SixIsland_RuinValley_Text_CheckDoorMoreThoroughly::
+	.string "The door doesn't budge at all.\n"
+	.string "Check it more thoroughly?$"
+
+SixIsland_RuinValley_Text_LeftDoorAlone::
+	.string "{PLAYER} left the door alone.$"
+
+SixIsland_RuinValley_Text_SeveralDotsOnTheDoor::
+	.string "On closer inspection, there are\n"
+	.string "several dots on the door…$"
 
 SixIsland_RuinValley_Text_DoorIsOpen::
 	.string "The door is open.$"

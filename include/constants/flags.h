@@ -60,7 +60,7 @@
 #define FLAG_TUTOR_MOVES_RELEARNER 0x26 // Move relearner offers Tutor moves (P_FLAG_TUTOR_MOVES)
 #define FLAG_PERFECT_IV_MODE  0x27 // Set if Perfect IV Mode was chosen on the new-game options screen
 #define FLAG_ICEFALL_CAVE_ROCKETS_DEFEATED 0x28 // Lorelei's Icefall Cave Rocket scene done: hides the Rockets and Lorelei there and the Ruin Valley scientist; shows Lorelei at home
-#define FLAG_UNUSED_0x029    0x29 // Unused Flag
+#define FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE 0x29 // Cut used on the Dotted Hole door braille in Ruin Valley: the door is open (CutMoveRuinValleyCheck)
 #define FLAG_UNUSED_0x02A    0x2A // Unused Flag
 #define FLAG_UNUSED_0x02B    0x2B // Unused Flag
 #define FLAG_UNUSED_0x02C    0x2C // Unused Flag
@@ -2129,7 +2129,6 @@
 #define FLAG_TUTOR_HYDRO_CANNON                          0
 #define FLAG_LEARNED_ALL_MOVES_AT_CAPE_BRINK             0
 #define FLAG_GOT_NUGGET_FROM_DUNSPARCE_TUNNEL            0
-#define FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE             0
 #define FLAG_FOUGHT_DEOXYS                               0
 #define FLAG_0x2E5                                       0
 #define FLAG_0x2E6                                       0

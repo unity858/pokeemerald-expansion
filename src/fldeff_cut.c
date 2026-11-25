@@ -320,7 +320,12 @@ static void StartCutGrassFieldEffect(void)
 {
     FieldEffectActiveListRemove(FLDEFF_USE_CUT_ON_GRASS);
     if (sScheduleOpenDottedHole == TRUE)
+    {
+        // Release the objects frozen by EventScript_UseCutGrass's lockall,
+        // like the end of the cut grass effect does.
+        ScriptUnfreezeObjectEvents();
         CutMoveOpenDottedHoleDoor();
+    }
     else
         FieldEffectStart(FLDEFF_CUT_GRASS);
 }
