@@ -3002,3 +3002,102 @@
 	getbraillestringwidth \text
 	call EventScript_BrailleCursorWaitButton
 	.endm
+
+	@ ---- Hack: static and gift encounter state (src/static_encounters.c) ----
+	@ 'id' is a STATIC_ENC_* / GIFT_* constant (include/constants/static_encounters.h) or a var.
+	@ 'bit' is DEFEATED (back after the next Hall of Fame), CAUGHT (gone for good) or
+	@ RECEIVED (gift given; the same permanent bit as CAUGHT).
+
+	@ Emits the bit number for DEFEATED / CAUGHT / RECEIVED. This file isn't run through the
+	@ C preprocessor, so the values are spelled out here; src/static_encounters.c asserts they
+	@ match STATIC_ENC_BIT_* in include/constants/static_encounters.h.
+	.macro staticenc_bit bit:req
+	.ifc \bit, DEFEATED
+	.byte 0
+	.else
+	.ifc \bit, CAUGHT
+	.byte 1
+	.else
+	.ifc \bit, RECEIVED
+	.byte 1
+	.else
+	.error "staticenc bit must be DEFEATED, CAUGHT or RECEIVED"
+	.endif
+	.endif
+	.endif
+	.endm
+
+	@ Sets VAR_RESULT to TRUE if the bit is set for the encounter, FALSE otherwise.
+	.macro checkstaticenc id:req, bit:req
+	callnative ScrCmd_checkstaticenc, requests_effects=1
+	.2byte \id
+	staticenc_bit \bit
+	.endm
+
+	.macro setstaticenc id:req, bit:req
+	callnative ScrCmd_setstaticenc, requests_effects=1
+	.2byte \id
+	staticenc_bit \bit
+	.endm
+
+	.macro clearstaticenc id:req, bit:req
+	callnative ScrCmd_clearstaticenc, requests_effects=1
+	.2byte \id
+	staticenc_bit \bit
+	.endm
+
+	@ Overwrites VAR_RESULT.
+	.macro goto_if_staticenc id:req, bit:req, dest:req
+	checkstaticenc \id, \bit
+	goto_if_eq VAR_RESULT, TRUE, \dest
+	.endm
+
+	@ Overwrites VAR_RESULT.
+	.macro goto_if_not_staticenc id:req, bit:req, dest:req
+	checkstaticenc \id, \bit
+	goto_if_eq VAR_RESULT, FALSE, \dest
+	.endm
+
+	@ Hall of Fame: every knocked-out static comes back; caught and received are kept.
+	.macro clearallstaticencdefeated
+	callnative ScrCmd_clearallstaticencdefeated, requests_effects=1
+	.endm
+
+	@ For a map's ON_TRANSITION script: sets hideFlag (the static's object flag, e.g.
+	@ FLAG_TEMP_HIDE_STATIC_MON) unless gateFlag is set (0 = no gate) and the static is
+	@ neither caught nor knocked out, in which case hideFlag is cleared.
+	@ Extra conditions (time of day, ...) can setflag hideFlag afterwards.
+	.macro setupstaticenc id:req, hideFlag:req, gateFlag=FLAG_BADGE08_GET
+	callnative ScrCmd_setupstaticenc, requests_effects=1
+	.2byte \id
+	.2byte \hideFlag
+	.2byte \gateFlag
+	.endm
+
+	@ The whole talk-to script of a static: lock, battle, then sets CAUGHT or DEFEATED
+	@ from the outcome and ends (flew away unless caught). 'battle' is a script that
+	@ starts the battle with VAR_0x8004 = species and VAR_0x8006 = held item and
+	@ returns the outcome in VAR_RESULT (data/scripts/hack_statics.inc):
+	@ HackStatic_EventScript_LegendaryBattle (default), HackStatic_EventScript_GyaooBattle
+	@ (Kanto birds) or HackStatic_EventScript_RegiBattle.
+	.macro staticencounter id:req, species:req, battle=HackStatic_EventScript_LegendaryBattle, item=ITEM_NONE
+	lock
+	faceplayer
+	setvar VAR_0x8004, \species
+	setvar VAR_0x8006, \item
+	call \battle
+	setvar VAR_0x8004, \species
+	setvar VAR_0x8005, \id
+	goto HackStatic_EventScript_SetOutcome
+	.endm
+
+	@ Gives a gift Pokémon at the scaled level (party full -> PC) and marks the gift
+	@ RECEIVED if it was given. VAR_RESULT = TRUE if given, FALSE if there was no room
+	@ (the "no more room" message has been shown).
+	.macro givegiftmon id:req, species:req
+	setvar VAR_0x8008, \species
+	call HackGift_EventScript_GiveMon
+	goto_if_eq VAR_RESULT, FALSE, .Lgivegiftmon_done_\@
+	setstaticenc \id, RECEIVED
+.Lgivegiftmon_done_\@:
+	.endm

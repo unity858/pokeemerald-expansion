@@ -19,6 +19,7 @@
 #include "constants/berry.h"
 #include "constants/maps.h"
 #include "constants/mass_outbreak.h"
+#include "constants/static_encounters.h"
 #include "constants/pokemon.h"
 #include "constants/easy_chat.h"
 #include "constants/trainer_hill.h"
@@ -302,6 +303,9 @@ struct SaveBlock3
     // At the end so saves made before it existed read it as all undefeated.
     u8 kantoTrainerFlags[EXTRA_TRAINER_FLAGS_BYTES];
 #endif
+    // Defeated/caught/received bits of the hack's static and gift encounters, 2 per
+    // STATIC_ENC_* ID (include/constants/static_encounters.h, src/static_encounters.c).
+    u8 staticEncounterFlags[STATIC_ENC_FLAGS_BYTES];
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;
