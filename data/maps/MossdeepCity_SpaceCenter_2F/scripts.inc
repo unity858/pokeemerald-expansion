@@ -94,7 +94,7 @@ MossdeepCity_SpaceCenter_2F_Movement_Grunt7Defeated:
 MossdeepCity_SpaceCenter_2F_EventScript_Scientist::
 	lock
 	faceplayer
-	goto_if_set FLAG_SYS_GAME_CLEAR, MossdeepCity_SpaceCenter_2F_EventScript_ScientistNormal
+	goto_if_set FLAG_SYS_GAME_CLEAR, MossdeepCity_SpaceCenter_2F_EventScript_ScientistPostgame
 	goto_if_eq VAR_MOSSDEEP_CITY_STATE, 2, MossdeepCity_SpaceCenter_2F_EventScript_ScientistMagma
 	goto_if_lt VAR_MOSSDEEP_CITY_STATE, 2, MossdeepCity_SpaceCenter_2F_EventScript_ScientistNormal
 	goto MossdeepCity_SpaceCenter_2F_EventScript_ScientistMagma
@@ -488,3 +488,66 @@ MossdeepCity_SpaceCenter_2F_Text_StevenThankYouComeSeeMeAtHome:
 	.string "after this.\p"
 	.string "Oh, yes, I don't live in RUSTBORO CITY.\n"
 	.string "I live right here on this island.$"
+
+@ Cosmog gift: postgame only (this script is only reached with FLAG_SYS_GAME_CLEAR set,
+@ so the Team Magma scenes and the multi battle with Steven are untouched).
+@ One time, scaled level, party full -> PC.
+MossdeepCity_SpaceCenter_2F_EventScript_ScientistPostgame::
+	goto_if_set FLAG_RECEIVED_COSMOG, MossdeepCity_SpaceCenter_2F_EventScript_CosmogGiven
+	msgbox MossdeepCity_SpaceCenter_2F_Text_OfferCosmog, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MossdeepCity_SpaceCenter_2F_EventScript_DeclineCosmog
+	setvar VAR_0x8008, SPECIES_COSMOG
+	call HackGift_EventScript_GiveMon
+	goto_if_eq VAR_RESULT, FALSE, MossdeepCity_SpaceCenter_2F_EventScript_CosmogEnd
+	setflag FLAG_RECEIVED_COSMOG
+	msgbox MossdeepCity_SpaceCenter_2F_Text_TakeCareOfCosmog, MSGBOX_DEFAULT
+MossdeepCity_SpaceCenter_2F_EventScript_CosmogEnd::
+	release
+	end
+
+MossdeepCity_SpaceCenter_2F_EventScript_DeclineCosmog::
+	msgbox MossdeepCity_SpaceCenter_2F_Text_DeclinedCosmog, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_SpaceCenter_2F_EventScript_CosmogGiven::
+	msgbox MossdeepCity_SpaceCenter_2F_Text_CosmogFromBeyondTheStars, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_SpaceCenter_2F_Text_OfferCosmog:
+	.string "Oh! You're the TRAINER who helped\n"
+	.string "STEVEN drive TEAM MAGMA out of the\l"
+	.string "SPACE CENTER!\p"
+	.string "If they had gotten away with our\n"
+	.string "rocket fuel, who knows what would\l"
+	.string "have happened. Thank you!\p"
+	.string "Actually, there's something I'd\n"
+	.string "like you to have.\p"
+	.string "A while ago, our telescope picked\n"
+	.string "up a strange flash of light in the\l"
+	.string "night sky.\p"
+	.string "The next morning, we found this\n"
+	.string "POKéMON drifting outside, like a\l"
+	.string "little wisp of cloud.\p"
+	.string "We've been calling it the\n"
+	.string "“Nebula” POKéMON.\p"
+	.string "Our readings suggest it came from\n"
+	.string "another world entirely!\p"
+	.string "But we can't raise a POKéMON here.\n"
+	.string "Will you take it with you?$"
+
+MossdeepCity_SpaceCenter_2F_Text_DeclinedCosmog:
+	.string "I see…\p"
+	.string "It seems to like you, though.\n"
+	.string "Come back if you change your mind.$"
+
+MossdeepCity_SpaceCenter_2F_Text_TakeCareOfCosmog:
+	.string "Please take good care of it.\p"
+	.string "If you ever find out where it came\n"
+	.string "from, I'd love to hear about it!$"
+
+MossdeepCity_SpaceCenter_2F_Text_CosmogFromBeyondTheStars:
+	.string "That POKéMON came to us from beyond\n"
+	.string "the stars.\p"
+	.string "I wonder what it will grow into…$"
