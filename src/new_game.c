@@ -269,6 +269,8 @@ static void ResetItemFlags(void)
 // as in R.O.W.E., which handed the player the DexNav in the moving truck.
 static void EnableStartingFeatures(void)
 {
+    // Running Shoes are available from the start; Mom's Littleroot scene still plays but is now redundant.
+    FlagSet(FLAG_SYS_B_DASH);
 #if DEXNAV_ENABLED
     FlagSet(DN_FLAG_DEXNAV_GET);
     FlagSet(DN_FLAG_DETECTOR_MODE);
