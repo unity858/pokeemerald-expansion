@@ -7357,6 +7357,8 @@ const struct SpeciesInfo gSpeciesInfoGen7[] =
             gOverworldPalette_Magearna,
             gShinyOverworldPalette_Magearna
         )
+        .itemCommon = ITEM_MAGEARNITE,
+        .itemRare = ITEM_MAGEARNITE,
         .isMythical = TRUE,
         .isFrontierBanned = TRUE,
         .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,
@@ -7425,6 +7427,8 @@ const struct SpeciesInfo gSpeciesInfoGen7[] =
             gOverworldPalette_MagearnaOriginal,
             gShinyOverworldPalette_MagearnaOriginal
         )
+        .itemCommon = ITEM_MAGEARNITE,
+        .itemRare = ITEM_MAGEARNITE,
         .isMythical = TRUE,
         .isFrontierBanned = TRUE,
         .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,
@@ -7973,6 +7977,8 @@ const struct SpeciesInfo gSpeciesInfoGen7[] =
             gOverworldPalette_Zeraora,
             gShinyOverworldPalette_Zeraora
         )
+        .itemCommon = ITEM_ZERAORITE,
+        .itemRare = ITEM_ZERAORITE,
         .isMythical = TRUE,
         .isFrontierBanned = TRUE,
         .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,

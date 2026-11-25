@@ -6948,6 +6948,8 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
             gOverworldPalette_Heatran,
             gShinyOverworldPalette_Heatran
         )
+        .itemCommon = ITEM_HEATRANITE,
+        .itemRare = ITEM_HEATRANITE,
         .isSubLegendary = TRUE,
         .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,
         .levelUpLearnset = sHeatranLevelUpLearnset,
@@ -7570,6 +7572,8 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
             gOverworldPalette_Darkrai,
             gShinyOverworldPalette_Darkrai
         )
+        .itemCommon = ITEM_DARKRANITE,
+        .itemRare = ITEM_DARKRANITE,
         .isMythical = TRUE,
         .isFrontierBanned = TRUE,
         .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,

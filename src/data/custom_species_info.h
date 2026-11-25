@@ -125,7 +125,7 @@ const struct SpeciesInfoOverride gCustomSpeciesInfo[NUM_SPECIES + 1] =
     [SPECIES_ARTICUNO] = { .baseAttack = 70, .baseSpeed = 105, .abilities[1] = ABILITY_SNOW_CLOAK, .abilities[2] = ABILITY_SHIELD_DUST }, // Atk 85->70, Spe 85->105, Slot 2: None->Snow Cloak, Hidden: Snow Cloak->Shield Dust
     [SPECIES_ZAPDOS] = { .abilities[1] = ABILITY_LIGHTNING_ROD }, // Slot 2: None->Lightning Rod
     [SPECIES_MOLTRES] = { .baseAttack = 80, .baseDefense = 95, .baseSpeed = 95, .baseSpDefense = 95, .abilities[1] = ABILITY_FLAME_BODY }, // Atk 100->80, Def 90->95, Spe 90->95, SpD 85->95, Slot 2: None->Flame Body
-    [SPECIES_MEWTWO] = { .itemCommon = ITEM_MEWTWONITE_Y, .itemRare = ITEM_MEWTWONITE_Y }, // Common None→Mewtwonite Y, Rare None→Mewtwonite Y (always held)
+    [SPECIES_MEWTWO] = { .itemCommon = ITEM_MEWTWONITE_X, .itemRare = ITEM_MEWTWONITE_Y }, // Mewtwonite X / Mewtwonite Y, same as vanilla (R.O.W.E. had Mewtwonite Y always held)
     [SPECIES_CHIKORITA] = { .abilities[1] = ABILITY_LEAF_GUARD }, // Slot 2: None->Leaf Guard
     [SPECIES_BAYLEEF] = { .abilities[1] = ABILITY_LEAF_GUARD }, // Slot 2: None->Leaf Guard
     [SPECIES_MEGANIUM] = { .abilities[1] = ABILITY_TRIAGE, .abilities[2] = ABILITY_TRIAGE }, // Slot 2: None->Triage, Hidden: Leaf Guard->Triage

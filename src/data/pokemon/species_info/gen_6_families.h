@@ -6882,6 +6882,8 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
             gOverworldPalette_Zygarde50,
             gShinyOverworldPalette_Zygarde50
         )
+        .itemCommon = ITEM_ZYGARDITE,
+        .itemRare = ITEM_ZYGARDITE,
         .isRestrictedLegendary = TRUE,
         .isFrontierBanned = TRUE,
         .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,
@@ -7012,6 +7014,8 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
             gOverworldPalette_Zygarde10,
             gShinyOverworldPalette_Zygarde10
         )
+        .itemCommon = ITEM_ZYGARDITE,
+        .itemRare = ITEM_ZYGARDITE,
         .isRestrictedLegendary = TRUE,
         .isFrontierBanned = TRUE,
         .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,
@@ -7085,6 +7089,8 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
             gOverworldPalette_ZygardeComplete,
             gShinyOverworldPalette_ZygardeComplete
         )
+        .itemCommon = ITEM_ZYGARDITE,
+        .itemRare = ITEM_ZYGARDITE,
         .isRestrictedLegendary = TRUE,
         .isFrontierBanned = TRUE,
         .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,
@@ -7222,6 +7228,8 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
             gOverworldPalette_Diancie,
             gShinyOverworldPalette_Diancie
         )
+        .itemCommon = ITEM_DIANCITE,
+        .itemRare = ITEM_DIANCITE,
         .isMythical = TRUE,
         .isFrontierBanned = TRUE,
         .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,

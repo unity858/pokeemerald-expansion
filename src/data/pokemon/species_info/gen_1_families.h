@@ -20749,6 +20749,8 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
             gOverworldPalette_Mewtwo,
             gShinyOverworldPalette_Mewtwo
         )
+        .itemCommon = ITEM_MEWTWONITE_X,
+        .itemRare = ITEM_MEWTWONITE_Y,
         .isRestrictedLegendary = TRUE,
         .isFrontierBanned = TRUE,
         .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,
