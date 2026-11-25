@@ -23,6 +23,11 @@
       "map": "MAP_ROUTE136",
       "offset": 0,
       "direction": "left"
+    },
+    {
+      "map": "MAP_LITTLEROOT_MEADOWS",
+      "offset": 4,
+      "direction": "down"
     }
   ],
   "object_events": [

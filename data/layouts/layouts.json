@@ -9356,6 +9356,17 @@
       "border_filepath": "data/layouts/Route137/border.bin",
       "blockdata_filepath": "data/layouts/Route137/map.bin",
       "layout_version": "emerald"
+    },
+    {
+      "id": "LAYOUT_LITTLEROOT_MEADOWS",
+      "name": "LittlerootMeadows_Layout",
+      "width": 16,
+      "height": 14,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/LittlerootMeadows/border.bin",
+      "blockdata_filepath": "data/layouts/LittlerootMeadows/map.bin",
+      "layout_version": "emerald"
     }
   ]
 }
