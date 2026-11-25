@@ -69,18 +69,19 @@ SixIsland_RuinValley_EventScript_KT_Larry::
 	end
 
 SixIsland_RuinValley_Text_LarryIntro::
-	.string "It's been said that there are\n"
-	.string "mysterious stones on this island.\p"
-	.string "I suspect it has something to do\n"
-	.string "with the ruins here.$"
+	.string "Have you seen the POKéMON around\n"
+	.string "these ruins? Some look ancient…\p"
+	.string "Others look like machines from\n"
+	.string "the future!$"
 
 SixIsland_RuinValley_Text_LarryDefeat::
 	.string "Oh, interesting.$"
 
 SixIsland_RuinValley_Text_LarryPostBattle::
-	.string "Those ruins over there…\p"
-	.string "I haven't had any luck in finding\n"
-	.string "how I can get inside.$"
+	.string "Those POKéMON don't belong to our\n"
+	.string "time, I'm sure of it.\p"
+	.string "Could the ruins over there be\n"
+	.string "where they're coming from?$"
 
 SixIsland_RuinValley_EventScript_KT_Daryl::
 	trainerbattle_single TRAINER_KANTO_HIKER_DARYL, SixIsland_RuinValley_Text_DarylIntro, SixIsland_RuinValley_Text_DarylDefeat
