@@ -50,6 +50,9 @@ EverGrandeCity_HallOfFame_EventScript_ResetDefeatedEventLegendaries::
 	clearflag FLAG_DEFEATED_TING_LU
 	clearflag FLAG_DEFEATED_CHIEN_PAO
 	clearflag FLAG_DEFEATED_CHI_YU
+	clearflag FLAG_DEFEATED_OKIDOGI
+	clearflag FLAG_DEFEATED_MUNKIDORI
+	clearflag FLAG_DEFEATED_FEZANDIPITI
 	return
 
 EverGrandeCity_HallOfFame_EventScript_SetDesertUnderpassCommentReady::

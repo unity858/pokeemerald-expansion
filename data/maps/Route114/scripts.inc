@@ -2,9 +2,15 @@ Route114_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, Route114_OnTransition
 	map_script MAP_SCRIPT_ON_LOAD, Route114_OnLoad
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, Route114_OnFrame
+	map_script MAP_SCRIPT_ON_RESUME, Route114_OnResume
 	.byte 0
 
+Route114_OnResume:
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	end
+
 Route114_OnTransition:
+	call Route114_EventScript_SetupFezandipiti
 	call_if_eq VAR_SHOULD_END_ABNORMAL_WEATHER, 1, AbnormalWeather_EventScript_HideMapNamePopup
 	call_if_eq VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_114_NORTH, AbnormalWeather_StartGroudonWeather
 	call_if_eq VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_114_SOUTH, AbnormalWeather_StartGroudonWeather
@@ -197,3 +203,34 @@ Route114_Text_FossilManiacsHouseSign:
 Route114_Text_LanettesHouse:
 	.string "LANETTE'S HOUSE$"
 
+@ Fezandipiti: on the ledge west of the pond above the waterfall (reached by Waterfall). After the 8th badge.
+Route114_EventScript_SetupFezandipiti::
+	setflag FLAG_TEMP_HIDE_STATIC_MON
+	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
+	goto_if_set FLAG_CAUGHT_FEZANDIPITI, Common_EventScript_NopReturn
+	goto_if_set FLAG_DEFEATED_FEZANDIPITI, Common_EventScript_NopReturn
+	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	return
+
+Route114_EventScript_Fezandipiti::
+	lock
+	faceplayer
+	setvar VAR_0x8004, SPECIES_FEZANDIPITI
+	setvar VAR_0x8006, ITEM_NONE
+	call HackStatic_EventScript_LegendaryBattle
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, Route114_EventScript_CaughtFezandipiti
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, Route114_EventScript_DefeatedFezandipiti
+	setvar VAR_0x8004, SPECIES_FEZANDIPITI
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+Route114_EventScript_DefeatedFezandipiti::
+	setflag FLAG_DEFEATED_FEZANDIPITI
+	setvar VAR_0x8004, SPECIES_FEZANDIPITI
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+Route114_EventScript_CaughtFezandipiti::
+	setflag FLAG_CAUGHT_FEZANDIPITI
+	release
+	end
