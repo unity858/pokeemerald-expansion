@@ -21,14 +21,12 @@ SevenIsland_SevaultCanyon_House_Text_Chansey::
 SevenIsland_SevaultCanyon_House_EventScript_PoipoleResearcher::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_POIPOLE, SevenIsland_SevaultCanyon_House_EventScript_PoipoleGiven
+	goto_if_staticenc GIFT_POIPOLE, RECEIVED, SevenIsland_SevaultCanyon_House_EventScript_PoipoleGiven
 	goto_if_unset FLAG_SYS_GAME_CLEAR, SevenIsland_SevaultCanyon_House_EventScript_PoipoleNotYet
 	msgbox SevenIsland_SevaultCanyon_House_Text_OfferPoipole, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, SevenIsland_SevaultCanyon_House_EventScript_DeclinePoipole
-	setvar VAR_0x8008, SPECIES_POIPOLE
-	call HackGift_EventScript_GiveMon
+	givegiftmon GIFT_POIPOLE, SPECIES_POIPOLE
 	goto_if_eq VAR_RESULT, FALSE, SevenIsland_SevaultCanyon_House_EventScript_PoipoleEnd
-	setflag FLAG_RECEIVED_POIPOLE
 	msgbox SevenIsland_SevaultCanyon_House_Text_PoipoleReceived, MSGBOX_DEFAULT
 SevenIsland_SevaultCanyon_House_EventScript_PoipoleEnd::
 	release

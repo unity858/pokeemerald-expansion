@@ -205,32 +205,8 @@ Route114_Text_LanettesHouse:
 
 @ Fezandipiti: on the ledge west of the pond above the waterfall (reached by Waterfall). After the 8th badge.
 Route114_EventScript_SetupFezandipiti::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_FEZANDIPITI, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_FEZANDIPITI, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_FEZANDIPITI, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 Route114_EventScript_Fezandipiti::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_FEZANDIPITI
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, Route114_EventScript_CaughtFezandipiti
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, Route114_EventScript_DefeatedFezandipiti
-	setvar VAR_0x8004, SPECIES_FEZANDIPITI
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-Route114_EventScript_DefeatedFezandipiti::
-	setflag FLAG_DEFEATED_FEZANDIPITI
-	setvar VAR_0x8004, SPECIES_FEZANDIPITI
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-Route114_EventScript_CaughtFezandipiti::
-	setflag FLAG_CAUGHT_FEZANDIPITI
-	release
-	end
+	staticencounter STATIC_ENC_FEZANDIPITI, SPECIES_FEZANDIPITI

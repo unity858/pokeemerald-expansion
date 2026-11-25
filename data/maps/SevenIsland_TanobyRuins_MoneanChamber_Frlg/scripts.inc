@@ -15,32 +15,8 @@ SevenIsland_TanobyRuins_MoneanChamber_OnResume:
 	end
 
 SevenIsland_TanobyRuins_MoneanChamber_EventScript_SetupRegidrago::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_REGIDRAGO, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_REGIDRAGO, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_REGIDRAGO, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 SevenIsland_TanobyRuins_MoneanChamber_EventScript_Regidrago::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_REGIDRAGO
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_RegiBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SevenIsland_TanobyRuins_MoneanChamber_EventScript_CaughtRegidrago
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SevenIsland_TanobyRuins_MoneanChamber_EventScript_DefeatedRegidrago
-	setvar VAR_0x8004, SPECIES_REGIDRAGO
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SevenIsland_TanobyRuins_MoneanChamber_EventScript_DefeatedRegidrago::
-	setflag FLAG_DEFEATED_REGIDRAGO
-	setvar VAR_0x8004, SPECIES_REGIDRAGO
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SevenIsland_TanobyRuins_MoneanChamber_EventScript_CaughtRegidrago::
-	setflag FLAG_CAUGHT_REGIDRAGO
-	release
-	end
+	staticencounter STATIC_ENC_REGIDRAGO, SPECIES_REGIDRAGO, HackStatic_EventScript_RegiBattle

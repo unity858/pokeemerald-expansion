@@ -15,32 +15,8 @@ SevenIsland_TanobyRuins_ScufibChamber_OnResume:
 	end
 
 SevenIsland_TanobyRuins_ScufibChamber_EventScript_SetupChienPao::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_SYS_GAME_CLEAR, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_CHIEN_PAO, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_CHIEN_PAO, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_CHIEN_PAO, FLAG_TEMP_HIDE_STATIC_MON, FLAG_SYS_GAME_CLEAR
 	return
 
 SevenIsland_TanobyRuins_ScufibChamber_EventScript_ChienPao::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_CHIEN_PAO
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SevenIsland_TanobyRuins_ScufibChamber_EventScript_CaughtChienPao
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SevenIsland_TanobyRuins_ScufibChamber_EventScript_DefeatedChienPao
-	setvar VAR_0x8004, SPECIES_CHIEN_PAO
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SevenIsland_TanobyRuins_ScufibChamber_EventScript_DefeatedChienPao::
-	setflag FLAG_DEFEATED_CHIEN_PAO
-	setvar VAR_0x8004, SPECIES_CHIEN_PAO
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SevenIsland_TanobyRuins_ScufibChamber_EventScript_CaughtChienPao::
-	setflag FLAG_CAUGHT_CHIEN_PAO
-	release
-	end
+	staticencounter STATIC_ENC_CHIEN_PAO, SPECIES_CHIEN_PAO

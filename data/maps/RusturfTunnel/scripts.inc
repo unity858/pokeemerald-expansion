@@ -533,32 +533,8 @@ RusturfTunnel_Text_MikePostBattle:
 @ Terrakion: in the tunnel's upper alcove (the dead end north of the main
 @ passage, entered at x=8), off every scripted path. After the 8th badge.
 RusturfTunnel_EventScript_SetupTerrakion::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_TERRAKION, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_TERRAKION, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_TERRAKION, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 RusturfTunnel_EventScript_Terrakion::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_TERRAKION
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, RusturfTunnel_EventScript_CaughtTerrakion
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, RusturfTunnel_EventScript_DefeatedTerrakion
-	setvar VAR_0x8004, SPECIES_TERRAKION
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-RusturfTunnel_EventScript_DefeatedTerrakion::
-	setflag FLAG_DEFEATED_TERRAKION
-	setvar VAR_0x8004, SPECIES_TERRAKION
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-RusturfTunnel_EventScript_CaughtTerrakion::
-	setflag FLAG_CAUGHT_TERRAKION
-	release
-	end
+	staticencounter STATIC_ENC_TERRAKION, SPECIES_TERRAKION

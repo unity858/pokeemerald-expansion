@@ -44,32 +44,8 @@ OneIsland_TreasureBeach_Text_AmaraPostBattle::
 	.string "parts.$"
 
 OneIsland_TreasureBeach_EventScript_SetupTapuFini::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_TAPU_FINI, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_TAPU_FINI, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_TAPU_FINI, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 OneIsland_TreasureBeach_EventScript_TapuFini::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_TAPU_FINI
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, OneIsland_TreasureBeach_EventScript_CaughtTapuFini
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, OneIsland_TreasureBeach_EventScript_DefeatedTapuFini
-	setvar VAR_0x8004, SPECIES_TAPU_FINI
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-OneIsland_TreasureBeach_EventScript_DefeatedTapuFini::
-	setflag FLAG_DEFEATED_TAPU_FINI
-	setvar VAR_0x8004, SPECIES_TAPU_FINI
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-OneIsland_TreasureBeach_EventScript_CaughtTapuFini::
-	setflag FLAG_CAUGHT_TAPU_FINI
-	release
-	end
+	staticencounter STATIC_ENC_TAPU_FINI, SPECIES_TAPU_FINI

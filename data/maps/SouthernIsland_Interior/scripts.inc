@@ -18,19 +18,11 @@ SouthernIsland_Interior_OnTransition:
 	end
 
 SouthernIsland_Interior_EventScript_SetupLatios::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_LATIOS, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_LATIOS, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_LATIOS, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 SouthernIsland_Interior_EventScript_SetupLatias::
-	setflag FLAG_TEMP_HIDE_STATIC_MON_2
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_LATIAS, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_LATIAS, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON_2
+	setupstaticenc STATIC_ENC_LATIAS, FLAG_TEMP_HIDE_STATIC_MON_2
 	return
 
 SouthernIsland_Interior_EventScript_SetUpPlayerGfx::
@@ -48,48 +40,10 @@ SouthernIsland_Interior_EventScript_SetMayGfx::
 	return
 
 SouthernIsland_Interior_EventScript_Latios::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_LATIOS
-	call SouthernIsland_Interior_EventScript_LatiBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SouthernIsland_Interior_EventScript_CaughtLatios
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SouthernIsland_Interior_EventScript_DefeatedLatios
-	setvar VAR_0x8004, SPECIES_LATIOS
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SouthernIsland_Interior_EventScript_DefeatedLatios::
-	setflag FLAG_DEFEATED_LATIOS
-	setvar VAR_0x8004, SPECIES_LATIOS
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SouthernIsland_Interior_EventScript_CaughtLatios::
-	setflag FLAG_CAUGHT_LATIOS
-	release
-	end
+	staticencounter STATIC_ENC_LATIOS, SPECIES_LATIOS, SouthernIsland_Interior_EventScript_LatiBattle
 
 SouthernIsland_Interior_EventScript_Latias::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_LATIAS
-	call SouthernIsland_Interior_EventScript_LatiBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SouthernIsland_Interior_EventScript_CaughtLatias
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SouthernIsland_Interior_EventScript_DefeatedLatias
-	setvar VAR_0x8004, SPECIES_LATIAS
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SouthernIsland_Interior_EventScript_DefeatedLatias::
-	setflag FLAG_DEFEATED_LATIAS
-	setvar VAR_0x8004, SPECIES_LATIAS
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SouthernIsland_Interior_EventScript_CaughtLatias::
-	setflag FLAG_CAUGHT_LATIAS
-	release
-	end
+	staticencounter STATIC_ENC_LATIAS, SPECIES_LATIAS, SouthernIsland_Interior_EventScript_LatiBattle
 
 @ VAR_0x8004 = species. Vanilla level and held item. Returns the outcome in VAR_RESULT.
 SouthernIsland_Interior_EventScript_LatiBattle::

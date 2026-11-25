@@ -12,32 +12,8 @@ ShoalCave_LowTideIceRoom_OnResume:
 	end
 
 ShoalCave_LowTideIceRoom_EventScript_SetupKyurem::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_KYUREM, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_KYUREM, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_KYUREM, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 ShoalCave_LowTideIceRoom_EventScript_Kyurem::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_KYUREM
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, ShoalCave_LowTideIceRoom_EventScript_CaughtKyurem
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, ShoalCave_LowTideIceRoom_EventScript_DefeatedKyurem
-	setvar VAR_0x8004, SPECIES_KYUREM
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-ShoalCave_LowTideIceRoom_EventScript_DefeatedKyurem::
-	setflag FLAG_DEFEATED_KYUREM
-	setvar VAR_0x8004, SPECIES_KYUREM
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-ShoalCave_LowTideIceRoom_EventScript_CaughtKyurem::
-	setflag FLAG_CAUGHT_KYUREM
-	release
-	end
+	staticencounter STATIC_ENC_KYUREM, SPECIES_KYUREM

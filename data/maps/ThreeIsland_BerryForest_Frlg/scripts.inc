@@ -34,32 +34,8 @@ ThreeIsland_BerryForest_Text_BewareWildBerryLovingMons::
 	.string "POKéMON!$"
 
 ThreeIsland_BerryForest_EventScript_SetupTapuBulu::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_TAPU_BULU, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_TAPU_BULU, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_TAPU_BULU, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 ThreeIsland_BerryForest_EventScript_TapuBulu::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_TAPU_BULU
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, ThreeIsland_BerryForest_EventScript_CaughtTapuBulu
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, ThreeIsland_BerryForest_EventScript_DefeatedTapuBulu
-	setvar VAR_0x8004, SPECIES_TAPU_BULU
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-ThreeIsland_BerryForest_EventScript_DefeatedTapuBulu::
-	setflag FLAG_DEFEATED_TAPU_BULU
-	setvar VAR_0x8004, SPECIES_TAPU_BULU
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-ThreeIsland_BerryForest_EventScript_CaughtTapuBulu::
-	setflag FLAG_CAUGHT_TAPU_BULU
-	release
-	end
+	staticencounter STATIC_ENC_TAPU_BULU, SPECIES_TAPU_BULU

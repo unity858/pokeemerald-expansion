@@ -493,13 +493,11 @@ MossdeepCity_SpaceCenter_2F_Text_StevenThankYouComeSeeMeAtHome:
 @ so the Team Magma scenes and the multi battle with Steven are untouched).
 @ One time, scaled level, party full -> PC.
 MossdeepCity_SpaceCenter_2F_EventScript_ScientistPostgame::
-	goto_if_set FLAG_RECEIVED_COSMOG, MossdeepCity_SpaceCenter_2F_EventScript_CosmogGiven
+	goto_if_staticenc GIFT_COSMOG, RECEIVED, MossdeepCity_SpaceCenter_2F_EventScript_CosmogGiven
 	msgbox MossdeepCity_SpaceCenter_2F_Text_OfferCosmog, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, MossdeepCity_SpaceCenter_2F_EventScript_DeclineCosmog
-	setvar VAR_0x8008, SPECIES_COSMOG
-	call HackGift_EventScript_GiveMon
+	givegiftmon GIFT_COSMOG, SPECIES_COSMOG
 	goto_if_eq VAR_RESULT, FALSE, MossdeepCity_SpaceCenter_2F_EventScript_CosmogEnd
-	setflag FLAG_RECEIVED_COSMOG
 	msgbox MossdeepCity_SpaceCenter_2F_Text_TakeCareOfCosmog, MSGBOX_DEFAULT
 MossdeepCity_SpaceCenter_2F_EventScript_CosmogEnd::
 	release

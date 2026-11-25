@@ -264,40 +264,8 @@ NewMauville_Inside_Text_SteppedOnSwitchGeneratorStopped:
 	.string "stopped…$"
 
 NewMauville_Inside_EventScript_SetupZapdos::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_ZAPDOS, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_ZAPDOS, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_ZAPDOS, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 NewMauville_Inside_EventScript_Zapdos::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_ZAPDOS
-	setvar VAR_0x8006, ITEM_NONE
-	waitse
-	playmoncry SPECIES_ZAPDOS, CRY_MODE_ENCOUNTER
-	message Text_Gyaoo
-	waitmessage
-	waitmoncry
-	delay 10
-	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, 0
-	waitbuttonpress
-	call HackStatic_EventScript_LegendaryBattleNoCry
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, NewMauville_Inside_EventScript_CaughtZapdos
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, NewMauville_Inside_EventScript_DefeatedZapdos
-	setvar VAR_0x8004, SPECIES_ZAPDOS
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-NewMauville_Inside_EventScript_DefeatedZapdos::
-	setflag FLAG_DEFEATED_ZAPDOS
-	setvar VAR_0x8004, SPECIES_ZAPDOS
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-NewMauville_Inside_EventScript_CaughtZapdos::
-	setflag FLAG_CAUGHT_ZAPDOS
-	release
-	end
+	staticencounter STATIC_ENC_ZAPDOS, SPECIES_ZAPDOS, HackStatic_EventScript_GyaooBattle

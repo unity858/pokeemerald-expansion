@@ -15,32 +15,8 @@ SevenIsland_TanobyRuins_RixyChamber_OnResume:
 	end
 
 SevenIsland_TanobyRuins_RixyChamber_EventScript_SetupChiYu::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_SYS_GAME_CLEAR, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_CHI_YU, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_CHI_YU, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_CHI_YU, FLAG_TEMP_HIDE_STATIC_MON, FLAG_SYS_GAME_CLEAR
 	return
 
 SevenIsland_TanobyRuins_RixyChamber_EventScript_ChiYu::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_CHI_YU
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SevenIsland_TanobyRuins_RixyChamber_EventScript_CaughtChiYu
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SevenIsland_TanobyRuins_RixyChamber_EventScript_DefeatedChiYu
-	setvar VAR_0x8004, SPECIES_CHI_YU
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SevenIsland_TanobyRuins_RixyChamber_EventScript_DefeatedChiYu::
-	setflag FLAG_DEFEATED_CHI_YU
-	setvar VAR_0x8004, SPECIES_CHI_YU
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SevenIsland_TanobyRuins_RixyChamber_EventScript_CaughtChiYu::
-	setflag FLAG_CAUGHT_CHI_YU
-	release
-	end
+	staticencounter STATIC_ENC_CHI_YU, SPECIES_CHI_YU

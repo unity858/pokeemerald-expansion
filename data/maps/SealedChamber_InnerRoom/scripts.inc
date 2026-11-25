@@ -78,34 +78,11 @@ SealedChamber_InnerRoom_EventScript_BrailleStoryPart6::
 	end
 
 SealedChamber_InnerRoom_EventScript_SetupRegigigas::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
+	setupstaticenc STATIC_ENC_REGIGIGAS, FLAG_TEMP_HIDE_STATIC_MON
 	specialvar VAR_RESULT, AreOtherRegisCaught
-	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_REGIGIGAS, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_REGIGIGAS, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	goto_if_eq VAR_RESULT, TRUE, Common_EventScript_NopReturn
+	setflag FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 SealedChamber_InnerRoom_EventScript_Regigigas::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_REGIGIGAS
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_RegiBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SealedChamber_InnerRoom_EventScript_CaughtRegigigas
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SealedChamber_InnerRoom_EventScript_DefeatedRegigigas
-	setvar VAR_0x8004, SPECIES_REGIGIGAS
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SealedChamber_InnerRoom_EventScript_DefeatedRegigigas::
-	setflag FLAG_DEFEATED_REGIGIGAS
-	setvar VAR_0x8004, SPECIES_REGIGIGAS
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SealedChamber_InnerRoom_EventScript_CaughtRegigigas::
-	setflag FLAG_CAUGHT_REGIGIGAS
-	release
-	end
+	staticencounter STATIC_ENC_REGIGIGAS, SPECIES_REGIGIGAS, HackStatic_EventScript_RegiBattle

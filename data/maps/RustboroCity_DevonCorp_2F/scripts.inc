@@ -387,14 +387,12 @@ RustboroCity_DevonCorp_2F_EventScript_TypeNullScientist::
 	lock
 	faceplayer
 	call_if_eq VAR_FOSSIL_RESURRECTION_STATE, 1, RustboroCity_DevonCorp_2F_EventScript_SetFossilReady
-	goto_if_set FLAG_RECEIVED_TYPE_NULL, RustboroCity_DevonCorp_2F_EventScript_WorkOnNext
+	goto_if_staticenc GIFT_TYPE_NULL, RECEIVED, RustboroCity_DevonCorp_2F_EventScript_WorkOnNext
 	goto_if_unset FLAG_BADGE08_GET, RustboroCity_DevonCorp_2F_EventScript_TypeNullNotReady
 	msgbox RustboroCity_DevonCorp_2F_Text_OfferTypeNull, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, RustboroCity_DevonCorp_2F_EventScript_DeclineTypeNull
-	setvar VAR_0x8008, SPECIES_TYPE_NULL
-	call HackGift_EventScript_GiveMon
+	givegiftmon GIFT_TYPE_NULL, SPECIES_TYPE_NULL
 	goto_if_eq VAR_RESULT, FALSE, RustboroCity_DevonCorp_2F_EventScript_TypeNullEnd
-	setflag FLAG_RECEIVED_TYPE_NULL
 	msgbox RustboroCity_DevonCorp_2F_Text_TreatTypeNullWithCare, MSGBOX_DEFAULT
 RustboroCity_DevonCorp_2F_EventScript_TypeNullEnd::
 	release

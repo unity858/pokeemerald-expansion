@@ -21,7 +21,7 @@ ShoalCave_LowTideEntranceRoom_EventScript_ShellBellExpert::
 	dotimebasedevents
 	call_if_set FLAG_SYS_SHOAL_ITEM, ShoalCave_LowTideEntranceRoom_EventScript_ResetShoalItems
 	goto_if_unset FLAG_BADGE08_GET, ShoalCave_LowTideEntranceRoom_EventScript_ShellBellCheck
-	goto_if_unset FLAG_RECEIVED_KUBFU, ShoalCave_LowTideEntranceRoom_EventScript_GiveKubfu
+	goto_if_not_staticenc GIFT_KUBFU, RECEIVED, ShoalCave_LowTideEntranceRoom_EventScript_GiveKubfu
 	call ShoalCave_LowTideEntranceRoom_EventScript_CheckScrolls
 	goto_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_GiveScrollsLater
 ShoalCave_LowTideEntranceRoom_EventScript_ShellBellCheck::
@@ -99,10 +99,8 @@ ShoalCave_LowTideEntranceRoom_EventScript_ResetShoalItems::
 @ man gives Kubfu (scaled wild level). Afterwards he's back to his Shell Bell routine.
 ShoalCave_LowTideEntranceRoom_EventScript_GiveKubfu::
 	msgbox ShoalCave_LowTideEntranceRoom_Text_OfferKubfu, MSGBOX_DEFAULT
-	setvar VAR_0x8008, SPECIES_KUBFU
-	call HackGift_EventScript_GiveMon
+	givegiftmon GIFT_KUBFU, SPECIES_KUBFU
 	goto_if_eq VAR_RESULT, FALSE, ShoalCave_LowTideEntranceRoom_EventScript_KubfuEnd
-	setflag FLAG_RECEIVED_KUBFU
 	msgbox ShoalCave_LowTideEntranceRoom_Text_OfferScrolls, MSGBOX_DEFAULT
 	call ShoalCave_LowTideEntranceRoom_EventScript_GiveMissingScrolls
 	msgbox ShoalCave_LowTideEntranceRoom_Text_KubfuReceived, MSGBOX_DEFAULT

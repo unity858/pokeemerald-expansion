@@ -162,34 +162,11 @@ ThreeIsland_BondBridge_Text_MegNotEnoughMons::
 	.string "One POKéMON isn't enough.$"
 
 ThreeIsland_BondBridge_EventScript_SetupCresselia::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
+	setupstaticenc STATIC_ENC_CRESSELIA, FLAG_TEMP_HIDE_STATIC_MON
 	specialvar VAR_RESULT, IsTimeOfDayNight
-	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_CRESSELIA, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_CRESSELIA, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	goto_if_eq VAR_RESULT, TRUE, Common_EventScript_NopReturn
+	setflag FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 ThreeIsland_BondBridge_EventScript_Cresselia::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_CRESSELIA
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, ThreeIsland_BondBridge_EventScript_CaughtCresselia
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, ThreeIsland_BondBridge_EventScript_DefeatedCresselia
-	setvar VAR_0x8004, SPECIES_CRESSELIA
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-ThreeIsland_BondBridge_EventScript_DefeatedCresselia::
-	setflag FLAG_DEFEATED_CRESSELIA
-	setvar VAR_0x8004, SPECIES_CRESSELIA
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-ThreeIsland_BondBridge_EventScript_CaughtCresselia::
-	setflag FLAG_CAUGHT_CRESSELIA
-	release
-	end
+	staticencounter STATIC_ENC_CRESSELIA, SPECIES_CRESSELIA

@@ -15,40 +15,8 @@ MtEmber_Summit_OnResume::
 	end
 
 MtEmber_Summit_EventScript_SetupMoltres::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_MOLTRES, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_MOLTRES, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_MOLTRES, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 MtEmber_Summit_EventScript_Moltres::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_MOLTRES
-	setvar VAR_0x8006, ITEM_NONE
-	waitse
-	playmoncry SPECIES_MOLTRES, CRY_MODE_ENCOUNTER
-	message Text_Gyaoo
-	waitmessage
-	waitmoncry
-	delay 10
-	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, 0
-	waitbuttonpress
-	call HackStatic_EventScript_LegendaryBattleNoCry
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, MtEmber_Summit_EventScript_CaughtMoltres
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, MtEmber_Summit_EventScript_DefeatedMoltres
-	setvar VAR_0x8004, SPECIES_MOLTRES
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-MtEmber_Summit_EventScript_DefeatedMoltres::
-	setflag FLAG_DEFEATED_MOLTRES
-	setvar VAR_0x8004, SPECIES_MOLTRES
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-MtEmber_Summit_EventScript_CaughtMoltres::
-	setflag FLAG_CAUGHT_MOLTRES
-	release
-	end
+	staticencounter STATIC_ENC_MOLTRES, SPECIES_MOLTRES, HackStatic_EventScript_GyaooBattle

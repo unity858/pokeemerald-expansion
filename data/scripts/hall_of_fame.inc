@@ -30,29 +30,8 @@ EverGrandeCity_HallOfFame_EventScript_ResetDefeatedEventLegendaries::
 	clearflag FLAG_DEFEATED_DEOXYS
 	clearflag FLAG_DEFEATED_LUGIA
 	clearflag FLAG_DEFEATED_HO_OH
-	@ The hack's added statics (data/scripts/hack_statics.inc)
-	clearflag FLAG_DEFEATED_LATIAS
-	clearflag FLAG_DEFEATED_ARTICUNO
-	clearflag FLAG_DEFEATED_ZAPDOS
-	clearflag FLAG_DEFEATED_MOLTRES
-	clearflag FLAG_DEFEATED_REGIGIGAS
-	clearflag FLAG_DEFEATED_CRESSELIA
-	clearflag FLAG_DEFEATED_TAPU_KOKO
-	clearflag FLAG_DEFEATED_TAPU_LELE
-	clearflag FLAG_DEFEATED_TAPU_BULU
-	clearflag FLAG_DEFEATED_TAPU_FINI
-	clearflag FLAG_DEFEATED_REGIELEKI
-	clearflag FLAG_DEFEATED_REGIDRAGO
-	clearflag FLAG_DEFEATED_KYUREM
-	clearflag FLAG_DEFEATED_TERRAKION
-	clearflag FLAG_DEFEATED_COBALION
-	clearflag FLAG_DEFEATED_WO_CHIEN
-	clearflag FLAG_DEFEATED_TING_LU
-	clearflag FLAG_DEFEATED_CHIEN_PAO
-	clearflag FLAG_DEFEATED_CHI_YU
-	clearflag FLAG_DEFEATED_OKIDOGI
-	clearflag FLAG_DEFEATED_MUNKIDORI
-	clearflag FLAG_DEFEATED_FEZANDIPITI
+	@ The hack's added statics (data/scripts/hack_statics.inc, src/static_encounters.c)
+	clearallstaticencdefeated
 	return
 
 EverGrandeCity_HallOfFame_EventScript_SetDesertUnderpassCommentReady::

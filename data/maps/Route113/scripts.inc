@@ -168,32 +168,8 @@ Route113_Text_GlassWorkshopSign:
 
 @ Okidogi (temporary spot): on the ledge west of the Route 111 sign. After the 8th badge.
 Route113_EventScript_SetupOkidogi::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_OKIDOGI, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_OKIDOGI, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_OKIDOGI, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 Route113_EventScript_Okidogi::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_OKIDOGI
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, Route113_EventScript_CaughtOkidogi
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, Route113_EventScript_DefeatedOkidogi
-	setvar VAR_0x8004, SPECIES_OKIDOGI
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-Route113_EventScript_DefeatedOkidogi::
-	setflag FLAG_DEFEATED_OKIDOGI
-	setvar VAR_0x8004, SPECIES_OKIDOGI
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-Route113_EventScript_CaughtOkidogi::
-	setflag FLAG_CAUGHT_OKIDOGI
-	release
-	end
+	staticencounter STATIC_ENC_OKIDOGI, SPECIES_OKIDOGI

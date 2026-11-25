@@ -15,32 +15,8 @@ SevenIsland_TanobyRuins_DilfordChamber_OnResume:
 	end
 
 SevenIsland_TanobyRuins_DilfordChamber_EventScript_SetupTingLu::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_TING_LU, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_TING_LU, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_TING_LU, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 SevenIsland_TanobyRuins_DilfordChamber_EventScript_TingLu::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_TING_LU
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SevenIsland_TanobyRuins_DilfordChamber_EventScript_CaughtTingLu
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SevenIsland_TanobyRuins_DilfordChamber_EventScript_DefeatedTingLu
-	setvar VAR_0x8004, SPECIES_TING_LU
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SevenIsland_TanobyRuins_DilfordChamber_EventScript_DefeatedTingLu::
-	setflag FLAG_DEFEATED_TING_LU
-	setvar VAR_0x8004, SPECIES_TING_LU
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SevenIsland_TanobyRuins_DilfordChamber_EventScript_CaughtTingLu::
-	setflag FLAG_CAUGHT_TING_LU
-	release
-	end
+	staticencounter STATIC_ENC_TING_LU, SPECIES_TING_LU

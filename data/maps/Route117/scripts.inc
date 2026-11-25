@@ -249,32 +249,8 @@ Route117_Text_DayCareSign:
 
 @ Munkidori (temporary spot): on the cleared ground below the southern pond. After the 8th badge.
 Route117_EventScript_SetupMunkidori::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_MUNKIDORI, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_MUNKIDORI, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_MUNKIDORI, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 Route117_EventScript_Munkidori::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_MUNKIDORI
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, Route117_EventScript_CaughtMunkidori
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, Route117_EventScript_DefeatedMunkidori
-	setvar VAR_0x8004, SPECIES_MUNKIDORI
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-Route117_EventScript_DefeatedMunkidori::
-	setflag FLAG_DEFEATED_MUNKIDORI
-	setvar VAR_0x8004, SPECIES_MUNKIDORI
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-Route117_EventScript_CaughtMunkidori::
-	setflag FLAG_CAUGHT_MUNKIDORI
-	release
-	end
+	staticencounter STATIC_ENC_MUNKIDORI, SPECIES_MUNKIDORI

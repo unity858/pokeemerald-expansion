@@ -15,32 +15,8 @@ TwoIsland_CapeBrink_OnResume:
 	end
 
 TwoIsland_CapeBrink_EventScript_SetupTapuKoko::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_TAPU_KOKO, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_TAPU_KOKO, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_TAPU_KOKO, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 TwoIsland_CapeBrink_EventScript_TapuKoko::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_TAPU_KOKO
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, TwoIsland_CapeBrink_EventScript_CaughtTapuKoko
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, TwoIsland_CapeBrink_EventScript_DefeatedTapuKoko
-	setvar VAR_0x8004, SPECIES_TAPU_KOKO
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-TwoIsland_CapeBrink_EventScript_DefeatedTapuKoko::
-	setflag FLAG_DEFEATED_TAPU_KOKO
-	setvar VAR_0x8004, SPECIES_TAPU_KOKO
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-TwoIsland_CapeBrink_EventScript_CaughtTapuKoko::
-	setflag FLAG_CAUGHT_TAPU_KOKO
-	release
-	end
+	staticencounter STATIC_ENC_TAPU_KOKO, SPECIES_TAPU_KOKO

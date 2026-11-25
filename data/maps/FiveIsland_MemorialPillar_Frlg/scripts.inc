@@ -102,32 +102,8 @@ FiveIsland_MemorialPillar_Text_HaroldPostBattle::
 	.string "bird POKéMON beg playfully…$"
 
 FiveIsland_MemorialPillar_EventScript_SetupTapuLele::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_TAPU_LELE, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_TAPU_LELE, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_TAPU_LELE, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 FiveIsland_MemorialPillar_EventScript_TapuLele::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_TAPU_LELE
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, FiveIsland_MemorialPillar_EventScript_CaughtTapuLele
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, FiveIsland_MemorialPillar_EventScript_DefeatedTapuLele
-	setvar VAR_0x8004, SPECIES_TAPU_LELE
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-FiveIsland_MemorialPillar_EventScript_DefeatedTapuLele::
-	setflag FLAG_DEFEATED_TAPU_LELE
-	setvar VAR_0x8004, SPECIES_TAPU_LELE
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-FiveIsland_MemorialPillar_EventScript_CaughtTapuLele::
-	setflag FLAG_CAUGHT_TAPU_LELE
-	release
-	end
+	staticencounter STATIC_ENC_TAPU_LELE, SPECIES_TAPU_LELE

@@ -15,32 +15,8 @@ SevenIsland_TanobyRuins_LiptooChamber_OnResume:
 	end
 
 SevenIsland_TanobyRuins_LiptooChamber_EventScript_SetupWoChien::
-	setflag FLAG_TEMP_HIDE_STATIC_MON
-	goto_if_unset FLAG_BADGE08_GET, Common_EventScript_NopReturn
-	goto_if_set FLAG_CAUGHT_WO_CHIEN, Common_EventScript_NopReturn
-	goto_if_set FLAG_DEFEATED_WO_CHIEN, Common_EventScript_NopReturn
-	clearflag FLAG_TEMP_HIDE_STATIC_MON
+	setupstaticenc STATIC_ENC_WO_CHIEN, FLAG_TEMP_HIDE_STATIC_MON
 	return
 
 SevenIsland_TanobyRuins_LiptooChamber_EventScript_WoChien::
-	lock
-	faceplayer
-	setvar VAR_0x8004, SPECIES_WO_CHIEN
-	setvar VAR_0x8006, ITEM_NONE
-	call HackStatic_EventScript_LegendaryBattle
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, SevenIsland_TanobyRuins_LiptooChamber_EventScript_CaughtWoChien
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SevenIsland_TanobyRuins_LiptooChamber_EventScript_DefeatedWoChien
-	setvar VAR_0x8004, SPECIES_WO_CHIEN
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SevenIsland_TanobyRuins_LiptooChamber_EventScript_DefeatedWoChien::
-	setflag FLAG_DEFEATED_WO_CHIEN
-	setvar VAR_0x8004, SPECIES_WO_CHIEN
-	goto Common_EventScript_LegendaryFlewAway
-	end
-
-SevenIsland_TanobyRuins_LiptooChamber_EventScript_CaughtWoChien::
-	setflag FLAG_CAUGHT_WO_CHIEN
-	release
-	end
+	staticencounter STATIC_ENC_WO_CHIEN, SPECIES_WO_CHIEN
