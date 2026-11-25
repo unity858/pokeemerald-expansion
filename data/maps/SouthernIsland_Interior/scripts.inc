@@ -40,19 +40,19 @@ SouthernIsland_Interior_EventScript_SetMayGfx::
 	return
 
 SouthernIsland_Interior_EventScript_Latios::
-	staticencounter STATIC_ENC_LATIOS, SPECIES_LATIOS, SouthernIsland_Interior_EventScript_LatiBattle
+	staticencounter STATIC_ENC_LATIOS, SPECIES_LATIOS, SouthernIsland_Interior_EventScript_LatiBattle, ITEM_LATIOSITE
 
 SouthernIsland_Interior_EventScript_Latias::
-	staticencounter STATIC_ENC_LATIAS, SPECIES_LATIAS, SouthernIsland_Interior_EventScript_LatiBattle
+	staticencounter STATIC_ENC_LATIAS, SPECIES_LATIAS, SouthernIsland_Interior_EventScript_LatiBattle, ITEM_LATIASITE
 
-@ VAR_0x8004 = species. Vanilla level and held item. Returns the outcome in VAR_RESULT.
+@ VAR_0x8004 = species, VAR_0x8006 = held item (Latiasite / Latiosite, set by staticencounter).
+@ Vanilla level. Returns the outcome in VAR_RESULT.
 SouthernIsland_Interior_EventScript_LatiBattle::
 	waitse
 	playmoncry VAR_0x8004, CRY_MODE_ENCOUNTER
 	delay 40
 	waitmoncry
 	setvar VAR_0x8005, 50
-	setvar VAR_0x8006, ITEM_SOUL_DEW
 	special CreateEnemyEventMon
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special BattleSetup_StartLatiBattle

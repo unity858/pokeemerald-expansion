@@ -12,7 +12,8 @@
 @                   (hides the object unless gated in and neither caught nor knocked out;
 @                   gateFlag defaults to FLAG_BADGE08_GET)
 @   ON_RESUME:      call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
-@   its object:     staticencounter STATIC_ENC_X, SPECIES_X[, battle script]
+@   its object:     staticencounter STATIC_ENC_X, SPECIES_X[, battle script[, held item]]
+@                   (held item goes in VAR_0x8006; legendaries with a Mega Stone / orb hold it)
 @ A gift: goto_if_staticenc GIFT_X, RECEIVED, <already given> ... givegiftmon GIFT_X, SPECIES_X
 
 @ Static legendary battles. Set VAR_0x8004 = species and VAR_0x8006 = held item first.
