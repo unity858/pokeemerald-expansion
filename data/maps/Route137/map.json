@@ -17,11 +17,11 @@
     {
       "map": "MAP_ROUTE136",
       "offset": 0,
-      "direction": "right"
+      "direction": "up"
     },
     {
       "map": "MAP_ROUTE106",
-      "offset": 60,
+      "offset": 38,
       "direction": "left"
     },
     {
