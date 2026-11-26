@@ -16,20 +16,20 @@
   "connections": [
     {
       "map": "MAP_LITTLEROOT_TOWN",
-      "offset": 0,
+      "offset": 4,
       "direction": "right"
     },
     {
       "map": "MAP_ROUTE137",
-      "offset": 0,
+      "offset": 7,
       "direction": "down"
     }
   ],
   "object_events": [
     {
       "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE",
-      "x": 44,
-      "y": 10,
+      "x": 51,
+      "y": 14,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
@@ -41,8 +41,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE",
-      "x": 44,
-      "y": 11,
+      "x": 51,
+      "y": 15,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
