@@ -440,7 +440,7 @@ const u16 gTilesetPalettes_PokemonCenter[][16] =
     INCGFX_U16("data/tilesets/secondary/pokemon_center/palettes/15.pal", ".gbapal"),
 };
 
-const u32 gTilesetTiles_Cave[] = INCGFX_U32("data/tilesets/secondary/cave/tiles.png", ".4bpp.fastSmol", "-num_tiles 425 -Wnum_tiles");
+const u32 gTilesetTiles_Cave[] = INCGFX_U32("data/tilesets/secondary/cave/tiles.png", ".4bpp.fastSmol", "-num_tiles 436 -Wnum_tiles");
 
 const u16 gTilesetPalettes_Cave[][16] =
 {
