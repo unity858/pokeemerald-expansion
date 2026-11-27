@@ -137,7 +137,14 @@ SootopolisCity_EventScript_SetWallaceLeft::
 	return
 
 SootopolisCity_EventScript_SetExpertBlockCaveEntrance::
+	goto_if_set FLAG_BADGE08_GET, SootopolisCity_EventScript_SetExpertBesideCaveEntrance
 	setobjectxyperm LOCALID_SOOTOPOLIS_EXPERT, 31, 18
+	return
+
+@ Hack: after the 8th badge the expert steps aside so the Cave of Origin is open (Diancie on B1F)
+SootopolisCity_EventScript_SetExpertBesideCaveEntrance::
+	setobjectxyperm LOCALID_SOOTOPOLIS_EXPERT, 30, 18
+	setobjectmovementtype LOCALID_SOOTOPOLIS_EXPERT, MOVEMENT_TYPE_FACE_RIGHT
 	return
 
 SootopolisCity_OnWarp:

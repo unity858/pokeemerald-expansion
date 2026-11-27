@@ -1,5 +1,25 @@
+@ Diancie is a hack static on the ledge where Wallace stood, above the
+@ central pit, after the 8th badge (FLAG_BADGE08_GET).
+
 CaveOfOrigin_B1F_MapScripts::
+	map_script MAP_SCRIPT_ON_RESUME, CaveOfOrigin_B1F_OnResume
+	map_script MAP_SCRIPT_ON_TRANSITION, CaveOfOrigin_B1F_OnTransition
 	.byte 0
+
+CaveOfOrigin_B1F_OnResume::
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	end
+
+CaveOfOrigin_B1F_OnTransition::
+	call CaveOfOrigin_B1F_EventScript_SetupDiancie
+	end
+
+CaveOfOrigin_B1F_EventScript_SetupDiancie::
+	setupstaticenc STATIC_ENC_DIANCIE, FLAG_TEMP_HIDE_STATIC_MON, FLAG_BADGE08_GET
+	return
+
+CaveOfOrigin_B1F_EventScript_Diancie::
+	staticencounter STATIC_ENC_DIANCIE, SPECIES_DIANCIE, HackStatic_EventScript_LegendaryBattle
 
 CaveOfOrigin_B1F_EventScript_Wallace::
 	lock
