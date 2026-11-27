@@ -69,6 +69,9 @@ u8 ScriptGiveEgg(enum Species species)
     struct Pokemon mon;
     u8 isEgg;
 
+    if (IsPlayerPartyAndPokemonStorageFull())
+        return MON_CANT_GIVE;
+
     CreateEgg(&mon, species, TRUE);
     isEgg = TRUE;
     SetMonData(&mon, MON_DATA_IS_EGG, &isEgg);

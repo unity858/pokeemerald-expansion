@@ -4,8 +4,8 @@
 // New Game Plus (after R.O.W.E.'s, reduced to a single "is a plus game" flag).
 //
 // Picked with NEW GAME+ on the main menu, which is shown for a save CONTINUE would load
-// that has beaten the game (FLAG_SYS_GAME_CLEAR), unless storage is full (see
-// NewGamePlus_IsStorageFull). The new game resets as
+// that has beaten the game (FLAG_SYS_GAME_CLEAR), unless storage is full (the game-wide
+// IsPlayerPartyAndPokemonStorageFull: party + PC >= 420). The new game resets as
 // usual, except that the bag (every pocket but Key Items), the PC items and the PC
 // boxes are kept: the party is moved into the PC, every stored Pokémon goes back to
 // level 1 (IVs and EVs kept, level 1 moves, healed), and their species are
@@ -19,11 +19,6 @@ bool32 IsNewGamePlusAvailable(void);
 // TRUE if a save CONTINUE would load is in memory (SAVE_STATUS_OK or SAVE_STATUS_ERROR)
 // and it has beaten the game (FLAG_SYS_GAME_CLEAR). Storage not checked.
 bool32 CanStartNewGamePlus(void);
-// TRUE when party Pokémon + PC Pokémon (eggs included) >= the PC capacity (14 * 30 = 420).
-// Equality counts as full on purpose.
-bool32 NewGamePlus_IsStorageFull(void);
-u32 NewGamePlus_CountFreePcSlots(void);
-u32 NewGamePlus_CountPartyMons(void);
 
 // Used by NewGameInitData.
 // Before the reset: moves the party's Pokémon into free PC slots. Any that do not

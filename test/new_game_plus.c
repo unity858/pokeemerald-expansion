@@ -7,9 +7,17 @@
 #include "pokemon.h"
 #include "pokemon_storage_system.h"
 #include "save.h"
+#include "script_pokemon_util.h"
 #include "test/test.h"
 #include "constants/flags.h"
 #include "constants/items.h"
+
+// Tests share the save blocks: leave the PC and party empty for the tests that follow.
+static void ClearTestStorage(void)
+{
+    ResetPokemonStorageSystem();
+    ZeroPlayerPartyMons();
+}
 
 static void ExpectLevelledDown(struct BoxPokemon *boxMon, enum Species species, u32 hpEv, u32 atkIv)
 {
@@ -61,7 +69,7 @@ TEST("New Game Plus moves the party to the PC and levels every stored Pokemon do
     CreateTrainedMon(&gParties[B_TRAINER_PLAYER][0], SPECIES_PIKACHU, 40, 100, 20);
     CreateTrainedMon(&gParties[B_TRAINER_PLAYER][1], SPECIES_SNORLAX, 60, 4, 7);
     gPartiesCount[B_TRAINER_PLAYER] = 2;
-    EXPECT(!NewGamePlus_IsStorageFull());
+    EXPECT(!IsPlayerPartyAndPokemonStorageFull());
 
     EXPECT_EQ(NewGamePlus_MovePartyToPC(leftovers), 0);
     EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPECIES), SPECIES_NONE);
@@ -83,6 +91,7 @@ TEST("New Game Plus moves the party to the PC and levels every stored Pokemon do
     EXPECT(GetSetPokedexFlag(SpeciesToNationalPokedexNum(SPECIES_SNORLAX), FLAG_GET_CAUGHT));
     EXPECT(!GetSetPokedexFlag(SpeciesToNationalPokedexNum(SPECIES_TOGEPI), FLAG_GET_SEEN));
     EXPECT(!GetSetPokedexFlag(SpeciesToNationalPokedexNum(SPECIES_TOGEPI), FLAG_GET_CAUGHT));
+    ClearTestStorage();
 }
 
 // Fills the PC with `pcMons` Pokémon (the last one an egg) and the party with `partyMons`.
@@ -103,20 +112,66 @@ static void FillStorage(u32 pcMons, u32 partyMons)
     gPartiesCount[B_TRAINER_PLAYER] = partyMons;
 }
 
-TEST("New Game Plus storage is full at party + PC >= PC capacity, eggs included")
+TEST("Storage is full at party + PC >= PC capacity, eggs included")
 {
     u32 capacity = TOTAL_BOXES_COUNT * IN_BOX_COUNT;
+    u32 party, isEgg = TRUE;
+
+    for (party = 0; party <= PARTY_SIZE; party++)
+    {
+        FillStorage(capacity - 1 - party, party); // 419
+        EXPECT(!IsPlayerPartyAndPokemonStorageFull());
+        FillStorage(capacity - party, party); // 420
+        EXPECT(IsPlayerPartyAndPokemonStorageFull());
+    }
+
+    // A party egg counts too: 414 in the PC + 5 + an egg = 420.
+    FillStorage(capacity - PARTY_SIZE, PARTY_SIZE - 1);
+    EXPECT(!IsPlayerPartyAndPokemonStorageFull());
+    CreateMon(&gParties[B_TRAINER_PLAYER][PARTY_SIZE - 1], SPECIES_TOGEPI, 5, 0, OTID_STRUCT_PLAYER_ID);
+    SetMonData(&gParties[B_TRAINER_PLAYER][PARTY_SIZE - 1], MON_DATA_IS_EGG, &isEgg);
+    EXPECT(IsPlayerPartyAndPokemonStorageFull());
+
+    // The box-only check keeps its meaning.
+    FillStorage(capacity - 1, 1);
+    EXPECT(IsPlayerPartyAndPokemonStorageFull());
+    EXPECT(!IsPokemonStorageFull());
+    ClearTestStorage();
+}
+
+TEST("Giving a Pokemon or an egg is refused once storage is full")
+{
+    u32 capacity = TOTAL_BOXES_COUNT * IN_BOX_COUNT;
+
+    FillStorage(capacity - 2, 1); // 419: one more fits
+    EXPECT_EQ(ScriptGiveMon(SPECIES_PIKACHU, 5, ITEM_NONE), MON_GIVEN_TO_PARTY);
+    EXPECT(IsPlayerPartyAndPokemonStorageFull());
+    EXPECT_EQ(ScriptGiveMon(SPECIES_PIKACHU, 5, ITEM_NONE), MON_CANT_GIVE);
+    EXPECT_EQ(ScriptGiveEgg(SPECIES_PICHU), MON_CANT_GIVE);
+    EXPECT_EQ(CalculatePlayerPartyCount(), 2);
+
+    // Party full, PC has room but the total is at the limit: nothing goes to the PC either.
+    FillStorage(capacity - PARTY_SIZE, PARTY_SIZE);
+    EXPECT(!IsPokemonStorageFull());
+    EXPECT_EQ(ScriptGiveMon(SPECIES_PIKACHU, 5, ITEM_NONE), MON_CANT_GIVE);
+    ClearTestStorage();
+}
+
+TEST("New Game Plus is hidden when storage is full (party + PC >= PC capacity), eggs included")
+{
+    u32 capacity = TOTAL_BOXES_COUNT * IN_BOX_COUNT;
+    u8 savedStatus = gSaveFileStatus;
 
     // A valid save that has beaten the game; the storage check decides.
     gSaveFileStatus = SAVE_STATUS_OK;
     FlagSet(FLAG_SYS_GAME_CLEAR);
 
     FillStorage(capacity - 1 - PARTY_SIZE, PARTY_SIZE); // 419
-    EXPECT(!NewGamePlus_IsStorageFull());
+    EXPECT(!IsPlayerPartyAndPokemonStorageFull());
     EXPECT(IsNewGamePlusAvailable());
 
     FillStorage(capacity - PARTY_SIZE, PARTY_SIZE); // 420
-    EXPECT(NewGamePlus_IsStorageFull());
+    EXPECT(IsPlayerPartyAndPokemonStorageFull());
     EXPECT(!IsNewGamePlusAvailable());
 
     FillStorage(capacity - 1, 0); // 419, empty party
@@ -147,6 +202,8 @@ TEST("New Game Plus storage is full at party + PC >= PC capacity, eggs included"
     EXPECT(!IsNewGamePlusAvailable());
     gSaveFileStatus = SAVE_STATUS_ERROR;
     EXPECT(!IsNewGamePlusAvailable());
+    ClearTestStorage();
+    gSaveFileStatus = savedStatus;
 }
 
 TEST("New Game Plus keeps party Pokemon that do not fit in a full PC, levelled down")
@@ -166,7 +223,7 @@ TEST("New Game Plus keeps party Pokemon that do not fit in a full PC, levelled d
     CreateTrainedMon(&gParties[B_TRAINER_PLAYER][0], SPECIES_PIKACHU, 40, 100, 20);
     CreateTrainedMon(&gParties[B_TRAINER_PLAYER][1], SPECIES_SNORLAX, 60, 4, 7);
     gPartiesCount[B_TRAINER_PLAYER] = 2;
-    EXPECT(NewGamePlus_IsStorageFull());
+    EXPECT(IsPlayerPartyAndPokemonStorageFull());
     EXPECT(!IsNewGamePlusAvailable());
 
     count = NewGamePlus_MovePartyToPC(leftovers);
@@ -179,6 +236,7 @@ TEST("New Game Plus keeps party Pokemon that do not fit in a full PC, levelled d
     ExpectLevelledDown(&gParties[B_TRAINER_PLAYER][0].box, SPECIES_SNORLAX, 4, 7);
     EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_LEVEL), 1);
     EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_HP), GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_MAX_HP));
+    ClearTestStorage();
 }
 
 TEST("New Game Plus carries over every bag pocket but Key Items, and the PC items")

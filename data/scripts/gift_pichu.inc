@@ -6,6 +6,8 @@ MysteryGiftScript_SurfPichu::
 SurfPichu_GiveIfPossible:
 	specialvar VAR_GIFT_PICHU_SLOT, CalculatePlayerPartyCount
 	vgoto_if_eq VAR_GIFT_PICHU_SLOT, PARTY_SIZE, SurfPichu_FullParty
+	specialvar VAR_RESULT, IsPlayerPartyAndPokemonStorageFull
+	vgoto_if_eq VAR_RESULT, TRUE, SurfPichu_FullParty
 	setflag FLAG_MYSTERY_GIFT_DONE
 	vcall SurfPichu_GiveEgg
 	lock

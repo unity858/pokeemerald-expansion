@@ -23,46 +23,11 @@ bool32 CanStartNewGamePlus(void)
         && FlagGet(FLAG_SYS_GAME_CLEAR);
 }
 
-u32 NewGamePlus_CountFreePcSlots(void)
-{
-    u32 boxId, boxPos, count = 0;
-
-    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
-    {
-        for (boxPos = 0; boxPos < IN_BOX_COUNT; boxPos++)
-        {
-            if (GetBoxMonData(GetBoxedMonPtr(boxId, boxPos), MON_DATA_SPECIES) == SPECIES_NONE)
-                count++;
-        }
-    }
-    return count;
-}
-
-u32 NewGamePlus_CountPartyMons(void)
-{
-    u32 i, count = 0;
-
-    for (i = 0; i < PARTY_SIZE; i++)
-    {
-        if (GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES) != SPECIES_NONE)
-            count++;
-    }
-    return count;
-}
-
-// Storage is full when the party and the PC together hold at least a PC's worth of
-// Pokémon (eggs included). Reaching exactly the PC capacity counts as full on purpose,
-// so NEW GAME+ always leaves at least one free PC slot after moving the party in.
-bool32 NewGamePlus_IsStorageFull(void)
-{
-    u32 pcMons = TOTAL_BOXES_COUNT * IN_BOX_COUNT - NewGamePlus_CountFreePcSlots();
-
-    return NewGamePlus_CountPartyMons() + pcMons >= TOTAL_BOXES_COUNT * IN_BOX_COUNT;
-}
-
+// Uses the game-wide limit (hidden once party + PC >= 420). The party then always fits in
+// the PC; saves made before the limit existed can hold more, which is why it is checked here.
 bool32 IsNewGamePlusAvailable(void)
 {
-    return CanStartNewGamePlus() && !NewGamePlus_IsStorageFull();
+    return CanStartNewGamePlus() && !IsPlayerPartyAndPokemonStorageFull();
 }
 
 static struct BoxPokemon *FindFreePcSlot(void)

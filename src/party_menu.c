@@ -7501,6 +7501,15 @@ void ItemUseCB_Fusion(u8 taskId, TaskFunc taskFunc)
             task->func = taskFunc;
             return;
         }
+        // Unfusing brings back a stored Pokémon, which must respect the storage limit.
+        if (IsPlayerPartyAndPokemonStorageFull())
+        {
+            gPartyMenuUseExitCallback = FALSE;
+            DisplayPartyMenuMessage(gText_BoxFull, TRUE);
+            ScheduleBgCopyTilemapToVram(2);
+            task->func = taskFunc;
+            return;
+        }
         for (i = 0; itemFusion[i].fusionStorageIndex != FUSION_TERMINATOR; i++) // Loops through fusion table and checks if the mon can be unfused
         {
             if (gPokemonStoragePtr->fusions[itemFusion[i].fusionStorageIndex].level == 0)

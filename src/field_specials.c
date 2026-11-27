@@ -1560,9 +1560,10 @@ void BufferStarterSpeciesName(void)
     StringCopy(gStringVar1, GetSpeciesName(GetStarterPokemon(VarGet(VAR_STARTER_MON))));
 }
 
+// Safari Zone entrance: there must be room to catch a Pokémon (party + PC below the limit).
 bool8 ScriptCheckFreePokemonStorageSpace(void)
 {
-    return CheckFreePokemonStorageSpace();
+    return !IsPlayerPartyAndPokemonStorageFull();
 }
 
 // Task data for Task_ShakeCamera

@@ -22,7 +22,10 @@ Route117_EventScript_DaycareEggWaiting::
 
 Route117_EventScript_DaycareAcceptEgg::
 	specialvar VAR_RESULT, CalculatePlayerPartyCount
-	goto_if_ne VAR_RESULT, PARTY_SIZE, Route117_EventScript_DaycareReceiveEgg
+	goto_if_eq VAR_RESULT, PARTY_SIZE, Route117_EventScript_DaycareNoRoomForEgg
+	specialvar VAR_RESULT, IsPlayerPartyAndPokemonStorageFull
+	goto_if_eq VAR_RESULT, FALSE, Route117_EventScript_DaycareReceiveEgg
+Route117_EventScript_DaycareNoRoomForEgg::
 	msgbox Route117_Text_YouHaveNoRoomForIt, MSGBOX_DEFAULT
 	release
 	end
@@ -159,6 +162,8 @@ Route117_PokemonDayCare_EventScript_OneMonInDaycare::
 Route117_PokemonDayCare_EventScript_TryRetrieveMon::
 	specialvar VAR_RESULT, CalculatePlayerPartyCount
 	goto_if_eq VAR_RESULT, PARTY_SIZE, Route117_PokemonDayCare_EventScript_NoRoom
+	specialvar VAR_RESULT, IsPlayerPartyAndPokemonStorageFull
+	goto_if_eq VAR_RESULT, TRUE, Route117_PokemonDayCare_EventScript_NoRoom
 	specialvar VAR_RESULT, GetDaycareState
 	setvar VAR_0x8004, 0
 	goto_if_eq VAR_RESULT, DAYCARE_ONE_MON, Route117_PokemonDayCare_EventScript_CostPrompt

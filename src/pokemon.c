@@ -3196,15 +3196,24 @@ enum TrainerClassID GetSecretBaseTrainerClass(void)
     return gFacilityClassToTrainerClass[facilityClass];
 }
 
+// Storage counts as full once party + PC (eggs included) reaches the PC capacity
+// (14 * 30 = 420). Every path that adds a Pokémon to the player checks this first, so the
+// total can never go past 420 and the whole party always fits in the PC (New Game Plus
+// moves it there). IsPokemonStorageFull below is the box-only check.
 bool8 IsPlayerPartyAndPokemonStorageFull(void)
 {
-    s32 i;
+    u32 i, j, count = 0;
 
     for (i = 0; i < PARTY_SIZE; i++)
-        if (GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES) == SPECIES_NONE)
-            return FALSE;
+        if (GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES) != SPECIES_NONE)
+            count++;
 
-    return IsPokemonStorageFull();
+    for (i = 0; i < TOTAL_BOXES_COUNT; i++)
+        for (j = 0; j < IN_BOX_COUNT; j++)
+            if (GetBoxMonDataAt(i, j, MON_DATA_SPECIES) != SPECIES_NONE)
+                count++;
+
+    return count >= TOTAL_BOXES_COUNT * IN_BOX_COUNT;
 }
 
 bool8 IsPokemonStorageFull(void)
@@ -7271,6 +7280,12 @@ u32 GiveScriptedMonToPlayer(struct Pokemon *mon, u8 slot)
 {
     u32 sentToPc;
     u32 i = 0;
+
+    // Adding a Pokémon (not replacing one in a given party slot) respects the storage limit.
+    if ((slot >= PARTY_SIZE || GetMonData(&gParties[B_TRAINER_PLAYER][slot], MON_DATA_SPECIES) == SPECIES_NONE)
+     && IsPlayerPartyAndPokemonStorageFull())
+        return MON_CANT_GIVE;
+
     if (slot < PARTY_SIZE)
     {
         CopyMon(&gParties[B_TRAINER_PLAYER][slot], mon, sizeof(struct Pokemon));
