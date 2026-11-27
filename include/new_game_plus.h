@@ -5,7 +5,7 @@
 //
 // Picked with NEW GAME+ on the main menu, which is shown for a save CONTINUE would load
 // that has beaten the game (FLAG_SYS_GAME_CLEAR), unless storage is full (the game-wide
-// IsPlayerPartyAndPokemonStorageFull: party + PC >= 420). The new game resets as
+// IsPlayerPartyAndPokemonStorageFull: party + PC >= 419). The new game resets as
 // usual, except that the bag (every pocket but Key Items), the PC items and the PC
 // boxes are kept: the party is moved into the PC, every stored Pokémon goes back to
 // level 1 (IVs and EVs kept, level 1 moves, healed), and their species are

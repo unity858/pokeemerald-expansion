@@ -5,6 +5,9 @@
 #define IN_BOX_ROWS             5 // Number of rows, 6 Pokémon per row
 #define IN_BOX_COLUMNS          6 // Number of columns, 5 Pokémon per column
 #define IN_BOX_COUNT            (IN_BOX_ROWS * IN_BOX_COLUMNS)
+// Most Pokémon the player may own, party + PC with eggs (one less than the PC holds, 419):
+// adding one more is refused (IsPlayerPartyAndPokemonStorageFull).
+#define MAX_OWNED_POKEMON       (TOTAL_BOXES_COUNT * IN_BOX_COUNT - 1)
 #define BOX_NAME_LENGTH         8
 #define MAX_FUSION_STORAGE      4
 

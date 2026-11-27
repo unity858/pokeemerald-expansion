@@ -112,28 +112,27 @@ static void FillStorage(u32 pcMons, u32 partyMons)
     gPartiesCount[B_TRAINER_PLAYER] = partyMons;
 }
 
-TEST("Storage is full at party + PC >= PC capacity, eggs included")
+TEST("Storage is full at party + PC >= 419, eggs included")
 {
-    u32 capacity = TOTAL_BOXES_COUNT * IN_BOX_COUNT;
     u32 party, isEgg = TRUE;
 
     for (party = 0; party <= PARTY_SIZE; party++)
     {
-        FillStorage(capacity - 1 - party, party); // 419
+        FillStorage(MAX_OWNED_POKEMON - 1 - party, party); // 418
         EXPECT(!IsPlayerPartyAndPokemonStorageFull());
-        FillStorage(capacity - party, party); // 420
+        FillStorage(MAX_OWNED_POKEMON - party, party); // 419
         EXPECT(IsPlayerPartyAndPokemonStorageFull());
     }
 
-    // A party egg counts too: 414 in the PC + 5 + an egg = 420.
-    FillStorage(capacity - PARTY_SIZE, PARTY_SIZE - 1);
+    // A party egg counts too: 413 in the PC + 5 + an egg = 419.
+    FillStorage(MAX_OWNED_POKEMON - PARTY_SIZE, PARTY_SIZE - 1);
     EXPECT(!IsPlayerPartyAndPokemonStorageFull());
     CreateMon(&gParties[B_TRAINER_PLAYER][PARTY_SIZE - 1], SPECIES_TOGEPI, 5, 0, OTID_STRUCT_PLAYER_ID);
     SetMonData(&gParties[B_TRAINER_PLAYER][PARTY_SIZE - 1], MON_DATA_IS_EGG, &isEgg);
     EXPECT(IsPlayerPartyAndPokemonStorageFull());
 
     // The box-only check keeps its meaning.
-    FillStorage(capacity - 1, 1);
+    FillStorage(MAX_OWNED_POKEMON - 1, 1);
     EXPECT(IsPlayerPartyAndPokemonStorageFull());
     EXPECT(!IsPokemonStorageFull());
     ClearTestStorage();
@@ -141,48 +140,45 @@ TEST("Storage is full at party + PC >= PC capacity, eggs included")
 
 TEST("Giving a Pokemon or an egg is refused once storage is full")
 {
-    u32 capacity = TOTAL_BOXES_COUNT * IN_BOX_COUNT;
-
-    FillStorage(capacity - 2, 1); // 419: one more fits
+    FillStorage(MAX_OWNED_POKEMON - 2, 1); // 418: one more fits
     EXPECT_EQ(ScriptGiveMon(SPECIES_PIKACHU, 5, ITEM_NONE), MON_GIVEN_TO_PARTY);
-    EXPECT(IsPlayerPartyAndPokemonStorageFull());
+    EXPECT(IsPlayerPartyAndPokemonStorageFull()); // 419
     EXPECT_EQ(ScriptGiveMon(SPECIES_PIKACHU, 5, ITEM_NONE), MON_CANT_GIVE);
     EXPECT_EQ(ScriptGiveEgg(SPECIES_PICHU), MON_CANT_GIVE);
     EXPECT_EQ(CalculatePlayerPartyCount(), 2);
 
     // Party full, PC has room but the total is at the limit: nothing goes to the PC either.
-    FillStorage(capacity - PARTY_SIZE, PARTY_SIZE);
+    FillStorage(MAX_OWNED_POKEMON - PARTY_SIZE, PARTY_SIZE);
     EXPECT(!IsPokemonStorageFull());
     EXPECT_EQ(ScriptGiveMon(SPECIES_PIKACHU, 5, ITEM_NONE), MON_CANT_GIVE);
     ClearTestStorage();
 }
 
-TEST("New Game Plus is hidden when storage is full (party + PC >= PC capacity), eggs included")
+TEST("New Game Plus is hidden when storage is full (party + PC >= 419), eggs included")
 {
-    u32 capacity = TOTAL_BOXES_COUNT * IN_BOX_COUNT;
     u8 savedStatus = gSaveFileStatus;
 
     // A valid save that has beaten the game; the storage check decides.
     gSaveFileStatus = SAVE_STATUS_OK;
     FlagSet(FLAG_SYS_GAME_CLEAR);
 
-    FillStorage(capacity - 1 - PARTY_SIZE, PARTY_SIZE); // 419
+    FillStorage(MAX_OWNED_POKEMON - 1 - PARTY_SIZE, PARTY_SIZE); // 418
     EXPECT(!IsPlayerPartyAndPokemonStorageFull());
     EXPECT(IsNewGamePlusAvailable());
 
-    FillStorage(capacity - PARTY_SIZE, PARTY_SIZE); // 420
+    FillStorage(MAX_OWNED_POKEMON - PARTY_SIZE, PARTY_SIZE); // 419
     EXPECT(IsPlayerPartyAndPokemonStorageFull());
     EXPECT(!IsNewGamePlusAvailable());
 
-    FillStorage(capacity - 1, 0); // 419, empty party
+    FillStorage(MAX_OWNED_POKEMON - 1, 0); // 418, empty party
     EXPECT(IsNewGamePlusAvailable());
 
-    FillStorage(capacity, 0); // 420, empty party
+    FillStorage(MAX_OWNED_POKEMON, 0); // 419, empty party
     EXPECT(!IsNewGamePlusAvailable());
 
-    FillStorage(capacity - 2, 1); // 419
+    FillStorage(MAX_OWNED_POKEMON - 2, 1); // 418
     EXPECT(IsNewGamePlusAvailable());
-    FillStorage(capacity - 1, 1); // 420
+    FillStorage(MAX_OWNED_POKEMON - 1, 1); // 419
     EXPECT(!IsNewGamePlusAvailable());
 
     // Only saves CONTINUE would load.

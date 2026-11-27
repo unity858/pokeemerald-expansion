@@ -23,7 +23,7 @@ bool32 CanStartNewGamePlus(void)
         && FlagGet(FLAG_SYS_GAME_CLEAR);
 }
 
-// Uses the game-wide limit (hidden once party + PC >= 420). The party then always fits in
+// Uses the game-wide limit (hidden once party + PC >= 419). The party then always fits in
 // the PC; saves made before the limit existed can hold more, which is why it is checked here.
 bool32 IsNewGamePlusAvailable(void)
 {

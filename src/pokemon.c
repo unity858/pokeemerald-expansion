@@ -3196,10 +3196,10 @@ enum TrainerClassID GetSecretBaseTrainerClass(void)
     return gFacilityClassToTrainerClass[facilityClass];
 }
 
-// Storage counts as full once party + PC (eggs included) reaches the PC capacity
-// (14 * 30 = 420). Every path that adds a Pokémon to the player checks this first, so the
-// total can never go past 420 and the whole party always fits in the PC (New Game Plus
-// moves it there). IsPokemonStorageFull below is the box-only check.
+// Storage counts as full once party + PC (eggs included) reaches MAX_OWNED_POKEMON (419),
+// i.e. when one more would make 420 (the PC capacity). Every path that adds a Pokémon to the
+// player checks this first, so the total never goes past 419 and the whole party always fits
+// in the PC (New Game Plus moves it there). IsPokemonStorageFull below is the box-only check.
 bool8 IsPlayerPartyAndPokemonStorageFull(void)
 {
     u32 i, j, count = 0;
@@ -3213,7 +3213,7 @@ bool8 IsPlayerPartyAndPokemonStorageFull(void)
             if (GetBoxMonDataAt(i, j, MON_DATA_SPECIES) != SPECIES_NONE)
                 count++;
 
-    return count >= TOTAL_BOXES_COUNT * IN_BOX_COUNT;
+    return count >= MAX_OWNED_POKEMON;
 }
 
 bool8 IsPokemonStorageFull(void)
