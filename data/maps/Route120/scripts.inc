@@ -7,6 +7,7 @@ Route120_MapScripts::
 
 Route120_OnResume:
 	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, Route120_EventScript_RemoveKecleonObject
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
 	end
 
 Route120_EventScript_RemoveKecleonObject::
@@ -55,8 +56,28 @@ Route120_EventScript_SetBridgeKecleonMovement::
 
 Route120_OnTransition:
 	call GabbyAndTy_EventScript_UpdateLocation
+	call Route120_EventScript_SetupLakeTrio
 	call Route120_EventScript_SetWeather
 	end
+
+@ Uxie, Mesprit and Azelf are hack statics in a triangle on the puddles at the
+@ south end of the route (south-east of the Pecha berry trees), after the 8th badge.
+@ FLAG_TEMP_A is a free temp flag (no FLAG_TEMP_HIDE_STATIC_MON_3 alias exists);
+@ Route120 itself only uses FLAG_TEMP_11/12/14 (cut trees).
+Route120_EventScript_SetupLakeTrio::
+	setupstaticenc STATIC_ENC_UXIE, FLAG_TEMP_HIDE_STATIC_MON, FLAG_BADGE08_GET
+	setupstaticenc STATIC_ENC_MESPRIT, FLAG_TEMP_HIDE_STATIC_MON_2, FLAG_BADGE08_GET
+	setupstaticenc STATIC_ENC_AZELF, FLAG_TEMP_A, FLAG_BADGE08_GET
+	return
+
+Route120_EventScript_Uxie::
+	staticencounter STATIC_ENC_UXIE, SPECIES_UXIE, HackStatic_EventScript_LegendaryBattle
+
+Route120_EventScript_Mesprit::
+	staticencounter STATIC_ENC_MESPRIT, SPECIES_MESPRIT, HackStatic_EventScript_LegendaryBattle
+
+Route120_EventScript_Azelf::
+	staticencounter STATIC_ENC_AZELF, SPECIES_AZELF, HackStatic_EventScript_LegendaryBattle
 
 Route120_EventScript_SetWeather::
 	getplayerxy VAR_TEMP_0, VAR_TEMP_1
