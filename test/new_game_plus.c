@@ -1,4 +1,5 @@
 #include "global.h"
+#include "event_data.h"
 #include "item.h"
 #include "new_game_plus.h"
 #include "player_pc.h"
@@ -7,6 +8,7 @@
 #include "pokemon_storage_system.h"
 #include "save.h"
 #include "test/test.h"
+#include "constants/flags.h"
 #include "constants/items.h"
 
 static void ExpectLevelledDown(struct BoxPokemon *boxMon, enum Species species, u32 hpEv, u32 atkIv)
@@ -105,8 +107,9 @@ TEST("New Game Plus storage is full at party + PC >= PC capacity, eggs included"
 {
     u32 capacity = TOTAL_BOXES_COUNT * IN_BOX_COUNT;
 
-    // Any valid save can start it; the storage check decides.
+    // A valid save that has beaten the game; the storage check decides.
     gSaveFileStatus = SAVE_STATUS_OK;
+    FlagSet(FLAG_SYS_GAME_CLEAR);
 
     FillStorage(capacity - 1 - PARTY_SIZE, PARTY_SIZE); // 419
     EXPECT(!NewGamePlus_IsStorageFull());
@@ -135,6 +138,14 @@ TEST("New Game Plus storage is full at party + PC >= PC capacity, eggs included"
     gSaveFileStatus = SAVE_STATUS_EMPTY;
     EXPECT(!IsNewGamePlusAvailable());
     gSaveFileStatus = SAVE_STATUS_CORRUPT;
+    EXPECT(!IsNewGamePlusAvailable());
+
+    // Only saves that have beaten the game.
+    gSaveFileStatus = SAVE_STATUS_OK;
+    FlagClear(FLAG_SYS_GAME_CLEAR);
+    EXPECT(!CanStartNewGamePlus());
+    EXPECT(!IsNewGamePlusAvailable());
+    gSaveFileStatus = SAVE_STATUS_ERROR;
     EXPECT(!IsNewGamePlusAvailable());
 }
 

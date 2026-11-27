@@ -14,11 +14,13 @@
 
 // See include/new_game_plus.h.
 
-// Any save that CONTINUE would load: the main menu shows CONTINUE for SAVE_STATUS_OK and
-// for SAVE_STATUS_ERROR (the newest save was damaged and the previous one was loaded).
+// A save that CONTINUE would load (the main menu shows CONTINUE for SAVE_STATUS_OK and for
+// SAVE_STATUS_ERROR, where the newest save was damaged and the previous one was loaded)
+// and that has beaten the game.
 bool32 CanStartNewGamePlus(void)
 {
-    return gSaveFileStatus == SAVE_STATUS_OK || gSaveFileStatus == SAVE_STATUS_ERROR;
+    return (gSaveFileStatus == SAVE_STATUS_OK || gSaveFileStatus == SAVE_STATUS_ERROR)
+        && FlagGet(FLAG_SYS_GAME_CLEAR);
 }
 
 u32 NewGamePlus_CountFreePcSlots(void)
