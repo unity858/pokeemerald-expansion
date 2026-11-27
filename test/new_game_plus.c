@@ -5,6 +5,7 @@
 #include "pokedex.h"
 #include "pokemon.h"
 #include "pokemon_storage_system.h"
+#include "save.h"
 #include "test/test.h"
 #include "constants/items.h"
 
@@ -58,7 +59,7 @@ TEST("New Game Plus moves the party to the PC and levels every stored Pokemon do
     CreateTrainedMon(&gParties[B_TRAINER_PLAYER][0], SPECIES_PIKACHU, 40, 100, 20);
     CreateTrainedMon(&gParties[B_TRAINER_PLAYER][1], SPECIES_SNORLAX, 60, 4, 7);
     gPartiesCount[B_TRAINER_PLAYER] = 2;
-    EXPECT(IsNewGamePlusAvailable() || !CanStartNewGamePlus());
+    EXPECT(!NewGamePlus_IsStorageFull());
 
     EXPECT_EQ(NewGamePlus_MovePartyToPC(leftovers), 0);
     EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPECIES), SPECIES_NONE);
@@ -82,6 +83,61 @@ TEST("New Game Plus moves the party to the PC and levels every stored Pokemon do
     EXPECT(!GetSetPokedexFlag(SpeciesToNationalPokedexNum(SPECIES_TOGEPI), FLAG_GET_CAUGHT));
 }
 
+// Fills the PC with `pcMons` Pokémon (the last one an egg) and the party with `partyMons`.
+static void FillStorage(u32 pcMons, u32 partyMons)
+{
+    struct Pokemon mon;
+    u32 i, isEgg = TRUE;
+
+    ResetPokemonStorageSystem();
+    ZeroPlayerPartyMons();
+    CreateMon(&mon, SPECIES_WOBBUFFET, 10, 0, OTID_STRUCT_PLAYER_ID);
+    for (i = 0; i < pcMons; i++)
+        *GetBoxedMonPtr(i / IN_BOX_COUNT, i % IN_BOX_COUNT) = mon.box;
+    if (pcMons != 0)
+        SetBoxMonData(GetBoxedMonPtr((pcMons - 1) / IN_BOX_COUNT, (pcMons - 1) % IN_BOX_COUNT), MON_DATA_IS_EGG, &isEgg);
+    for (i = 0; i < partyMons; i++)
+        CreateMon(&gParties[B_TRAINER_PLAYER][i], SPECIES_PIKACHU, 10, 0, OTID_STRUCT_PLAYER_ID);
+    gPartiesCount[B_TRAINER_PLAYER] = partyMons;
+}
+
+TEST("New Game Plus storage is full at party + PC >= PC capacity, eggs included")
+{
+    u32 capacity = TOTAL_BOXES_COUNT * IN_BOX_COUNT;
+
+    // Any valid save can start it; the storage check decides.
+    gSaveFileStatus = SAVE_STATUS_OK;
+
+    FillStorage(capacity - 1 - PARTY_SIZE, PARTY_SIZE); // 419
+    EXPECT(!NewGamePlus_IsStorageFull());
+    EXPECT(IsNewGamePlusAvailable());
+
+    FillStorage(capacity - PARTY_SIZE, PARTY_SIZE); // 420
+    EXPECT(NewGamePlus_IsStorageFull());
+    EXPECT(!IsNewGamePlusAvailable());
+
+    FillStorage(capacity - 1, 0); // 419, empty party
+    EXPECT(IsNewGamePlusAvailable());
+
+    FillStorage(capacity, 0); // 420, empty party
+    EXPECT(!IsNewGamePlusAvailable());
+
+    FillStorage(capacity - 2, 1); // 419
+    EXPECT(IsNewGamePlusAvailable());
+    FillStorage(capacity - 1, 1); // 420
+    EXPECT(!IsNewGamePlusAvailable());
+
+    // Only saves CONTINUE would load.
+    FillStorage(0, 1);
+    EXPECT(IsNewGamePlusAvailable());
+    gSaveFileStatus = SAVE_STATUS_ERROR;
+    EXPECT(IsNewGamePlusAvailable());
+    gSaveFileStatus = SAVE_STATUS_EMPTY;
+    EXPECT(!IsNewGamePlusAvailable());
+    gSaveFileStatus = SAVE_STATUS_CORRUPT;
+    EXPECT(!IsNewGamePlusAvailable());
+}
+
 TEST("New Game Plus keeps party Pokemon that do not fit in a full PC, levelled down")
 {
     struct Pokemon mon;
@@ -99,6 +155,7 @@ TEST("New Game Plus keeps party Pokemon that do not fit in a full PC, levelled d
     CreateTrainedMon(&gParties[B_TRAINER_PLAYER][0], SPECIES_PIKACHU, 40, 100, 20);
     CreateTrainedMon(&gParties[B_TRAINER_PLAYER][1], SPECIES_SNORLAX, 60, 4, 7);
     gPartiesCount[B_TRAINER_PLAYER] = 2;
+    EXPECT(NewGamePlus_IsStorageFull());
     EXPECT(!IsNewGamePlusAvailable());
 
     count = NewGamePlus_MovePartyToPC(leftovers);

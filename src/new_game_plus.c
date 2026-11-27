@@ -14,9 +14,11 @@
 
 // See include/new_game_plus.h.
 
+// Any save that CONTINUE would load: the main menu shows CONTINUE for SAVE_STATUS_OK and
+// for SAVE_STATUS_ERROR (the newest save was damaged and the previous one was loaded).
 bool32 CanStartNewGamePlus(void)
 {
-    return gSaveFileStatus == SAVE_STATUS_OK && FlagGet(FLAG_SYS_GAME_CLEAR);
+    return gSaveFileStatus == SAVE_STATUS_OK || gSaveFileStatus == SAVE_STATUS_ERROR;
 }
 
 u32 NewGamePlus_CountFreePcSlots(void)
@@ -34,7 +36,7 @@ u32 NewGamePlus_CountFreePcSlots(void)
     return count;
 }
 
-static u32 CountPlayerPartyMons(void)
+u32 NewGamePlus_CountPartyMons(void)
 {
     u32 i, count = 0;
 
@@ -46,9 +48,19 @@ static u32 CountPlayerPartyMons(void)
     return count;
 }
 
+// Storage is full when the party and the PC together hold at least a PC's worth of
+// Pokémon (eggs included). Reaching exactly the PC capacity counts as full on purpose,
+// so NEW GAME+ always leaves at least one free PC slot after moving the party in.
+bool32 NewGamePlus_IsStorageFull(void)
+{
+    u32 pcMons = TOTAL_BOXES_COUNT * IN_BOX_COUNT - NewGamePlus_CountFreePcSlots();
+
+    return NewGamePlus_CountPartyMons() + pcMons >= TOTAL_BOXES_COUNT * IN_BOX_COUNT;
+}
+
 bool32 IsNewGamePlusAvailable(void)
 {
-    return CanStartNewGamePlus() && NewGamePlus_CountFreePcSlots() >= CountPlayerPartyMons();
+    return CanStartNewGamePlus() && !NewGamePlus_IsStorageFull();
 }
 
 static struct BoxPokemon *FindFreePcSlot(void)
