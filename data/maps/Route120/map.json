@@ -613,9 +613,9 @@
     {
       "local_id": "LOCALID_ROUTE120_UXIE",
       "graphics_id": "OBJ_EVENT_GFX_SPECIES(UXIE)",
-      "x": 17,
-      "y": 91,
-      "elevation": 5,
+      "x": 21,
+      "y": 104,
+      "elevation": 1,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
       "movement_range_y": 0,
@@ -627,9 +627,9 @@
     {
       "local_id": "LOCALID_ROUTE120_MESPRIT",
       "graphics_id": "OBJ_EVENT_GFX_SPECIES(MESPRIT)",
-      "x": 18,
-      "y": 90,
-      "elevation": 5,
+      "x": 22,
+      "y": 102,
+      "elevation": 1,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
       "movement_range_y": 0,
@@ -641,16 +641,16 @@
     {
       "local_id": "LOCALID_ROUTE120_AZELF",
       "graphics_id": "OBJ_EVENT_GFX_SPECIES(AZELF)",
-      "x": 19,
-      "y": 91,
-      "elevation": 5,
+      "x": 23,
+      "y": 104,
+      "elevation": 1,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Route120_EventScript_Azelf",
-      "flag": "FLAG_TEMP_A"
+      "flag": "FLAG_TEMP_HIDE_STATIC_MON_3"
     }
   ],
   "warp_events": [

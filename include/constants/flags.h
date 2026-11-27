@@ -1663,6 +1663,7 @@
 #define FLAG_TEMP_HIDE_MIRAGE_ISLAND_BERRY_TREE FLAG_TEMP_11
 #define FLAG_TEMP_HIDE_STATIC_MON               FLAG_TEMP_8  // Object flag of the hack's static legendaries, set up on map load
 #define FLAG_TEMP_HIDE_STATIC_MON_2             FLAG_TEMP_9  // Same, for a second static on the same map
+#define FLAG_TEMP_HIDE_STATIC_MON_3             FLAG_TEMP_A  // Same, for a third static on the same map
 
 // FRLG flags
 

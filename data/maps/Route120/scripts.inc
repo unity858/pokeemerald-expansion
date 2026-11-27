@@ -60,14 +60,12 @@ Route120_OnTransition:
 	call Route120_EventScript_SetWeather
 	end
 
-@ Uxie, Mesprit and Azelf are hack statics in a triangle on the puddles at the
-@ south end of the route (south-east of the Pecha berry trees), after the 8th badge.
-@ FLAG_TEMP_A is a free temp flag (no FLAG_TEMP_HIDE_STATIC_MON_3 alias exists);
-@ Route120 itself only uses FLAG_TEMP_11/12/14 (cut trees).
+@ Uxie, Mesprit and Azelf are hack statics in a triangle out in the Surf-only
+@ pond at the south end of the route, after the 8th badge.
 Route120_EventScript_SetupLakeTrio::
 	setupstaticenc STATIC_ENC_UXIE, FLAG_TEMP_HIDE_STATIC_MON, FLAG_BADGE08_GET
 	setupstaticenc STATIC_ENC_MESPRIT, FLAG_TEMP_HIDE_STATIC_MON_2, FLAG_BADGE08_GET
-	setupstaticenc STATIC_ENC_AZELF, FLAG_TEMP_A, FLAG_BADGE08_GET
+	setupstaticenc STATIC_ENC_AZELF, FLAG_TEMP_HIDE_STATIC_MON_3, FLAG_BADGE08_GET
 	return
 
 Route120_EventScript_Uxie::
