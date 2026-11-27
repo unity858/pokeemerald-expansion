@@ -683,6 +683,7 @@ struct BattleStruct
     struct Illusion illusion[MAX_BATTLERS_COUNT];
     enum BattlerId soulheartBattlerId;
     struct LostItem itemLost[MAX_BATTLE_TRAINERS][PARTY_SIZE];
+    enum Item wildItemDrop[MAX_BATTLERS_COUNT]; // R.O.W.E.: item a wild battler held when it fainted, given at the end of the battle
     u8 blunderPolicy:1; // should blunder policy activate
     u8 redCardActivated :1;
     u8 snatchedMoveIsUsed:1;

@@ -2875,8 +2875,15 @@ BattleScript_LocalBattleWonReward::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_PayDayMoneyAndPickUpItems::
 	givepaydaymoney
+	givewilditemdrops
 	pickup
 	end
+
+BattleScript_WildMonDroppedItem::
+	playse SE_BALL_BOUNCE_1
+	printfromtable gWildItemDropStringIds
+	waitmessage B_WAIT_TIME_LONG
+	return
 
 BattleScript_RivalBattleLost::
 	jumpifhasnohp BS_ATTACKER, BattleScript_RivalBattleLostSkipMonRecall

@@ -209,6 +209,7 @@ BattleScript_TryNicknameCaughtMon::
 BattleScript_GiveCaughtMonEnd::
 	givecaughtmon BattleScript_SuccessBallThrowEnd
 BattleScript_SuccessBallThrowEnd::
+	givewilditemdrops
 	setbyte gBattleOutcome, B_OUTCOME_CAUGHT
 	finishturn
 

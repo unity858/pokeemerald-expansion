@@ -212,6 +212,7 @@ static void InvokeTestFunction(const struct BattleTest *test)
         break;
     case BATTLE_TEST_DOUBLES:
     case BATTLE_TEST_AI_DOUBLES:
+    case BATTLE_TEST_WILD_DOUBLES:
         DATA.battlerTrainers |= B_TRAINER_OPPONENT_A << 6;
         InvokeDoubleTestFunctionWithStack(STATE->results, STATE->runParameter, &gBattleMons[B_POSITION_PLAYER_LEFT], &gBattleMons[B_POSITION_OPPONENT_LEFT], &gBattleMons[B_POSITION_PLAYER_RIGHT], &gBattleMons[B_POSITION_OPPONENT_RIGHT], test->function.doubles, &DATA.stack[BATTLE_TEST_STACK_SIZE]);
         break;
@@ -280,6 +281,7 @@ static void InitTestBattlers(const struct BattleTest *test)
         break;
     case BATTLE_TEST_DOUBLES:
     case BATTLE_TEST_AI_DOUBLES:
+    case BATTLE_TEST_WILD_DOUBLES:
     case BATTLE_TEST_MULTI:
     case BATTLE_TEST_AI_MULTI:
     case BATTLE_TEST_TWO_VS_ONE:
@@ -433,6 +435,11 @@ static void BattleTest_Run(void *data)
     {
     case BATTLE_TEST_WILD:
         DATA.recordedBattle.battleFlags = BATTLE_TYPE_IS_MASTER;
+        for (i = 0; i < STATE->battlersCount; i++)
+            DATA.currentMonIndexes[i] = i / 2;
+        break;
+    case BATTLE_TEST_WILD_DOUBLES:
+        DATA.recordedBattle.battleFlags = BATTLE_TYPE_IS_MASTER | BATTLE_TYPE_DOUBLE;
         for (i = 0; i < STATE->battlersCount; i++)
             DATA.currentMonIndexes[i] = i / 2;
         break;
@@ -2792,6 +2799,7 @@ static const char *BattlerIdentifier(enum BattlerId battlerId)
         return sBattlerIdentifiersSingles[battlerId];
     case BATTLE_TEST_DOUBLES:
     case BATTLE_TEST_AI_DOUBLES:
+    case BATTLE_TEST_WILD_DOUBLES:
     case BATTLE_TEST_MULTI:
     case BATTLE_TEST_AI_MULTI:
     case BATTLE_TEST_TWO_VS_ONE:

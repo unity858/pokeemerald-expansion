@@ -9144,6 +9144,40 @@ void BS_TryExiolitePrompt(void)
     }
 }
 
+// R.O.W.E.: give the player the items the knocked-out wild Pokemon dropped.
+// Runs once per dropped item (the message script returns to this command).
+void BS_GiveWildItemDrops(void)
+{
+    NATIVE_ARGS();
+
+    if (CanWildMonsDropItems())
+    {
+        for (enum BattlerId battler = 0; battler < gBattlersCount; battler++)
+        {
+            enum Item item = gBattleStruct->wildItemDrop[battler];
+
+            if (item == ITEM_NONE || IsOnPlayerSide(battler))
+                continue;
+
+            gBattleStruct->wildItemDrop[battler] = ITEM_NONE;
+            // A caught Pokemon keeps its held item (only possible here if it was revived).
+            if (gBattleScripting.monCaught && battler == gBattlerTarget)
+                continue;
+
+            gLastUsedItem = item;
+            gBattleScripting.battler = battler;
+            if (AddBagItem(item, 1))
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_WILD_ITEM_DROPPED;
+            else
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_WILD_ITEM_DROPPED_BAG_FULL;
+            BattleScriptCall(BattleScript_WildMonDroppedItem);
+            return;
+        }
+    }
+
+    gBattlescriptCurrInstr = cmd->nextInstr;
+}
+
 void BS_SaveTarget(void)
 {
     NATIVE_ARGS();

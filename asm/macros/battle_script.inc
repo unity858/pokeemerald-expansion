@@ -1135,6 +1135,10 @@
 	.4byte \func
 	.endm
 
+	.macro givewilditemdrops
+	callnative BS_GiveWildItemDrops
+	.endm
+
 	.macro savetarget
 	callnative BS_SaveTarget
 	.endm

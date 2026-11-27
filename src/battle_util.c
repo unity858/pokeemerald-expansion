@@ -11382,6 +11382,45 @@ void SetValuesOnFaint(enum BattlerId battler)
         gBattleResults.lastOpponentSpecies = GetMonData(GetBattlerMon(battler), MON_DATA_SPECIES);
         gSideTimers[B_SIDE_OPPONENT].retaliateTimer = 2;
     }
+
+    TryRecordWildItemDrop(battler);
+}
+
+// R.O.W.E.: wild held-item drops. Only in real wild battles, never against Trainers.
+// (BATTLE_TYPE_RECORDED is not excluded: recorded Frontier/link battles are caught by
+// their own flags, and the battle test runner plays every battle back as recorded.)
+bool32 CanWildMonsDropItems(void)
+{
+    return B_WILD_HELD_ITEM_DROPS
+        && !(gBattleTypeFlags & (BATTLE_TYPE_TRAINER
+                               | BATTLE_TYPE_LINK
+                               | BATTLE_TYPE_RECORDED_LINK
+                               | BATTLE_TYPE_FIRST_BATTLE
+                               | BATTLE_TYPE_CATCH_TUTORIAL
+                               | BATTLE_TYPE_SAFARI
+                               | BATTLE_TYPE_FRONTIER
+                               | BATTLE_TYPE_EREADER_TRAINER
+                               | BATTLE_TYPE_SECRET_BASE
+                               | BATTLE_TYPE_TRAINER_HILL
+                               | BATTLE_TYPE_GHOST
+                               | BATTLE_TYPE_POKEDUDE));
+}
+
+// Remember the item a wild Pokemon holds at the moment it faints. Items it lost
+// earlier (stolen, Knocked Off, eaten, popped) are already gone from
+// gBattleMons, so they are never dropped. Only its own item counts: an item it
+// got from the player during the battle (Trick, Thief, Bestow, ...) is not
+// dropped, as the player's held items are handed back by TryRestoreHeldItems.
+void TryRecordWildItemDrop(enum BattlerId battler)
+{
+    enum Item item = gBattleMons[battler].item;
+
+    gBattleStruct->wildItemDrop[battler] = ITEM_NONE;
+    if (!CanWildMonsDropItems() || IsOnPlayerSide(battler) || item == ITEM_NONE)
+        return;
+    if (item != GetLostItemState(GetBattlerTrainer(battler), gBattlerPartyIndexes[battler])->originalItem)
+        return;
+    gBattleStruct->wildItemDrop[battler] = item;
 }
 
 bool32 IsVictoryCatch(void)

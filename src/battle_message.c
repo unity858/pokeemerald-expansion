@@ -905,6 +905,8 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_LOSTSOMEOFITSHP]                      = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} lost some of its HP!"),
     [STRINGID_BELCHCANTUSE]                         = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} hasn't eaten any held Berries, so it can't possibly belch!\p"),
     [STRINGID_ITEMSCANTBEUSEDTRAINER]               = COMPOUND_STRING("Items can't be used in TRAINER battles!{PAUSE 64}"),
+    [STRINGID_WILDMONDROPPEDITEM]                   = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX} dropped its {B_LAST_ITEM}!\p"),
+    [STRINGID_WILDMONDROPPEDITEMBAGFULL]            = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX} dropped its {B_LAST_ITEM}, but your Bag is full!\p"),
     [STRINGID_MOVEDAMAGEDEALT]                      = COMPOUND_STRING("{B_DEF_NAME_WITH_PREFIX} took {B_BUFF1} damage from {B_ATK_NAME_WITH_PREFIX2}!"),
 };
 
@@ -1372,6 +1374,12 @@ const u16 gFlashFireStringIds[] =
 {
     [B_MSG_FLASH_FIRE_BOOST]    = STRINGID_PKMNRAISEDFIREPOWERWITH,
     [B_MSG_FLASH_FIRE_NO_BOOST] = STRINGID_PKMNSXMADEITINEFFECTIVE
+};
+
+const u16 gWildItemDropStringIds[] =
+{
+    [B_MSG_WILD_ITEM_DROPPED]          = STRINGID_WILDMONDROPPEDITEM,
+    [B_MSG_WILD_ITEM_DROPPED_BAG_FULL] = STRINGID_WILDMONDROPPEDITEMBAGFULL,
 };
 
 const u16 gCaughtMonStringIds[] =
