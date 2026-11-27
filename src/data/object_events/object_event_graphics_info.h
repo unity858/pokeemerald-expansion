@@ -4433,6 +4433,26 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ItemBallTm = {
     .images = sPicTable_ItemBallTm,
 };
 
+// Portal ported from R.O.W.E. (graphics/object_events/pics/misc/portal.png). A single static
+// 16x32 frame; R.O.W.E. drew it with Glacia's palette, which is the palette embedded in the PNG.
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Portal = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_PORTAL,
+    .reflectionPaletteTag = OBJ_EVENT_PAL_TAG_NONE,
+    .size = 256,
+    .width = 16,
+    .height = 32,
+    .paletteSlot = PALSLOT_NPC_SPECIAL,
+    .shadowSize = SHADOW_SIZE_M,
+    .inanimate = TRUE,
+    .compressed = FALSE,
+    .tracks = TRACKS_NONE,
+    .oam = &gObjectEventBaseOam_16x32,
+    .subspriteTables = sOamTables_16x32,
+    .anims = sAnimTable_Inanimate,
+    .images = sPicTable_Portal,
+};
+
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Follower = {
     .tileTag = TAG_NONE,
     .paletteTag = OBJ_EVENT_PAL_TAG_DYNAMIC,

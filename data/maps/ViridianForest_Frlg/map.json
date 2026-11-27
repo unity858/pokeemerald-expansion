@@ -14,7 +14,13 @@
   "show_map_name": true,
   "floor_number": 0,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": 0,
+  "connections": [
+    {
+      "map": "MAP_VIRIDIAN_FOREST_EAST",
+      "offset": 0,
+      "direction": "right"
+    }
+  ],
   "object_events": [
     {
       "type": "object",

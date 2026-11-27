@@ -474,7 +474,9 @@
     "TerraCave_Entrance",
     "TerraCave_End",
     "AlteringCave",
-    "MeteorFalls_StevensCave"
+    "MeteorFalls_StevensCave",
+    "PetalburgWoods_East",
+    "SpearPillar"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",
@@ -796,7 +798,8 @@
     "SixIsland_DottedHole_B4F_Frlg",
     "SixIsland_DottedHole_SapphireRoom_Frlg",
     "SixIsland_PatternBush_Frlg",
-    "SixIsland_AlteringCave_Frlg"
+    "SixIsland_AlteringCave_Frlg",
+    "ViridianForest_East_Frlg"
   ],
   "gMapGroup_SpecialArea_Frlg": [
     "NavelRock_Exterior_Frlg",

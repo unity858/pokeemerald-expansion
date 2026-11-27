@@ -414,6 +414,7 @@ enum
     OBJ_EVENT_GFX_CUTTABLE_TREE_FRLG,
     OBJ_EVENT_GFX_BREAKABLE_ROCK_FRLG,
     OBJ_EVENT_GFX_ITEM_BALL_TM, // Orange item ball from R.O.W.E., used for TMs and Mega Stones
+    OBJ_EVENT_GFX_PORTAL,       // Hoopa ring portal from R.O.W.E. (talk to it to warp)
     NUM_OBJ_EVENT_GFX,
 };
 
@@ -570,6 +571,7 @@ enum
 #define OBJ_EVENT_PAL_TAG_SEAGALLOP               0x1132
 #define OBJ_EVENT_PAL_TAG_SS_ANNE                 0x1133
 #define OBJ_EVENT_PAL_TAG_ITEM_BALL_TM            0x1134
+#define OBJ_EVENT_PAL_TAG_PORTAL                  0x1135
 
 #if OW_FOLLOWERS_POKEBALLS
 // Vanilla
