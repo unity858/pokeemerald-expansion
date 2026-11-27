@@ -1419,7 +1419,7 @@ static void UNUSED SetBattledTrainerFlag(void)
 }
 
 // Trainer IDs below TRAINER_FLAGS_COUNT use the trainer flags in SaveBlock1's flag array.
-// The trainer IDs above them (the Kanto trainers) use gSaveBlock3Ptr->kantoTrainerFlags.
+// The trainer IDs above them (the Kanto trainers) use gSaveBlock3Ptr->kantoTrainerFlags(2).
 // IDs past the last trainer (partners, TRAINER_SECRET_BASE, ...) have no flag.
 static u8 *GetExtraTrainerFlagByte(u16 trainerId, u8 *mask)
 {
@@ -1429,6 +1429,10 @@ static u8 *GetExtraTrainerFlagByte(u16 trainerId, u8 *mask)
     if (trainerId < TRAINER_FLAGS_COUNT || index >= EXTRA_TRAINER_FLAGS_COUNT)
         return NULL;
     *mask = 1 << (index % 8);
+#if EXTRA_TRAINER_FLAGS_BYTES_2 > 0
+    if (index / 8 >= EXTRA_TRAINER_FLAGS_BYTES_1)
+        return &gSaveBlock3Ptr->kantoTrainerFlags2[index / 8 - EXTRA_TRAINER_FLAGS_BYTES_1];
+#endif
     return &gSaveBlock3Ptr->kantoTrainerFlags[index / 8];
 #else
     return NULL;

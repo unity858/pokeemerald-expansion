@@ -25,3 +25,52 @@ SilphCo_8F_Text_ThanksForSavingUs::
 SilphCo_8F_Text_FloorSign::
 	.string "SILPH CO. HEAD OFFICE\n"
 	.string "8F$"
+
+@ ---- Team Rocket trainers (FRLG); hidden by FLAG_HIDE_SILPH_CO_ROCKETS once Giovanni is beaten ----
+
+SilphCo_8F_EventScript_Grunt1::
+	trainerbattle_single TRAINER_KANTO_TEAM_ROCKET_GRUNT_32, SilphCo_8F_Text_Grunt1Intro, SilphCo_8F_Text_Grunt1Defeat
+	msgbox SilphCo_8F_Text_Grunt1PostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SilphCo_8F_Text_Grunt1Intro::
+	.string "That's as far as you'll go!$"
+
+SilphCo_8F_Text_Grunt1Defeat::
+	.string "Not enough grit!$"
+
+SilphCo_8F_Text_Grunt1PostBattle::
+	.string "If you don't turn back…\n"
+	.string "I'll call for backup!$"
+
+SilphCo_8F_EventScript_Grunt2::
+	trainerbattle_single TRAINER_KANTO_TEAM_ROCKET_GRUNT_36, SilphCo_8F_Text_Grunt2Intro, SilphCo_8F_Text_Grunt2Defeat
+	msgbox SilphCo_8F_Text_Grunt2PostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SilphCo_8F_Text_Grunt2Intro::
+	.string "I am one of the four ROCKET\n"
+	.string "BROTHERS!$"
+
+SilphCo_8F_Text_Grunt2Defeat::
+	.string "Whoo!\n"
+	.string "Oh, Brothers!$"
+
+SilphCo_8F_Text_Grunt2PostBattle::
+	.string "I'll leave you up to my brothers.$"
+
+SilphCo_8F_EventScript_Parker::
+	trainerbattle_single TRAINER_KANTO_SCIENTIST_PARKER, SilphCo_8F_Text_ParkerIntro, SilphCo_8F_Text_ParkerDefeat
+	msgbox SilphCo_8F_Text_ParkerPostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SilphCo_8F_Text_ParkerIntro::
+	.string "You're causing us problems!$"
+
+SilphCo_8F_Text_ParkerDefeat::
+	.string "Huh?\n"
+	.string "I lost?$"
+
+SilphCo_8F_Text_ParkerPostBattle::
+	.string "So, what do you think of SILPH\n"
+	.string "BUILDING's maze?$"

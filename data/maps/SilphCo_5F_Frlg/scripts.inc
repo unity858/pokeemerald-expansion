@@ -56,3 +56,71 @@ SilphCo_5F_Text_SomeMonsEvolveWhenTraded::
 SilphCo_5F_Text_FloorSign::
 	.string "SILPH CO. HEAD OFFICE\n"
 	.string "5F$"
+
+@ ---- Team Rocket trainers (FRLG); hidden by FLAG_HIDE_SILPH_CO_ROCKETS once Giovanni is beaten ----
+
+SilphCo_5F_EventScript_Grunt2::
+	trainerbattle_single TRAINER_KANTO_TEAM_ROCKET_GRUNT_29, SilphCo_5F_Text_Grunt2Intro, SilphCo_5F_Text_Grunt2Defeat
+	msgbox SilphCo_5F_Text_Grunt2PostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SilphCo_5F_Text_Grunt2Intro::
+	.string "Show TEAM ROCKET a little respect!$"
+
+SilphCo_5F_Text_Grunt2Defeat::
+	.string "Cough…\n"
+	.string "Cough…$"
+
+SilphCo_5F_Text_Grunt2PostBattle::
+	.string "Which reminds me.\p"
+	.string "KOFFING evolves into WEEZING!$"
+
+SilphCo_5F_EventScript_Dalton::
+	trainerbattle_single TRAINER_KANTO_JUGGLER_DALTON, SilphCo_5F_Text_DaltonIntro, SilphCo_5F_Text_DaltonDefeat
+	msgbox SilphCo_5F_Text_DaltonPostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SilphCo_5F_Text_DaltonIntro::
+	.string "Whaaat?\p"
+	.string "There shouldn't be any children\n"
+	.string "here!$"
+
+SilphCo_5F_Text_DaltonDefeat::
+	.string "Oh, goodness!$"
+
+SilphCo_5F_Text_DaltonPostBattle::
+	.string "You're only on 5F.\n"
+	.string "It's a long way to my BOSS!$"
+
+SilphCo_5F_EventScript_Beau::
+	trainerbattle_single TRAINER_KANTO_SCIENTIST_BEAU, SilphCo_5F_Text_BeauIntro, SilphCo_5F_Text_BeauDefeat
+	msgbox SilphCo_5F_Text_BeauPostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SilphCo_5F_Text_BeauIntro::
+	.string "We study POKé BALL technology on\n"
+	.string "this floor.$"
+
+SilphCo_5F_Text_BeauDefeat::
+	.string "Dang!\n"
+	.string "Blast it!$"
+
+SilphCo_5F_Text_BeauPostBattle::
+	.string "We worked on the ultimate POKé\n"
+	.string "BALL which would catch anything.$"
+
+SilphCo_5F_EventScript_Grunt1::
+	trainerbattle_single TRAINER_KANTO_TEAM_ROCKET_GRUNT_28, SilphCo_5F_Text_Grunt1Intro, SilphCo_5F_Text_Grunt1Defeat
+	msgbox SilphCo_5F_Text_Grunt1PostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SilphCo_5F_Text_Grunt1Intro::
+	.string "I heard a kid was wandering\n"
+	.string "around.$"
+
+SilphCo_5F_Text_Grunt1Defeat::
+	.string "Boom!$"
+
+SilphCo_5F_Text_Grunt1PostBattle::
+	.string "It's not smart to pick a fight with\n"
+	.string "TEAM ROCKET!$"

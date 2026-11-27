@@ -8858,3 +8858,1115 @@ Golbat
 Level: 38
 Tera Type: Poison
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_8 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Drowzee
+Level: 21
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Machop
+Level: 21
+Tera Type: Fighting
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_9 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Raticate
+Level: 21
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Raticate
+Level: 21
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_10 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Grimer
+Level: 20
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Minimize
+- Sludge
+- Disable
+- Harden
+
+Koffing
+Level: 20
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smog
+- Tackle
+- Poison Gas
+
+Koffing
+Level: 20
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smog
+- Tackle
+- Poison Gas
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_11 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Rattata
+Level: 19
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Raticate
+Level: 19
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Raticate
+Level: 19
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Rattata
+Level: 19
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_12 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Grimer
+Level: 22
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Minimize
+- Sludge
+- Disable
+- Harden
+
+Koffing
+Level: 22
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Sludge
+- Smog
+- Tackle
+- Poison Gas
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_13 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Zubat
+Level: 17
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Bite
+- Astonish
+- Supersonic
+- Leech Life
+
+Koffing
+Level: 17
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smog
+- Tackle
+- Poison Gas
+
+Grimer
+Level: 17
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Sludge
+- Disable
+- Harden
+- Pound
+
+Zubat
+Level: 17
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Bite
+- Astonish
+- Supersonic
+- Leech Life
+
+Raticate
+Level: 17
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Hyper Fang
+- Quick Attack
+- Tail Whip
+- Tackle
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_14 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Rattata
+Level: 20
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Raticate
+Level: 20
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Drowzee
+Level: 20
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_15 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Machop
+Level: 21
+Tera Type: Fighting
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Machop
+Level: 21
+Tera Type: Fighting
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_16 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Sandshrew
+Level: 23
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Ekans
+Level: 23
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Sandslash
+Level: 23
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_17 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Ekans
+Level: 23
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Sandshrew
+Level: 23
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Arbok
+Level: 23
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_18 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Koffing
+Level: 21
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Zubat
+Level: 21
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_BOSS_GIOVANNI ===
+Name: GIOVANNI
+Class: Boss Frlg
+Pic: Leader Giovanni Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Onix
+Level: 25
+Tera Type: Rock
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+
+Rhyhorn
+Level: 24
+Tera Type: Ground
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+
+Kangaskhan
+Level: 29
+Tera Type: Normal
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_23 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Cubone
+Level: 29
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Zubat
+Level: 29
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_24 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Golbat
+Level: 25
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Zubat
+Level: 25
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Zubat
+Level: 25
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Raticate
+Level: 25
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Zubat
+Level: 25
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_25 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Raticate
+Level: 28
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Hypno
+Level: 28
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Raticate
+Level: 28
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_26 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Machop
+Level: 29
+Tera Type: Fighting
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Drowzee
+Level: 29
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_27 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Ekans
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Zubat
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Cubone
+Level: 28
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_28 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Arbok
+Level: 33
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_29 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Hypno
+Level: 33
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_30 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Machop
+Level: 29
+Tera Type: Fighting
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Machoke
+Level: 29
+Tera Type: Fighting
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_31 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Zubat
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Zubat
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Golbat
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_32 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Raticate
+Level: 26
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Scary Face
+- Hyper Fang
+- Quick Attack
+- Tail Whip
+
+Arbok
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Glare
+- Bite
+- Poison Sting
+- Leer
+
+Koffing
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smokescreen
+- Sludge
+- Smog
+- Tackle
+
+Golbat
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Wing Attack
+- Bite
+- Astonish
+- Supersonic
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_33 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Cubone
+Level: 29
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Cubone
+Level: 29
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_34 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Sandshrew
+Level: 29
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Sandslash
+Level: 29
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_35 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Raticate
+Level: 26
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Zubat
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Golbat
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Rattata
+Level: 26
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_36 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Weezing
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Golbat
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Koffing
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_37 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Drowzee
+Level: 28
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Grimer
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Machop
+Level: 28
+Tera Type: Fighting
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_38 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Golbat
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Drowzee
+Level: 28
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Hypno
+Level: 28
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_39 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Machoke
+Level: 33
+Tera Type: Fighting
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_40 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Rattata
+Level: 25
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Rattata
+Level: 25
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Zubat
+Level: 25
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Rattata
+Level: 25
+Tera Type: Normal
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Ekans
+Level: 25
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_TEAM_ROCKET_GRUNT_41 ===
+Name: GRUNT
+Class: Team Rocket Frlg
+Pic: Rocket Grunt M Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Cubone
+Level: 32
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Drowzee
+Level: 32
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Marowak
+Level: 32
+Tera Type: Ground
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_SCIENTIST_JERRY ===
+Name: JERRY
+Class: Scientist Frlg
+Pic: Scientist Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Magnemite
+Level: 28
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Voltorb
+Level: 28
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Magneton
+Level: 28
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_SCIENTIST_CONNOR ===
+Name: CONNOR
+Class: Scientist Frlg
+Pic: Scientist Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Grimer
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Screech
+- Minimize
+- Sludge
+- Disable
+
+Weezing
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smokescreen
+- Sludge
+- Smog
+- Tackle
+
+Koffing
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smokescreen
+- Sludge
+- Smog
+- Self Destruct
+
+Weezing
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smokescreen
+- Sludge
+- Smog
+- Tackle
+
+=== TRAINER_KANTO_SCIENTIST_JOSE ===
+Name: JOSE
+Class: Scientist Frlg
+Pic: Scientist Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Electrode
+Level: 29
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Spark
+- Sonic Boom
+- Screech
+- Tackle
+
+Weezing
+Level: 29
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smokescreen
+- Sludge
+- Smog
+- Tackle
+
+=== TRAINER_KANTO_SCIENTIST_RODNEY ===
+Name: RODNEY
+Class: Scientist Frlg
+Pic: Scientist Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Electrode
+Level: 33
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_SCIENTIST_BEAU ===
+Name: BEAU
+Class: Scientist Frlg
+Pic: Scientist Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Magneton
+Level: 26
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Spark
+- Thunder Wave
+- Sonic Boom
+- Supersonic
+
+Koffing
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smokescreen
+- Sludge
+- Smog
+- Tackle
+
+Weezing
+Level: 26
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smokescreen
+- Sludge
+- Smog
+- Tackle
+
+Magnemite
+Level: 26
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Spark
+- Thunder Wave
+- Sonic Boom
+- Supersonic
+
+=== TRAINER_KANTO_SCIENTIST_TAYLOR ===
+Name: TAYLOR
+Class: Scientist Frlg
+Pic: Scientist Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Voltorb
+Level: 25
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Spark
+- Sonic Boom
+- Screech
+- Tackle
+
+Koffing
+Level: 25
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smokescreen
+- Sludge
+- Smog
+- Tackle
+
+Magneton
+Level: 25
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Thunder Wave
+- Sonic Boom
+- Supersonic
+- Thunder Shock
+
+Magnemite
+Level: 25
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Thunder Wave
+- Sonic Boom
+- Supersonic
+- Thunder Shock
+
+Koffing
+Level: 25
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smokescreen
+- Sludge
+- Smog
+- Self Destruct
+
+=== TRAINER_KANTO_SCIENTIST_JOSHUA ===
+Name: JOSHUA
+Class: Scientist Frlg
+Pic: Scientist Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Electrode
+Level: 29
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Muk
+Level: 29
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_SCIENTIST_PARKER ===
+Name: PARKER
+Class: Scientist Frlg
+Pic: Scientist Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Grimer
+Level: 29
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Electrode
+Level: 29
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_SCIENTIST_ED ===
+Name: ED
+Class: Scientist Frlg
+Pic: Scientist Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Voltorb
+Level: 28
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Spark
+- Sonic Boom
+- Screech
+- Tackle
+
+Koffing
+Level: 28
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Smokescreen
+- Sludge
+- Tackle
+- Smog
+
+Magneton
+Level: 28
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Spark
+- Thunder Wave
+- Sonic Boom
+- Supersonic
+
+=== TRAINER_KANTO_SCIENTIST_TRAVIS ===
+Name: TRAVIS
+Class: Scientist Frlg
+Pic: Scientist Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Magnemite
+Level: 29
+Tera Type: Electric
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Koffing
+Level: 29
+Tera Type: Poison
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_JUGGLER_DALTON ===
+Name: DALTON
+Class: Juggler Frlg
+Pic: Juggler Frlg
+Gender: Male
+Music: Serious
+Double Battle: No
+AI: Check Bad Move
+
+Kadabra
+Level: 29
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Mr Mime
+Level: 29
+Tera Type: Psychic
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_KANTO_BOSS_GIOVANNI_2 ===
+Name: GIOVANNI
+Class: Boss Frlg
+Pic: Leader Giovanni Frlg
+Gender: Male
+Music: Dangerous
+Double Battle: No
+AI: Check Bad Move
+
+Nidorino
+Level: 37
+Tera Type: Poison
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+
+Kangaskhan
+Level: 35
+Tera Type: Normal
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+
+Rhyhorn
+Level: 37
+Tera Type: Ground
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+
+Nidoqueen
+Level: 41
+Tera Type: Poison
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe

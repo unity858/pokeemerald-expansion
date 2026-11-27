@@ -85,3 +85,55 @@ SilphCo_6F_Text_ComeWorkForSilphWhenYoureOlder::
 SilphCo_6F_Text_FloorSign::
 	.string "SILPH CO. HEAD OFFICE\n"
 	.string "6F$"
+
+@ ---- Team Rocket trainers (FRLG); hidden by FLAG_HIDE_SILPH_CO_ROCKETS once Giovanni is beaten ----
+
+SilphCo_6F_EventScript_Grunt1::
+	trainerbattle_single TRAINER_KANTO_TEAM_ROCKET_GRUNT_30, SilphCo_6F_Text_Grunt1Intro, SilphCo_6F_Text_Grunt1Defeat
+	msgbox SilphCo_6F_Text_Grunt1PostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SilphCo_6F_Text_Grunt1Intro::
+	.string "I am one of the four ROCKET\n"
+	.string "BROTHERS!$"
+
+SilphCo_6F_Text_Grunt1Defeat::
+	.string "Flame out!$"
+
+SilphCo_6F_Text_Grunt1PostBattle::
+	.string "No matter!\n"
+	.string "My brothers will avenge me!$"
+
+SilphCo_6F_EventScript_Taylor::
+	trainerbattle_single TRAINER_KANTO_SCIENTIST_TAYLOR, SilphCo_6F_Text_TaylorIntro, SilphCo_6F_Text_TaylorDefeat
+	msgbox SilphCo_6F_Text_TaylorPostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SilphCo_6F_Text_TaylorIntro::
+	.string "That rotten PRESIDENT!\p"
+	.string "Serves him right for shipping me\n"
+	.string "off to the TIKSI BRANCH!\p"
+	.string "That's why TEAM ROCKET came after\n"
+	.string "us, I'm sure of it!$"
+
+SilphCo_6F_Text_TaylorDefeat::
+	.string "Shoot!$"
+
+SilphCo_6F_Text_TaylorPostBattle::
+	.string "TIKSI BRANCH?\n"
+	.string "It's in Russian no-man's-land!$"
+
+SilphCo_6F_EventScript_Grunt2::
+	trainerbattle_single TRAINER_KANTO_TEAM_ROCKET_GRUNT_31, SilphCo_6F_Text_Grunt2Intro, SilphCo_6F_Text_Grunt2Defeat
+	msgbox SilphCo_6F_Text_Grunt2PostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SilphCo_6F_Text_Grunt2Intro::
+	.string "You dare betray TEAM ROCKET?$"
+
+SilphCo_6F_Text_Grunt2Defeat::
+	.string "You traitor!$"
+
+SilphCo_6F_Text_Grunt2PostBattle::
+	.string "If you stand for justice, you\n"
+	.string "betray us bad guys!$"

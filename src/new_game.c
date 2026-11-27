@@ -256,6 +256,9 @@ static void ResetExtraTrainerFlags(void)
 #if EXTRA_TRAINER_FLAGS_BYTES > 0
     memset(gSaveBlock3Ptr->kantoTrainerFlags, 0, sizeof(gSaveBlock3Ptr->kantoTrainerFlags));
 #endif
+#if EXTRA_TRAINER_FLAGS_BYTES_2 > 0
+    memset(gSaveBlock3Ptr->kantoTrainerFlags2, 0, sizeof(gSaveBlock3Ptr->kantoTrainerFlags2));
+#endif
 }
 
 static void ResetItemFlags(void)

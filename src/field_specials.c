@@ -5165,7 +5165,7 @@ void GetElevatorFloor(void)
             break;
         }
     }
-    VarSet(VAR_ELEVATOR_FLOOR, floor);
+    VarSet(VAR_KANTO_ELEVATOR_FLOOR, floor);
 }
 
 u16 InitElevatorFloorSelectMenuPos(void)
@@ -5339,8 +5339,13 @@ void DrawElevatorCurrentFloorWindow(void)
     u32 strwidth;
 
     sElevatorCurrentFloorWindowId = AddWindow(&sElevatorCurrentFloorWindowTemplate);
+#if IS_FRLG
     LoadUserWindowBorderGfx(sElevatorCurrentFloorWindowId, 0x21D, BG_PLTT_ID(13));
     DrawStdFrameWithCustomTileAndPalette(sElevatorCurrentFloorWindowId, FALSE, 0x21D, 13);
+#else
+    // Emerald's standard window frame (as the Lilycove elevator's floor window)
+    SetStandardWindowBorderStyle(sElevatorCurrentFloorWindowId, FALSE);
+#endif
     AddTextPrinterParameterized(sElevatorCurrentFloorWindowId, FONT_NORMAL, sText_NowOn, 0, 2, 0xFF, NULL);
     floorname = sFloorNamePointers[gSpecialVar_0x8005];
     strwidth = GetStringWidth(FONT_NORMAL, floorname, 0);

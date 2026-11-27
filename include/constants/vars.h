@@ -326,6 +326,15 @@
 
 #define VAR_TEMP_TRANSFERRED_SPECIES  VAR_TEMP_1
 
+// Floor var of the Kanto elevators (Silph Co., Rocket Hideout; GetElevatorFloor). FRLG's
+// VAR_ELEVATOR_FLOOR (0x403A) is VAR_FARAWAY_ISLAND_STEP_COUNTER in Emerald, so the Emerald build
+// shares the Lilycove elevator's floor var: every elevator recomputes it on entry (FLAG_TEMP_2 unset).
+#if IS_FRLG
+#define VAR_KANTO_ELEVATOR_FLOOR VAR_ELEVATOR_FLOOR
+#else
+#define VAR_KANTO_ELEVATOR_FLOOR VAR_DEPT_STORE_FLOOR
+#endif
+
 #if TESTING
 #define TESTING_VARS_START                  0x9000
 #define TESTING_VAR_DIFFICULTY              (TESTING_VARS_START + 0x0)

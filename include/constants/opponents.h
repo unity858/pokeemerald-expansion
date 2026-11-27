@@ -868,7 +868,7 @@
 //       The first TRAINER_FLAGS_COUNT_EMERALD trainer IDs use the trainer flags in SaveBlock1's
 //       flag array (TRAINER_FLAGS_START, see constants/flags.h); its size can't change without
 //       moving the system flags and breaking saves.  Trainer IDs from TRAINER_FLAGS_COUNT_EMERALD
-//       up to TRAINERS_COUNT use gSaveBlock3Ptr->kantoTrainerFlags (see HasTrainerBeenFought).
+//       up to TRAINERS_COUNT use gSaveBlock3Ptr->kantoTrainerFlags / kantoTrainerFlags2 (see HasTrainerBeenFought).
 
 #define TRAINERS_COUNT_EMERALD      KANTO_TRAINERS_END
 #define TRAINER_FLAGS_COUNT_EMERALD 864
@@ -892,6 +892,16 @@
 #define EXTRA_TRAINER_FLAGS_COUNT           0
 #endif
 #define EXTRA_TRAINER_FLAGS_BYTES           ((EXTRA_TRAINER_FLAGS_COUNT + 7) / 8)
+// SaveBlock3.kantoTrainerFlags is capped at its original 46 bytes so that the fields after it
+// (staticEncounterFlags) keep their place in existing saves; the bytes beyond that go in
+// SaveBlock3.kantoTrainerFlags2, at the very end of SaveBlock3.
+#define EXTRA_TRAINER_FLAGS_BYTES_1_MAX     46
+#if EXTRA_TRAINER_FLAGS_BYTES > EXTRA_TRAINER_FLAGS_BYTES_1_MAX
+#define EXTRA_TRAINER_FLAGS_BYTES_1         EXTRA_TRAINER_FLAGS_BYTES_1_MAX
+#else
+#define EXTRA_TRAINER_FLAGS_BYTES_1         EXTRA_TRAINER_FLAGS_BYTES
+#endif
+#define EXTRA_TRAINER_FLAGS_BYTES_2         (EXTRA_TRAINER_FLAGS_BYTES - EXTRA_TRAINER_FLAGS_BYTES_1)
 #define TRAINER_PARTNER(partner)           (MAX_TRAINERS_COUNT + partner)
 
 #endif  // GUARD_CONSTANTS_OPPONENTS_H
