@@ -476,7 +476,9 @@
     "AlteringCave",
     "MeteorFalls_StevensCave",
     "PetalburgWoods_East",
-    "SpearPillar"
+    "SpearPillar",
+    "ScorchedSlab_B1F",
+    "ScorchedSlab_B2F"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",
