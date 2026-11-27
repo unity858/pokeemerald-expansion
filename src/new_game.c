@@ -53,6 +53,8 @@
 #include "constants/items.h"
 #include "difficulty.h"
 #include "follower_npc.h"
+#include "new_game_options.h"
+#include "new_game_plus.h"
 
 extern const u8 EventScript_ResetAllMapFlags[];
 extern const u8 EventScript_ResetAllMapFlagsFrlg[];
@@ -166,6 +168,19 @@ void NewGameInitData(void)
 #if IS_FRLG
     u8 rivalName[PLAYER_NAME_LENGTH + 1];
 #endif
+    // NEW GAME+ (src/new_game_plus.c): decided from the loaded save before anything is reset.
+    bool32 isNewGamePlus = NewGameOptions_IsNewGamePlusPending() && CanStartNewGamePlus();
+    struct Pokemon leftoverParty[PARTY_SIZE];
+    u32 leftoverPartyCount = 0;
+    void *newGamePlusItems = NULL;
+
+    // Move the party into the PC before it is zeroed below, and copy the non-key items aside
+    // before ClearSav1/ClearSav3/ClearBag and the encryption key reset.
+    if (isNewGamePlus)
+    {
+        leftoverPartyCount = NewGamePlus_MovePartyToPC(leftoverParty);
+        newGamePlusItems = NewGamePlus_SaveItems();
+    }
     if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
         RtcReset();
 
@@ -201,11 +216,28 @@ void NewGameInitData(void)
     InitLotadSizeRecord();
     gPartiesCount[B_TRAINER_PLAYER] = 0;
     ZeroPlayerPartyMons();
-    ResetPokemonStorageSystem();
+    if (isNewGamePlus)
+    {
+        // Keep the PC boxes (with the party now in them), all back to level 1.
+        NewGamePlus_LevelDownStorage();
+        // ClearSav1 wiped Walda's wallpaper settings, which ResetPokemonStorageSystem would restore.
+        ResetWaldaWallpaper();
+        NewGamePlus_RestoreLeftoverParty(leftoverParty, leftoverPartyCount);
+        // After ResetPokedex/ClearPokedexFlags: the kept Pokémon count as seen and caught.
+        NewGamePlus_RegisterOwnedMonsInPokedex();
+        // After InitEventData, which cleared every flag (and with it this one on a normal new game).
+        FlagSet(FLAG_IS_NEW_GAME_PLUS);
+    }
+    else
+    {
+        ResetPokemonStorageSystem();
+    }
     DeactivateAllRoamers();
     gSaveBlock1Ptr->registeredItem = ITEM_NONE;
     ClearBag();
     NewGameInitPCItems();
+    if (isNewGamePlus)
+        NewGamePlus_RestoreItems(newGamePlusItems);
     ClearPokeblocks();
     ClearDecorationInventories();
     InitEasyChatPhrases();

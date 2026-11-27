@@ -64,7 +64,7 @@
 #define FLAG_HIDE_ROCKET_HIDEOUT_ROCKETS 0x2A // Rocket Hideout Giovanni (B4F) beaten: hides the Rocket trainers on B1F-B4F (Giovanni stays)
 #define FLAG_HIDE_SILPH_CO_ROCKETS 0x2B // Silph Co. Giovanni (11F) beaten: hides the Rocket trainers on 2F-11F (Giovanni stays)
 #define FLAG_GOT_ROCKET_HIDEOUT_LIFT_KEY 0x2C // Lift Key picked up on Rocket Hideout B4F: the hideout elevator works
-#define FLAG_UNUSED_0x02D    0x2D // Unused Flag
+#define FLAG_IS_NEW_GAME_PLUS 0x2D // Set by NewGameInitData when the game was started with NEW GAME+ (src/new_game_plus.c); cleared with the other flags by a normal new game
 #define FLAG_UNUSED_0x02E    0x2E // Unused Flag
 #define FLAG_UNUSED_0x02F    0x2F // Unused Flag
 #define FLAG_UNUSED_0x030    0x30 // Unused Flag

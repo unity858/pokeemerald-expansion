@@ -18,6 +18,11 @@ void CB2_InitNewGameOptions(void);
 // clears all flags and vars.
 void NewGameOptions_ApplyToSave(void);
 
+// New Game Plus choice made on the main menu (NEW GAME+ vs NEW GAME). NewGameInitData
+// reads it before resetting the save; NewGameOptions_ApplyToSave clears it.
+void NewGameOptions_SetNewGamePlusPending(bool32 pending);
+bool32 NewGameOptions_IsNewGamePlusPending(void);
+
 // Accessors for the rest of the game.
 // Difficulty: use GetCurrentDifficultyLevel() from difficulty.h.
 bool32 IsCustomDataMode(void);

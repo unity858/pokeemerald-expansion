@@ -83,6 +83,8 @@ struct PendingNewGameOptions
 
 // Not part of the save. Holds the choices until NewGameInitData has run.
 EWRAM_DATA static struct PendingNewGameOptions sPendingOptions = {0};
+// Set from the main menu: NEW GAME+ (TRUE) or NEW GAME (FALSE). Read by NewGameInitData.
+EWRAM_DATA static bool8 sNewGamePlusPending = FALSE;
 
 static void Task_NewGameOptionsFadeIn(u8 taskId);
 static void Task_NewGameOptionsProcessInput(u8 taskId);
@@ -203,6 +205,17 @@ void NewGameOptions_ApplyToSave(void)
 
     // Consumed; a later new game must go through the screen again.
     sPendingOptions.chosen = FALSE;
+    sNewGamePlusPending = FALSE;
+}
+
+void NewGameOptions_SetNewGamePlusPending(bool32 pending)
+{
+    sNewGamePlusPending = (pending != FALSE);
+}
+
+bool32 NewGameOptions_IsNewGamePlusPending(void)
+{
+    return sNewGamePlusPending;
 }
 
 bool32 IsCustomDataMode(void)
