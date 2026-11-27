@@ -1,5 +1,25 @@
+@ Volcanion is a hack static in the lava pool, south of where Groudon slept,
+@ after the 8th badge (FLAG_BADGE08_GET).
+
 MagmaHideout_4F_MapScripts::
+	map_script MAP_SCRIPT_ON_RESUME, MagmaHideout_4F_OnResume
+	map_script MAP_SCRIPT_ON_TRANSITION, MagmaHideout_4F_OnTransition
 	.byte 0
+
+MagmaHideout_4F_OnResume::
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	end
+
+MagmaHideout_4F_OnTransition::
+	call MagmaHideout_4F_EventScript_SetupVolcanion
+	end
+
+MagmaHideout_4F_EventScript_SetupVolcanion::
+	setupstaticenc STATIC_ENC_VOLCANION, FLAG_TEMP_HIDE_STATIC_MON, FLAG_BADGE08_GET
+	return
+
+MagmaHideout_4F_EventScript_Volcanion::
+	staticencounter STATIC_ENC_VOLCANION, SPECIES_VOLCANION, HackStatic_EventScript_LegendaryBattle
 
 MagmaHideout_4F_EventScript_Maxie::
 	lockall

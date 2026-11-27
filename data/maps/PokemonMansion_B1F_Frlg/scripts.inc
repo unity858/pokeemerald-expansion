@@ -1,13 +1,32 @@
 @ Converted for the Emerald build by dev_scripts/kanto/convert_kanto_maps.py.
 @ Story events, trainers and items were removed; FRLG flags/vars are not referenced.
+@ Reshiram is a hack static in the top-right corner, after the League (FLAG_SYS_GAME_CLEAR).
 
 PokemonMansion_B1F_Frlg_MapScripts::
 	map_script MAP_SCRIPT_ON_LOAD, PokemonMansion_B1F_OnLoad
+	map_script MAP_SCRIPT_ON_RESUME, PokemonMansion_B1F_OnResume
+	map_script MAP_SCRIPT_ON_TRANSITION, PokemonMansion_B1F_OnTransition
 	.byte 0
 
 PokemonMansion_B1F_OnLoad::
 	call_if_set FLAG_POKEMON_MANSION_SWITCH_STATE, PokemonMansion_EventScript_PressSwitch_B1F
 	end
+
+PokemonMansion_B1F_OnResume::
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, HackStatic_EventScript_TryRemoveCaughtMon
+	end
+
+PokemonMansion_B1F_OnTransition::
+	call PokemonMansion_B1F_EventScript_SetupReshiram
+	end
+
+@ Postgame only.
+PokemonMansion_B1F_EventScript_SetupReshiram::
+	setupstaticenc STATIC_ENC_RESHIRAM, FLAG_TEMP_HIDE_STATIC_MON, FLAG_SYS_GAME_CLEAR
+	return
+
+PokemonMansion_B1F_EventScript_Reshiram::
+	staticencounter STATIC_ENC_RESHIRAM, SPECIES_RESHIRAM, HackStatic_EventScript_LegendaryBattle
 
 PokemonMansion_B1F_EventScript_Statue::
 	lockall

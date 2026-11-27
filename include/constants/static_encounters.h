@@ -54,8 +54,14 @@
 #define STATIC_ENC_MEWTWO        29
 #define STATIC_ENC_LANDORUS      30
 #define STATIC_ENC_ENAMORUS      31
+#define STATIC_ENC_ZEKROM        32
+#define STATIC_ENC_MIRAIDON      33
+#define STATIC_ENC_RESHIRAM      34
+#define STATIC_ENC_XERNEAS       35
+#define STATIC_ENC_YVELTAL       36
+#define STATIC_ENC_VOLCANION     37
 
-#define STATIC_ENC_COUNT         32
+#define STATIC_ENC_COUNT         38
 
 // Capacity reserved in the save: the one constant to raise if the encounters ever
 // outgrow it (in steps of 4 IDs = 1 byte). 128 IDs = 32 bytes of SaveBlock3; the plan
